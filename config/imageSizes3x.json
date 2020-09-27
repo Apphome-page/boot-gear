@@ -1,0 +1,41 @@
+{
+  "ios": [
+    {
+      "postfix": "@3x",
+      "folder": "ios",
+      "scale": 3
+    },
+    {
+      "postfix": "@2x",
+      "folder": "ios",
+      "scale": 2
+    },
+    {
+      "postfix": "",
+      "folder": "ios",
+      "scale": 1
+    }
+  ],
+  "android": [
+    {
+      "postfix": "",
+      "folder": "android/drawable-mdpi",
+      "scale": 1
+    },
+    {
+      "postfix": "",
+      "folder": "android/drawable-hdpi",
+      "scale": 1.5
+    },
+    {
+      "postfix": "",
+      "folder": "android/drawable-xhdpi",
+      "scale": 2
+    },
+    {
+      "postfix": "",
+      "folder": "android/drawable-xxhdpi",
+      "scale": 3
+    }
+  ]
+}

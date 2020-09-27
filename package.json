@@ -3,13 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.22",
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
+    "aws-amplify": "^3.3.2",
+    "cross-env": "^7.0.2",
+    "cross-fetch": "^3.0.6",
+    "file-saver": "^2.0.2",
+    "jszip": "^3.5.0",
     "next": "9.5.3",
+    "pica": "^6.1.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "swr": "^0.3.5"
   }
 }

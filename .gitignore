@@ -17,6 +17,8 @@
 
 # misc
 .DS_Store
+.sublime
+.vscode
 *.pem
 
 # debug

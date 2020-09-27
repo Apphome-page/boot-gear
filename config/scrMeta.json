@@ -1,0 +1,279 @@
+{
+  "ios": [
+    {
+      "id": "IPHONE_BLACK",
+      "name": "iPhone Black",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_CALLY_BLACK",
+      "name": "iPhone Cally Black",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_CALLY_WHITE",
+      "name": "iPhone Cally White",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_DARB_BLACK",
+      "name": "iPhone Darb Black",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_DARB_WHITE",
+      "name": "iPhone Darb white",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_GOLD",
+      "name": "iPhone Gold",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_ROSE",
+      "name": "iPhone Rose",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_TRICIA_BLACK",
+      "name": "iPhone Tricia Black",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_TRICIA_WHITE",
+      "name": "iPhone Tricia White",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_UBBE_BLACK",
+      "name": "iPhone Ubbe Black",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_UBBE_WHITE",
+      "name": "iPhone Ubbe White",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    },
+    {
+      "id": "IPHONE_WHITE",
+      "name": "iPhone White",
+      "sizes": [
+        "iphoneXSM",
+        "iphoneX",
+        "iphone7plus",
+        "iphone7",
+        "iphone5",
+        "iphone4",
+        "ipadPro",
+        "ipad"
+      ]
+    }
+  ],
+  "android": [
+    {
+      "id": "NEXUS5X_BLACK",
+      "name": "Nexus 5X Black",
+      "sizes": ["nexus5x", "tab7", "tab10"]
+    },
+    {
+      "id": "NEXUS6P_BLACK",
+      "name": "Nexus 6P Black",
+      "sizes": ["nexus6p", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_3_BLACK",
+      "name": "Pixel 3 Black",
+      "sizes": ["pixel_3_black", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_3_WHITE",
+      "name": "Pixel 3 White",
+      "sizes": ["pixel_3_white", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_3XL_BLACK",
+      "name": "Pixel 3XL Black",
+      "sizes": ["pixel_3xl_black", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_3XL_WHITE",
+      "name": "Pixel 3XL White",
+      "sizes": ["pixel_3xl_white", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_4XL_BLACK",
+      "name": "Pixel 4XL Black",
+      "sizes": ["pixel_4xl_black", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_BLACK",
+      "name": "Pixel Black",
+      "sizes": ["pixel_black", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_BLUE",
+      "name": "Pixel Blue",
+      "sizes": ["pixel_blue", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_CALLY_BLACK",
+      "name": "Pixel Cally Black",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_CALLY_WHITE",
+      "name": "Pixel Cally White",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_DARB_BLACK",
+      "name": "Pixel Darb Black",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_DARB_WHITE",
+      "name": "Pixel Darb White",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_SILVER",
+      "name": "Pixel Silver",
+      "sizes": ["pixel_silver", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_TRICIA_BLACK",
+      "name": "Pixel Tricia Black",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_TRICIA_WHITE",
+      "name": "Pixel Tricia White",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_UBBE_BLACK",
+      "name": "Pixel Ubbe Black",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "PIXEL_UBBE_WHITE",
+      "name": "Pixel Ubbe White",
+      "sizes": ["pixel_custom", "tab7", "tab10"]
+    },
+    {
+      "id": "SAMSUNG_NOTE10_BLACK",
+      "name": "Samsung Note10 Black",
+      "sizes": ["samsung_note10_black", "tab7", "tab10"]
+    },
+    {
+      "id": "SAMSUNG_S10_BLACK",
+      "name": "Samsung S10 Black",
+      "sizes": ["samsung_s10_black", "tab7", "tab10"]
+    },
+    {
+      "id": "SAMSUNG_S10_PLUS_BLACK",
+      "name": "Samsung S10 Plus Black",
+      "sizes": ["samsung_s10_plus_black", "tab7", "tab10"]
+    }
+  ]
+}
