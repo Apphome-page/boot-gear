@@ -9,7 +9,8 @@ export default function Home() {
       </Head>
       <h1> HOME </h1>
       <Link href='/appicon'>App Icon Generator</Link>
-      <Link href='/appscreenshot'>App Icon Generator</Link>
+      <br />
+      <Link href='/appscreenshot'>App Screenshot Generator</Link>
     </div>
   )
 }

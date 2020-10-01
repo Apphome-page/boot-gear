@@ -60,7 +60,7 @@ export default function AppIcon() {
       type,
       url: window.URL.createObjectURL(e.target.files[0]),
     })
-  })
+  }, [])
 
   const eventPlatforms = useCallback((e) => {
     if (e.target.tagName !== 'INPUT') {
@@ -75,7 +75,7 @@ export default function AppIcon() {
     } else if (!platforms[value] && checked) {
       updatePlatforms((oldPlatforms) => ({ ...oldPlatforms, [value]: true }))
     }
-  })
+  }, [])
 
   const eventGenerate = useCallback((e) => {
     if (!source.url) {
@@ -146,7 +146,7 @@ export default function AppIcon() {
         saveAs(zip, 'AppIcons.zip')
         updateProgress(0)
       })
-  })
+  }, [])
 
   return (
     <Wrap>
