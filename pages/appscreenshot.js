@@ -1,5 +1,7 @@
 import { useRef, useState, useCallback } from 'react'
 import Head from 'next/head'
+import debounce from 'lodash/debounce'
+import ColorPicker from 'rc-color-picker'
 
 import scrMeta from '../config/scrMeta.json'
 import scrSizes from '../config/scrSizes.json'
@@ -8,38 +10,49 @@ import FrameCanvas from '../components/FrameCanvas'
 
 import canvasText from '../helpers/canvasText'
 
+const defaultScale = 0.2
+const defaultFrameId = 'NEXUS5X_BLACK'
+const {
+  W: defaultWidth,
+  H: defaultHeight,
+  SCR_X: defaultScrX,
+  SCR_Y: defaultScrY,
+  SCR_W: defaultScrWidth,
+  SCR_H: defaultScrHeight,
+} = scrSizes[scrMeta.android.find(({ id }) => id === defaultFrameId).sizes[0]]
+
 const frameDefaults = {
   heading: '',
-  headingColor: '#333',
-  headingFont: 'Times New Roman',
+  headingColor: '#000',
+  headingFont: 'Arial',
   headingSize: 32,
-  headingPosX: 0,
+  headingPosX: (defaultWidth * defaultScale) / 2,
   headingPosY: 32,
   frame: '/scr/android/NEXUS5X_BLACK/nexus5x.png',
   framePosX: 0,
   framePosY: 0,
-  frameWidth: 0,
-  frameHeight: 0,
+  frameWidth: defaultWidth * defaultScale,
+  frameHeight: defaultHeight * defaultScale,
   frameRot: 0,
   screenshot: '/scr/default.png',
-  screenshotPosX: 0,
-  screenshotPosY: 0,
-  screenshotWidth: 0,
-  screenshotHeight: 0,
+  screenshotPosX: defaultScrX * defaultScale,
+  screenshotPosY: defaultScrY * defaultScale,
+  screenshotWidth: defaultScrWidth * defaultScale,
+  screenshotHeight: defaultScrHeight * defaultScale,
   screenshotRot: 0,
-  width: 0,
-  height: 0,
+  width: defaultWidth * defaultScale,
+  height: defaultHeight * defaultScale,
 }
 
 export default function AppScr() {
-  const scale = 0.2
+  const scale = defaultScale
   const canvasRef = useRef(null)
   const [frameCanvasProps, updateFrameCanvasProps] = useState({
     ...frameDefaults,
   })
 
   const modFrameCanvasProps = useCallback(
-    (deltaProps) => {
+    debounce((deltaProps) => {
       updateFrameCanvasProps((prevFrameCanvasProps) => {
         const newProps = { ...prevFrameCanvasProps, ...deltaProps }
         const {
@@ -78,31 +91,8 @@ export default function AppScr() {
             })
           : newProps
       })
-    },
+    }, 300),
     [updateFrameCanvasProps]
-  )
-
-  const eventInput = useCallback(
-    (e) => {
-      const { id } = e.target.dataset
-      const numValue = parseInt(e.target.value, 10)
-      switch (id) {
-        case 'headingSize':
-          if (!isNaN(numValue) && isFinite(numValue)) {
-            modFrameCanvasProps({
-              headingSize: numValue || frameDefaults.headingSize,
-              headingPosY: numValue || frameDefaults.headingPosY,
-            })
-          }
-          break
-        default:
-          modFrameCanvasProps({
-            [id]: e.target.value || frameDefaults[id],
-          })
-          break
-      }
-    },
-    [modFrameCanvasProps]
   )
 
   const eventPosition = useCallback(
@@ -149,9 +139,10 @@ export default function AppScr() {
 
   const eventFrame = useCallback(
     (e) => {
-      const { id: frameId, type: frameType = 'android' } = e.target.options[
+      const { type: frameType = 'android' } = e.target.options[
         e.target.selectedIndex
       ].dataset
+      const frameId = e.target.value
       if (!frameId || !scrMeta[frameType]) {
         return
       }
@@ -191,7 +182,7 @@ export default function AppScr() {
         screenshotRot: 0,
       })
     },
-    [modFrameCanvasProps]
+    [modFrameCanvasProps, scale]
   )
 
   return (
@@ -200,78 +191,113 @@ export default function AppScr() {
         <title>App Screenshot Generator</title>
       </Head>
       <hr />
+      <form>
+        <select onChange={eventFrame} defaultValue={defaultFrameId}>
+          <optgroup label='iOS'>
+            {scrMeta.ios.map((phone, key) => (
+              <option key={key} data-type='ios' value={phone.id}>
+                {phone.name}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label='Android'>
+            {scrMeta.android.map((phone, key) => (
+              <option key={key} data-type='android' value={phone.id}>
+                {phone.name}
+              </option>
+            ))}
+          </optgroup>
+        </select>
+        <input
+          type='reset'
+          onClick={() => updateFrameCanvasProps(frameDefaults)}
+        />
+        <hr />
+        <section role='button' tabIndex='-1' onClick={eventPosition}>
+          <button type='button' data-type='deg' data-value='-5'>
+            Rot Left
+          </button>
+          <button
+            type='button'
+            data-type='y'
+            data-value={`-${frameDefaults.height / 16}`}
+          >
+            Move Up
+          </button>
+          <button type='button' data-type='deg' data-value='5'>
+            Rot Right
+          </button>
+          <br />
+          <button
+            type='button'
+            data-type='x'
+            data-value={`-${frameDefaults.width / 16}`}
+          >
+            Move Left
+          </button>
+          <button
+            type='button'
+            data-type='y'
+            data-value={`${frameDefaults.height / 16}`}
+          >
+            Move Down
+          </button>
+          <button
+            type='button'
+            data-type='x'
+            data-value={`${frameDefaults.width / 16}`}
+          >
+            Move Right
+          </button>
+        </section>
+        <hr />
+        <textarea
+          placeholder='Heading'
+          onChange={(e) => modFrameCanvasProps({ heading: e.target.value })}
+        />
+        <ColorPicker
+          enableAlpha={false}
+          defaultColor={frameDefaults.headingColor}
+          color={frameCanvasProps.headingColor}
+          onChange={({ color }) => modFrameCanvasProps({ headingColor: color })}
+        >
+          <span className='rc-color-picker-trigger' title='Heading Color' />
+        </ColorPicker>
+        <select
+          defaultValue='Arial'
+          onChange={(e) => modFrameCanvasProps({ headingFont: e.target.value })}
+        >
+          <option>Arial</option>
+          <option>Times New Roman</option>
+          <option>Roboto</option>
+          <option>Open Sans</option>
+          <option>Montserrat</option>
+          <option>Poppin</option>
+        </select>
+        <select
+          defaultValue='32'
+          onChange={(e) => {
+            const numValue = parseInt(e.target.value, 10)
+            if (!isNaN(numValue) && isFinite(numValue)) {
+              modFrameCanvasProps({
+                headingSize: numValue || frameDefaults.headingSize,
+                headingPosY: numValue || frameDefaults.headingPosY,
+              })
+            }
+          }}
+        >
+          <option value='24'>Small</option>
+          <option value='32'>Medium</option>
+          <option value='40'>Large</option>
+        </select>
+      </form>
+      <hr />
       <FrameCanvas
         ref={canvasRef}
         updateCanvasProps={modFrameCanvasProps}
         {...frameCanvasProps} // eslint-disable-line react/jsx-props-no-spreading
       />
       <hr />
-      <select onBlur={eventFrame} defaultValue='none'>
-        <option value='none' disabled hidden>
-          Select Phone
-        </option>
-        <optgroup label='iOS'>
-          {scrMeta.ios.map((phone, key) => (
-            <option key={key} data-id={phone.id} data-type='ios'>
-              {phone.name}
-            </option>
-          ))}
-        </optgroup>
-        <optgroup label='Android'>
-          {scrMeta.android.map((phone, key) => (
-            <option key={key} data-id={phone.id} data-type='android'>
-              {phone.name}
-            </option>
-          ))}
-        </optgroup>
-      </select>
-      <button
-        type='button'
-        onClick={() => updateFrameCanvasProps(frameDefaults)}
-      >
-        Reset
-      </button>
-      <hr />
-      <section role='button' tabIndex='-1' onClick={eventPosition}>
-        <button type='button' data-type='deg' data-value='-5'>
-          Rot Left
-        </button>
-        <button type='button' data-type='y' data-value='-5'>
-          Move Up
-        </button>
-        <button type='button' data-type='deg' data-value='5'>
-          Rot Right
-        </button>
-        <br />
-        <button type='button' data-type='x' data-value='-5'>
-          Move Left
-        </button>
-        <button type='button' data-type='y' data-value='5'>
-          Move Down
-        </button>
-        <button type='button' data-type='x' data-value='5'>
-          Move Right
-        </button>
-      </section>
-      <hr />
-      <section onBlur={eventInput}>
-        <label>
-          heading
-          <textarea data-id='heading' />
-        </label>
-        <label>
-          headingColor
-          <input data-id='headingColor' />
-        </label>
-        <label>
-          headingFont
-          <input data-id='headingFont' />
-        </label>
-        <label>
-          headingSize
-          <input data-id='headingSize' />
-        </label>
-      </section>
     </div>
   )
 }

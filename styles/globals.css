@@ -7,13 +7,14 @@
   font-weight: 400;
   font-style: normal;
   font-family: 'Montserrat', sans-serif;
-  line-height: 1.8;
-  letter-spacing: 1px;
-  background-color: #fff;
-  color: #333;
   border-radius: 0px;
   outline: none;
   text-decoration: none;
+}
+input,
+textarea,
+button {
+  background-color: #fff;
 }
 em {
   font-weight: 600;

@@ -5,7 +5,8 @@ import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 
 import ResizeImage from '../helpers/resizeImage'
-import AppIconSizes from '../config/appIconSizes'
+
+import AppIconSizes from '../config/appIconSizes.json'
 
 import {
   IconSource,
@@ -62,28 +63,32 @@ export default function AppIcon() {
     })
   }, [])
 
-  const eventPlatforms = useCallback((e) => {
-    if (e.target.tagName !== 'INPUT') {
-      return
-    }
-    const checked = e.target.checked
-    const value = e.target.dataset.platform
-    if (platforms[value] && !checked) {
-      updatePlatforms(
-        ({ [value]: deleteValue, ...restPlatforms }) => restPlatforms
-      )
-    } else if (!platforms[value] && checked) {
-      updatePlatforms((oldPlatforms) => ({ ...oldPlatforms, [value]: true }))
-    }
-  }, [])
+  const eventPlatforms = useCallback(
+    (e) => {
+      const {
+        tagName,
+        checked,
+        dataset: { platform: value },
+      } = e.target
+      if (tagName !== 'INPUT') {
+        return
+      }
+      if (platforms[value] && !checked) {
+        updatePlatforms(
+          ({ [value]: deleteValue, ...restPlatforms }) => restPlatforms
+        )
+      } else if (!platforms[value] && checked) {
+        updatePlatforms((oldPlatforms) => ({ ...oldPlatforms, [value]: true }))
+      }
+    },
+    [platforms]
+  )
 
-  const eventGenerate = useCallback((e) => {
+  const eventGenerate = useCallback(() => {
     if (!source.url) {
       return
     }
-
     updateProgress(0)
-
     const validPlatforms = Object.keys(platforms)
     const json = {
       filename: 'Assets.xcassets/AppIcon.appiconset/Contents.json',
@@ -95,9 +100,10 @@ export default function AppIcon() {
     }
     const progressDelta =
       parseInt(
-        validPlatforms.reduce(function (total, platform) {
-          return total + AppIconSizes[platform].length
-        }, 0) / 50,
+        validPlatforms.reduce(
+          (total, platform) => total + AppIconSizes[platform].length,
+          0
+        ) / 50,
         10
       ) || 1
 
@@ -107,9 +113,9 @@ export default function AppIcon() {
       validPlatforms.reduce((promises, platform) => {
         AppIconSizes[platform].forEach((size) => {
           let filename =
-            platform == 'android' ? 'ic_launcher.png' : size.filename
+            platform === 'android' ? 'ic_launcher.png' : size.filename
           if (size.folder) {
-            filename = size.folder + '/' + filename
+            filename = `${size.folder}/${filename}`
           }
           promises.push(
             ResizeImage({
@@ -119,11 +125,11 @@ export default function AppIcon() {
                 width: size['expected-size'],
                 height: size['expected-size'],
               },
-            }).then(function (image) {
-              updateProgress((progress) => progress + progressDelta)
+            }).then((image) => {
+              updateProgress((pState) => pState + progressDelta)
               return {
                 raw: image,
-                filename: filename,
+                filename,
               }
             })
           )
@@ -131,22 +137,22 @@ export default function AppIcon() {
         return promises
       }, [])
     )
-      .then(function (files) {
+      .then((files) => {
         updateProgress(70)
-        var zip = new JSZip()
-        files.concat(json).forEach(function (file) {
+        const zip = new JSZip()
+        files.concat(json).forEach((file) => {
           zip.file(file.filename, file.raw)
         })
         return zip.generateAsync({
           type: 'blob',
         })
       })
-      .then(function (zip) {
+      .then((zip) => {
         updateProgress(90)
         saveAs(zip, 'AppIcons.zip')
         updateProgress(0)
       })
-  }, [])
+  }, [platforms, source])
 
   return (
     <Wrap>
@@ -158,7 +164,7 @@ export default function AppIcon() {
         <Source
           data-filename={source.name}
           style={{
-            backgroundImage: source.url ? "url('" + source.url + "')" : '',
+            backgroundImage: source.url ? `url('${source.url}')` : '',
           }}
         >
           <IconSource
@@ -184,7 +190,7 @@ export default function AppIcon() {
           <IconGen disabled={!source.url} onClick={eventGenerate}>
             ⬇ Generate
           </IconGen>
-          <Progress value={progress} max='100'></Progress>
+          <Progress value={progress} max='100' />
         </Options>
       </Main>
       <hr />

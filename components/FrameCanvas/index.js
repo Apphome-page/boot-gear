@@ -8,9 +8,9 @@ import canvasImage from '../../helpers/canvasImage'
 function FrameCanvas(
   {
     heading = '',
-    headingColor = '#333',
-    headingFont = 'Times New Roman',
-    headingSize = 16,
+    headingColor = '#000',
+    headingFont = 'Arial',
+    headingSize = 0.125,
     headingPosX = 0,
     headingPosY = 0,
     frame = '',
@@ -104,7 +104,7 @@ function FrameCanvas(
     ctx.clearRect(0, 0, width, height)
     updateHeading()
     updateSnapshot()
-  }, 300)
+  }, 100)
 
   useEffect(() => {
     if (!canvasRef || !canvasRef.current) {

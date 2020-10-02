@@ -42,10 +42,14 @@
     "comma-dangle": "off",
     "jsx-quotes": "off",
     "linebreak-style": "off",
+    "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
+    "jsx-a11y/no-onchange": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "react/no-array-index-key": "off",
+    "react/jsx-curly-newline": "off",
+    "react/jsx-one-expression-per-line": "off",
     // NextJs specific fix: suppress errors for missing 'import React' in files for nextjs
     "react/react-in-jsx-scope": "off",
     // NextJs specific fix: allow jsx syntax in js files

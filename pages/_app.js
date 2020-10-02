@@ -1,6 +1,9 @@
 import Head from 'next/head'
+import 'normalize.css'
+import 'rc-color-picker/assets/index.css'
 import '../styles/globals.css'
 
+// eslint-disable-next-line react/prop-types
 function Bootgear({ Component, pageProps }) {
   return (
     <>
@@ -10,9 +13,23 @@ function Bootgear({ Component, pageProps }) {
         <link
           rel='stylesheet'
           href='https://fonts.googleapis.com/css2?family=Montserrat&display=swap'
-        ></link>
+        />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
+          rel='stylesheet'
+        />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'
+          rel='stylesheet'
+        />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Poppin&display=swap'
+          rel='stylesheet'
+        />
       </Head>
-      <Component {...pageProps} />
+      <Component
+        {...pageProps} // eslint-disable-line react/jsx-props-no-spreading
+      />
     </>
   )
 }
