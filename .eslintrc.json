@@ -42,6 +42,7 @@
     "comma-dangle": "off",
     "jsx-quotes": "off",
     "linebreak-style": "off",
+    "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
     "jsx-a11y/no-onchange": "off",

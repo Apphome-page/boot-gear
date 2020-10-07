@@ -58,13 +58,6 @@ export const Wrap = styled.div`
   max-width: 1024px;
 `
 
-export const Header = styled.header`
-  margin: 18px 0px;
-  padding: 12px 0px;
-  border-bottom: 1px solid #eee;
-  font-size: 24px;
-`
-
 export const Main = styled.main`
   display: grid;
   grid-template-columns: 400px auto;
@@ -75,11 +68,6 @@ export const Main = styled.main`
       display: block;
     }
   }
-`
-
-export const Footer = styled.div`
-  margin: 10px 0px;
-  text-align: center;
 `
 
 export const Source = styled.div`

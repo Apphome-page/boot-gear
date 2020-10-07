@@ -4,21 +4,19 @@ import Head from 'next/head'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 
-import ResizeImage from '../helpers/resizeImage'
+import ResizeImage from '../../helpers/resizeImage'
 
-import AppIconSizes from '../config/appIconSizes.json'
+import AppIconSizes from '../../config/appIconSizes.json'
 
 import {
   IconSource,
   IconGen,
   Progress,
   Wrap,
-  Header,
   Main,
-  Footer,
   Source,
   Options,
-} from '../styles/appicon'
+} from '../../styles/appicon'
 
 const defaultPlatforms = {
   iphone: {
@@ -159,7 +157,6 @@ export default function AppIcon() {
       <Head>
         <title>App Icon Generator</title>
       </Head>
-      <Header>App Icon Generator</Header>
       <Main>
         <Source
           data-filename={source.name}
@@ -193,8 +190,6 @@ export default function AppIcon() {
           <Progress value={progress} max='100' />
         </Options>
       </Main>
-      <hr />
-      <Footer>© Copyright</Footer>
     </Wrap>
   )
 }

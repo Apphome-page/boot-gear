@@ -6,13 +6,16 @@
     "dev": "next dev",
     "inspect": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next export",
+    "gitdeploy": "rm -rf .next out && next build && next export && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^0.2.22",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "aws-amplify": "^3.3.2",
+    "bootstrap": "^4.5.2",
     "cross-env": "^7.0.2",
     "cross-fetch": "^3.0.6",
     "file-saver": "^2.0.2",
@@ -22,6 +25,7 @@
     "normalize.css": "^8.0.1",
     "pica": "^6.1.1",
     "rc-color-picker": "^1.2.6",
+    "rc-tabs": "^11.6.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "swr": "^0.3.5"

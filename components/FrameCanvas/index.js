@@ -27,6 +27,8 @@ function FrameCanvas(
     screenshotRot = 0,
     width = 0,
     height = 0,
+    backgroundColor = '#fff',
+    backgroundImage = '',
     updateCanvasProps,
     ...restProps
   },
@@ -45,6 +47,7 @@ function FrameCanvas(
       face: headingFont,
       color: headingColor,
     })
+    return
   }, [
     canvasRef,
     heading,
@@ -60,6 +63,26 @@ function FrameCanvas(
   const updateSnapshot = useCallback(() => {
     const ctx = canvasRef.current.getContext('2d')
     return Promise.all([])
+      .then(() => {
+        ctx.save()
+        ctx.beginPath()
+        ctx.rect(0, 0, width, height)
+        ctx.fillStyle = backgroundColor
+        ctx.fill()
+        ctx.restore()
+      })
+      .then(
+        () =>
+          backgroundImage &&
+          canvasImage(ctx, {
+            url: backgroundImage,
+            posX: 0,
+            posY: 0,
+            rot: 0,
+            width: width,
+            height: height,
+          })
+      )
       .then(() =>
         canvasImage(ctx, {
           url: screenshot,
@@ -94,6 +117,8 @@ function FrameCanvas(
     screenshotWidth,
     screenshotHeight,
     screenshotRot,
+    backgroundColor,
+    backgroundImage,
   ])
 
   const renderFrame = debounce(() => {
@@ -102,8 +127,7 @@ function FrameCanvas(
     canvas.width = width
     canvas.height = height
     ctx.clearRect(0, 0, width, height)
-    updateHeading()
-    updateSnapshot()
+    updateSnapshot().then(updateHeading)
   }, 100)
 
   useEffect(() => {
