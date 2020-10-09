@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
 import ColorPicker from 'rc-color-picker'
+import { saveAs } from 'file-saver'
 
 import scrBg from '../../config/scrBg.json'
 import scrMeta from '../../config/scrMeta.json'
@@ -27,6 +28,9 @@ export default function FrameTemplateSingle() {
         ...prevFrameCanvasProps,
         ...deltaProps,
       }
+      // if (newProps.template === 'none') {
+      //   newProps.heading = ''
+      // }
       return frameTemplates[newProps.template].adjustProps(newProps)
     })
   }, [])
@@ -54,6 +58,10 @@ export default function FrameTemplateSingle() {
     },
     [modFrameCanvasProps]
   )
+
+  const eventSave = useCallback(() => {
+    saveAs(canvasRef.current.toDataURL('image/png'), 'screenshot.png')
+  }, [canvasRef])
 
   return (
     <>
@@ -297,7 +305,7 @@ export default function FrameTemplateSingle() {
               <input
                 className='w-100 btn btn-success'
                 type='button'
-                onClick={() => updateFrameCanvasProps(frameDefaults)}
+                onClick={eventSave}
                 value='Save'
               />
             </div>

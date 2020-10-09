@@ -30,6 +30,8 @@ function FrameCanvas(
     backgroundColor = '#fff',
     backgroundImage = '',
     updateCanvasProps,
+    frameId,
+    frameType,
     ...restProps
   },
   canvasRef

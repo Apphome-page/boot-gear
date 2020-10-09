@@ -25,7 +25,7 @@ export default function wrapCanvasText(
     const testline = `${line}${word} `
     const testWidth = context.measureText(testline).width
     if (testWidth > maxWidth && index > 0) {
-      context.fillText(line, x, paraHeight)
+      context.fillText(line.slice(0, -1), x, paraHeight)
       line = `${word} `
       paraHeight += lineHeight
     } else {
