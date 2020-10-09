@@ -16,6 +16,7 @@
     "bootstrap": "^4.5.2",
     "file-saver": "^2.0.2",
     "jszip": "^3.5.0",
+    "lodash": "^4.17.20",
     "next": "9.5.3",
     "normalize.css": "^8.0.1",
     "pica": "^6.1.1",

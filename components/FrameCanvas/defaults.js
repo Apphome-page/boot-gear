@@ -13,7 +13,7 @@ export const {
 } = scrSizes[scrMeta.android.find(({ id }) => id === defaultFrameId).sizes[0]]
 
 export function defaultProps(maxHeight) {
-  const defaultScale = maxHeight / defaultHeight
+  const defaultScale = maxHeight ? maxHeight / defaultHeight : 1
   return {
     heading: '',
     headingColor: '#ffffff',

@@ -7,6 +7,7 @@ import scrMeta from '../../config/scrMeta.json'
 
 import FrameCanvas from '../FrameCanvas'
 import frameTemplates from '../FrameCanvas/templates'
+import frameRender from '../FrameCanvas/render'
 import {
   defaultProps as frameDefaultProps,
   defaultFrameId,
@@ -60,8 +61,27 @@ export default function FrameTemplateSingle() {
   )
 
   const eventSave = useCallback(() => {
-    saveAs(canvasRef.current.toDataURL('image/png'), 'screenshot.png')
-  }, [canvasRef])
+    const { frameId, frameType } = frameCanvasProps
+    const fullFrameProps = {
+      ...frameCanvasProps,
+      ...getFrameProps(frameType, frameId),
+    }
+    fullFrameProps.headingSize =
+      (fullFrameProps.headingSize * fullFrameProps.height) / maxHeight
+    fullFrameProps.headingPosY = fullFrameProps.headingSize + 16
+
+    const adjustedFrameProps = frameTemplates[
+      fullFrameProps.template
+    ].adjustProps(fullFrameProps)
+
+    const canvasObj = Object.assign(document.createElement('canvas'), {
+      height: adjustedFrameProps.height,
+      width: adjustedFrameProps.width,
+    })
+    frameRender(canvasObj.getContext('2d'), adjustedFrameProps).then(() => {
+      saveAs(canvasObj.toDataURL('image/png'), 'screenshot.png')
+    })
+  }, [frameCanvasProps])
 
   return (
     <>
