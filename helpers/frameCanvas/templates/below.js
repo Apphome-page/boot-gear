@@ -1,4 +1,4 @@
-import canvasText from '../../../helpers/canvasText'
+import renderText from '../render'
 
 export default {
   name: 'Caption Below',
@@ -9,11 +9,9 @@ export default {
       headingFont,
       headingSize,
       headingPosX,
-      headingPosY,
       framePosY,
       frameHeight,
       screenshotPosY,
-      screnshotHeight,
       height,
       width,
     } = newProps
@@ -23,7 +21,7 @@ export default {
     }).getContext('2d')
     const headingHeight =
       heading && headingSize
-        ? canvasText(ctx, {
+        ? renderText(ctx, {
             text: heading,
             x: headingPosX,
             y: headingSize + 16,

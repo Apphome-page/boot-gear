@@ -1,9 +1,11 @@
-import Head from 'next/head'
 import 'normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'rc-color-picker/assets/index.css'
 import '../styles/globals.css'
-import Link from 'next/link'
+
+import Head from 'next/head'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 // eslint-disable-next-line react/prop-types
 function Bootgear({ Component, pageProps }) {
@@ -29,22 +31,11 @@ function Bootgear({ Component, pageProps }) {
           rel='stylesheet'
         />
       </Head>
-      <Link href='/'>
-        <h1> HOME </h1>
-      </Link>
-      <Link href='/icons'>App Icon Generator</Link>
-      <br />
-      <Link href='/screenshots'>App Sample Screenshot Generator</Link>
-      <br />
-      <Link href='/screenshots/templates'>
-        App Template Screenshot Generator
-      </Link>
-      <hr />
+      <Header />
       <Component
         {...pageProps} // eslint-disable-line react/jsx-props-no-spreading
       />
-      <hr />
-      <footer>© Copyright</footer>
+      <Footer />
     </>
   )
 }

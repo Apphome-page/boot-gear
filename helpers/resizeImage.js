@@ -2,15 +2,15 @@ import Pica from 'pica'
 
 export default function ResizeImage({ blob, extension, size, scale, base }) {
   const pica = Pica()
-  return new Promise(function (resolve) {
-    var img = new Image()
-    var toCanvas = document.createElement('canvas')
-    var ctx = toCanvas.getContext('2d', {
+  return new Promise((resolve) => {
+    const img = new Image()
+    const toCanvas = document.createElement('canvas')
+    const ctx = toCanvas.getContext('2d', {
       alpha: true,
     })
 
     img.crossOrigin = 'anonymous'
-    img.addEventListener('load', function () {
+    img.addEventListener('load', () => {
       if (scale) {
         toCanvas.width = img.width / (base / scale)
         toCanvas.height = img.height / (base / scale)
@@ -19,8 +19,8 @@ export default function ResizeImage({ blob, extension, size, scale, base }) {
         toCanvas.height = size.height
       }
 
-      var regexResults = /(image\/.*)/.exec(extension)
-      var exportType =
+      const regexResults = /(image\/.*)/.exec(extension)
+      const exportType =
         regexResults && regexResults.length > 1 ? regexResults[1] : 'image/png'
 
       if (exportType === 'image/svg+xml') {
@@ -35,9 +35,7 @@ export default function ResizeImage({ blob, extension, size, scale, base }) {
           unsharpThreshold: 2,
           alpha: true,
         })
-        .then(function (result) {
-          return pica.toBlob(result, exportType, 0.9)
-        })
+        .then((result) => pica.toBlob(result, exportType, 0.9))
         .then(resolve)
     })
     img.setAttribute('src', blob)

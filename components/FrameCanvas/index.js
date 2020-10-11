@@ -1,7 +1,7 @@
 import { useEffect, forwardRef } from 'react'
 import debounce from 'lodash/debounce'
 
-import render from './render'
+import render from '../../helpers/frameCanvas/render'
 
 // TODO: Set default measurements / template
 function FrameCanvas(frameCanvasProps, canvasRef) {
