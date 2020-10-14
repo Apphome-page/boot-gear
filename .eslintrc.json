@@ -10,6 +10,7 @@
     "eslint:recommended",
     "airbnb",
     "airbnb/hooks",
+    "plugin:json/recommended",
     "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -49,6 +50,7 @@
       "endOfLine":"auto"
     }],
     "react/no-array-index-key": "off",
+    "react/prop-types": "off",
     "jsx-a11y/no-onchange": "off",
     // NextJs specific fix: suppress errors for missing 'import React' in files for nextjs
     "react/react-in-jsx-scope": "off",

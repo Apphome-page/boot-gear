@@ -1,13 +1,40 @@
 import 'normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'rc-color-picker/assets/index.css'
+import 'nprogress/nprogress.css'
 import '../styles/globals.css'
 
 import Head from 'next/head'
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import * as firebase from 'firebase/app'
+// Add the Firebase services that are used
+import 'firebase/auth'
+import 'firebase/firestore'
+import 'firebase/storage'
+import 'firebase/database'
+
+import StoreProvider from '../utils/storeProvider'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-// eslint-disable-next-line react/prop-types
+import firebaseJSON from '../config/firebase.json'
+
+// initialize firebase
+try {
+  firebase.initializeApp(firebaseJSON)
+} catch (e) {
+  if (e.code !== 'app/duplicate-app') {
+    throw e
+  }
+}
+
+// initialize nprogress
+NProgress.configure({ showSpinner: false })
+Router.events.on('routeChangeStart', () => NProgress.start())
+Router.events.on('routeChangeComplete', () => NProgress.done())
+Router.events.on('routeChangeError', () => NProgress.done())
+
 function Bootgear({ Component, pageProps }) {
   return (
     <>
@@ -27,15 +54,17 @@ function Bootgear({ Component, pageProps }) {
           rel='stylesheet'
         />
         <link
-          href='https://fonts.googleapis.com/css2?family=Poppin&display=swap'
+          href='https://fonts.googleapis.com/css2?family=Poppins&display=swap'
           rel='stylesheet'
         />
       </Head>
-      <Header />
-      <Component
-        {...pageProps} // eslint-disable-line react/jsx-props-no-spreading
-      />
-      <Footer />
+      <StoreProvider store={{ firebase }}>
+        <Header />
+        <Component
+          {...pageProps} // eslint-disable-line react/jsx-props-no-spreading
+        />
+        <Footer />
+      </StoreProvider>
     </>
   )
 }

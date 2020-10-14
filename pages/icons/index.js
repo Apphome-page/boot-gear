@@ -1,8 +1,11 @@
 import { useState, useCallback } from 'react'
+import { Container, Jumbotron, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
 
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+
+import Subscription from '../../components/Subscription'
 
 import ResizeImage from '../../helpers/resizeImage'
 
@@ -12,8 +15,6 @@ import {
   IconSource,
   IconGen,
   Progress,
-  Wrap,
-  Main,
   Source,
   Options,
 } from '../../styles/appicon'
@@ -43,6 +44,7 @@ const defaultPlatforms = {
 
 export default function AppIcon() {
   const [source, updateSource] = useState({})
+  const [subShow, setSubShow] = useState(false)
   const [platforms, updatePlatforms] = useState({
     ...defaultPlatforms,
     stores: {},
@@ -153,43 +155,70 @@ export default function AppIcon() {
   }, [platforms, source])
 
   return (
-    <Wrap>
+    <>
       <Head>
         <title>App Icon Generator</title>
       </Head>
-      <Main>
-        <Source
-          data-filename={source.name}
-          style={{
-            backgroundImage: source.url ? `url('${source.url}')` : '',
-          }}
-        >
-          <IconSource
-            type='file'
-            accept='image/*'
-            aria-label='Image'
-            onChange={eventSource}
-          />
-        </Source>
-        <Options onClick={eventPlatforms}>
-          <small>
-            Drag or select an app icon image (1024x1024) to generate different
-            app icon sizes for all platforms
-          </small>
-          <hr />
-          {Object.keys(defaultPlatforms).map((platform, key) => (
-            <label key={key}>
-              <input data-platform={platform} type='checkbox' defaultChecked />
-              <em>{defaultPlatforms[platform].name}</em>
-              <small> - {defaultPlatforms[platform].subtitle}</small>
-            </label>
-          ))}
-          <IconGen disabled={!source.url} onClick={eventGenerate}>
-            ⬇ Generate
-          </IconGen>
-          <Progress value={progress} max='100' />
-        </Options>
-      </Main>
-    </Wrap>
+      <Subscription
+        show={subShow}
+        onComplete={() => {
+          setSubShow(false)
+          eventGenerate()
+        }}
+      />
+      <Jumbotron fluid className='bg-transparent'>
+        <Container className='text-center'>
+          <h1>App Icon Generator</h1>
+        </Container>
+      </Jumbotron>
+      <Container className='my-4 py-4 min-vh-100'>
+        <Row>
+          <Col lg={6}>
+            <Source
+              data-filename={source.name}
+              style={{
+                backgroundImage: source.url ? `url('${source.url}')` : '',
+              }}
+            >
+              <IconSource
+                type='file'
+                accept='image/*'
+                aria-label='Image'
+                onChange={eventSource}
+              />
+            </Source>
+          </Col>
+          <Col lg={6}>
+            <Options onClick={eventPlatforms}>
+              <small>
+                Drag or select an app icon image (1024x1024) to generate
+                different app icon sizes for all platforms
+              </small>
+              <hr />
+              {Object.keys(defaultPlatforms).map((platform, key) => (
+                <label key={key}>
+                  <input
+                    data-platform={platform}
+                    type='checkbox'
+                    defaultChecked
+                  />
+                  <em>{defaultPlatforms[platform].name}</em>
+                  <small> - {defaultPlatforms[platform].subtitle}</small>
+                </label>
+              ))}
+              <IconGen
+                disabled={!source.url}
+                onClick={() => {
+                  setSubShow(true)
+                }}
+              >
+                ⬇ Generate
+              </IconGen>
+              <Progress value={progress} max='100' />
+            </Options>
+          </Col>
+        </Row>
+      </Container>
+    </>
   )
 }

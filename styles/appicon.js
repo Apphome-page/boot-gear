@@ -52,26 +52,9 @@ export const Progress = styled.progress`
   }
 `
 
-export const Wrap = styled.div`
-  margin: 0px auto;
-  padding: 0px 12px;
-  max-width: 1024px;
-`
-
-export const Main = styled.main`
-  display: grid;
-  grid-template-columns: 400px auto;
-  margin: 24px;
-  @media (max-width: 768px) {
-    display: block;
-    > * {
-      display: block;
-    }
-  }
-`
-
 export const Source = styled.div`
   position: relative;
+  margin: auto;
   height: 400px;
   width: 400px;
   border: 1px dashed #ccc;

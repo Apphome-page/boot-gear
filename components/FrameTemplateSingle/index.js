@@ -1,16 +1,16 @@
 import { useRef, useState, useCallback } from 'react'
 import {
-  Container,
   Row,
   Col,
   Form,
   FormControl,
   InputGroup,
   FormFile,
-  Jumbotron,
 } from 'react-bootstrap'
 import ColorPicker from 'rc-color-picker'
 import { saveAs } from 'file-saver'
+
+import Subscription from '../Subscription'
 
 import scrBg from '../../config/scrBg.json'
 import scrMeta from '../../config/scrMeta.json'
@@ -29,6 +29,7 @@ const maxHeight = 512
 const frameDefaults = frameDefaultProps(maxHeight)
 
 export default function FrameTemplateSingle() {
+  const [subShow, setSubShow] = useState(false)
   const canvasRef = useRef(null)
   const [frameCanvasProps, updateFrameCanvasProps] = useState({
     ...frameDefaults,
@@ -95,12 +96,14 @@ export default function FrameTemplateSingle() {
   }, [frameCanvasProps])
 
   return (
-    <Container className='my-3 min-vh-100'>
-      <Jumbotron fluid className='bg-transparent'>
-        <Container className='text-center'>
-          <h1>Screenshot Generator</h1>
-        </Container>
-      </Jumbotron>
+    <>
+      <Subscription
+        show={subShow}
+        onComplete={() => {
+          setSubShow(false)
+          eventSave()
+        }}
+      />
       <Row className='align-items-center'>
         <Col lg={8}>
           <Form>
@@ -234,7 +237,7 @@ export default function FrameTemplateSingle() {
                     <option>Roboto</option>
                     <option>Open Sans</option>
                     <option>Montserrat</option>
-                    <option>Poppin</option>
+                    <option>Poppins</option>
                   </FormControl>
                 </InputGroup>
               </Col>
@@ -243,7 +246,7 @@ export default function FrameTemplateSingle() {
               <Col md className='m-1'>
                 <InputGroup>
                   <InputGroup.Prepend>
-                    <InputGroup.Text>Font Family</InputGroup.Text>
+                    <InputGroup.Text>Font Weight</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl as='select' custom>
                     <option value='400'>Light</option>
@@ -344,7 +347,9 @@ export default function FrameTemplateSingle() {
                 <FormControl
                   className='btn btn-success'
                   type='button'
-                  onClick={eventSave}
+                  onClick={() => {
+                    setSubShow(true)
+                  }}
                   value='Save'
                 />
               </Col>
@@ -364,6 +369,6 @@ export default function FrameTemplateSingle() {
           />
         </Col>
       </Row>
-    </Container>
+    </>
   )
 }
