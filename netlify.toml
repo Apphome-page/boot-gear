@@ -2,6 +2,6 @@
   publish = "out"
   command = "next build && next export"
 [[redirects]]
-  from = "/*"
-  to = "/"
+  from = "/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2F:slug%2Findex.html?alt=media"
   status = 200
