@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import { useRef, useState, useCallback } from 'react'
 import {
   Row,
@@ -7,10 +8,8 @@ import {
   InputGroup,
   FormFile,
 } from 'react-bootstrap'
-import ColorPicker from 'rc-color-picker'
-import { saveAs } from 'file-saver'
 
-import Subscription from '../Subscription'
+import FrameCanvas from '../FrameCanvas'
 
 import scrBg from '../../config/scrBg.json'
 import scrMeta from '../../config/scrMeta.json'
@@ -23,7 +22,12 @@ import {
   getFrameProps,
 } from '../../helpers/frameCanvas/defaults'
 
-import FrameCanvas from '../FrameCanvas'
+const ColorPicker = dynamic(() => import('rc-color-picker'), {
+  ssr: false,
+})
+const Subscription = dynamic(() => import('../Subscription'), {
+  ssr: false,
+})
 
 const maxHeight = 512
 const frameDefaults = frameDefaultProps(maxHeight)
@@ -90,9 +94,11 @@ export default function FrameTemplateSingle() {
       height: adjustedFrameProps.height,
       width: adjustedFrameProps.width,
     })
-    frameRender(canvasObj.getContext('2d'), adjustedFrameProps).then(() => {
-      saveAs(canvasObj.toDataURL('image/png'), 'screenshot.png')
-    })
+    frameRender(canvasObj.getContext('2d'), adjustedFrameProps)
+      .then(() => import('file-saver'))
+      .then(({ saveAs }) => {
+        saveAs(canvasObj.toDataURL('image/png'), 'screenshot.png')
+      })
   }, [frameCanvasProps])
 
   return (

@@ -1,6 +1,13 @@
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import { Container, Jumbotron } from 'react-bootstrap'
-import FrameTemplateSingle from '../../components/FrameTemplateSingle'
+
+const FrameTemplateSingle = dynamic(
+  () => import('../../components/FrameTemplateSingle'),
+  {
+    ssr: false,
+  }
+)
 
 export default function AppScr() {
   return (

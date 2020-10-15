@@ -1,11 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Container, Jumbotron, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
-
-import JSZip from 'jszip'
-import { saveAs } from 'file-saver'
-
-import Subscription from '../../components/Subscription'
+import dynamic from 'next/dynamic'
 
 import ResizeImage from '../../helpers/resizeImage'
 
@@ -18,6 +14,10 @@ import {
   Source,
   Options,
 } from '../../styles/appicon'
+
+const Subscription = dynamic(() => import('../../components/Subscription'), {
+  ssr: false,
+})
 
 const defaultPlatforms = {
   iphone: {
@@ -110,44 +110,50 @@ export default function AppIcon() {
     updateProgress(10)
 
     Promise.all(
-      validPlatforms.reduce((promises, platform) => {
-        AppIconSizes[platform].forEach((size) => {
-          let filename =
-            platform === 'android' ? 'ic_launcher.png' : size.filename
-          if (size.folder) {
-            filename = `${size.folder}/${filename}`
-          }
-          promises.push(
-            ResizeImage({
-              blob: source.url,
-              extension: source.extension,
-              size: {
-                width: size['expected-size'],
-                height: size['expected-size'],
-              },
-            }).then((image) => {
-              updateProgress((pState) => pState + progressDelta)
-              return {
-                raw: image,
-                filename,
-              }
-            })
-          )
-        })
-        return promises
-      }, [])
+      validPlatforms.reduce(
+        (promises, platform) => {
+          AppIconSizes[platform].forEach((size) => {
+            let filename =
+              platform === 'android' ? 'ic_launcher.png' : size.filename
+            if (size.folder) {
+              filename = `${size.folder}/${filename}`
+            }
+            promises.push(
+              ResizeImage({
+                blob: source.url,
+                extension: source.extension,
+                size: {
+                  width: size['expected-size'],
+                  height: size['expected-size'],
+                },
+              }).then((image) => {
+                updateProgress((pState) => pState + progressDelta)
+                return {
+                  raw: image,
+                  filename,
+                }
+              })
+            )
+          })
+          return promises
+        },
+        [import('jszip')]
+      )
     )
-      .then((files) => {
+      .then(([{ default: JSZip }, ...files]) => {
         updateProgress(70)
         const zip = new JSZip()
         files.concat(json).forEach((file) => {
           zip.file(file.filename, file.raw)
         })
-        return zip.generateAsync({
-          type: 'blob',
-        })
+        return Promise.all([
+          import('file-saver'),
+          zip.generateAsync({
+            type: 'blob',
+          }),
+        ])
       })
-      .then((zip) => {
+      .then(([{ saveAs }, zip]) => {
         updateProgress(90)
         saveAs(zip, 'AppIcons.zip')
         updateProgress(0)
