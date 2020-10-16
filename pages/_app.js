@@ -34,6 +34,9 @@ Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
 function Bootgear({ Component, pageProps }) {
+  // TODO: Global Alert System
+  // TODO: Global Login Popup
+  // TODO: Firebase Userdata from Database Listener
   return (
     <>
       <Head>

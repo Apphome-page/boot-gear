@@ -34,10 +34,10 @@ export default function Home() {
                 <br />
                 Sign Up !
               </p>
-              <Button variane='info' className='btn-alt mr-1 mr-sm-3'>
+              <Button variant='light' className='btn-alt mr-1 mr-sm-3'>
                 Sign Up
               </Button>
-              <Button variane='info' className='btn-alt2 mt-4 mt-sm-0'>
+              <Button variant='light' className='btn-alt2 mt-4 mt-sm-0'>
                 View Pricing
               </Button>
             </Col>

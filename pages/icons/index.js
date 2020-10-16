@@ -202,7 +202,7 @@ export default function AppIcon() {
               </small>
               <hr />
               {Object.keys(defaultPlatforms).map((platform, key) => (
-                <label key={key}>
+                <div key={key}>
                   <input
                     data-platform={platform}
                     type='checkbox'
@@ -210,7 +210,7 @@ export default function AppIcon() {
                   />
                   <em>{defaultPlatforms[platform].name}</em>
                   <small> - {defaultPlatforms[platform].subtitle}</small>
-                </label>
+                </div>
               ))}
               <IconGen
                 disabled={!source.url}

@@ -13,7 +13,7 @@ import { StoreContext } from '../../utils/storeProvider'
 export default function Subscription({ show, onComplete }) {
   const emailRef = useRef(null)
 
-  const [{ firebase }] = useContext(StoreContext)
+  const [{ firebase, userAuth }] = useContext(StoreContext)
 
   const actionSub = useCallback(() => {
     const validEmail =
@@ -35,15 +35,13 @@ export default function Subscription({ show, onComplete }) {
     }
   }, [firebase, onComplete])
 
-  const activeUser = firebase.auth().currentUser
-
   useEffect(() => {
-    if (show && activeUser) {
+    if (show && userAuth) {
       onComplete()
     }
-  }, [show, onComplete, activeUser])
+  }, [show, onComplete, userAuth])
 
-  if (show && activeUser) {
+  if (show && userAuth) {
     return ''
   }
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import {
   Button,
   Modal,
@@ -24,34 +24,51 @@ const productLinks = [
     name: 'Screenshots Generator',
     path: '/screenshots',
   },
+  {
+    name: 'Website Generator',
+    path: '/website',
+  },
 ]
 
 export default function Header() {
-  const [signedIn, setSignedIn] = useState(false)
-  const [signPop, setSignPop] = useState(false)
   const { asPath } = useRouter()
-  const [{ firebase }] = useContext(StoreContext)
-  useEffect(
-    () => firebase.auth().onAuthStateChanged((user) => setSignedIn(user)),
-    [firebase]
-  )
+  const [{ firebase, userAuth, signPop }, modStore] = useContext(StoreContext)
+
+  const userId = userAuth && userAuth.uid
+
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged((userAuthState) =>
+      modStore({
+        userAuth: userAuthState,
+        userData: { uid: userAuthState && userAuthState.uid },
+      })
+    )
+  }, [firebase, modStore])
+
+  useEffect(() => {
+    const userDataRef = firebase.database().ref(`users/${userId}`)
+
+    userDataRef.on('value', (snapshot) => {
+      modStore({ userData: snapshot.val() })
+    })
+
+    return () => {
+      userDataRef.off()
+    }
+  }, [firebase, userId, modStore])
+
   return (
     <>
-      <Modal show={signPop} onHide={() => setSignPop(false)}>
+      <Modal show={signPop} onHide={() => modStore({ signPop: false })}>
         <Modal.Header closeButton />
         <ModalBody className='p-0'>
           <AuthWrap
             uiConfig={{
-              // Popup signin flow rather than redirect flow.
               signInFlow: 'popup',
-              // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-              // signInSuccessUrl: '/signedIn',
-              // We will display Google and Facebook as auth providers.
               signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
               callbacks: {
-                signInSuccess: () => {
-                  setSignedIn(true)
-                  setSignPop(false)
+                signInSuccessWithAuthResult: () => {
+                  modStore({ signPop: false })
                 },
               },
             }}
@@ -84,14 +101,9 @@ export default function Header() {
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
-            <Nav.Link href='/features'>Features</Nav.Link>
-            <Nav.Link href='/pricing'>Pricing</Nav.Link>
             <Nav.Link href='/blog'>Blog</Nav.Link>
-            {signedIn ? (
-              <NavDropdown
-                alignRight
-                title={`Hi! ${firebase.auth().currentUser.displayName}`}
-              >
+            {userAuth ? (
+              <NavDropdown alignRight title={`Hi! ${userAuth.displayName}`}>
                 <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <Button
@@ -107,11 +119,11 @@ export default function Header() {
             )}
           </Nav>
         </Navbar.Collapse>
-        {!signedIn ? (
+        {!userAuth ? (
           <Button
             className='btn-alt ml-auto ml-lg-3 mr-3'
             variant='light'
-            onClick={() => setSignPop(true)}
+            onClick={() => modStore({ signPop: true })}
           >
             Sign In
           </Button>
