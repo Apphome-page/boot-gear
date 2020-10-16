@@ -7,4 +7,8 @@ export const AuthWrap = styled(StyledFirebaseAuth)`
   .firebaseui-container {
     max-width: none;
   }
+  .firebaseui-title:after {
+    content: '/ Sign up';
+    margin: 0px 4px;
+  }
 `

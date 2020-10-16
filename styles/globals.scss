@@ -1,0 +1,62 @@
+@import 'bootstrap/scss/bootstrap';
+
+::selection {
+  background-color: #7b10ff;
+  color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+  text-decoration: none;
+}
+body {
+  color: #50668f;
+  font-size: 16px;
+  line-height: 30px;
+}
+textarea {
+  resize: none;
+}
+em {
+  font-weight: 600;
+}
+small {
+  color: #666;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.bg-alt {
+  background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+  background-color: #f2f5fa;
+}
+
+.btn-alt {
+  padding: 12px 32px;
+  border: 0;
+  border-radius: 0;
+  background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+  background-color: #7b10ff;
+  color: #fff;
+  &:hover {
+    background: #f2f5fa;
+    color: #1e283c;
+  }
+}
+.btn-alt2 {
+  padding: 12px 32px;
+  border: 0;
+  border-radius: 0;
+  background-image: none;
+  background: #f2f5fa;
+  color: #1e283c;
+  &:hover {
+    background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+    background-color: #7b10ff;
+    color: #fff;
+  }
+}

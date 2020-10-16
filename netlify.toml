@@ -1,23 +1,26 @@
 [build]
   publish = "out"
   command = "next build && next export"
+
+[[redirects]]
+  from = "/blog/*"
+  to = "https://cms.apphome.page/blog/:splat"
+  status = 200
+
 [[redirects]]
   from = "/:slug"
   to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2F:slug%2Findex.html?alt=media"
   status = 200
 [[redirects]]
-  from = "/sassets/:slug"
-  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2Fsassets%2F:slug%2Findex.html?alt=media"
+  from = "/:slug/bin/:file"
+  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2F:slug%2Fbin%2F:file?alt=media"
+  status = 200
+
+[[redirects]]
+  from = "/_bin/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2F_bin%2F:slug?alt=media"
   status = 200
 [[redirects]]
-  from = "/sassets/css/:slug"
-  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2Fsassets%2Fcss%2F:slug?alt=media"
-  status = 200
-[[redirects]]
-  from = "/sassets/js/:slug"
-  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2Fsassets%2Fjs%2F:slug?alt=media"
-  status = 200
-[[redirects]]
-  from = "/sassets/img/:slug"
-  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2Fsassets%2Fimg%2F:slug?alt=media"
+  from = "/_bin/:type/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/boot-gear.appspot.com/o/public%2F_bin%2F:type%2F:slug?alt=media"
   status = 200

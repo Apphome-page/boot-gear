@@ -59,22 +59,34 @@ export default function Header() {
           />
         </ModalBody>
       </Modal>
-      <Navbar bg='light' expand='lg' sticky='top' className='shadow'>
+      <Navbar
+        bg='light'
+        expand='lg'
+        sticky='top'
+        className='shadow px-lg-5 py-lg-2'
+      >
         <Link href='/'>
           <div className='navbar-brand'>AppHome</div>
         </Link>
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ml-auto'>
-            {productLinks.map(({ name, path }, index) => (
-              <Link key={index} href={path} passHref>
-                <Nav.Link
-                  href={path}
-                  className={asPath === path ? 'active' : ''}
-                >
-                  {name}
-                </Nav.Link>
-              </Link>
-            ))}
+            <NavDropdown alignRight title='Products'>
+              {productLinks.map(({ name, path }, index) => (
+                <NavDropdown.Item key={index} as='div'>
+                  <Link href={path} passHref>
+                    <Nav.Link
+                      href={path}
+                      className={asPath === path ? 'active' : ''}
+                    >
+                      {name}
+                    </Nav.Link>
+                  </Link>
+                </NavDropdown.Item>
+              ))}
+            </NavDropdown>
+            <Nav.Link href='/features'>Features</Nav.Link>
+            <Nav.Link href='/pricing'>Pricing</Nav.Link>
+            <Nav.Link href='/blog'>Blog</Nav.Link>
             {signedIn ? (
               <NavDropdown
                 alignRight
@@ -97,8 +109,8 @@ export default function Header() {
         </Navbar.Collapse>
         {!signedIn ? (
           <Button
-            className='ml-auto mr-3 ml-lg-0'
-            variant='info'
+            className='btn-alt ml-auto ml-lg-3 mr-3'
+            variant='light'
             onClick={() => setSignPop(true)}
           >
             Sign In

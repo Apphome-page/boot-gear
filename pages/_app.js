@@ -1,8 +1,6 @@
-import 'normalize.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import 'rc-color-picker/assets/index.css'
 import 'nprogress/nprogress.css'
-import '../styles/globals.css'
+import '../styles/globals.scss'
 
 import Head from 'next/head'
 import Router from 'next/router'
