@@ -83,7 +83,7 @@ export default function Header() {
         className='shadow px-lg-5 py-lg-2'
       >
         <Link href='/'>
-          <div className='navbar-brand'>AppHome</div>
+          <div className='navbar-brand btn'>AppHome</div>
         </Link>
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ml-auto'>

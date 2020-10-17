@@ -47,7 +47,11 @@ export default function HomeWebsite() {
       return
     }
     const { appName, appIcon, appScreenshot } = templateProps
-    const appKey = appName.replace(/\W/gi, '-')
+    const appKey = appName.replace(/\W/gi, '-').toLowerCase()
+    if (!appKey) {
+      alert('Please provide a valid App Name')
+      return
+    }
 
     const storagePath = `public/${appKey}/index.html`
     const databasePath = `users/${userId}/sites/${appKey}`
@@ -95,7 +99,9 @@ export default function HomeWebsite() {
 
     try {
       // Update file in storage
-      const renderTemplate = await import('../../helpers/homeWebsite')
+      const { default: renderTemplate } = await import(
+        '../../helpers/homeWebsite'
+      )
       await storageRef.putString(
         renderTemplate({ ...templateProps, appKey }),
         'raw',
