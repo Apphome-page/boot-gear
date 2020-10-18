@@ -11,7 +11,7 @@ import {
   ListGroupItem,
 } from 'react-bootstrap'
 
-import { Hero, HeroImage, FeatureImage } from '../styles/components/home'
+import { Hero, HeroImage, FeatureImage } from '../styles/pages/home'
 
 export default function Home() {
   return (

@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 
+import HomeWebsite from '../../components/HomeWebsite'
+
 export default ''
 
 export const Hero = styled.section`
@@ -10,11 +12,6 @@ export const Hero = styled.section`
   color: #fff;
 `
 
-export const HeroImage = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 50%;
-  height: 100%;
-  background: url(/img/hero/hero-template.png) no-repeat right center/contain;
+export const WebsiteBuilder = styled(HomeWebsite)`
+  max-width: 540px;
 `

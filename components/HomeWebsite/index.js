@@ -1,21 +1,20 @@
 /* eslint-disable no-alert */
-import { useState, useContext, useCallback, useRef } from 'react'
+import { useState, useContext, useCallback, useEffect, useRef } from 'react'
 import {
-  Container,
   InputGroup,
   Form,
   FormFile,
   FormControl,
   Button,
-  Row,
   Col,
 } from 'react-bootstrap'
+import debounce from 'lodash/debounce'
 
 import { StoreContext } from '../../utils/storeProvider'
 
-import { Hero, HeroImage } from './style'
+import uploadWebsite from '../../helpers/homeWebsite/upload'
 
-export default function HomeWebsite() {
+export default function HomeWebsite({ initProps = {}, className }) {
   const formRef = useRef(null)
   const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
   const userId = userAuth && userAuth.uid
@@ -30,13 +29,18 @@ export default function HomeWebsite() {
     appEmailLink: '',
     appTwitterLink: '',
     appFacebookLink: '',
+    ...initProps,
   })
 
-  const modTemplateProps = useCallback((deltaProps) => {
-    setTemplateProps((prevProps) => {
-      return { ...prevProps, ...deltaProps }
-    })
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const modTemplateProps = useCallback(
+    debounce((deltaProps) => {
+      setTemplateProps((prevProps) => {
+        return { ...prevProps, ...deltaProps }
+      })
+    }),
+    []
+  )
 
   const actionUpload = useCallback(async () => {
     if (!userId) {
@@ -46,232 +50,166 @@ export default function HomeWebsite() {
     if (!formRef.current.reportValidity()) {
       return
     }
-    const { appName, appIcon, appScreenshot } = templateProps
-    const appKey = appName.replace(/\W/gi, '-').toLowerCase()
+    const appKey = templateProps.appName.replace(/\W/gi, '-').toLowerCase()
     if (!appKey) {
       alert('Please provide a valid App Name')
       return
     }
 
-    const storagePath = `public/${appKey}/index.html`
-    const databasePath = `users/${userId}/sites/${appKey}`
-
-    const storageRef = firebase.storage().ref(storagePath)
-    const databaseRef = firebase.database().ref(databasePath)
-
-    // 1. User Limit
-    const userSitesPromise = await firebase
-      .database()
-      .ref(`users/${userId}/sites`)
-      .once('value')
-    const userSites = userSitesPromise.val() || {}
-    delete userSites[appKey]
-
-    // 2. Path is accessible || User Owns Path
-    const snapshot = await databaseRef.once('value')
-    const { timeStamp: userWebsite } = snapshot.val() || {}
-    let freeWebsitePath = true
     try {
-      const {
-        customMetadata: { owner },
-      } = await storageRef.getMetadata()
-      freeWebsitePath = !owner || owner === userId
-    } catch (e) {
-      // Path Does not exist
-    }
-
-    // EXIT: Already owns 1 Website || Path is inaccessible
-    if (Object.keys(userSites).length > 0) {
-      alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
-      return
-    }
-    if (!(freeWebsitePath || userWebsite)) {
-      alert(`${appKey} is already taken`)
-      return
-    }
-
-    const customMeta = {
-      // cacheControl: 'public,max-age=300',
-      customMetadata: {
-        owner: userId,
-      },
-    }
-
-    try {
-      // Update file in storage
-      const { default: renderTemplate } = await import(
-        '../../helpers/homeWebsite'
-      )
-      await storageRef.putString(
-        renderTemplate({ ...templateProps, appKey }),
-        'raw',
-        {
-          ...customMeta,
-          contentType: 'text/html; charset=utf-8',
-        }
-      )
-      firebase
-        .storage()
-        .ref(`public/${appKey}/bin/${appIcon.name}`)
-        .put(appIcon, customMeta)
-      firebase
-        .storage()
-        .ref(`public/${appKey}/bin/${appScreenshot.name}`)
-        .put(appScreenshot, customMeta)
-      // Update ownership
-      await databaseRef.set({
-        timeStamp: new Date().getTime(),
-      })
+      await uploadWebsite(firebase, userId, appKey, templateProps)
+      formRef.current.reset()
+      window.open(`https://boot-gear.netlify.app/${appKey}`)
     } catch (e) {
       alert('Something went wrong while updating your website.')
     }
   }, [firebase, modStore, templateProps, userId])
 
+  useEffect(() => {
+    modTemplateProps(initProps)
+  }, [initProps, modTemplateProps])
+
   return (
-    <>
-      <Hero>
-        <Container className='py-5'>
-          <Row>
-            <Col lg={6}>
-              <h1 className='display-4 py-5'>App Website Generator</h1>
-              <Form ref={formRef}>
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>App Name</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    onChange={(e) => {
-                      modTemplateProps({ appName: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <FormFile
-                  accept='image/*'
-                  required
-                  label='Attach App Icon'
-                  custom
-                  onChange={(e) => {
-                    if (e.target.files.length < 1) {
-                      return
-                    }
-                    modTemplateProps({
-                      appIcon: e.target.files[0],
-                    })
-                  }}
-                />
-                <hr />
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>App Description</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    as='textarea'
-                    rows='1'
-                    onChange={(e) => {
-                      modTemplateProps({ appDescription: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <FormFile
-                  accept='image/*'
-                  required
-                  label='Attach App Screenshot'
-                  custom
-                  onChange={(e) => {
-                    if (e.target.files.length < 1) {
-                      return
-                    }
-                    modTemplateProps({
-                      appScreenshot: e.target.files[0],
-                    })
-                  }}
-                />
-                <hr />
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Play Store Link</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    onChange={(e) => {
-                      modTemplateProps({ appAndroidLink: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>App Store (Apple) Link</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    onChange={(e) => {
-                      modTemplateProps({ appLink: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <hr />
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Facebook</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    onChange={(e) => {
-                      modTemplateProps({ appFacebookLink: e.target.value })
-                    }}
-                  />
-                </InputGroup>{' '}
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Twitter</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    onChange={(e) => {
-                      modTemplateProps({ appTwitterLink: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <InputGroup className='my-1'>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Email</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    required
-                    type='email'
-                    onChange={(e) => {
-                      modTemplateProps({ appEmailLink: e.target.value })
-                    }}
-                  />
-                </InputGroup>
-                <hr />
-                <Form.Row>
-                  <Col>
-                    <FormControl
-                      required
-                      type='reset'
-                      value='Reset'
-                      className='btn btn-info w-100'
-                    />
-                  </Col>
-                  <Col>
-                    <Button
-                      onClick={actionUpload}
-                      variant='success'
-                      className='w-100'
-                    >
-                      Create Website
-                    </Button>
-                  </Col>
-                </Form.Row>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
-        <HeroImage className='d-lg-block d-none' />
-      </Hero>
-    </>
+    <Form ref={formRef} className={className}>
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>App Name</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          disabled={!!initProps.appName}
+          defaultValue={templateProps.appName}
+          onChange={(e) => {
+            modTemplateProps({ appName: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <FormFile
+        accept='image/*'
+        required
+        label='Attach App Icon'
+        custom
+        onChange={(e) => {
+          if (e.target.files.length < 1) {
+            return
+          }
+          modTemplateProps({
+            appIcon: e.target.files[0],
+          })
+        }}
+      />
+      <hr />
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>App Description</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          as='textarea'
+          rows='1'
+          defaultValue={templateProps.appDescription}
+          onChange={(e) => {
+            modTemplateProps({ appDescription: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <FormFile
+        accept='image/*'
+        required
+        label='Attach App Screenshot'
+        custom
+        onChange={(e) => {
+          if (e.target.files.length < 1) {
+            return
+          }
+          modTemplateProps({
+            appScreenshot: e.target.files[0],
+          })
+        }}
+      />
+      <hr />
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>Play Store Link</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          defaultValue={templateProps.appAndroidLink}
+          onChange={(e) => {
+            modTemplateProps({ appAndroidLink: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>App Store (Apple) Link</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          defaultValue={templateProps.appLink}
+          onChange={(e) => {
+            modTemplateProps({ appLink: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <hr />
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>Facebook</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          defaultValue={templateProps.appFacebookLink}
+          onChange={(e) => {
+            modTemplateProps({ appFacebookLink: e.target.value })
+          }}
+        />
+      </InputGroup>{' '}
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>Twitter</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          defaultValue={templateProps.appTwitterLink}
+          onChange={(e) => {
+            modTemplateProps({ appTwitterLink: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <InputGroup className='my-1'>
+        <InputGroup.Prepend>
+          <InputGroup.Text>Email</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          required
+          type='email'
+          defaultValue={templateProps.appEmailLink}
+          onChange={(e) => {
+            modTemplateProps({ appEmailLink: e.target.value })
+          }}
+        />
+      </InputGroup>
+      <hr />
+      <Form.Row>
+        <Col>
+          <Button
+            variant='info'
+            className='w-100'
+            onClick={() => {
+              setTemplateProps({})
+              formRef.current.reset()
+            }}
+          >
+            Reset
+          </Button>
+        </Col>
+        <Col>
+          <Button onClick={actionUpload} variant='success' className='w-100'>
+            Create Website
+          </Button>
+        </Col>
+      </Form.Row>
+    </Form>
   )
 }

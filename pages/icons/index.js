@@ -13,7 +13,7 @@ import {
   Progress,
   Source,
   Options,
-} from '../../styles/components/appicon'
+} from '../../styles/pages/appicon'
 
 const Subscription = dynamic(() => import('../../components/Subscription'), {
   ssr: false,

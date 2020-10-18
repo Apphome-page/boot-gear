@@ -30,36 +30,35 @@ const productLinks = [
   },
 ]
 
-export default function Header() {
-  const { asPath } = useRouter()
-  const [{ firebase, userAuth, signPop }, modStore] = useContext(StoreContext)
+const userLinks = []
 
+export default function Header() {
+  const router = useRouter()
+  const [{ firebase, userAuth, signPop, signForced }, modStore] = useContext(
+    StoreContext
+  )
   const userId = userAuth && userAuth.uid
 
   useEffect(() => {
     return firebase.auth().onAuthStateChanged((userAuthState) =>
       modStore({
         userAuth: userAuthState,
-        userData: { uid: userAuthState && userAuthState.uid },
       })
     )
   }, [firebase, modStore])
 
-  useEffect(() => {
-    const userDataRef = firebase.database().ref(`users/${userId}`)
-
-    userDataRef.on('value', (snapshot) => {
-      modStore({ userData: snapshot.val() })
-    })
-
-    return () => {
-      userDataRef.off()
-    }
-  }, [firebase, userId, modStore])
-
   return (
     <>
-      <Modal show={signPop} onHide={() => modStore({ signPop: false })}>
+      <Modal
+        show={signPop || (signForced && !userId)}
+        onHide={() => {
+          if (signForced && !userId) {
+            router.replace('/')
+          }
+          modStore({ signPop: false })
+        }}
+        backdrop={signForced ? 'static' : true}
+      >
         <Modal.Header closeButton />
         <ModalBody className='p-0'>
           <AuthWrap
@@ -83,7 +82,7 @@ export default function Header() {
         className='shadow px-lg-5 py-lg-2'
       >
         <Link href='/'>
-          <div className='navbar-brand btn'>AppHome</div>
+          <div className='navbar-brand cursor-pointer'>AppHome</div>
         </Link>
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ml-auto'>
@@ -93,7 +92,7 @@ export default function Header() {
                   <Link href={path} passHref>
                     <Nav.Link
                       href={path}
-                      className={asPath === path ? 'active' : ''}
+                      className={router.pathname === path ? 'active' : ''}
                     >
                       {name}
                     </Nav.Link>
@@ -104,11 +103,26 @@ export default function Header() {
             <Nav.Link href='/blog'>Blog</Nav.Link>
             {userAuth ? (
               <NavDropdown alignRight title={`Hi! ${userAuth.displayName}`}>
+                {userLinks.map(({ name, path }, index) => (
+                  <NavDropdown.Item key={index} as='div'>
+                    <Link href={path} passHref>
+                      <Nav.Link
+                        href={path}
+                        className={router.pathname === path ? 'active' : ''}
+                      >
+                        {name}
+                      </Nav.Link>
+                    </Link>
+                  </NavDropdown.Item>
+                ))}
                 <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <Button
-                    variant='info'
-                    onClick={() => firebase.auth().signOut()}
+                    variant='outline-danger'
+                    onClick={() => {
+                      router.push('/')
+                      firebase.auth().signOut()
+                    }}
                   >
                     Sign Out
                   </Button>
@@ -122,7 +136,7 @@ export default function Header() {
         {!userAuth ? (
           <Button
             className='btn-alt ml-auto ml-lg-3 mr-3'
-            variant='light'
+            variant='dark'
             onClick={() => modStore({ signPop: true })}
           >
             Sign In
