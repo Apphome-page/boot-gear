@@ -1,7 +1,7 @@
-import { renderText } from '../render'
+import { renderText } from '../../../utils/renderCanvas'
 
 export default {
-  name: 'Caption Below Full Device',
+  name: 'Caption Above Full Device',
   adjustProps: (newProps) => {
     const {
       heading,
@@ -41,16 +41,17 @@ export default {
             color: headingColor,
           }) + 4
         : 0
-    headingPosY = height - headingHeight + 16
-    if (framePosY + frameHeight > headingPosY) {
-      framePosY = 0
+    headingPosY = headingSize + 16
+    if (headingHeight > framePosY) {
+      framePosY = headingHeight
       frameHeight = height - headingHeight
       const frameScale = frameHeight / prevFrameHeight
       frameWidth *= frameScale
       framePosX = (width - frameWidth) / 2
 
-      // // TODO: Recalculate screenshot values
-      screenshotPosY = (prevScreenshotPosY - prevFramePosY) * frameScale
+      // TODO: Recalculate screenshot values
+      screenshotPosY =
+        headingHeight + (prevScreenshotPosY - prevFramePosY) * frameScale
       screenshotHeight *= frameScale
       screenshotWidth *= frameScale
       screenshotPosX = (width - screenshotWidth) / 2

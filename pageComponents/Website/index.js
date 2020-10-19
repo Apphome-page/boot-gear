@@ -12,9 +12,9 @@ import debounce from 'lodash/debounce'
 
 import { StoreContext } from '../../utils/storeProvider'
 
-import uploadWebsite from '../../helpers/homeWebsite/upload'
+import uploadWebsite from './helpers/upload'
 
-export default function HomeWebsite({ initProps = {}, className }) {
+export default function HomeWebsite({ initProps = {} }) {
   const formRef = useRef(null)
   const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
   const userId = userAuth && userAuth.uid
@@ -70,7 +70,7 @@ export default function HomeWebsite({ initProps = {}, className }) {
   }, [initProps, modTemplateProps])
 
   return (
-    <Form ref={formRef} className={className}>
+    <Form ref={formRef}>
       <InputGroup className='my-1'>
         <InputGroup.Prepend>
           <InputGroup.Text>App Name</InputGroup.Text>

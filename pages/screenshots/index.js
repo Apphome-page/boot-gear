@@ -1,13 +1,7 @@
 import Head from 'next/head'
-import dynamic from 'next/dynamic'
 import { Container, Jumbotron } from 'react-bootstrap'
 
-const FrameTemplateSingle = dynamic(
-  () => import('../../components/FrameTemplateSingle'),
-  {
-    ssr: false,
-  }
-)
+import MockUpSingle from '../../pageComponents/MockUp/single'
 
 export default function AppScr() {
   return (
@@ -21,7 +15,7 @@ export default function AppScr() {
         </Container>
       </Jumbotron>
       <Container className='my-3 min-vh-100'>
-        <FrameTemplateSingle />
+        <MockUpSingle />
       </Container>
     </>
   )

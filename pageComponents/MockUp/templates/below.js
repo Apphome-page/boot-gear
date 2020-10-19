@@ -1,7 +1,7 @@
-import { renderText } from '../render'
+import { renderText } from '../../../utils/renderCanvas'
 
 export default {
-  name: 'Caption Above',
+  name: 'Caption Below',
   adjustProps: (newProps) => {
     const {
       heading,
@@ -10,6 +10,7 @@ export default {
       headingSize,
       headingPosX,
       framePosY,
+      frameHeight,
       screenshotPosY,
       height,
       width,
@@ -23,18 +24,19 @@ export default {
         ? renderText(ctx, {
             text: heading,
             x: headingPosX,
-            y: 16 + headingSize,
+            y: headingSize + 16,
             size: headingSize,
             face: headingFont,
             color: headingColor,
           }) + 4
         : 0
-    const updatedHeadingPosY = headingSize + 16
-    const isOverlap = headingHeight > framePosY
-    const updatedFramePosY = isOverlap ? headingHeight : framePosY
+    const updatedHeadingPosY = height - headingHeight + 16
+    const isOverlap = framePosY + frameHeight > updatedHeadingPosY
+    const updatedFramePosY = isOverlap ? 0 - headingHeight : framePosY
     const updatedScreenshotPosY = isOverlap
-      ? screenshotPosY + (updatedFramePosY - framePosY)
+      ? screenshotPosY - (framePosY - updatedFramePosY)
       : screenshotPosY
+
     return {
       ...newProps,
       headingPosY: updatedHeadingPosY,

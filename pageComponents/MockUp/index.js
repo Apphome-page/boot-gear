@@ -14,8 +14,8 @@ import {
 import scrBg from '../../config/scrBg.json'
 import scrMeta from '../../config/scrMeta.json'
 
-import frameTemplates from '../../helpers/frameCanvas/templates'
-import { defaultFrameId } from '../../helpers/frameCanvas/defaults'
+import frameTemplates from './templates'
+import { defaultFrameId } from './helpers/defaults'
 
 import {
   MoveUp,
@@ -26,7 +26,7 @@ import {
   RotateRight,
 } from './style'
 
-export default function FrameTemplate() {
+export default function MockUp() {
   return (
     <Row>
       <Col lg={3}>

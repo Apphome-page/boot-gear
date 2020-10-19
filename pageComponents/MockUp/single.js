@@ -9,23 +9,24 @@ import {
   FormFile,
 } from 'react-bootstrap'
 
-import FrameCanvas from '../FrameCanvas'
+import FrameCanvas from '../../components/FrameCanvas'
 
-import scrBg from '../../config/scrBg.json'
+import renderCanvas from '../../utils/renderCanvas'
+
 import scrMeta from '../../config/scrMeta.json'
 
-import frameTemplates from '../../helpers/frameCanvas/templates'
-import frameRender from '../../helpers/frameCanvas/render'
+import frameTemplates from './templates'
+
 import {
   defaultProps as frameDefaultProps,
   defaultFrameId,
   getFrameProps,
-} from '../../helpers/frameCanvas/defaults'
+} from './helpers/defaults'
 
 const ColorPicker = dynamic(() => import('rc-color-picker'), {
   ssr: false,
 })
-const Subscription = dynamic(() => import('../Subscription'), {
+const Subscription = dynamic(() => import('../../components/Subscription'), {
   ssr: false,
 })
 
@@ -94,7 +95,7 @@ export default function FrameTemplateSingle() {
       height: adjustedFrameProps.height,
       width: adjustedFrameProps.width,
     })
-    frameRender(canvasObj.getContext('2d'), adjustedFrameProps)
+    renderCanvas(canvasObj.getContext('2d'), adjustedFrameProps)
       .then(() => import('file-saver'))
       .then(({ saveAs }) => {
         saveAs(canvasObj.toDataURL('image/png'), 'screenshot.png')
@@ -252,13 +253,27 @@ export default function FrameTemplateSingle() {
               <Col md className='m-1'>
                 <InputGroup>
                   <InputGroup.Prepend>
-                    <InputGroup.Text>Font Weight</InputGroup.Text>
+                    <InputGroup.Text>Background Color</InputGroup.Text>
                   </InputGroup.Prepend>
-                  <FormControl as='select' custom>
-                    <option value='400'>Light</option>
-                    <option value='600'>Normal</option>
-                    <option value='800'>Bold</option>
-                  </FormControl>
+                  <FormControl
+                    readOnly
+                    placeholder={frameDefaults.backgroundColor}
+                    value={frameCanvasProps.backgroundColor}
+                    aria-label='Background Color'
+                  />
+                  <InputGroup.Append>
+                    <ColorPicker
+                      className='input-group-text p-0'
+                      enableAlpha={false}
+                      defaultColor={frameDefaults.backgroundColor}
+                      color={frameCanvasProps.backgroundColor}
+                      onChange={({ color }) =>
+                        modFrameCanvasProps({ backgroundColor: color })
+                      }
+                    >
+                      <span className='rc-color-picker-trigger h-100 m-0 p-0 border-0 fsize-32' />
+                    </ColorPicker>
+                  </InputGroup.Append>
                 </InputGroup>
               </Col>
               <Col md className='m-1'>
@@ -280,57 +295,6 @@ export default function FrameTemplateSingle() {
                       color={frameCanvasProps.headingColor}
                       onChange={({ color }) =>
                         modFrameCanvasProps({ headingColor: color })
-                      }
-                    >
-                      <span className='rc-color-picker-trigger h-100 m-0 p-0 border-0 fsize-32' />
-                    </ColorPicker>
-                  </InputGroup.Append>
-                </InputGroup>
-              </Col>
-            </Form.Row>
-            <hr />
-            <Form.Row className='my-1'>
-              <Col md className='m-1'>
-                <InputGroup>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Background Template</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    as='select'
-                    onChange={(e) => {
-                      modFrameCanvasProps({
-                        backgroundImage: `/scr/bg/${e.target.value}`,
-                      })
-                    }}
-                  >
-                    <option value=''>None</option>
-                    {scrBg.map(({ path }, index) => (
-                      <option value={path} key={index}>
-                        {`Option ${index}`}
-                      </option>
-                    ))}
-                  </FormControl>
-                </InputGroup>
-              </Col>
-              <Col md className='m-1'>
-                <InputGroup>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Background Color</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    readOnly
-                    placeholder={frameDefaults.backgroundColor}
-                    value={frameCanvasProps.backgroundColor}
-                    aria-label='Background Color'
-                  />
-                  <InputGroup.Append>
-                    <ColorPicker
-                      className='input-group-text p-0'
-                      enableAlpha={false}
-                      defaultColor={frameDefaults.backgroundColor}
-                      color={frameCanvasProps.backgroundColor}
-                      onChange={({ color }) =>
-                        modFrameCanvasProps({ backgroundColor: color })
                       }
                     >
                       <span className='rc-color-picker-trigger h-100 m-0 p-0 border-0 fsize-32' />

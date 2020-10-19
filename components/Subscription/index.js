@@ -15,22 +15,22 @@ export default function Subscription({ show, onComplete }) {
 
   const [{ firebase, userAuth }] = useContext(StoreContext)
 
-  const actionSub = useCallback(() => {
+  const actionSub = useCallback(async () => {
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
-    if (onComplete && typeof onComplete === 'function' && validEmail) {
-      firebase
+    if (validEmail) {
+      await firebase
         .database()
         .ref(`subs/${validEmail.replace(/\W/gi, '_')}`)
-        .set(
-          {
-            email: validEmail,
-            location: window.location.href,
-            timestamp: new Date().getTime(),
-          },
-          onComplete
-        )
-    } else if (!validEmail) {
+        .set({
+          email: validEmail,
+          location: window.location.href,
+          timestamp: new Date().getTime(),
+        })
+      if (onComplete && typeof onComplete === 'function') {
+        onComplete()
+      }
+    } else {
       emailRef.current.reportValidity()
     }
   }, [firebase, onComplete])

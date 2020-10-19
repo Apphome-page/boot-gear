@@ -1,5 +1,5 @@
-import scrMeta from '../../config/scrMeta.json'
-import scrSizes from '../../config/scrSizes.json'
+import scrMeta from '../../../config/scrMeta.json'
+import scrSizes from '../../../config/scrSizes.json'
 
 export const defaultFrameId = 'NEXUS5X_BLACK'
 
@@ -37,7 +37,7 @@ export function defaultProps(maxHeight) {
     screenshotRot: 0,
     width: defaultWidth * defaultScale,
     height: defaultHeight * defaultScale,
-    backgroundColor: '#00b9d1',
+    backgroundColor: '#7b10ff',
     backgroundImage: '',
     template: 'above',
   }

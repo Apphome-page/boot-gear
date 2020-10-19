@@ -136,7 +136,7 @@ export default function Header() {
         {!userAuth ? (
           <Button
             className='btn-alt ml-auto ml-lg-3 mr-3'
-            variant='dark'
+            variant='light'
             onClick={() => modStore({ signPop: true })}
           >
             Sign In

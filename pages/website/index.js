@@ -5,7 +5,8 @@ import { useRouter } from 'next/router'
 
 import useUserData from '../../utils/useUserData'
 
-import { Hero, WebsiteBuilder } from '../../styles/pages/appwebsite'
+import WebsiteBuilder from '../../pageComponents/Website'
+import { Hero } from '../../pageComponents/Website/style'
 
 export default function Website() {
   const { query: { edit: websiteKey = '' } = {} } = useRouter()
@@ -38,27 +39,16 @@ export default function Website() {
           ) : (
             ''
           )}
-        </Container>
-        <Container fluid className='pt-2 pb-5'>
-          <Row>
+          <Row className='pt-3 pb-5'>
             <Col lg={6}>
               <WebsiteBuilder
                 className='ml-auto'
                 initProps={initTemplateProps}
               />
             </Col>
-            <Col lg={6} className='align-self-end d-lg-block d-none'>
-              <img
-                src='/img/hero/hero-template.png'
-                alt='Hero Template'
-                className='w-100'
-              />
-            </Col>
           </Row>
         </Container>
       </Hero>
-
-      <hr />
     </>
   )
 }

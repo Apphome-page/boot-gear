@@ -1,10 +1,17 @@
 @import 'bootstrap/scss/bootstrap';
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 ::selection {
   background-color: #7b10ff;
   color: #fff;
 }
-
 * {
   box-sizing: border-box;
   margin: 0px;
@@ -63,6 +70,9 @@ small {
 
 .cursor-pointer {
   cursor: pointer;
+}
+.filter-invert {
+  filter: invert(1);
 }
 .fsize-32 {
   height: 32px;
