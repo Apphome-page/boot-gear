@@ -8,6 +8,7 @@ import {
   InputGroup,
   FormFile,
 } from 'react-bootstrap'
+import debounce from 'lodash/debounce'
 
 import FrameCanvas from '../../components/FrameCanvas'
 
@@ -40,18 +41,22 @@ export default function FrameTemplateSingle() {
     ...frameDefaults,
   })
 
-  const modFrameCanvasProps = useCallback((deltaProps) => {
-    updateFrameCanvasProps((prevFrameCanvasProps) => {
-      const newProps = {
-        ...prevFrameCanvasProps,
-        ...deltaProps,
-      }
-      // if (newProps.template === 'none') {
-      //   newProps.heading = ''
-      // }
-      return frameTemplates[newProps.template].adjustProps(newProps)
-    })
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const modFrameCanvasProps = useCallback(
+    debounce((deltaProps) => {
+      updateFrameCanvasProps((prevFrameCanvasProps) => {
+        const newProps = {
+          ...prevFrameCanvasProps,
+          ...deltaProps,
+        }
+        // if (newProps.template === 'none') {
+        //   newProps.heading = ''
+        // }
+        return frameTemplates[newProps.template].adjustProps(newProps)
+      })
+    }, 100),
+    []
+  )
 
   const eventTemplate = useCallback(
     (e) => {

@@ -55,6 +55,10 @@ service firebase.storage {
 }
 ```
 
+# To-do
+- Subscription Alerts
+- Verbose Error Reporting ( eliminate alert/confirm )
+
 # Issues:
 - 404 Routes for `/:slug` fallback to Terniary Location (Firebase Storage) with a JSON response
 - Flush Primary CDN (Netlify) for Terniary (Firebase Storage) updates

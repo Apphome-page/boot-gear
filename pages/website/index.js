@@ -23,32 +23,34 @@ export default function Website() {
       <Head>
         <title>App Website Home Page Generator</title>
       </Head>
-      <Hero>
-        <Container>
-          <h1 className='display-4 py-5'>App Website Generator</h1>
-          {websiteKey && userSites.includes(websiteKey) ? (
-            <div className='lead border-bottom lead my-2'>
-              Editing{' '}
-              <a
-                href={`/${websiteKey}`}
-                className='text-decoration-none text-white-50'
-              >
-                {websiteKey}
-              </a>
-            </div>
-          ) : (
-            ''
-          )}
-          <Row className='pt-3 pb-5'>
-            <Col lg={6}>
-              <WebsiteBuilder
-                className='ml-auto'
-                initProps={initTemplateProps}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </Hero>
+      <div className='min-vh-100'>
+        <Hero>
+          <Container>
+            <h1 className='display-4 py-5'>App Website Generator</h1>
+            {websiteKey && userSites.includes(websiteKey) ? (
+              <div className='lead border-bottom lead my-2'>
+                Editing{' '}
+                <a
+                  href={`/${websiteKey}`}
+                  className='text-decoration-none text-white-50'
+                >
+                  {websiteKey}
+                </a>
+              </div>
+            ) : (
+              ''
+            )}
+            <Row className='pt-3 pb-5'>
+              <Col lg={6}>
+                <WebsiteBuilder
+                  className='ml-auto'
+                  initProps={initTemplateProps}
+                />
+              </Col>
+            </Row>
+          </Container>
+        </Hero>
+      </div>
     </>
   )
 }

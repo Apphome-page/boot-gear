@@ -8,11 +8,11 @@ export default function Footer() {
       <Container>
         <Row>
           <Col lg={3}>
-            <div className='my-4 h5 font-weight-bold'>Newsletter</div>
+            <div className='my-4 h5 font-weight-bold'>About Us</div>
             <p>
-              You can trust us. we only send promo offers, not a single spam.
+              We make mobile apps dynamic so that your users do not have to
+              upgrade their apps for minor changes
             </p>
-            <SubscriptionInline />
           </Col>
           <Col lg={3}>
             <div className='my-4 h5 font-weight-bold'>Resources</div>
@@ -69,11 +69,11 @@ export default function Footer() {
             </Media>
           </Col>
           <Col lg={3}>
-            <div className='my-4 h5 font-weight-bold'>About Us</div>
+            <div className='my-4 h5 font-weight-bold'>Newsletter</div>
             <p>
-              We make mobile apps dynamic so that your users do not have to
-              upgrade their apps for minor changes
+              You can trust us. we only send promo offers, not a single spam.
             </p>
+            <SubscriptionInline />
           </Col>
         </Row>
         <Row className='my-5 text-center'>

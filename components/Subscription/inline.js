@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useRef } from 'react'
+import { useContext, useCallback, useRef } from 'react'
 import { Container, FormControl, InputGroup, Button } from 'react-bootstrap'
 
 import { StoreContext } from '../../utils/storeProvider'

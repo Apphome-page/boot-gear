@@ -11,5 +11,5 @@ export const CanvasLoader = styled.div`
   transform: translateX(-50%);
   align-items: center;
   justify-content: center;
-  background-color: #000c;
+  background-color: #000d;
 `

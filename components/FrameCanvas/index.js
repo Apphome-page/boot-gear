@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, forwardRef } from 'react'
+/* eslint-disable no-param-reassign */
+import { useState, useEffect, forwardRef } from 'react'
 import { Spinner } from 'react-bootstrap'
 import debounce from 'lodash/debounce'
 
@@ -6,38 +7,32 @@ import render from '../../utils/renderCanvas'
 
 import { CanvasLoader } from './style'
 
-// TODO: Set default measurements / template
+// TODO:
+const debouncedRender = debounce(async (canvas, ctx, props, setLoading) => {
+  canvas.width = props.width
+  canvas.height = props.height
+  setLoading(true)
+  await render(ctx, props)
+  setLoading(false)
+}, 100)
+
 function FrameCanvas(frameCanvasProps, canvasRef) {
-  const { width = 0, height = 0, className } = frameCanvasProps
+  const { width = 0, height = 0 } = frameCanvasProps
   const [isLoading, setLoading] = useState(false)
-
-  const renderFrame = useCallback(async () => {
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    canvas.width = width
-    canvas.height = height
-    setLoading(true)
-    await render(ctx, frameCanvasProps)
-    setLoading(false)
-  }, [canvasRef, frameCanvasProps, height, width])
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedRender = useCallback(debounce(renderFrame, 200), [renderFrame])
 
   useEffect(() => {
     if (!canvasRef || !canvasRef.current) {
       return
     }
-    debouncedRender()
-  }, [canvasRef, width, height, debouncedRender])
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    debouncedRender(canvas, ctx, frameCanvasProps, setLoading)
+  }, [canvasRef, width, height, frameCanvasProps])
 
   return (
     <div className='position-relative'>
-      <canvas ref={canvasRef} className={className} />
-      <CanvasLoader
-        className={`${isLoading ? '' : 'd-none'}`}
-        style={{ width }}
-      >
+      <canvas ref={canvasRef} className='position-relative' />
+      <CanvasLoader style={{ width }} className={isLoading ? '' : 'd-none'}>
         <Spinner animation='border' variant='light' />
       </CanvasLoader>
     </div>

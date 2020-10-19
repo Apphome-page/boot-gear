@@ -77,6 +77,7 @@ export default function HomeWebsite({ initProps = {} }) {
         </InputGroup.Prepend>
         <FormControl
           required
+          readOnly={!!initProps.appName}
           disabled={!!initProps.appName}
           defaultValue={templateProps.appName}
           onChange={(e) => {
