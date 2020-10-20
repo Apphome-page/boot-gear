@@ -30,7 +30,12 @@ const productLinks = [
   },
 ]
 
-const userLinks = []
+const userLinks = [
+  {
+    name: 'Dashboard',
+    path: '/dashboard',
+  },
+]
 
 export default function Header() {
   const router = useRouter()

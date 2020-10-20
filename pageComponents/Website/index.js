@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { useState, useContext, useCallback, useEffect, useRef } from 'react'
 import {
   InputGroup,
@@ -52,16 +51,19 @@ export default function HomeWebsite({ initProps = {} }) {
     }
     const appKey = templateProps.appName.replace(/\W/gi, '-').toLowerCase()
     if (!appKey) {
-      alert('Please provide a valid App Name')
+      window.alert('Please provide a valid App Name')
       return
     }
 
     try {
       await uploadWebsite(firebase, userId, appKey, templateProps)
       formRef.current.reset()
-      window.open(`https://boot-gear.netlify.app/${appKey}`)
+      window.alert(
+        `Your website is generated!\nVisit your website at: https://apphome.page/${appKey}`
+      )
+      window.open(`https://apphome.page/${appKey}`, '_blank')
     } catch (e) {
-      alert('Something went wrong while updating your website.')
+      window.alert('Something went wrong while updating your website.')
     }
   }, [firebase, modStore, templateProps, userId])
 

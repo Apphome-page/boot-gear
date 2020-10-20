@@ -47,7 +47,10 @@ function Bootgear({ Component, pageProps }) {
       <Head>
         <meta property='og:url' content={pathname} />
         <meta property='og:type' content='website' />
-        <meta property='og:image' content='/img/logo.png' />
+        <meta
+          property='og:image'
+          content={`https://firebasestorage.googleapis.com/v0/b/${process.env.NEXT_PUBLIC_FIREBASE_storageBucket}/o/logo-apphome.png?alt=media`}
+        />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <meta charSet='utf-8' />
         <link rel='canonical' href={pathname} />

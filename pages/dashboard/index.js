@@ -1,25 +1,54 @@
-import Link from 'next/link'
-import { Container } from 'react-bootstrap'
+import {
+  Container,
+  Row,
+  Col,
+  TabContainer,
+  TabContent,
+  TabPane,
+  ListGroup,
+  ListGroupItem,
+} from 'react-bootstrap'
+import DashboardProfile from '../../pageComponents/Dashboard/profile'
+import DashboardSecurity from '../../pageComponents/Dashboard/security'
+import DashboardWebsite from '../../pageComponents/Dashboard/website'
 
 import AuthWrapper from '../../components/AuthWrapper'
 
-import useUserData from '../../utils/useUserData'
-
 export default function Dashboard() {
-  const userData = useUserData()
-  const userSites = (userData && userData.sites) || {}
   return (
-    <Container className='my-5 min-vh-100'>
+    <Container className='min-vh-100 my-5'>
       <AuthWrapper>
-        <h3>Websites</h3>
-        <ol>
-          {Object.keys(userSites).map((uSite, uIndex) => (
-            <li key={uIndex}>
-              {uSite} - <Link href={`/website?edit=${uSite}`}>Edit</Link> |
-              Delete
-            </li>
-          ))}
-        </ol>
+        <TabContainer defaultActiveKey='profile'>
+          <Row className='p-2'>
+            <Col lg={3}>
+              <ListGroup>
+                <ListGroupItem variant='light' action eventKey='profile'>
+                  Profile
+                </ListGroupItem>
+                <ListGroupItem variant='light' action eventKey='security'>
+                  Security
+                </ListGroupItem>
+                <ListGroupItem variant='light' action eventKey='website'>
+                  Websites
+                </ListGroupItem>
+              </ListGroup>
+              <hr className='d-block d-lg-none' />
+            </Col>
+            <Col lg={9} className=''>
+              <TabContent>
+                <TabPane eventKey='profile'>
+                  <DashboardProfile />
+                </TabPane>
+                <TabPane eventKey='security'>
+                  <DashboardSecurity />
+                </TabPane>
+                <TabPane eventKey='website'>
+                  <DashboardWebsite />
+                </TabPane>
+              </TabContent>
+            </Col>
+          </Row>
+        </TabContainer>
       </AuthWrapper>
     </Container>
   )

@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { Container, Row, Col } from 'react-bootstrap'
 import Head from 'next/head'
 import { useRouter } from 'next/router'

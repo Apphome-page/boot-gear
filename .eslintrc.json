@@ -49,6 +49,7 @@
       "jsxBracketSameLine": false,
       "endOfLine":"auto"
     }],
+    "no-alert": "off",
     "react/no-array-index-key": "off",
     "react/prop-types": "off",
     "jsx-a11y/no-onchange": "off",

@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import renderTemplate from './index'
 import removeTemplate from './remove'
 
@@ -34,11 +33,11 @@ export default async function upload(firebase, userId, appKey, templateProps) {
 
   // EXIT: Already owns 1 Website || Path is inaccessible
   if (Object.keys(userSites).length > 0) {
-    alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
+    window.alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
     return
   }
   if (!(freeWebsitePath || userWebsite)) {
-    alert(`${appKey} is already taken`)
+    window.alert(`${appKey} is already taken`)
     return
   }
 
