@@ -18,15 +18,15 @@ import { AuthWrap } from './style'
 const productLinks = [
   {
     name: 'App Icon Generator',
-    path: '/icons',
+    path: '/app-icon-generator',
   },
   {
-    name: 'Screenshots Generator',
-    path: '/screenshots',
+    name: 'App Screenshot Generator',
+    path: '/app-screenshot-generator',
   },
   {
-    name: 'Website Generator',
-    path: '/website',
+    name: 'App Website Builder',
+    path: '/app-website-builder',
   },
 ]
 
