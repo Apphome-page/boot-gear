@@ -1,6 +1,6 @@
 [build]
   publish = "out"
-  command = "next build && next export"
+  command = "cp netlify.prod.toml netlify.toml && npm run export"
 
 [[redirects]]
   from = "/blog/*"

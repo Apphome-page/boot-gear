@@ -1,0 +1,26 @@
+[build]
+  publish = "out"
+  command = "cp netlify.prod.toml netlify.toml && npm run export"
+
+[[redirects]]
+  from = "/blog/*"
+  to = "https://cms.apphome.page/blog/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F:slug%2Findex.html?alt=media"
+  status = 200
+[[redirects]]
+  from = "/:slug/bin/:file"
+  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F:slug%2Fbin%2F:file?alt=media"
+  status = 200
+
+[[redirects]]
+  from = "/_bin/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F_bin%2F:slug?alt=media"
+  status = 200
+[[redirects]]
+  from = "/_bin/:type/:slug"
+  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F_bin%2F:type%2F:slug?alt=media"
+  status = 200
