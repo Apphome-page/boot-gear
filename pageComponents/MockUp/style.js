@@ -48,3 +48,11 @@ export const RotateRight = styled.button`
     content: '⭮';
   }
 `
+
+export const Dummy = styled.div`
+  height: 448px;
+  width: 256px;
+  &:before {
+    content: '+';
+  }
+`

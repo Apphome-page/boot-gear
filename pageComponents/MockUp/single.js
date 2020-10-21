@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useRef, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Row,
   Col,
@@ -36,7 +36,6 @@ const frameDefaults = frameDefaultProps(maxHeight)
 
 export default function FrameTemplateSingle() {
   const [subShow, setSubShow] = useState(false)
-  const canvasRef = useRef(null)
   const [frameCanvasProps, updateFrameCanvasProps] = useState({
     ...frameDefaults,
   })
@@ -336,12 +335,7 @@ export default function FrameTemplateSingle() {
           className='text-center'
           style={{ minHeight: `${maxHeight}px` }}
         >
-          <FrameCanvas
-            ref={canvasRef}
-            updateCanvasProps={modFrameCanvasProps}
-            style={{ boxShadow: '#CCC 0px 0px 32px' }}
-            {...frameCanvasProps} // eslint-disable-line react/jsx-props-no-spreading
-          />
+          <FrameCanvas renderProps={frameCanvasProps} />
         </Col>
       </Row>
     </>

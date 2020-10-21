@@ -74,9 +74,7 @@ function Bootgear({ Component, pageProps }) {
       </Head>
       <StoreProvider store={{ firebase }}>
         <Header />
-        <Component
-          {...pageProps} // eslint-disable-line react/jsx-props-no-spreading
-        />
+        <Component {...pageProps} />
         <Footer />
       </StoreProvider>
     </>
