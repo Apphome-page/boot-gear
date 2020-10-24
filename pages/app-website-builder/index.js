@@ -4,8 +4,28 @@ import { useRouter } from 'next/router'
 
 import useUserData from '../../utils/useUserData'
 
+import FAQ from '../../components/FAQ'
+
 import WebsiteBuilder from '../../pageComponents/Website'
 import { Hero } from '../../pageComponents/Website/style'
+
+const faqList = [
+  {
+    title: 'App Website Builder',
+    desc:
+      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
+  },
+  {
+    title: 'App Website Builder',
+    desc:
+      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
+  },
+  {
+    title: 'App Website Builder',
+    desc:
+      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
+  },
+]
 
 export default function Website() {
   const { query: { edit: websiteKey = '' } = {} } = useRouter()
@@ -64,6 +84,13 @@ export default function Website() {
             </Row>
           </Container>
         </Hero>
+        {faqList.length ? (
+          <Container fluid className='py-5'>
+            <FAQ faqList={faqList} />
+          </Container>
+        ) : (
+          ''
+        )}
       </div>
     </>
   )

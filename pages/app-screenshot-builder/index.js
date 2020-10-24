@@ -7,14 +7,14 @@ export default function AppScr() {
   return (
     <>
       <Head>
-        <title>Advanced App Screenshot Generator</title>
+        <title>App Screenshot Builder</title>
       </Head>
-      <Jumbotron fluid className='bg-transparent'>
-        <Container className='text-center'>
-          <h1>Advanced App Screenshot Generator</h1>
-        </Container>
-      </Jumbotron>
       <div className='my-3 min-vh-100'>
+        <Jumbotron fluid className='bg-transparent'>
+          <Container className='text-center'>
+            <h1>App Screenshot Builder</h1>
+          </Container>
+        </Jumbotron>
         <MockUp />
       </div>
     </>

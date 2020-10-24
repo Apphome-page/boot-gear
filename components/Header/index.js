@@ -8,6 +8,8 @@ import {
   ModalBody,
   Navbar,
   Nav,
+  NavItem,
+  NavLink,
   NavDropdown,
 } from 'react-bootstrap'
 
@@ -30,6 +32,18 @@ const productLinks = [
   },
 ]
 
+const headerLinks = [
+  {
+    name: 'Features',
+    path: '/features',
+  },
+  {
+    name: 'Pricing',
+    path: '/pricing',
+  },
+  { name: 'Blog', path: '/blog' },
+]
+
 const userLinks = [
   {
     name: 'Dashboard',
@@ -45,11 +59,11 @@ export default function Header() {
   const userId = userAuth && userAuth.uid
 
   useEffect(() => {
-    return firebase.auth().onAuthStateChanged((userAuthState) =>
+    return firebase.auth().onAuthStateChanged((userAuthState) => {
       modStore({
         userAuth: userAuthState,
       })
-    )
+    })
   }, [firebase, modStore])
 
   return (
@@ -105,7 +119,18 @@ export default function Header() {
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
-            <Nav.Link href='/blog'>Blog</Nav.Link>
+            {headerLinks.map(({ name, path }, index) => (
+              <NavItem key={index}>
+                <Link href={path} passHref>
+                  <NavLink
+                    href={path}
+                    className={router.pathname === path ? 'active' : ''}
+                  >
+                    {name}
+                  </NavLink>
+                </Link>
+              </NavItem>
+            ))}
             {userAuth ? (
               <NavDropdown alignRight title={`Hi! ${userAuth.displayName}`}>
                 {userLinks.map(({ name, path }, index) => (

@@ -31,7 +31,7 @@ const defaultPlatforms = {
   },
 }
 
-export default function AppIcon() {
+export default function AppIcon({ preset = [] }) {
   const [source, updateSource] = useState({})
   const [subShow, setSubShow] = useState(false)
   const [platforms, updatePlatforms] = useState({
@@ -168,7 +168,7 @@ export default function AppIcon() {
           eventGenerate()
         }}
       />
-      <Container className='my-4 py-4 min-vh-100'>
+      <Container className='my-4 py-4'>
         <Row>
           <Col lg={6}>
             <Source
@@ -192,17 +192,25 @@ export default function AppIcon() {
                 different app icon sizes for all platforms
               </small>
               <hr />
-              {Object.keys(defaultPlatforms).map((platform, key) => (
-                <div key={key}>
-                  <input
-                    data-platform={platform}
-                    type='checkbox'
-                    defaultChecked
-                  />
-                  <em>{defaultPlatforms[platform].name}</em>
-                  <small> - {defaultPlatforms[platform].subtitle}</small>
-                </div>
-              ))}
+              <div className='d-flex flex-column'>
+                {Object.keys(defaultPlatforms).map((platform, key) => {
+                  const isChecked = preset.length
+                    ? preset.includes(platform.toLowerCase())
+                    : true
+
+                  return (
+                    <div key={key} className={isChecked ? 'order-first' : ''}>
+                      <input
+                        data-platform={platform}
+                        type='checkbox'
+                        defaultChecked={isChecked}
+                      />
+                      <em>{defaultPlatforms[platform].name}</em>
+                      <small> - {defaultPlatforms[platform].subtitle}</small>
+                    </div>
+                  )
+                })}
+              </div>
               <IconGen
                 disabled={!source.url}
                 onClick={() => {
