@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         <p>
-          We, <em>Apphomepage LLP</em>, registered under the provisions of the
+          We, <em>Applandingpage LLP</em>, registered under the provisions of the
           Limited Liability Partnership Act 2008, having its registered office
           at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245 304,
           INDIA&quot; represented by its Directors, hereinafter referred to as
@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           This privacy policy contains information about the Website &nbsp;
-          <a href='https://apphome.page'>https://apphome.page</a> (hereinafter
+          <a href='https://applanding.page'>https://applanding.page</a> (hereinafter
           referred to as the &quot;<b>Platforms</b>&quot;).
         </p>
         <p>
@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
           the manner of collection or use of your information, please do not use
           or access the Site. If you have any questions or concerns regarding
           this Privacy Policy, you should contact our Customer Support Desk at
-          care@apphome.page.
+          care@applanding.page.
         </p>
         <p>
           ANY CAPITALIZED WORDS USED HENCEFORTH SHALL HAVE THE MEANING ACCORDED
@@ -158,7 +158,7 @@ export default function PrivacyPolicy() {
           its efforts for service improvement but shall immediately delete all
           such information upon withdrawal of your consent for the same through
           the &quot;unsubscribe&quot; button or through an email to be sent
-          care@apphome.page.
+          care@applanding.page.
         </p>
         <p>
           To the extent possible, we provide You with the option of not
@@ -490,13 +490,13 @@ export default function PrivacyPolicy() {
         <p>
           To withdraw your consent, or to request the download or delete your
           data with us for any or all our products & services at any time,
-          please email to care@apphome.page.
+          please email to care@applanding.page.
         </p>
         <h3 className='mt-5 mb-2'>CONTACT US</h3>
         <p>
           If you have any questions or concerns regarding this privacy policy,
           you should contact us by sending an e-mail to please email to
-          <em>care@apphome.page</em>.
+          <em>care@applanding.page</em>.
         </p>
         <p>
           Information provided on the website may not be 100% accurate and may

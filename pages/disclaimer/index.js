@@ -12,7 +12,7 @@ export default function Disclaimer() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         <p>
-          We, Apphomepage LLP, registered under the provisions of the Limited
+          We, Applandingpage LLP, registered under the provisions of the Limited
           Liability Partnership Act 2008, having its registered office at “493
           Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245 304, INDIA”
           represented by its Directors, hereinafter referred to as the “FIRM”

@@ -12,7 +12,7 @@ export default function TermsConditions() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         <p>
-          We, <em>Apphomepage LLP</em>, registered under the provisions of the
+          We, <em>Applandingpage LLP</em>, registered under the provisions of the
           Limited Liability Partnership Act 2008, having its registered office
           at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245 304,
           INDIA&quot; represented by its Directors, hereinafter referred to as
@@ -25,7 +25,7 @@ export default function TermsConditions() {
           The Firm ensures steady commitment to Your usage of the Platform and
           privacy with regard to the protection of Your invaluable information.
           This document contains information about the Website and domain &nbsp;
-          <a href='https://apphome.page'>https://apphome.page</a> (hereinafter
+          <a href='https://applanding.page'>https://applanding.page</a> (hereinafter
           referred to as the &quot;<b>Platform</b>&quot;).
         </p>
         <p>
@@ -138,7 +138,7 @@ export default function TermsConditions() {
         </ol>
         <h2 className='mt-5 mb-2'>PLATFORM OVERVIEW</h2>
         <p>
-          Apphome.page is a platform owned and operated by Apphomepage LLP which
+          Applanding.page is a platform owned and operated by Applandingpage LLP which
           is a limited liability partnership registered under the provisions of
           the Limited Liability Partnership Act, 2008.
         </p>
@@ -254,7 +254,7 @@ export default function TermsConditions() {
           of its representatives at any time.
         </p>
         <p>
-          User can report to <em>care@apphome.page</em> if they find any
+          User can report to <em>care@applanding.page</em> if they find any
           discrepancy with regard to Platform or content-related information and
           the Firm will take necessary action after an investigation. The
           response with resolution (if any issues found) shall be dependent on
@@ -738,7 +738,7 @@ export default function TermsConditions() {
         <p>
           Any and all communication relating to any dispute or grievance
           experienced by the User may be communicated to the Firm by the User by
-          emailing to <em>care@apphome.page</em>.
+          emailing to <em>care@applanding.page</em>.
         </p>
         <h3 className='mt-5 mb-2'>MISCELLANEOUS PROVISIONS</h3>
         <ol className='ml-5 text-left'>
@@ -775,7 +775,7 @@ export default function TermsConditions() {
             <b>Contact Us</b>: If you have any questions about this Policy, the
             practices of the Platform, or your experience with the Service
             provided by the Platform, you can contact us at{' '}
-            <em>care@apphome.page</em>.
+            <em>care@applanding.page</em>.
           </li>
         </ol>
       </Container>
