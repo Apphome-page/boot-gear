@@ -1,7 +1,42 @@
 import { Container, Jumbotron } from 'react-bootstrap'
 import Head from 'next/head'
 
-import IconGen from '../../components/IconGen'
+import FAQ from '../../components/FAQ'
+
+import IconGen from '../../pageComponents/IconGen'
+
+const faqList = [
+  {
+    title: 'Can we generate app icons on linux using Applanding.page\'s icon generator?',
+    desc:
+      'Yes, using Applanding.page you can generate app icons on linux as well, since you do not need to install any software to use Applanding.page\'s icon generator. ',
+  },
+  {
+    title: 'What is the USP of Applanding.page\'s icon generator ?',
+    desc:
+      'The best thing about Applanding.page\'s icon generator is that it does not send any data to server, hence is it fully secure and your data does not leave your browser.',
+  },
+  {
+    title: 'Is Applanding.page icon generator free ?',
+    desc:
+      'Yes, using Applanding.page you can generate app icons for free',
+  },
+  {
+    title: 'Which platforms are supported for creating app icons ?',
+    desc:
+      'Using Applanding.page you can create app icons for android, mac, watch and iOS',
+  },
+  {
+    title: 'Is Applanding.page icon generator secure ? ?',
+    desc:
+      'Yes, it is fully secure as no data is transferred to server for icon generation.',
+  },
+  {
+    title: 'Is Applanding.page icon generator free ?',
+    desc:
+      'Yes, using Applanding.page you can generate app icons for free',
+  },
+]
 
 export default function AppIcon() {
   return (
@@ -12,7 +47,7 @@ export default function AppIcon() {
         </title>
         <meta
           name='description'
-          content='Free App icon generator - Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server. '
+          content='Free App icon generator - Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server.'
         />
         <meta
           property='og:title'
@@ -20,7 +55,7 @@ export default function AppIcon() {
         />
         <meta
           property='og:description'
-          content='Free App icon generator - Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server. '
+          content='Free App icon generator - Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server.'
         />
       </Head>
       <Jumbotron fluid className='bg-transparent'>
@@ -29,6 +64,13 @@ export default function AppIcon() {
         </Container>
       </Jumbotron>
       <IconGen />
+      {faqList.length ? (
+        <Container fluid className='py-5 bg-light'>
+          <FAQ faqList={faqList} />
+        </Container>
+      ) : (
+        ''
+      )}
     </>
   )
 }

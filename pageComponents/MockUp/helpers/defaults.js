@@ -43,16 +43,22 @@ export function defaultProps(maxHeight) {
   }
 }
 
-export function getFrameProps(frameType, frameId, { maxHeight } = {}) {
+export function getFrameProps(
+  frameType,
+  frameId,
+  { lastFrame, maxHeight } = {}
+) {
   if (!frameId || !scrMeta[frameType]) {
     return {}
   }
   const deviceMeta = scrMeta[frameType].find(({ id }) => id === frameId)
+  const deviceSize =
+    deviceMeta.sizes[lastFrame ? deviceMeta.sizes.length - 1 : 0]
   if (
     !deviceMeta ||
     !deviceMeta.sizes ||
     !deviceMeta.sizes.length ||
-    !scrSizes[deviceMeta.sizes[0]]
+    !scrSizes[deviceSize]
   ) {
     return {}
   }
@@ -63,7 +69,7 @@ export function getFrameProps(frameType, frameId, { maxHeight } = {}) {
     SCR_Y: scrY,
     SCR_W: scrWidth,
     SCR_H: scrHeight,
-  } = scrSizes[deviceMeta.sizes[0]]
+  } = scrSizes[deviceSize]
   const scale = maxHeight ? maxHeight / height : 1
   return {
     width: width * scale,
@@ -71,7 +77,7 @@ export function getFrameProps(frameType, frameId, { maxHeight } = {}) {
     headingPosX: (width * scale) / 2,
     frameType,
     frameId,
-    frame: `/scr/${frameType}/${frameId}/${deviceMeta.sizes[0]}.png`,
+    frame: `/scr/${frameType}/${frameId}/${deviceSize}.png`,
     framePosX: 0,
     framePosY: 0,
     frameWidth: width * scale,

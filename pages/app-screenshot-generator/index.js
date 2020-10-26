@@ -1,7 +1,27 @@
 import Head from 'next/head'
 import { Container, Jumbotron } from 'react-bootstrap'
 
+import FAQ from '../../components/FAQ'
+
 import MockUpSingle from '../../pageComponents/MockUp/single'
+
+const faqList = [
+  {
+    title: 'App Screenshot Generator',
+    desc:
+      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
+  },
+  {
+    title: 'App Screenshot Generator',
+    desc:
+      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
+  },
+  {
+    title: 'App Screenshot Generator',
+    desc:
+      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
+  },
+]
 
 export default function AppScr() {
   return (
@@ -29,9 +49,16 @@ export default function AppScr() {
           <h1>App Screenshot Generator</h1>
         </Container>
       </Jumbotron>
-      <Container className='my-3 min-vh-100'>
+      <Container className='my-3'>
         <MockUpSingle />
       </Container>
+      {faqList.length ? (
+        <Container fluid className='py-5 bg-light'>
+          <FAQ faqList={faqList} />
+        </Container>
+      ) : (
+        ''
+      )}
     </>
   )
 }
