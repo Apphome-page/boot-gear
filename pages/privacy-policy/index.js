@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           This privacy policy contains information about the Website &nbsp;
-          <a href='https://applandingpage.page'>https://applandingpage.page</a> (hereinafter
+          <a href='https://applanding.page'>https://applanding.page</a> (hereinafter
           referred to as the &quot;<b>Platforms</b>&quot;).
         </p>
         <p>
@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
           the manner of collection or use of your information, please do not use
           or access the Site. If you have any questions or concerns regarding
           this Privacy Policy, you should contact our Customer Support Desk at
-          care@applandingpage.page.
+          care@applanding.page.
         </p>
         <p>
           ANY CAPITALIZED WORDS USED HENCEFORTH SHALL HAVE THE MEANING ACCORDED
