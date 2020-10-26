@@ -59,9 +59,9 @@ export default function HomeWebsite({ initProps = {} }) {
       await uploadWebsite(firebase, userId, appKey, templateProps)
       formRef.current.reset()
       window.alert(
-        `Your website is generated!\nVisit your website at: https://apphome.page/${appKey}`
+        `Your website is generated!\nVisit your website at: https://applanding.page/${appKey}`
       )
-      window.open(`https://apphome.page/${appKey}`, '_blank')
+      window.open(`https://applanding.page/${appKey}`, '_blank')
     } catch (e) {
       window.alert('Something went wrong while updating your website.')
     }

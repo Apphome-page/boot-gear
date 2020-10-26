@@ -10,10 +10,10 @@ export default function HomeCards() {
           <Card.Body>
             <CardIcon data-src='/img/feature/i1.png' className='mb-5' />
             <Card.Title className='font-weight-bold'>
-              Home page for Apps
+              Landing page for Apps
             </Card.Title>
             <Card.Text>
-              Build home page for your mobile app. We have both free and paid
+              Build landing page for your mobile app. We have both free and paid
               plans.
             </Card.Text>
           </Card.Body>

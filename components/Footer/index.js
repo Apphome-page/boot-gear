@@ -118,7 +118,7 @@ export default function Footer() {
                   className='mr-2 filter-invert'
                 />
                 <Media.Body>
-                  support@apphome.page
+                  support@applanding.page
                   <p className='text-white-50'>Send us your query anytime!</p>
                 </Media.Body>
               </Media>
@@ -132,7 +132,7 @@ export default function Footer() {
             </Col>
           </Row>
           <Row className='my-5 text-center'>
-            <Col>Copyright © 2020 | All rights reserved to Apphome.page</Col>
+            <Col>Copyright © 2020 | All rights reserved to Applanding.page</Col>
           </Row>
         </Container>
       </Container>

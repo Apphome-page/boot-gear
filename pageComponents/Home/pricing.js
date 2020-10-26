@@ -30,7 +30,7 @@ export default function HomePricing() {
               </Card.Text>
             </Card.Body>
             <ListGroup variant='flush' className='my-3 text-secondary'>
-              <ListGroupItem>1 website on apphome.page</ListGroupItem>
+              <ListGroupItem>1 website on applanding.page</ListGroupItem>
               <ListGroupItem>Fully featured</ListGroupItem>
               <ListGroupItem>
                 5 templates for Screenshot Generator

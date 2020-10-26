@@ -11,9 +11,9 @@ export default function HomeShowcase() {
             </p>
             <p>
               Your app is awesome. It needs an awesome website. Create it using
-              apphome.page. We have both paid and free plans. If you wish to
+              applanding.page. We have both paid and free plans. If you wish to
               host it on your custom domain, you can use our paid plans, or just
-              host it on apphome.page for free
+              host it on applanding.page for free
             </p>
             <Button variant='light' className='my-5 btn-alt2 bg-white'>
               Browse free Demo
