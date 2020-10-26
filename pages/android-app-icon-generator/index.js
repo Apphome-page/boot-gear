@@ -7,19 +7,19 @@ import IconGen from '../../pageComponents/IconGen'
 
 const faqList = [
   {
-    title: 'Android Icon Generator',
+    title: 'How to generate app icons for android ?',
     desc:
-      'Generate icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'Using Applanding.page, just drag or upload an app icon image to generate app icon for android.',
   },
   {
-    title: 'Android Icon Generator',
+    title: 'How much time is requied to generate app icon for android ?',
     desc:
-      'Generate icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'Using Applanding.page you can create professional app icons instantly.',
   },
   {
-    title: 'Android Icon Generator',
+    title: 'What is the easiest way to generate app icons for android',
     desc:
-      'Generate icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'Just with a few clicks you can create app icons for android using Applandingpage.',
   },
 ]
 

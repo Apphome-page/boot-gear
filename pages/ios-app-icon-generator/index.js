@@ -7,20 +7,25 @@ import IconGen from '../../pageComponents/IconGen'
 
 const faqList = [
   {
-    title: 'Free iOS icon maker',
+    title: 'In which formats are icons created by Applanding.page for iOS apps?',
     desc:
-      'Make icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'Icons are created in PNG format.',
   },
   {
-    title: 'Free iOS icon maker',
+    title: 'What features should be looked for in an app icon maker?',
     desc:
-      'Make icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'An app icon maker should be able to make high quality icons, instantly and securely, to increase recognizability and uniqueness of apps.',
   },
   {
-    title: 'Free iOS icon maker',
+    title: 'Can we make iOS app icons for free?',
     desc:
-      'Make icons for  your Android apps for free without login. 100% secure processing as no data is sent to server.',
+      'Yes, iOS app icons can be created for free using applanding.page',
   },
+  {
+    title: 'How to generate iOS app icons online?',
+    desc:
+      'Using Applanding.page you can create icons for iOS apps without installing any software, online',
+  }
 ]
 
 export default function AppIcon() {

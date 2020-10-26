@@ -7,19 +7,34 @@ import IconGen from '../../pageComponents/IconGen'
 
 const faqList = [
   {
-    title: 'Free App icon generator',
+    title: 'Can we generate app icons on linux using Applanding.page\'s icon generator?',
     desc:
-      'Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server.',
+      'Yes, using Applanding.page you can generate app icons on linux as well, since you do not need to install any software to use Applanding.page\'s icon generator. ',
   },
   {
-    title: 'Free App icon generator',
+    title: 'What is the USP of Applanding.page\'s icon generator ?',
     desc:
-      'Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server.',
+      'The best thing about Applanding.page\'s icon generator is that it does not send any data to server, hence is it fully secure and your data does not leave your browser.',
   },
   {
-    title: 'Free App icon generator',
+    title: 'Is Applanding.page icon generator free ?',
     desc:
-      'Generator icons for iOS, Android, Mac for free without login. 100% secure processing as no data is sent to server.',
+      'Yes, using Applanding.page you can generate app icons for free',
+  },
+  {
+    title: 'Which platforms are supported for creating app icons ?',
+    desc:
+      'Using Applanding.page you can create app icons for android, mac, watch and iOS',
+  },
+  {
+    title: 'Is Applanding.page icon generator secure ? ?',
+    desc:
+      'Yes, it is fully secure as no data is transferred to server for icon generation.',
+  },
+  {
+    title: 'Is Applanding.page icon generator free ?',
+    desc:
+      'Yes, using Applanding.page you can generate app icons for free',
   },
 ]
 
