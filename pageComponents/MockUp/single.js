@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useRef, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Row,
   Col,
@@ -20,7 +20,6 @@ import frameTemplates from './templates'
 
 import {
   defaultProps as frameDefaultProps,
-  defaultFrameId,
   getFrameProps,
 } from './helpers/defaults'
 
@@ -34,12 +33,47 @@ const Subscription = dynamic(() => import('../../components/Subscription'), {
 const maxHeight = 512
 const frameDefaults = frameDefaultProps(maxHeight)
 
-export default function FrameTemplateSingle() {
+export default function FrameTemplateSingle({ preset = '' }) {
   const [subShow, setSubShow] = useState(false)
-  const canvasRef = useRef(null)
-  const [frameCanvasProps, updateFrameCanvasProps] = useState({
-    ...frameDefaults,
+  const [frameCanvasProps, updateFrameCanvasProps] = useState(() => {
+    switch (preset) {
+      case 'android':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('android', 'NEXUS5X_BLACK', {
+            maxHeight,
+            lastFrame: true,
+          })
+        )
+        break
+      case 'iphone':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight })
+        )
+        break
+      case 'ios':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight, lastFrame: true })
+        )
+        break
+      default:
+        Object.assign(
+          frameDefaults,
+          getFrameProps('android', 'NEXUS5X_BLACK', { maxHeight })
+        )
+        break
+    }
+    return {
+      ...frameDefaults,
+    }
   })
+  const showAndroidDevice = !preset || preset.toLowerCase() === 'android'
+  const showAppleDevice =
+    !preset ||
+    preset.toLowerCase() === 'ios' ||
+    preset.toLowerCase() === 'iphone'
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const modFrameCanvasProps = useCallback(
@@ -107,6 +141,7 @@ export default function FrameTemplateSingle() {
       })
   }, [frameCanvasProps])
 
+  console.log('>>> ', { showAppleDevice, showAndroidDevice })
   return (
     <>
       <Subscription
@@ -163,22 +198,34 @@ export default function FrameTemplateSingle() {
                     as='select'
                     custom
                     onChange={eventFrame}
-                    defaultValue={defaultFrameId}
+                    defaultValue={frameDefaults.frameId}
                   >
-                    <optgroup label='Android'>
-                      {scrMeta.android.map((phone, key) => (
-                        <option key={key} data-type='android' value={phone.id}>
-                          {phone.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup label='iOS'>
-                      {scrMeta.ios.map((phone, key) => (
-                        <option key={key} data-type='ios' value={phone.id}>
-                          {phone.name}
-                        </option>
-                      ))}
-                    </optgroup>
+                    {showAndroidDevice ? (
+                      <optgroup label='Android'>
+                        {scrMeta.android.map((phone, key) => (
+                          <option
+                            key={key}
+                            data-type='android'
+                            value={phone.id}
+                          >
+                            {phone.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ) : (
+                      <></>
+                    )}
+                    {showAppleDevice ? (
+                      <optgroup label='iOS'>
+                        {scrMeta.ios.map((phone, key) => (
+                          <option key={key} data-type='ios' value={phone.id}>
+                            {phone.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ) : (
+                      <></>
+                    )}
                   </FormControl>
                 </InputGroup>
               </Col>
@@ -336,12 +383,7 @@ export default function FrameTemplateSingle() {
           className='text-center'
           style={{ minHeight: `${maxHeight}px` }}
         >
-          <FrameCanvas
-            ref={canvasRef}
-            updateCanvasProps={modFrameCanvasProps}
-            style={{ boxShadow: '#CCC 0px 0px 32px' }}
-            {...frameCanvasProps} // eslint-disable-line react/jsx-props-no-spreading
-          />
+          <FrameCanvas renderProps={frameCanvasProps} />
         </Col>
       </Row>
     </>

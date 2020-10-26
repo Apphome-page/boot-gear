@@ -8,10 +8,12 @@
     transform: rotate(360deg);
   }
 }
+
 ::selection {
   background-color: #7b10ff;
   color: #fff;
 }
+
 * {
   box-sizing: border-box;
   margin: 0px;
@@ -70,6 +72,9 @@ small {
 
 .cursor-pointer {
   cursor: pointer;
+}
+.hover-blur:hover {
+  filter: blur(2px);
 }
 .filter-invert {
   filter: invert(1);
