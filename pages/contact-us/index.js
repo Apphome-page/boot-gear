@@ -12,7 +12,7 @@ export default function Features() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         If you have any questions or concerns, you may contact us by sending an
-        e-mail to care@apphome.page.
+        e-mail to care@applanding.page.
       </Container>
     </>
   )
