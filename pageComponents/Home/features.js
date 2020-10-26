@@ -30,7 +30,7 @@ export default function HomeFeatures() {
               </div>
               <p>
                 You can create home page on web for your mobile apps using
-                apphome.page for free !
+                applanding.page for free !
               </p>
             </Media.Body>
           </Media>
@@ -45,7 +45,7 @@ export default function HomeFeatures() {
                 Enhance your presence on app stores
               </div>
               <p>
-                Apphome.page&apos;s powerful screenshot generator helps you
+                Applanding.page&apos;s powerful screenshot generator helps you
                 create stunning screenshots for your mobile apps !
               </p>
             </Media.Body>
