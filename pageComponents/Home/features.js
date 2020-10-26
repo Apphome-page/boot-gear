@@ -26,10 +26,10 @@ export default function HomeFeatures() {
             />
             <Media.Body>
               <div className='pb-3 lead font-weight-bold'>
-                Home page for mobile apps
+                Landing page for mobile apps
               </div>
               <p>
-                You can create home page on web for your mobile apps using
+                You can create landing page on web for your mobile apps using
                 applanding.page for free !
               </p>
             </Media.Body>
