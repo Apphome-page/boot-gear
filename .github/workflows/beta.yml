@@ -1,0 +1,47 @@
+name: BETA_FIREBASE
+
+on:
+  push:
+    branches: [ beta ]
+
+jobs:
+  build:
+    name: BUILD_FIREBASE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm install
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: beta_firebase
+          path: beta_firebase
+  deploy:
+    name: DEPLOY_FIREBASE
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@main
+        with:
+          name: beta_firebase
+          path: beta_firebase
+      - name: Load dotenv
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .env.development
+      - name: Set Firebase Config
+        uses: w9jds/firebase-action@master
+        with:
+          args: functions:config:set pabbly.username=${{ secrets.BETA_PABBLY_USERNAME }} pabbly.password=${{ secrets.BETA_PABBLY_PASSWORD }}
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
+          PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
