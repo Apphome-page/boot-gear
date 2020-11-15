@@ -193,7 +193,7 @@ exports.userSync = functions.https.onRequest((request, response) => {
             })
           ),
         ])
-        response.json({ uid, updatedCustomerId })
+        response.json({ uid, customerId: customer_id })
       } catch (e) {
         response.status(500).json(e.toString())
       }
@@ -333,7 +333,7 @@ exports.payValidate = functions.https.onRequest((request, response) => {
           product_id,
         })
       )
-      response.json({ uid: user.uid, customer_id })
+      response.json({ uid: user.uid, customerId: customer_id })
     } catch (e) {
       response.status(500).json(e.toString())
     }
