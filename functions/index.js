@@ -16,8 +16,12 @@ const validateFirebaseIdToken = async (request, response, next) => {
   } else {
     next(new Error('Unauthorized'))
   }
-  const decodedIdToken = await admin.auth().verifyIdToken(idToken)
-  request.user = decodedIdToken
+  try {
+    const decodedIdToken = await admin.auth().verifyIdToken(idToken)
+    request.user = decodedIdToken
+  } catch (e) {
+    next(e)
+  }
   next()
 }
 
@@ -138,7 +142,14 @@ exports.userRegister = functions.auth
     const {
       data: { id: customer_id },
     } = PABBLY_API_CREATE_CUSTOMER(displayName, email)
-    await syncUser(uid, Object.assign({}, customClaims || {}, { customer_id }))
+    try {
+      await syncUser(
+        uid,
+        Object.assign({}, customClaims || {}, { customer_id })
+      )
+    } catch (e) {
+      console.error(e)
+    }
     return
   })
 
