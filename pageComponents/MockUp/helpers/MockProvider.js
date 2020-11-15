@@ -41,9 +41,10 @@ export default function MockProvider({ children }) {
     (deltaStore) => {
       setMockStore((prevStore) => {
         const newStore = [...prevStore]
+        const newCurrentStore = { ...newStore[currentMockUp], ...deltaStore }
         newStore[currentMockUp] = frameTemplates[
-          newStore[currentMockUp].template
-        ].adjustProps({ ...newStore[currentMockUp], ...deltaStore })
+          newCurrentStore.template
+        ].adjustProps(newCurrentStore)
         return newStore
       })
     },

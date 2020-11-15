@@ -13,19 +13,27 @@ export default function Caption() {
     modCurrent: modCurrentMockUp,
   } = useContext(MockupContext)
 
-  const { heading } = mockStore[currentMockUp]
+  const {
+    heading,
+    headingColor,
+    headingFont,
+    headingSize,
+    headingPosY,
+  } = mockStore[currentMockUp]
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const actionCaption = useCallback(
-    debounce((caption) => {
-      modCurrentMockUp({ heading: caption })
+  const actionValue = useCallback(
+    debounce((key, value) => {
+      modCurrentMockUp({ [key]: value })
     }, 200),
     [modCurrentMockUp]
   )
 
   useEffect(() => {
     formRef.current.elements.caption.value = heading
-  }, [heading])
+    formRef.current.elements.captionSize.value = headingSize
+    formRef.current.elements.captionFont.value = headingFont
+  }, [heading, headingFont, headingSize])
 
   return (
     <Form ref={formRef}>
@@ -39,14 +47,28 @@ export default function Caption() {
           aria-label='Caption'
           placeholder='Add Caption Here'
           defaultValue={heading}
-          onChange={(e) => actionCaption(e.target.value)}
+          onChange={(e) => actionValue('heading', e.target.value)}
         />
       </InputGroup>
       <InputGroup className='m-1'>
         <InputGroup.Prepend>
           <InputGroup.Text>Font Size</InputGroup.Text>
         </InputGroup.Prepend>
-        <FormControl as='select' custom>
+        <FormControl
+          as='select'
+          name='captionSize'
+          custom
+          defaultValue={headingSize}
+          onChange={(e) => {
+            const numValue = parseInt(e.target.value, 10)
+            if (!Number.isNaN(numValue) && Number.isFinite(numValue)) {
+              modCurrentMockUp({
+                headingSize: numValue || headingSize,
+                headingPosY: 16 + (numValue || headingPosY),
+              })
+            }
+          }}
+        >
           <option value='18'>Small</option>
           <option value='24'>Medium</option>
           <option value='28'>Large</option>
@@ -56,7 +78,13 @@ export default function Caption() {
         <InputGroup.Prepend>
           <InputGroup.Text>Font Family</InputGroup.Text>
         </InputGroup.Prepend>
-        <FormControl as='select' custom defaultValue='Arial'>
+        <FormControl
+          as='select'
+          name='captionFont'
+          custom
+          defaultValue={headingFont}
+          onChange={(e) => actionValue('headingFont', e.target.value)}
+        >
           <option>Arial</option>
           <option>Times New Roman</option>
           <option>Roboto</option>
@@ -69,9 +97,15 @@ export default function Caption() {
         <InputGroup.Prepend>
           <InputGroup.Text>Font Color</InputGroup.Text>
         </InputGroup.Prepend>
-        <FormControl readOnly aria-label='Font Color' />
+        <FormControl readOnly aria-label='Font Color' value={headingColor} />
         <InputGroup.Append>
-          <ColorPicker className='input-group-text p-0' enableAlpha={false}>
+          <ColorPicker
+            className='input-group-text p-0'
+            enableAlpha={false}
+            defaultColor={headingColor}
+            color={headingColor}
+            onChange={({ color }) => actionValue('headingColor', color)}
+          >
             <span className='rc-color-picker-trigger h-100 m-0 p-0 border-0 fsize-32' />
           </ColorPicker>
         </InputGroup.Append>

@@ -35,6 +35,7 @@ const frameDefaults = frameDefaultProps(maxHeight)
 
 export default function FrameTemplateSingle({ preset = '' }) {
   const [subShow, setSubShow] = useState(false)
+  const lastFrame = preset === 'android' || preset === 'ios'
   const [frameCanvasProps, updateFrameCanvasProps] = useState(() => {
     switch (preset) {
       case 'android':
@@ -42,7 +43,7 @@ export default function FrameTemplateSingle({ preset = '' }) {
           frameDefaults,
           getFrameProps('android', 'NEXUS5X_BLACK', {
             maxHeight,
-            lastFrame: true,
+            lastFrame,
           })
         )
         break
@@ -55,7 +56,7 @@ export default function FrameTemplateSingle({ preset = '' }) {
       case 'ios':
         Object.assign(
           frameDefaults,
-          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight, lastFrame: true })
+          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight, lastFrame })
         )
         break
       default:
@@ -96,11 +97,11 @@ export default function FrameTemplateSingle({ preset = '' }) {
     (e) => {
       const { frameType, frameId } = frameCanvasProps
       modFrameCanvasProps({
-        ...getFrameProps(frameType, frameId, { maxHeight }),
+        ...getFrameProps(frameType, frameId, { maxHeight, lastFrame }),
         template: e.target.value,
       })
     },
-    [frameCanvasProps, modFrameCanvasProps]
+    [frameCanvasProps, lastFrame, modFrameCanvasProps]
   )
 
   const eventFrame = useCallback(
@@ -109,18 +110,18 @@ export default function FrameTemplateSingle({ preset = '' }) {
         getFrameProps(
           e.target.options[e.target.selectedIndex].dataset.type || 'android',
           e.target.value,
-          { maxHeight }
+          { maxHeight, lastFrame }
         )
       )
     },
-    [modFrameCanvasProps]
+    [lastFrame, modFrameCanvasProps]
   )
 
   const eventSave = useCallback(() => {
     const { frameId, frameType } = frameCanvasProps
     const fullFrameProps = {
       ...frameCanvasProps,
-      ...getFrameProps(frameType, frameId),
+      ...getFrameProps(frameType, frameId, { lastFrame }),
     }
     fullFrameProps.headingSize =
       (fullFrameProps.headingSize * fullFrameProps.height) / maxHeight
@@ -139,9 +140,8 @@ export default function FrameTemplateSingle({ preset = '' }) {
       .then(({ saveAs }) => {
         saveAs(canvasObj.toDataURL('image/png'), 'screenshot.png')
       })
-  }, [frameCanvasProps])
+  }, [frameCanvasProps, lastFrame])
 
-  console.log('>>> ', { showAppleDevice, showAndroidDevice })
   return (
     <>
       <Subscription

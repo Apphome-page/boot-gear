@@ -7,11 +7,13 @@ import {
   AccordionCollapse,
   AccordionToggle,
   Card,
+  Button,
 } from 'react-bootstrap'
 
 import Assembly from './components/Assembly'
 import Caption from './components/Caption'
 import Design from './components/Design'
+import Device from './components/Device'
 import Screenshot from './components/Screenshot'
 import Prefabs from './components/Prefabs'
 
@@ -45,6 +47,17 @@ export default function MockUp() {
                     </Card.Body>
                   </AccordionCollapse>
                 </Card>
+
+                <Card>
+                  <AccordionToggle as={Card.Header} eventKey='device'>
+                    Device
+                  </AccordionToggle>
+                  <AccordionCollapse eventKey='device'>
+                    <Card.Body>
+                      <Device />
+                    </Card.Body>
+                  </AccordionCollapse>
+                </Card>
                 <Card>
                   <AccordionToggle as={Card.Header} eventKey='caption'>
                     Caption
@@ -64,6 +77,16 @@ export default function MockUp() {
                       <Screenshot />
                     </Card.Body>
                   </AccordionCollapse>
+                </Card>
+                <Card>
+                  <Card.Body className='row'>
+                    <Button variant='info' className='col'>
+                      Reset
+                    </Button>
+                    <Button variant='success' className='col'>
+                      Save
+                    </Button>
+                  </Card.Body>
                 </Card>
               </Accordion>
             </Col>
