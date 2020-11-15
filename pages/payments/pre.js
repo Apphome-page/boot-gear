@@ -41,13 +41,14 @@ export default function Payment() {
     }
     try {
       const idToken = await firebase.auth().currentUser.getIdToken()
-      const { customerId } = await fetch(FIRECLOUD_USER_SYNC, {
+      const syncResp = await fetch(FIRECLOUD_USER_SYNC, {
         method: 'POST',
         'content-type': 'application/json',
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
       }) // Move to Pabbly Checkout using customerId
+      const { customerId } = await syncResp.json()
       window.location = `${checkoutLink}/?customer_id=${customerId}`
     } catch (e) {
       window.alert('Something went wrong. Please Sign in again to continue.')

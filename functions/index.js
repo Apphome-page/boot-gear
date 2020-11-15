@@ -58,7 +58,10 @@ const PABBLY_API_CREATE_CUSTOMER = async (displayName, email) => {
   return resBody
 }
 
-const PABBLY_API_UPDATE_CUSTOMER = async (customerId, customerDetails = {}) => {
+const PABBLY_API_UPDATE_CUSTOMER = async (
+  customer_id,
+  customerDetails = {}
+) => {
   const response = await fetch(
     'https://payments.pabbly.com/api/v1/customer/' + customer_id,
     {
