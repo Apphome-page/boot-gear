@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Firebase Config
+        run: cp ./firebase.dev.json ./firebase.json
+      - name: Firebase Dependencies
+        run: npm install
+        working-directory: functions
       - name: Load dotenv
         uses: c-py/action-dotenv-to-setenv@v2
         with:
@@ -19,10 +24,13 @@ jobs:
         uses: w9jds/firebase-action@master
         with:
           args: functions:config:set pabbly.username=${{ secrets.BETA_PABBLY_USERNAME }} pabbly.password=${{ secrets.BETA_PABBLY_PASSWORD }}
+        env: 
+          FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
+          PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only functions
         env:
           FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
           PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
