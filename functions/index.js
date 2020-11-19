@@ -139,22 +139,22 @@ const syncUser = async (uid, customClaims = {}) => {
  * EVENT: User Registeration
  * Sync with Pabbly
  */
-exports.userRegister = functions.auth
-  .user()
-  .onCreate(async ({ uid, customClaims, displayName, email }) => {
-    const {
-      data: { id: customer_id },
-    } = PABBLY_API_CREATE_CUSTOMER(displayName, email)
-    try {
-      await syncUser(
-        uid,
-        Object.assign({}, customClaims || {}, { customer_id })
-      )
-    } catch (e) {
-      console.error(e)
-    }
-    return
-  })
+// exports.userRegister = functions.auth
+//   .user()
+//   .onCreate(async ({ uid, customClaims, displayName, email }) => {
+//     const {
+//       data: { id: customer_id },
+//     } = PABBLY_API_CREATE_CUSTOMER(displayName, email)
+//     try {
+//       await syncUser(
+//         uid,
+//         Object.assign({}, customClaims || {}, { customer_id })
+//       )
+//     } catch (e) {
+//       console.error(e)
+//     }
+//     return
+//   })
 
 exports.userSync = functions.https.onRequest((request, response) => {
   cors(request, response, async () => {

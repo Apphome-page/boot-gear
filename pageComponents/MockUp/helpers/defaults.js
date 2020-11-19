@@ -43,6 +43,37 @@ export function defaultProps(maxHeight) {
   }
 }
 
+export function scaleFrameProps(
+  {
+    width,
+    height,
+    headingPosX,
+    framePosX,
+    framePosY,
+    frameWidth,
+    frameHeight,
+    screenshotPosX,
+    screenshotPosY,
+    screenshotWidth,
+    screenshotHeight,
+  } = {},
+  scale = 1
+) {
+  return {
+    width: width * scale,
+    height: height * scale,
+    headingPosX: headingPosX * scale,
+    framePosX: framePosX * scale,
+    framePosY: framePosY * scale,
+    frameWidth: frameWidth * scale,
+    frameHeight: frameHeight * scale,
+    screenshotPosX: screenshotPosX * scale,
+    screenshotPosY: screenshotPosY * scale,
+    screenshotWidth: screenshotWidth * scale,
+    screenshotHeight: screenshotHeight * scale,
+  }
+}
+
 export function getFrameProps(
   frameType,
   frameId,

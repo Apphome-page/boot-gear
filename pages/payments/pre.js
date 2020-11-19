@@ -48,8 +48,11 @@ export default function Payment() {
           Authorization: `Bearer ${idToken}`,
         },
       }) // Move to Pabbly Checkout using customerId
-      const { customerId } = await syncResp.json()
-      window.location = `${checkoutLink}/?customer_id=${customerId}`
+      const syncData = await syncResp.json()
+      if (syncResp.status >= 400) {
+        throw new Error(`Something went wrong. ${JSON.stringify(syncData)}`)
+      }
+      window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
       window.alert('Something went wrong. Please Sign in again to continue.')
       firebase.auth().signOut()

@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useContext, useRef } from 'react'
-import { InputGroup, FormControl, Form } from 'react-bootstrap'
+import { InputGroup, FormControl, Form, FormFile } from 'react-bootstrap'
 import ColorPicker from 'rc-color-picker'
 
 import { MockupContext } from '../../helpers/MockProvider'
@@ -99,6 +99,19 @@ export default function Design() {
           </ColorPicker>
         </InputGroup.Append>
       </InputGroup>
+      <FormFile
+        id='scrFile'
+        className='m-1 mt-3'
+        label='Upload a screenshot'
+        accept='image/*'
+        custom
+        onChange={(e) => {
+          modCurrentMockUp({
+            screenshot: window.URL.createObjectURL(e.target.files[0]),
+          })
+          e.target.value = ''
+        }}
+      />
     </Form>
   )
 }
