@@ -1,6 +1,6 @@
 [build]
   publish = "out"
-  command = "cp netlify.prod.toml netlify.toml && npm run export"
+  command = "cp netlify.prod.toml netlify.toml && cp .env.production .env.local && cp firebase.prod.json firebase.json && npm run export"
 
 [[redirects]]
   from = "/blog/*"

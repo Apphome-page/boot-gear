@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "export": "rimraf .next out && next build && next export",
+    "deploy:prod": "cp netlify.prod.toml netlify.toml && cp .env.production .env.local && cp firebase.prod.json firebase.json && npm run export",
+    "deploy:dev": "cp netlify.dev.toml netlify.toml && cp .env.development .env.local && firebase.dev.json firebase.json && npm run export",
     "fire-install": "cd ./functions && npm install",
     "fire-serve": "firebase functions:config:get > ./functions/.runtimeconfig.json && env-cmd -f ./.env.development firebase emulators:start --only functions",
     "fire-deploy": "firebase deploy --only functions"

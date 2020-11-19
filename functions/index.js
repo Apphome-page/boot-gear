@@ -158,8 +158,11 @@ const syncUser = async (uid, customClaims = {}) => {
 
 exports.userSync = functions.https.onRequest((request, response) => {
   cors(request, response, async () => {
-    validateFirebaseIdToken(request, response, async () => {
+    validateFirebaseIdToken(request, response, async (error) => {
       try {
+        if (error instanceof Error) {
+          throw error
+        }
         const {
           uid,
           displayName,
@@ -172,7 +175,7 @@ exports.userSync = functions.https.onRequest((request, response) => {
           const customerIdSnap = await admin
             .database()
             .ref('users/' + uid + '/customer_id')
-            .once(claimValue)
+            .once('value')
           customer_id = customerIdSnap.val()
         }
         if (!customer_id) {
@@ -240,8 +243,11 @@ exports.pabblyEvent = functions.https.onRequest((request, response) => {
           break
 
         case 'payment_success':
-          const { customer_id, plan_id, product_id } = data || {}
           let user = null
+          const { customer_id, plan_id, product_id } = data || {}
+          if (!customer_id && !plan_id && !product_id) {
+            throw new Error('Invalid Request.')
+          }
 
           // fetch uid from firebase realtime database & user from firebase Auth
           if (!user && customer_id) {
@@ -294,6 +300,10 @@ exports.payValidate = functions.https.onRequest((request, response) => {
     try {
       let user = null
       const { uid, hostedpage } = request.body
+
+      if (!hosted) {
+        throw new Error('Invalid Request.')
+      }
 
       // Verify hostedpage from Pabbly
       const {
