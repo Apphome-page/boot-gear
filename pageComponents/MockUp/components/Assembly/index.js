@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 import FrameCanvas from '../../../../components/FrameCanvas'
 
@@ -24,14 +24,15 @@ export default function Assembly() {
               mockIndex === currentMockUp ? ' border-danger' : ' border-light'
             }`}
           >
-            <Button
-              variant='light'
-              size='sm'
-              className='py-0 px-2 mb-1 text-danger'
-              onClick={() => removeMockStore(mockIndex)}
-            >
-              ×
-            </Button>
+            <OverlayTrigger overlay={<Tooltip>Remove Template</Tooltip>}>
+              <Button
+                variant='light'
+                className='py-0 px-2 mb-1 text-danger'
+                onClick={() => removeMockStore(mockIndex)}
+              >
+                ×
+              </Button>
+            </OverlayTrigger>
           </div>
           <FrameCanvas
             className='cursor-pointer hover-blur '

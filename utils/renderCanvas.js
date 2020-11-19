@@ -1,3 +1,5 @@
+// import scrFence from '../config/scrFence.json'
+
 export function renderText(
   context,
   {
@@ -6,6 +8,7 @@ export function renderText(
     y = 0,
     maxWidth = context.canvas.width,
     size = 16,
+    weight = '600',
     face = 'Times New Roman',
     color = '#333',
     align = 'center',
@@ -19,7 +22,7 @@ export function renderText(
   let paraHeight = y
   context.save()
   context.fillStyle = color
-  context.font = `${size}px ${face}`
+  context.font = `${weight} ${size}px ${face}`
   context.textAlign = align
   text.split(' ').forEach((word, index) => {
     const testline = `${line}${word} `
@@ -33,7 +36,7 @@ export function renderText(
     }
   })
   if (line) {
-    context.fillText(line, x, paraHeight)
+    context.fillText(line.replace(/\s+$/i, ''), x, paraHeight)
   }
   context.restore()
   return paraHeight
@@ -70,9 +73,7 @@ export function renderImage(
           width,
           height,
         ]
-        // console.log(drawParams)
         context.drawImage(...drawParams)
-        // return final Y
         context.restore()
         return resolve()
       },
@@ -84,9 +85,8 @@ export function renderImage(
   })
 }
 
-export default async function render(
-  ctx,
-  {
+export default async function render(ctx, renderValues) {
+  const {
     heading,
     headingColor,
     headingFont,
@@ -109,8 +109,7 @@ export default async function render(
     height,
     backgroundColor,
     backgroundImage,
-  }
-) {
+  } = renderValues
   ctx.clearRect(0, 0, width, height)
   ctx.save()
   ctx.beginPath()
@@ -153,4 +152,38 @@ export default async function render(
       color: headingColor,
     })
   }
+
+  // const fenceZones = Object.keys(scrFence)
+  // const fenceAttributes = [].concat(
+  //   ...fenceZones.map((fenceZone) => scrFence[fenceZone])
+  // )
+  // const isFenced = fenceAttributes.reduce((accFence, fenceObj) => {
+  //   if (accFence) {
+  //     return accFence
+  //   }
+  //   const fenceAttribute = (Object.keys(fenceObj) || [])[0]
+  //   if (!fenceAttribute) {
+  //     return accFence
+  //   }
+  //   const fencedValues = fenceObj[fenceAttribute]
+  //   const renderValue = renderValues[fenceAttribute]
+  //   return Array.isArray(fencedValues)
+  //     ? fencedValues.includes(renderValue)
+  //     : !!renderValue
+  // }, false)
+
+  // if (isFenced) {
+  //   ctx.save()
+  //   ctx.globalCompositeOperation = 'difference'
+  //   renderText(ctx, {
+  //     text: 'applanding.page',
+  //     x: width / 2,
+  //     y: height / 2,
+  //     size: 28,
+  //     weight: 800,
+  //     face: 'monospace',
+  //     color: '#ffffff99',
+  //   })
+  //   ctx.restore()
+  // }
 }

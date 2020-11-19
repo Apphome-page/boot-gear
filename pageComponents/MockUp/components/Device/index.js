@@ -86,16 +86,17 @@ export default function Design() {
 
   const eventFrame = useCallback(
     (e) => {
-      const { frameDevice, height: maxHeight } = currentMockStore
+      const { height: maxHeight } = currentMockStore
+      formRef.current.elements.designModel.value = -1
       modCurrentMockUp(
         getFrameProps(
           e.target.options[e.target.selectedIndex].dataset.type || 'android',
           e.target.value,
-          { maxHeight, frameDevice }
+          { maxHeight }
         )
       )
     },
-    [currentMockStore, modCurrentMockUp]
+    [formRef, currentMockStore, modCurrentMockUp]
   )
 
   const eventModel = useCallback(
@@ -152,7 +153,7 @@ export default function Design() {
           as='select'
           name='designModel'
           custom
-          defaultValue={-1}
+          defaultValue={currentMockStore.frameDevice || -1}
           onChange={eventModel}
           className='text-capitalize'
         >

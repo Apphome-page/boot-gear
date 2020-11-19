@@ -1,0 +1,65 @@
+{
+  "silver": [{
+    "frameId": [
+      "IPHONE_CALLY_BLACK",
+      "IPHONE_CALLY_WHITE",
+      "IPHONE_DARB_BLACK",
+      "IPHONE_DARB_WHITE",
+      "IPHONE_TRICIA_BLACK",
+      "IPHONE_TRICIA_WHITE",
+      "IPHONE_UBBE_BLACK",
+      "IPHONE_UBBE_WHITE",
+      "NEXUS6P_BLACK",
+      "PIXEL_3_BLACK",
+      "PIXEL_3_WHITE",
+      "PIXEL_3XL_BLACK",
+      "PIXEL_3XL_WHITE",
+      "PIXEL_4XL_BLACK",
+      "PIXEL_CALLY_BLACK",
+      "PIXEL_CALLY_WHITE",
+      "PIXEL_DARB_BLACK",
+      "PIXEL_DARB_WHITE",
+      "PIXEL_TRICIA_BLACK",
+      "PIXEL_TRICIA_WHITE",
+      "PIXEL_UBBE_BLACK",
+      "PIXEL_UBBE_WHITE",
+      "SAMSUNG_NOTE10_BLACK",
+      "SAMSUNG_S10_BLACK",
+      "SAMSUNG_S10_PLUS_BLACK"
+    ]
+  }, {
+    "backgroundImage": [
+      "6rfCsMAp",
+      "7Ys26kPc",
+      "8PAStm21",
+      "aijuYyFT",
+      "AnYZEgfK",
+      "ATv2jgyS",
+      "FoZ4edmn",
+      "FR0vSVUw",
+      "GTXLnCAY",
+      "K9q_W55X",
+      "kjoY_Aey",
+      "KlM0RD38",
+      "KMtRk8sl",
+      "KRqzG1zw",
+      "l8YZ9V9F",
+      "lQjfQntJ",
+      "MhrTA935",
+      "Nnwz5lqG",
+      "OlkRVJn0",
+      "QVhJrDIf",
+      "rvuxYX_n",
+      "uptomRGt",
+      "XxpEBXm3",
+      "Y1F_MobI"
+    ]
+  }, {
+    "frameRot": true
+  }, {
+    "screenshotRot": true
+  },{
+    "template": ["fullAbove", "fullBelow"]
+  }],
+  "gold": []
+}
