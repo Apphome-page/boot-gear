@@ -1,3 +1,3 @@
 export default function Prefabs() {
-  return 'Prefabs'
+  return '<<-- Add Prefarbricated screenshot templates to use here. -->>'
 }

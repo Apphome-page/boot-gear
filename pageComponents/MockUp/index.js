@@ -9,11 +9,12 @@ import {
   Card,
 } from 'react-bootstrap'
 
+import Actions from './components/Actions'
 import Assembly from './components/Assembly'
 import Caption from './components/Caption'
 import Design from './components/Design'
-import Screenshot from './components/Screenshot'
-import Prefabs from './components/Prefabs'
+import Device from './components/Device'
+// import Prefabs from './components/Prefabs'
 
 import MockProvider from './helpers/MockProvider'
 
@@ -25,8 +26,8 @@ export default function MockUp() {
           <Row className='p-2'>
             <Col lg={3}>
               <Accordion defaultActiveKey='design'>
-                <Card>
-                  <AccordionToggle as={Card.Header} eventKey='prefab'>
+                {/* <Card>
+                  <AccordionToggle as={Card.Header} eventKey='prefab' className='cursor-pointer'>
                     Prefabs
                   </AccordionToggle>
                   <AccordionCollapse eventKey='prefab'>
@@ -34,9 +35,13 @@ export default function MockUp() {
                       <Prefabs />
                     </Card.Body>
                   </AccordionCollapse>
-                </Card>
+                </Card> */}
                 <Card>
-                  <AccordionToggle as={Card.Header} eventKey='design'>
+                  <AccordionToggle
+                    as={Card.Header}
+                    eventKey='design'
+                    className='cursor-pointer'
+                  >
                     Design
                   </AccordionToggle>
                   <AccordionCollapse eventKey='design'>
@@ -45,8 +50,27 @@ export default function MockUp() {
                     </Card.Body>
                   </AccordionCollapse>
                 </Card>
+
                 <Card>
-                  <AccordionToggle as={Card.Header} eventKey='caption'>
+                  <AccordionToggle
+                    as={Card.Header}
+                    eventKey='device'
+                    className='cursor-pointer'
+                  >
+                    Device
+                  </AccordionToggle>
+                  <AccordionCollapse eventKey='device'>
+                    <Card.Body>
+                      <Device />
+                    </Card.Body>
+                  </AccordionCollapse>
+                </Card>
+                <Card>
+                  <AccordionToggle
+                    as={Card.Header}
+                    eventKey='caption'
+                    className='cursor-pointer'
+                  >
                     Caption
                   </AccordionToggle>
                   <AccordionCollapse eventKey='caption'>
@@ -55,15 +79,10 @@ export default function MockUp() {
                     </Card.Body>
                   </AccordionCollapse>
                 </Card>
-                <Card>
-                  <AccordionToggle as={Card.Header} eventKey='screenshot'>
-                    Screenshot
-                  </AccordionToggle>
-                  <AccordionCollapse eventKey='screenshot'>
-                    <Card.Body>
-                      <Screenshot />
-                    </Card.Body>
-                  </AccordionCollapse>
+                <Card className='container'>
+                  <Card.Body className='row'>
+                    <Actions />
+                  </Card.Body>
                 </Card>
               </Accordion>
             </Col>

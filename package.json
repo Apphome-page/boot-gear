@@ -3,17 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "inspect": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "rimraf .next out && next build && next export"
+    "export": "rimraf .next out && next build && next export",
+    "fire-install": "cd ./functions && npm install",
+    "fire-serve": "firebase functions:config:get > ./functions/.runtimeconfig.json && env-cmd -f ./.env.development firebase emulators:start --only functions",
+    "fire-deploy": "firebase deploy --only functions"
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "bootstrap": "^4.5.2",
+    "cross-fetch": "^3.0.6",
     "dot": "^1.1.3",
+    "env-cmd": "^10.1.0",
     "file-saver": "^2.0.2",
     "firebase": "^7.23.0",
     "glob": "^7.1.6",
@@ -28,7 +33,9 @@
     "react-bootstrap": "^1.3.0",
     "react-dom": "16.13.1",
     "react-firebaseui": "^4.1.0",
-    "sass": "^1.27.0"
+    "sass": "^1.27.0",
+    "swr": "^0.3.8",
+    "use-http": "^1.0.15"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

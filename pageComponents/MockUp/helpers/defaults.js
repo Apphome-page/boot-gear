@@ -43,23 +43,51 @@ export function defaultProps(maxHeight) {
   }
 }
 
+export function scaleFrameProps(
+  {
+    width,
+    height,
+    headingPosX,
+    framePosX,
+    framePosY,
+    frameWidth,
+    frameHeight,
+    screenshotPosX,
+    screenshotPosY,
+    screenshotWidth,
+    screenshotHeight,
+  } = {},
+  scale = 1
+) {
+  return {
+    width: width * scale,
+    height: height * scale,
+    headingPosX: headingPosX * scale,
+    framePosX: framePosX * scale,
+    framePosY: framePosY * scale,
+    frameWidth: frameWidth * scale,
+    frameHeight: frameHeight * scale,
+    screenshotPosX: screenshotPosX * scale,
+    screenshotPosY: screenshotPosY * scale,
+    screenshotWidth: screenshotWidth * scale,
+    screenshotHeight: screenshotHeight * scale,
+  }
+}
+
 export function getFrameProps(
   frameType,
   frameId,
-  { lastFrame, maxHeight } = {}
+  { lastFrame, frameDevice, maxHeight } = {}
 ) {
   if (!frameId || !scrMeta[frameType]) {
     return {}
   }
   const deviceMeta = scrMeta[frameType].find(({ id }) => id === frameId)
   const deviceSize =
-    deviceMeta.sizes[lastFrame ? deviceMeta.sizes.length - 1 : 0]
-  if (
-    !deviceMeta ||
-    !deviceMeta.sizes ||
-    !deviceMeta.sizes.length ||
-    !scrSizes[deviceSize]
-  ) {
+    frameDevice ||
+    (deviceMeta &&
+      deviceMeta.sizes[lastFrame ? deviceMeta.sizes.length - 1 : 0])
+  if (!deviceSize || !deviceSize.length || !scrSizes[deviceSize]) {
     return {}
   }
   const {
@@ -77,6 +105,7 @@ export function getFrameProps(
     headingPosX: (width * scale) / 2,
     frameType,
     frameId,
+    frameDevice,
     frame: `/scr/${frameType}/${frameId}/${deviceSize}.png`,
     framePosX: 0,
     framePosY: 0,

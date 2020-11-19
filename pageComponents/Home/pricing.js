@@ -6,6 +6,7 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'react-bootstrap'
+import Link from 'next/link'
 
 import { CardIcon } from './style'
 
@@ -54,9 +55,11 @@ export default function HomePricing() {
                 All templates available for Screenshot Generator
               </ListGroupItem>
             </ListGroup>
-            <Button variant='light' className='btn-alt m-5'>
-              Get Started
-            </Button>
+            <Link href='/payments/pre?plan=silver'>
+              <Button variant='light' className='btn-alt m-5'>
+                Get Started
+              </Button>
+            </Link>
           </Card>
           <Card className='rounded-0 border-0 p-4'>
             <Card.Body>
@@ -72,9 +75,11 @@ export default function HomePricing() {
                 All templates available for Screenshot Generator
               </ListGroupItem>
             </ListGroup>
-            <Button variant='light' className='btn-alt m-5'>
-              Get Started
-            </Button>
+            <Link href='/payments/pre?plan=gold'>
+              <Button variant='light' className='btn-alt m-5'>
+                Get Started
+              </Button>
+            </Link>
           </Card>
         </CardDeck>
       </Container>
