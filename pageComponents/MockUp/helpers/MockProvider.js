@@ -28,28 +28,34 @@ export default function MockProvider({ children }) {
     ])
   }, [])
 
-  const removeMockStore = useCallback((mockIdx) => {
-    setMockStore((prevStore) => {
-      const newMockStore = [...prevStore]
-      if (prevStore.length > 1) {
-        newMockStore.splice(mockIdx, 1)
-        setCurrentMockUp((prevCurrentMockUp) => {
-          if (mockIdx <= prevCurrentMockUp && prevCurrentMockUp !== 0) {
-            return prevCurrentMockUp - 1
-          }
-          return prevCurrentMockUp
-        })
-      }
-      return newMockStore
-    })
-  }, [])
+  const removeMockStore = useCallback(
+    (mockIdx) => {
+      setMockStore((prevStore) => {
+        const newMockStore = [...prevStore]
+        const activeIdx =
+          typeof mockIdx !== 'undefined' ? mockIdx : currentMockUp
+        if (prevStore.length > 1) {
+          newMockStore.splice(activeIdx, 1)
+          setCurrentMockUp((prevCurrentMockUp) => {
+            if (activeIdx <= prevCurrentMockUp && prevCurrentMockUp !== 0) {
+              return prevCurrentMockUp - 1
+            }
+            return prevCurrentMockUp
+          })
+        }
+        return newMockStore
+      })
+    },
+    [currentMockUp]
+  )
 
   const modMockStore = useCallback(
-    (deltaStore) => {
+    (deltaStore, mockIdx) => {
+      const activeIdx = typeof mockIdx !== 'undefined' ? mockIdx : currentMockUp
       setMockStore((prevStore) => {
         const newStore = [...prevStore]
-        const newCurrentStore = { ...newStore[currentMockUp], ...deltaStore }
-        newStore[currentMockUp] = frameTemplates[
+        const newCurrentStore = { ...newStore[activeIdx], ...deltaStore }
+        newStore[activeIdx] = frameTemplates[
           newCurrentStore.template
         ].adjustProps(newCurrentStore)
         return newStore
@@ -58,16 +64,30 @@ export default function MockProvider({ children }) {
     [currentMockUp]
   )
 
-  const eventReset = useCallback(() => {
-    const { frameId, frameType, frameDevice } = mockStore[currentMockUp]
-    const resetProps = getFrameProps(frameType, frameId, {
-      frameDevice,
-      maxHeight,
+  const eventDuplicate = useCallback((selectedIdx) => {
+    setMockStore((prevStore) => {
+      const newStore = [...prevStore]
+      const dupData = { ...prevStore[selectedIdx] }
+      newStore.splice(selectedIdx, 0, dupData)
+      return newStore
     })
-    resetProps.heading = ''
-    resetProps.screenshot = '/scr/default.png'
-    modMockStore(resetProps)
-  }, [modMockStore, mockStore, currentMockUp])
+  }, [])
+
+  const eventReset = useCallback(
+    (selectedIdx) => {
+      const activeIdx =
+        typeof selectedIdx !== 'undefined' ? selectedIdx : currentMockUp
+      const { frameId, frameType, frameDevice } = mockStore[activeIdx]
+      const resetProps = getFrameProps(frameType, frameId, {
+        frameDevice,
+        maxHeight,
+      })
+      resetProps.heading = ''
+      resetProps.screenshot = '/scr/default.png'
+      modMockStore(resetProps, activeIdx)
+    },
+    [modMockStore, mockStore, currentMockUp]
+  )
 
   const eventSave = useCallback(async () => {
     const mockPromise = mockStore.map(async (currentMockStore) => {
@@ -136,6 +156,7 @@ export default function MockProvider({ children }) {
         remove: removeMockStore,
         modCurrent: modMockStore,
         setCurrent: setCurrentMockUp,
+        eventDuplicate,
         eventReset,
         eventSave,
       }}

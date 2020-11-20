@@ -1,58 +1,32 @@
+import { Button, Container, Image } from 'react-bootstrap'
 import styled from '@emotion/styled'
 
-const Move = `
-  display: inline-block;
-  &:before {
-    text-align: center;
+export default ''
+
+export const PreviewContainer = styled(Container)`
+  max-height: 512px;
+  text-align: center;
+  overflow-y: scroll;
+`
+
+export const PreviewButton = styled(Button)`
+  &:after {
+    content: attr(data-name) '';
+    display: block;
+    width: 72px;
+    color: #000000;
+    font-size: 10px;
+    overflow-wrap: break-word;
   }
 `
 
-export const MoveUp = styled.button`
-  ${Move}
-  &:before {
-    content: '🠕';
-  }
-`
-
-export const MoveDown = styled.button`
-  ${Move}
-  &:before {
-    content: '🠗';
-  }
-`
-
-export const MoveLeft = styled.button`
-  ${Move}
-  &:before {
-    content: '🠔';
-  }
-`
-
-export const MoveRight = styled.button`
-  ${Move}
-  &:before {
-    content: '🠖';
-  }
-`
-
-export const RotateLeft = styled.button`
-  ${Move}
-  &:before {
-    content: '⭯';
-  }
-`
-
-export const RotateRight = styled.button`
-  ${Move}
-  &:before {
-    content: '⭮';
-  }
-`
-
-export const Dummy = styled.div`
-  height: 448px;
-  width: 256px;
-  &:before {
-    content: '+';
+export const PreviewImage = styled(Image)`
+  margin: 4px;
+  height: 65px;
+  width: 65px;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
   }
 `

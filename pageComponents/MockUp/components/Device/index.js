@@ -1,12 +1,5 @@
-import { useEffect, useCallback, useContext, useRef } from 'react'
-import {
-  InputGroup,
-  FormControl,
-  OverlayTrigger,
-  Tooltip,
-  Form,
-} from 'react-bootstrap'
-import isEmpty from 'lodash/isEmpty'
+import { useCallback, useContext } from 'react'
+import { Tabs, Tab } from 'react-bootstrap'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
@@ -14,17 +7,9 @@ import scrMeta from '../../../../config/scrMeta.json'
 
 import { getFrameProps } from '../../helpers/defaults'
 
-import {
-  MoveUp,
-  MoveDown,
-  MoveLeft,
-  MoveRight,
-  RotateLeft,
-  RotateRight,
-} from '../../style'
+import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
 
-export default function Design() {
-  const formRef = useRef(null)
+export default function Device() {
   const {
     data: mockStore,
     current: currentMockUp,
@@ -33,193 +18,78 @@ export default function Design() {
 
   const currentMockStore = mockStore[currentMockUp]
 
-  const noAction = useCallback((e) => {
-    e.preventDefault()
-  }, [])
-
-  const eventDevice = useCallback(
-    (e) => {
-      const { direction } = e.target.dataset
-      const {
-        framePosX,
-        framePosY,
-        frameRot,
-        screenshotPosX,
-        screenshotPosY,
-        screenshotRot,
-      } = currentMockStore
-      const deltaData = {}
-      switch (direction) {
-        case 'left':
-          deltaData.framePosX = framePosX - 8
-          deltaData.screenshotPosX = screenshotPosX - 8
-          break
-        case 'right':
-          deltaData.framePosX = framePosX + 8
-          deltaData.screenshotPosX = screenshotPosX + 8
-          break
-        case 'up':
-          deltaData.framePosY = framePosY - 8
-          deltaData.screenshotPosY = screenshotPosY - 8
-          break
-        case 'down':
-          deltaData.framePosY = framePosY + 8
-          deltaData.screenshotPosY = screenshotPosY + 8
-          break
-        case 'rotLeft':
-          deltaData.frameRot = frameRot - 8
-          deltaData.screenshotRot = screenshotRot - 8
-          break
-        case 'rotRight':
-          deltaData.frameRot = frameRot + 8
-          deltaData.screenshotRot = screenshotRot + 8
-          break
-        default:
-          break
-      }
-      if (!isEmpty(deltaData)) {
-        modCurrentMockUp(deltaData)
-      }
-    },
-    [currentMockStore, modCurrentMockUp]
-  )
-
   const eventFrame = useCallback(
     (e) => {
       const { height: maxHeight } = currentMockStore
-      formRef.current.elements.designModel.value = -1
-      modCurrentMockUp(
-        getFrameProps(
-          e.target.options[e.target.selectedIndex].dataset.type || 'android',
-          e.target.value,
-          { maxHeight }
-        )
-      )
-    },
-    [formRef, currentMockStore, modCurrentMockUp]
-  )
-
-  const eventModel = useCallback(
-    (e) => {
-      const { frameType, frameId, height: maxHeight } = currentMockStore
-      modCurrentMockUp({
-        ...getFrameProps(frameType, frameId, {
-          maxHeight,
-          frameDevice: e.target.value,
-        }),
-      })
+      let value = ''
+      let type = ''
+      if (e.target.tagName === 'BUTTON') {
+        value = e.target.dataset.value
+        type = e.currentTarget.dataset.type
+      } else if (
+        e.target.tagName === 'IMG' &&
+        e.target.parentElement.tagName === 'BUTTON'
+      ) {
+        value = e.target.parentElement.dataset.value
+        type = e.currentTarget.dataset.type
+      } else {
+        value = e.target.value
+        type = e.target.options[e.target.selectedIndex].dataset.type
+      }
+      modCurrentMockUp(getFrameProps(type || 'android', value, { maxHeight }))
     },
     [currentMockStore, modCurrentMockUp]
   )
 
-  useEffect(() => {
-    formRef.current.elements.designFrame.value = currentMockStore.frameId
-  }, [currentMockStore])
-
   return (
-    <Form ref={formRef} onSubmit={noAction}>
-      <InputGroup className='m-1'>
-        <InputGroup.Prepend>
-          <InputGroup.Text>Device Style</InputGroup.Text>
-        </InputGroup.Prepend>
-        <FormControl
-          as='select'
-          name='designFrame'
-          custom
-          defaultValue={currentMockStore.frameId}
-          onChange={eventFrame}
-        >
-          <optgroup label='Android'>
-            {scrMeta.android.map((phone, key) => (
-              <option key={key} data-type='android' value={phone.id}>
-                {phone.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label='iOS'>
-            {scrMeta.ios.map((phone, key) => (
-              <option key={key} data-type='ios' value={phone.id}>
-                {phone.name}
-              </option>
-            ))}
-          </optgroup>
-        </FormControl>
-      </InputGroup>
-      <InputGroup className='m-1'>
-        <InputGroup.Prepend>
-          <InputGroup.Text>Device Model</InputGroup.Text>
-        </InputGroup.Prepend>
-        <FormControl
-          as='select'
-          name='designModel'
-          custom
-          defaultValue={currentMockStore.frameDevice || -1}
-          onChange={eventModel}
-          className='text-capitalize'
-        >
-          {scrMeta[currentMockStore.frameType]
-            .find(({ id }) => id === currentMockStore.frameId)
-            .sizes.map((model, key) => (
-              <option key={key} value={model}>
-                {model
-                  .replace(/(\d+)/g, ' $1')
-                  .replace(/_/g, ' ')
-                  .replace('custom', '')}
-              </option>
-            ))}
-        </FormControl>
-      </InputGroup>
-      <InputGroup className='m-1' onClick={eventDevice}>
-        <FormControl readOnly disabled value='Device Position' />
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
-            <MoveLeft
-              className='btn btn-outline-secondary'
-              data-direction='left'
-            />
-          </OverlayTrigger>
-        </InputGroup.Append>
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Move Up</Tooltip>}>
-            <MoveUp className='btn btn-outline-secondary' data-direction='up' />
-          </OverlayTrigger>
-        </InputGroup.Append>
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Move Down</Tooltip>}>
-            <MoveDown
-              className='btn btn-outline-secondary'
-              data-direction='down'
-            />
-          </OverlayTrigger>
-        </InputGroup.Append>
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
-            <MoveRight
-              className='btn btn-outline-secondary'
-              data-direction='right'
-            />
-          </OverlayTrigger>
-        </InputGroup.Append>
-      </InputGroup>
-      <InputGroup className='m-1' onClick={eventDevice}>
-        <FormControl readOnly disabled value='Device Rotation' />
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Rotate Left</Tooltip>}>
-            <RotateLeft
-              className='btn btn-outline-secondary'
-              data-direction='rotLeft'
-            />
-          </OverlayTrigger>
-        </InputGroup.Append>
-        <InputGroup.Append>
-          <OverlayTrigger overlay={<Tooltip>Rotate Right</Tooltip>}>
-            <RotateRight
-              className='btn btn-outline-secondary'
-              data-direction='rotRight'
-            />
-          </OverlayTrigger>
-        </InputGroup.Append>
-      </InputGroup>
-    </Form>
+    <Tabs
+      defaultActiveKey='device-style-ios'
+      className='justify-content-center mt-1 mb-3'
+    >
+      <Tab eventKey='device-style-ios' title='iOS'>
+        <PreviewContainer onClick={eventFrame} data-type='ios'>
+          {scrMeta.ios.map(({ id, name, sizes }, key) => (
+            <PreviewButton
+              className={`m-1 ${
+                currentMockStore.frameId === id ? 'border-dark' : 'border'
+              }`}
+              variant='outline-light'
+              key={key}
+              data-value={id}
+              data-name={name}
+            >
+              <PreviewImage
+                src={`/scrPreview/ios/${id}/${sizes[0]}.png`}
+                height='100'
+                width='100'
+                alt='iOS Device Style Preview'
+              />
+            </PreviewButton>
+          ))}
+        </PreviewContainer>
+      </Tab>
+      <Tab eventKey='device-model-android' title='Android'>
+        <PreviewContainer onClick={eventFrame} data-type='android'>
+          {scrMeta.android.map(({ id, name, sizes }, key) => (
+            <PreviewButton
+              className={`m-1 ${
+                currentMockStore.frameId === id ? 'border-dark' : 'border'
+              }`}
+              variant='outline-light'
+              key={key}
+              data-value={id}
+              data-name={name}
+            >
+              <PreviewImage
+                src={`/scrPreview/android/${id}/${sizes[0]}.png`}
+                height='100'
+                width='100'
+                alt='Android Device Style Preview'
+              />
+            </PreviewButton>
+          ))}
+        </PreviewContainer>
+      </Tab>
+    </Tabs>
   )
 }

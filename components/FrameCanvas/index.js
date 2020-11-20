@@ -34,7 +34,7 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
 
   return (
     <div
-      className={`mx-2 d-inline-block position-relative shadow${
+      className={`mx-2 d-inline-block position-relative${
         className ? ` ${className}` : ''
       }`}
       style={{ height: `${height}px` }}

@@ -1,23 +1,20 @@
 import { useContext } from 'react'
-import { Col, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import { Download } from '@emotion-icons/bootstrap/Download'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 export default function Actions() {
-  const { eventReset, eventSave } = useContext(MockupContext)
+  const { eventSave } = useContext(MockupContext)
 
   return (
-    <>
-      <Col>
-        <Button variant='info' className='col' onClick={eventReset}>
-          Reset
-        </Button>
-      </Col>
-      <Col>
-        <Button variant='success' className='col' onClick={eventSave}>
-          Save
-        </Button>
-      </Col>
-    </>
+    <Button
+      variant='light'
+      className='w-100 btn-alt d-flex justify-content-center align-items-center'
+      onClick={eventSave}
+    >
+      <span className='mr-1'>Save & Download</span>
+      <Download size='18' />
+    </Button>
   )
 }

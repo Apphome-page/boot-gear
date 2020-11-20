@@ -6,7 +6,7 @@ import useFetch from 'use-http'
 const FIRECLOUD_PAY_VALIDATE = process.env.NEXT_PUBLIC_FIRECLOUD_PAY_VALIDATE
 
 export default function Payment() {
-  const [payState, setPayState] = useState({})
+  const [payState, setPayState] = useState(false)
 
   const {
     query: { hostedpage },
