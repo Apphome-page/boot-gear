@@ -76,6 +76,12 @@ small {
 .hover-blur:hover {
   filter: blur(1px);
 }
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.hover-border:hover {
+  border-width: $border-width;
+}
 .filter-invert {
   filter: invert(1);
 }

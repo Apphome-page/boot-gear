@@ -1,11 +1,16 @@
 import { useContext } from 'react'
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { X as IconX } from '@emotion-icons/bootstrap/X'
+import { Back as IconCopy } from '@emotion-icons/bootstrap/Back'
+// import { ChevronDoubleLeft as IconDoubleLeft } from '@emotion-icons/bootstrap/ChevronDoubleLeft'
+// import { ChevronDoubleRight as IconDoubleRight } from '@emotion-icons/bootstrap/ChevronDoubleRight'
+import { ArrowRepeat as IconRepeat } from '@emotion-icons/bootstrap/ArrowRepeat'
 
 import FrameCanvas from '../../../../components/FrameCanvas'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
-import { Dummy } from '../../style'
+import { Wrap, Dummy } from './style'
 
 export default function Assembly() {
   const {
@@ -14,34 +19,66 @@ export default function Assembly() {
     add: addMockStore,
     remove: removeMockStore,
     setCurrent: setCurrentMockUp,
+    eventDuplicate,
+    eventReset,
   } = useContext(MockupContext)
   return (
     <div className='p-2 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
       {mockStore.map((mockItem, mockIndex) => (
-        <div className='flex-shrink-0' key={mockIndex}>
-          <div
-            className={`mb-1 mx-2 text-right border-bottom${
-              mockIndex === currentMockUp ? ' border-danger' : ' border-light'
-            }`}
-          >
-            <OverlayTrigger overlay={<Tooltip>Remove Template</Tooltip>}>
+        <Wrap
+          className={`flex-shrink-0 cursor-pointer${
+            mockIndex === currentMockUp ? ' border-dark' : ''
+          }`}
+          key={mockIndex}
+        >
+          <div className='mx-2 text-right'>
+            {/* <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
+              <Button variant='light' className='py-0 px-2 ml-1 mb-1'>
+                <IconDoubleLeft size='12' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
+              <Button variant='light' className='py-0 px-2 ml-1 mb-1'>
+                <IconDoubleRight size='12' />
+              </Button>
+            </OverlayTrigger> */}
+            <OverlayTrigger overlay={<Tooltip>Duplicate</Tooltip>}>
               <Button
                 variant='light'
-                className='py-0 px-2 mb-1 text-danger'
-                onClick={() => removeMockStore(mockIndex)}
+                className='py-0 px-2 ml-1 mb-1'
+                onClick={() => eventDuplicate(mockIndex)}
               >
-                ×
+                <IconCopy size='12' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger overlay={<Tooltip>Reset</Tooltip>}>
+              <Button
+                variant='light'
+                className='py-0 px-2 ml-1 mb-1'
+                onClick={() => eventReset(mockIndex)}
+              >
+                <IconRepeat size='12' />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+              <Button
+                variant='light'
+                className='py-0 px-1 ml-1 mb-1'
+                onClick={() => {
+                  removeMockStore(mockIndex)
+                }}
+              >
+                <IconX size='18' />
               </Button>
             </OverlayTrigger>
           </div>
           <FrameCanvas
-            className='cursor-pointer hover-blur '
             renderProps={mockItem}
             onClick={() => {
               setCurrentMockUp(mockIndex)
             }}
           />
-        </div>
+        </Wrap>
       ))}
       <Dummy
         onClick={addMockStore}
