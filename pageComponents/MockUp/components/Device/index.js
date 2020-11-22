@@ -32,9 +32,9 @@ export default function Device() {
       ) {
         value = e.target.parentElement.dataset.value
         type = e.currentTarget.dataset.type
-      } else {
-        value = e.target.value
-        type = e.target.options[e.target.selectedIndex].dataset.type
+      }
+      if (!value) {
+        return
       }
       modCurrentMockUp(getFrameProps(type || 'android', value, { maxHeight }))
     },

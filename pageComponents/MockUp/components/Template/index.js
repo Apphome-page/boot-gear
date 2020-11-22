@@ -4,22 +4,20 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
+  Button,
 } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import { ArrowLeftShort as IconArrowLeft } from '@emotion-icons/bootstrap/ArrowLeftShort'
+import { ArrowRightShort as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightShort'
+import { ArrowUpShort as IconArrowUp } from '@emotion-icons/bootstrap/ArrowUpShort'
+import { ArrowDownShort as IconArrowDown } from '@emotion-icons/bootstrap/ArrowDownShort'
+import { ArrowClockwise as IconRotateRight } from '@emotion-icons/bootstrap/ArrowClockwise'
+import { ArrowCounterclockwise as IconRotateLeft } from '@emotion-icons/bootstrap/ArrowCounterclockwise'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
-
-import {
-  MoveUp,
-  MoveDown,
-  MoveLeft,
-  MoveRight,
-  RotateLeft,
-  RotateRight,
-} from './style'
 
 export default function Template() {
   const {
@@ -117,31 +115,30 @@ export default function Template() {
         <FormControl readOnly disabled value='Device Position' />
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
-            <MoveLeft
-              className='btn btn-outline-secondary'
-              data-direction='left'
-            />
+            <Button variant='outline-secondary' data-direction='left'>
+              <IconArrowLeft size='18' data-direction='left' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Move Up</Tooltip>}>
-            <MoveUp className='btn btn-outline-secondary' data-direction='up' />
+            <Button variant='outline-secondary' data-direction='up'>
+              <IconArrowUp size='18' data-direction='up' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Move Down</Tooltip>}>
-            <MoveDown
-              className='btn btn-outline-secondary'
-              data-direction='down'
-            />
+            <Button variant='outline-secondary' data-direction='down'>
+              <IconArrowDown size='18' data-direction='down' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
-            <MoveRight
-              className='btn btn-outline-secondary'
-              data-direction='right'
-            />
+            <Button variant='outline-secondary' data-direction='right'>
+              <IconArrowRight size='18' data-direction='right' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
       </InputGroup>
@@ -149,18 +146,16 @@ export default function Template() {
         <FormControl readOnly disabled value='Device Rotation' />
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Rotate Left</Tooltip>}>
-            <RotateLeft
-              className='btn btn-outline-secondary'
-              data-direction='rotLeft'
-            />
+            <Button variant='outline-secondary' data-direction='rotLeft'>
+              <IconRotateLeft size='18' data-direction='rotLeft' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
         <InputGroup.Append>
           <OverlayTrigger overlay={<Tooltip>Rotate Right</Tooltip>}>
-            <RotateRight
-              className='btn btn-outline-secondary'
-              data-direction='rotRight'
-            />
+            <Button variant='outline-secondary' data-direction='rotRight'>
+              <IconRotateRight size='18' data-direction='rotRight' />
+            </Button>
           </OverlayTrigger>
         </InputGroup.Append>
       </InputGroup>

@@ -1,5 +1,8 @@
 import { Container, Row, Col, Media } from 'react-bootstrap'
 import Link from 'next/link'
+import { House as IconHouse } from '@emotion-icons/bootstrap/House'
+import { Telephone as IconPhone } from '@emotion-icons/bootstrap/Telephone'
+import { Envelope as IconMail } from '@emotion-icons/bootstrap/Envelope'
 
 import SubscriptionInline from '../Subscription/inline'
 
@@ -87,37 +90,19 @@ export default function Footer() {
             <Col lg={3}>
               <div className='my-4 h5 font-weight-bold'>Connect</div>
               <Media className='mb-3'>
-                <img
-                  src='https://www.unpkg.com/feather-icons@latest/dist/icons/home.svg'
-                  alt='home'
-                  height='24'
-                  width='24'
-                  className='mr-2 filter-invert'
-                />
-                <Media.Body>Noida, India</Media.Body>
+                <IconHouse size='24' />
+                <Media.Body className='ml-2'>Noida, India</Media.Body>
               </Media>
               <Media className='mb-3'>
-                <img
-                  src='https://www.unpkg.com/feather-icons@latest/dist/icons/phone.svg'
-                  alt='home'
-                  height='24'
-                  width='24'
-                  className='mr-2 filter-invert'
-                />
-                <Media.Body>
+                <IconPhone size='24' />
+                <Media.Body className='ml-2'>
                   +91 8750348350
                   <p className='text-white-50'>Mon to Fri 9am to 6 pm</p>
                 </Media.Body>
               </Media>
               <Media className='mb-3'>
-                <img
-                  src='https://www.unpkg.com/feather-icons@latest/dist/icons/mail.svg'
-                  alt='home'
-                  height='24'
-                  width='24'
-                  className='mr-2 filter-invert'
-                />
-                <Media.Body>
+                <IconMail size='24' />
+                <Media.Body className='ml-2'>
                   support@applanding.page
                   <p className='text-white-50'>Send us your query anytime!</p>
                 </Media.Body>

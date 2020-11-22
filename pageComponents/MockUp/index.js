@@ -8,6 +8,12 @@ import {
   TabContent,
   TabPane,
 } from 'react-bootstrap'
+import { ChatSquareText as IconCaption } from '@emotion-icons/bootstrap/ChatSquareText'
+import { Columns as IconLayout } from '@emotion-icons/bootstrap/Columns'
+import { Collection as IconBackground } from '@emotion-icons/bootstrap/Collection'
+import { Fullscreen as IconScreen } from '@emotion-icons/bootstrap/Fullscreen'
+import { Phone as IconPhone } from '@emotion-icons/bootstrap/Phone'
+import { MusicPlayer as IconModel } from '@emotion-icons/bootstrap/MusicPlayer'
 
 import Actions from './components/Actions'
 import Assembly from './components/Assembly'
@@ -32,16 +38,17 @@ export default function MockUp() {
             </Col>
           </Row>
           <Row className='p-2'>
-            <Col lg={3}>
-              <Row>
+            <Col lg={4}>
+              <Row className='h-100'>
                 <Col sm={3} className='p-0 border'>
-                  <ListGroup variant='flush' className='small text-center'>
+                  <ListGroup variant='flush' className='small mini text-center'>
                     <ListGroupItem
                       action
                       eventKey='template'
                       variant='light'
                       className='p-1'
                     >
+                      <IconLayout size='18' className='d-block my-1 mx-auto' />
                       Template
                     </ListGroupItem>
                     <ListGroupItem
@@ -50,6 +57,10 @@ export default function MockUp() {
                       variant='light'
                       className='p-1'
                     >
+                      <IconBackground
+                        size='18'
+                        className='d-block my-1 mx-auto'
+                      />
                       Background
                     </ListGroupItem>
                     <ListGroupItem
@@ -58,6 +69,7 @@ export default function MockUp() {
                       variant='light'
                       className='p-1'
                     >
+                      <IconScreen size='18' className='d-block my-1 mx-auto' />
                       Screenshot
                     </ListGroupItem>
                     <ListGroupItem
@@ -66,6 +78,7 @@ export default function MockUp() {
                       variant='light'
                       className='p-1'
                     >
+                      <IconPhone size='18' className='d-block my-1 mx-auto' />
                       Device
                     </ListGroupItem>
                     <ListGroupItem
@@ -74,6 +87,7 @@ export default function MockUp() {
                       variant='light'
                       className='p-1'
                     >
+                      <IconModel size='18' className='d-block my-1 mx-auto' />
                       Model
                     </ListGroupItem>
                     <ListGroupItem
@@ -82,15 +96,12 @@ export default function MockUp() {
                       variant='light'
                       className='p-1'
                     >
+                      <IconCaption size='18' className='d-block my-1 mx-auto' />
                       Caption
                     </ListGroupItem>
                   </ListGroup>
                 </Col>
-                <Col
-                  sm={9}
-                  className='border border-left-0 bg-light'
-                  style={{ minHeight: '512px' }}
-                >
+                <Col sm={9} className='border border-left-0 bg-light'>
                   <TabContent>
                     <TabPane eventKey='template'>
                       <Template />
@@ -114,7 +125,7 @@ export default function MockUp() {
                 </Col>
               </Row>
             </Col>
-            <Col lg={9} className=''>
+            <Col lg={8} className=''>
               <Assembly />
             </Col>
           </Row>
