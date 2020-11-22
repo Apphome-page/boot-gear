@@ -1,0 +1,30 @@
+{
+  "free": {
+    "title":"Free",
+    "cost": "$0",
+    "details":[
+      "1 website on applanding.page",
+      "Fully featured",
+      "5 templates for Screenshot Generator"
+    ]
+  },
+  "silver":{
+    "title":"Pro",
+    "cost": "$79",
+    "checkout": "process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER",
+    "details":[
+      "1 website on your domain",
+      "Fully featured",
+      "All templates available for Screenshot Generator"
+    ]
+  },
+  "gold":{
+    "title":"Startup",
+    "cost": "$199+",
+    "details":[
+      "3+ websites on your domains",
+      "Fully featured",
+      "All templates available for Screenshot Generator"
+    ]
+  }
+}
