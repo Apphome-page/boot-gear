@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
-import { Button } from 'react-bootstrap'
-import { Download } from '@emotion-icons/bootstrap/Download'
+import { Button, Spinner, ProgressBar } from 'react-bootstrap'
+import { FileEarmarkArrowDown as Download } from '@emotion-icons/bootstrap/FileEarmarkArrowDown'
 
 import Subscription from '../../../../components/Subscription'
 
@@ -8,15 +8,17 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 export default function Actions() {
   const { eventSave } = useContext(MockupContext)
+  const [progress, setProgress] = useState(0)
   const [subShow, setSubShow] = useState(false)
 
+  const isLoading = progress === 0 || progress === 100
   return (
     <>
       <Subscription
         show={subShow}
         onComplete={() => {
           setSubShow(false)
-          eventSave()
+          eventSave(setProgress)
         }}
       />
       <Button
@@ -26,9 +28,25 @@ export default function Actions() {
           setSubShow(true)
         }}
       >
-        <span className='mr-1'>Save & Download</span>
-        <Download size='18' />
+        {isLoading ? (
+          <>
+            <span className='mr-1'>Save & Download</span>
+            <Download size='24' />
+          </>
+        ) : (
+          <>
+            <span className='mr-1'>Processing </span>
+            <Spinner animation='border' variant='warning' size='sm' />
+          </>
+        )}
       </Button>
+      <ProgressBar
+        className='bg-alt rounded-0'
+        animated
+        variant='warning'
+        now={progress}
+        style={{ height: '2px' }}
+      />
     </>
   )
 }

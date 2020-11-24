@@ -89,63 +89,85 @@ export default function MockProvider({ children }) {
     [modMockStore, mockStore, currentMockUp]
   )
 
-  const eventSave = useCallback(async () => {
-    const mockPromise = mockStore.map(async (currentMockStore) => {
-      const {
-        frameId,
-        frameType,
-        frameDevice,
-        width,
-        height,
-      } = currentMockStore
-      const {
-        width: originalWidth,
-        height: originalHeight,
-      } = getFrameProps(frameType, frameId, { frameDevice })
+  const eventSave = useCallback(
+    async (setProgress) => {
+      setProgress(1)
+      const progressDelta = parseFloat((50 / mockStore.length).toFixed(2))
+      const mockPromise = mockStore.map(async (currentMockStore) => {
+        const {
+          frameId,
+          frameType,
+          frameDevice,
+          width,
+          height,
+        } = currentMockStore
+        const {
+          width: originalWidth,
+          height: originalHeight,
+        } = getFrameProps(frameType, frameId, { frameDevice })
 
-      const scale = Math.max(originalWidth / width, originalHeight / height)
+        const scale = Math.max(originalWidth / width, originalHeight / height)
 
-      const fullFrameProps = {
-        ...currentMockStore,
-        ...scaleFrameProps(currentMockStore, scale),
-      }
+        const fullFrameProps = {
+          ...currentMockStore,
+          ...scaleFrameProps(currentMockStore, scale),
+        }
 
-      fullFrameProps.headingSize =
-        (fullFrameProps.headingSize * fullFrameProps.height) / maxHeight
-      fullFrameProps.headingPosY = fullFrameProps.headingSize + 16
+        fullFrameProps.headingSize =
+          (fullFrameProps.headingSize * fullFrameProps.height) / maxHeight
+        fullFrameProps.headingPosY = fullFrameProps.headingSize + 16
 
-      const adjustedFrameProps = frameTemplates[
-        fullFrameProps.template
-      ].adjustProps(fullFrameProps)
+        const adjustedFrameProps = frameTemplates[
+          fullFrameProps.template
+        ].adjustProps(fullFrameProps)
 
-      const canvasObj = Object.assign(document.createElement('canvas'), {
-        height: adjustedFrameProps.height,
-        width: adjustedFrameProps.width,
+        const canvasObj = Object.assign(document.createElement('canvas'), {
+          height: adjustedFrameProps.height,
+          width: adjustedFrameProps.width,
+        })
+
+        await renderCanvas(canvasObj.getContext('2d'), adjustedFrameProps)
+
+        const canvasBlob = await new Promise((resolve) => {
+          canvasObj.toBlob(resolve)
+        })
+
+        setProgress((prevProgress) => {
+          const newProgress = parseFloat(
+            (prevProgress + progressDelta).toFixed(2)
+          )
+          return newProgress
+        })
+        return canvasBlob
       })
 
-      await renderCanvas(canvasObj.getContext('2d'), adjustedFrameProps)
+      setProgress(10)
 
-      const canvasBlob = await new Promise((resolve) => {
-        canvasObj.toBlob(resolve)
+      const [{ default: JSZip }, { saveAs }, ...mockCanvas] = await Promise.all(
+        [import('jszip'), import('file-saver')].concat(mockPromise)
+      )
+
+      setProgress(70)
+
+      const zip = new JSZip()
+      mockCanvas.forEach((mCanvas, mIndex) => {
+        zip.file(`${mIndex}.png`, mCanvas)
       })
-      return canvasBlob
-    })
 
-    const [{ default: JSZip }, { saveAs }, ...mockCanvas] = await Promise.all(
-      [import('jszip'), import('file-saver')].concat(mockPromise)
-    )
+      setProgress(80)
 
-    const zip = new JSZip()
-    mockCanvas.forEach((mCanvas, mIndex) => {
-      zip.file(`${mIndex}.png`, mCanvas)
-    })
+      const zipBundle = await zip.generateAsync({
+        type: 'blob',
+      })
 
-    const zipBundle = await zip.generateAsync({
-      type: 'blob',
-    })
+      setProgress(95)
 
-    saveAs(zipBundle, 'AppScreenshots.zip')
-  }, [mockStore])
+      saveAs(zipBundle, 'AppScreenshots.zip')
+
+      setProgress(0)
+    },
+    [mockStore]
+  )
 
   return (
     <MockupContext.Provider

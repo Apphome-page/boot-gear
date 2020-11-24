@@ -22,14 +22,14 @@ import Caption from './components/Caption'
 import Device from './components/Device'
 import Model from './components/Model'
 import Screenshot from './components/Screenshot'
-import Template from './components/Template'
+import Layout from './components/Layout'
 
 import MockProvider from './helpers/MockProvider'
 
 export default function MockUp() {
   return (
     <MockProvider>
-      <TabContainer defaultActiveKey='template'>
+      <TabContainer defaultActiveKey='layout'>
         <Container fluid>
           <Row className='mt-3'>
             <Col lg={9} />
@@ -40,28 +40,25 @@ export default function MockUp() {
           <Row className='p-2'>
             <Col lg={4}>
               <Row className='h-100'>
-                <Col sm={3} className='p-0 border'>
+                <Col sm={3} className='p-0 border rounded-left'>
                   <ListGroup variant='flush' className='small mini text-center'>
                     <ListGroupItem
                       action
-                      eventKey='template'
+                      eventKey='layout'
                       variant='light'
                       className='p-1'
                     >
                       <IconLayout size='18' className='d-block my-1 mx-auto' />
-                      Template
+                      Layout
                     </ListGroupItem>
                     <ListGroupItem
                       action
-                      eventKey='background'
+                      eventKey='caption'
                       variant='light'
                       className='p-1'
                     >
-                      <IconBackground
-                        size='18'
-                        className='d-block my-1 mx-auto'
-                      />
-                      Background
+                      <IconCaption size='18' className='d-block my-1 mx-auto' />
+                      Caption
                     </ListGroupItem>
                     <ListGroupItem
                       action
@@ -92,19 +89,25 @@ export default function MockUp() {
                     </ListGroupItem>
                     <ListGroupItem
                       action
-                      eventKey='caption'
+                      eventKey='background'
                       variant='light'
                       className='p-1'
                     >
-                      <IconCaption size='18' className='d-block my-1 mx-auto' />
-                      Caption
+                      <IconBackground
+                        size='18'
+                        className='d-block my-1 mx-auto'
+                      />
+                      Background
                     </ListGroupItem>
                   </ListGroup>
                 </Col>
-                <Col sm={9} className='border border-left-0 bg-light'>
+                <Col
+                  sm={9}
+                  className='border border-left-0 rounded-right bg-light'
+                >
                   <TabContent>
-                    <TabPane eventKey='template'>
-                      <Template />
+                    <TabPane eventKey='layout'>
+                      <Layout />
                     </TabPane>
                     <TabPane eventKey='background'>
                       <Background />

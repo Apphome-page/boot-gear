@@ -21,8 +21,8 @@ export default function Design() {
     <>
       <FormFile
         id='scrFile'
-        className='mt-3 mb-1'
-        label='Upload a screenshot'
+        className='mt-3 mb-1 cursor-pointer'
+        label='Upload Screenshot'
         accept='image/*'
         custom
         onChange={(e) => {
