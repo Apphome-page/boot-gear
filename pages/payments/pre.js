@@ -8,8 +8,8 @@ import AuthWrapper from '../../components/AuthWrapper'
 import { StoreContext } from '../../utils/storeProvider'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
-const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKBOUT_SILVER
-const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKBOUT_GOLD
+const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
+const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_GOLD
 
 export default function Payment() {
   const router = useRouter()

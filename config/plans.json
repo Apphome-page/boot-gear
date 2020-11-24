@@ -1,0 +1,32 @@
+{
+  "free": {
+    "title":"Free",
+    "cost": "$0",
+    "webLimit": 1,
+    "details":[
+      "1 website on applanding.page",
+      "Fully featured",
+      "5 templates for Screenshot Generator"
+    ]
+  },
+  "silver":{
+    "title":"Pro",
+    "cost": "$79",
+    "webLimit": 1,
+    "details":[
+      "1 website on your domain",
+      "Fully featured",
+      "All templates available for Screenshot Generator"
+    ]
+  },
+  "gold":{
+    "title":"Startup",
+    "cost": "$199+",
+    "webLimit": 3,
+    "details":[
+      "3+ websites on your domains",
+      "Fully featured",
+      "All templates available for Screenshot Generator"
+    ]
+  }
+}

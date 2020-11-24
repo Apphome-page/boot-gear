@@ -158,7 +158,8 @@ export default function FrameTemplateSingle({ preset = '' }) {
               <Col md className='m-1'>
                 <FormFile
                   id='scrFile'
-                  label='Upload a screenshot'
+                  className='cursor-pointer'
+                  label='Upload Screenshot'
                   accept='image/*'
                   custom
                   onChange={(e) =>
