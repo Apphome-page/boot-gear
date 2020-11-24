@@ -3,6 +3,9 @@ import Link from 'next/link'
 import { House as IconHouse } from '@emotion-icons/bootstrap/House'
 import { Telephone as IconPhone } from '@emotion-icons/bootstrap/Telephone'
 import { Envelope as IconMail } from '@emotion-icons/bootstrap/Envelope'
+import { Facebook as IconFacebook } from '@emotion-icons/feather/Facebook'
+import { Twitter as IconTwitter } from '@emotion-icons/feather/Twitter'
+import { Linkedin as IconLinkedin } from '@emotion-icons/feather/Linkedin'
 
 import SubscriptionInline from '../Subscription/inline'
 
@@ -116,8 +119,30 @@ export default function Footer() {
               <SubscriptionInline />
             </Col>
           </Row>
-          <Row className='my-5 text-center'>
-            <Col>Copyright © 2020 | All rights reserved to Applanding.page</Col>
+          <Row className='my-3 py-3 border-top'>
+            <Col lg={8}>
+              Copyright © 2020 | All rights reserved to Applanding.page
+            </Col>
+            <Col lg={4} className='text-right'>
+              <a
+                href='https://www.facebook.com/applanding.page'
+                className='text-white d-inline-block mx-1'
+              >
+                <IconFacebook size='28' />
+              </a>
+              <a
+                href='https://twitter.com/ApplandingP'
+                className='text-white d-inline-block mx-1'
+              >
+                <IconTwitter size='28' />
+              </a>
+              <a
+                href='https://www.linkedin.com/in/applanding-page-845a941ba/'
+                className='text-white d-inline-block mx-1'
+              >
+                <IconLinkedin size='28' />
+              </a>
+            </Col>
           </Row>
         </Container>
       </Container>
