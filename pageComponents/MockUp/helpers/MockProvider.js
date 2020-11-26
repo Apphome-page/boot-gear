@@ -10,7 +10,7 @@ import {
   scaleFrameProps,
 } from './defaults'
 
-const maxHeight = 512
+const maxHeight = 256
 
 export const MockupContext = createContext(null)
 
@@ -112,10 +112,6 @@ export default function MockProvider({ children }) {
           ...currentMockStore,
           ...scaleFrameProps(currentMockStore, scale),
         }
-
-        fullFrameProps.headingSize =
-          (fullFrameProps.headingSize * fullFrameProps.height) / maxHeight
-        fullFrameProps.headingPosY = fullFrameProps.headingSize + 16
 
         const adjustedFrameProps = frameTemplates[
           fullFrameProps.template

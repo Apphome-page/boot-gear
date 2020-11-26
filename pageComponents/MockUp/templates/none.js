@@ -4,6 +4,7 @@ export default {
     const { headingSize } = newProps
     return {
       ...newProps,
+      heading: '',
       headingPosY: 16 + headingSize,
     }
   },

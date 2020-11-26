@@ -30,18 +30,17 @@ export default {
       height,
       width,
     }).getContext('2d')
+    const headingText = heading || 'Add your text here'
     const headingHeight =
-      heading && headingSize
-        ? renderText(ctx, {
-            text: heading,
-            x: headingPosX,
-            y: 16 + headingSize,
-            size: headingSize,
-            face: headingFont,
-            color: headingColor,
-          }) + 4
-        : 0
-    headingPosY = headingSize + 16
+      renderText(ctx, {
+        text: headingText,
+        x: headingPosX,
+        y: 16 + headingSize,
+        size: headingSize,
+        face: headingFont,
+        color: headingColor,
+      }) + 4
+    headingPosY = headingSize + height / 32
     if (headingHeight > framePosY) {
       framePosY = headingHeight
       frameHeight = height - headingHeight
@@ -58,6 +57,7 @@ export default {
     }
     return {
       ...newProps,
+      heading: headingText,
       headingPosY,
       framePosX,
       framePosY,

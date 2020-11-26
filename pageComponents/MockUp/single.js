@@ -66,9 +66,7 @@ export default function FrameTemplateSingle({ preset = '' }) {
         )
         break
     }
-    return {
-      ...frameDefaults,
-    }
+    return { ...frameDefaults }
   })
   const showAndroidDevice = !preset || preset.toLowerCase() === 'android'
   const showAppleDevice =

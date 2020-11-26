@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 export default ''
 
 export const PreviewContainer = styled(Container)`
-  max-height: 512px;
+  max-height: 248px;
   text-align: center;
   overflow-y: scroll;
 `
