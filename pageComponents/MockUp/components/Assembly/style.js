@@ -10,8 +10,8 @@ export const Wrap = styled.div`
 `
 
 export const Dummy = styled.div`
-  height: 400px;
-  width: 200px;
+  height: 200px;
+  width: 120px;
   &:before {
     content: '+';
   }

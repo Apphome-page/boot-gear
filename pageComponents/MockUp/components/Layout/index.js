@@ -4,7 +4,8 @@ import {
   Tooltip,
   Button,
   ButtonGroup,
-  Container,
+  Tabs,
+  Tab,
   Image,
 } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
@@ -19,6 +20,8 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
+
+import { PreviewContainer } from '../../style'
 
 export default function Layout() {
   const {
@@ -96,62 +99,67 @@ export default function Layout() {
   )
 
   return (
-    <Container fluid className='text-center'>
-      <div className='my-2 border-bottom text-left'>Device Alignment</div>
-      <ButtonGroup onClick={eventDevice} className='text-center'>
-        <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='left'>
-            <IconArrowLeft size='18' data-direction='left' />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger overlay={<Tooltip>Move Up</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='up'>
-            <IconArrowUp size='18' data-direction='up' />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger overlay={<Tooltip>Move Down</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='down'>
-            <IconArrowDown size='18' data-direction='down' />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='right'>
-            <IconArrowRight size='18' data-direction='right' />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger overlay={<Tooltip>Rotate Left</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='rotLeft'>
-            <IconRotateLeft size='18' data-direction='rotLeft' />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger overlay={<Tooltip>Rotate Right</Tooltip>}>
-          <Button variant='outline-secondary' data-direction='rotRight'>
-            <IconRotateRight size='18' data-direction='rotRight' />
-          </Button>
-        </OverlayTrigger>
-      </ButtonGroup>
-      <div className='mt-4 mb-2 border-bottom text-left'>Template</div>
-      <Container fluid onClick={eventTemplate}>
-        {Object.keys(frameTemplates).map((fTemplate) => (
-          <OverlayTrigger
-            key={fTemplate}
-            overlay={<Tooltip>{frameTemplates[fTemplate].name}</Tooltip>}
-          >
-            <Image
-              src={`/scrPreview/template/${fTemplate}.png`}
-              alt='Device Template'
-              data-value={fTemplate}
-              height='140'
-              width='auto'
-              className={`m-1 rounded cursor-pointer ${
-                currentMockStore.template === fTemplate
-                  ? 'bg-warning'
-                  : 'bg-alt'
-              }`}
-            />
+    <Tabs
+      defaultActiveKey='template'
+      className='justify-content-center mt-1 mb-3'
+    >
+      <Tab eventKey='template' title='Template'>
+        <PreviewContainer fluid onClick={eventTemplate}>
+          {Object.keys(frameTemplates).map((fTemplate) => (
+            <OverlayTrigger
+              key={fTemplate}
+              overlay={<Tooltip>{frameTemplates[fTemplate].name}</Tooltip>}
+            >
+              <Image
+                src={`/scrPreview/template/${fTemplate}.png`}
+                alt='Device Template'
+                data-value={fTemplate}
+                height='80'
+                width='auto'
+                className={`m-1 rounded cursor-pointer ${
+                  currentMockStore.template === fTemplate
+                    ? 'bg-warning'
+                    : 'bg-alt'
+                }`}
+              />
+            </OverlayTrigger>
+          ))}
+        </PreviewContainer>
+      </Tab>
+      <Tab eventKey='alignment' title='Alignment' className='text-center'>
+        <ButtonGroup onClick={eventDevice} className='text-center'>
+          <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='left'>
+              <IconArrowLeft size='18' data-direction='left' />
+            </Button>
           </OverlayTrigger>
-        ))}
-      </Container>
-    </Container>
+          <OverlayTrigger overlay={<Tooltip>Move Up</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='up'>
+              <IconArrowUp size='18' data-direction='up' />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger overlay={<Tooltip>Move Down</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='down'>
+              <IconArrowDown size='18' data-direction='down' />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='right'>
+              <IconArrowRight size='18' data-direction='right' />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger overlay={<Tooltip>Rotate Left</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='rotLeft'>
+              <IconRotateLeft size='18' data-direction='rotLeft' />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger overlay={<Tooltip>Rotate Right</Tooltip>}>
+            <Button variant='outline-secondary' data-direction='rotRight'>
+              <IconRotateRight size='18' data-direction='rotRight' />
+            </Button>
+          </OverlayTrigger>
+        </ButtonGroup>
+      </Tab>
+    </Tabs>
   )
 }

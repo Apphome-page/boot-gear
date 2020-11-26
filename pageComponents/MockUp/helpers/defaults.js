@@ -18,9 +18,9 @@ export function defaultProps(maxHeight) {
     heading: '',
     headingColor: '#ffffff',
     headingFont: 'Arial',
-    headingSize: 24,
+    headingSize: parseInt((defaultHeight * defaultScale) / 21, 10),
     headingPosX: (defaultWidth * defaultScale) / 2,
-    headingPosY: 40,
+    headingPosY: 0,
     frameType: 'android',
     frameId: 'NEXUS5X_BLACK',
     frame: '/scr/android/NEXUS5X_BLACK/nexus5x.png',
@@ -39,7 +39,7 @@ export function defaultProps(maxHeight) {
     height: defaultHeight * defaultScale,
     backgroundColor: '#7b10ff',
     backgroundImage: '',
-    template: 'above',
+    template: 'none',
   }
 }
 
@@ -47,7 +47,13 @@ export function scaleFrameProps(
   {
     width,
     height,
+    headingSize,
     headingPosX,
+    headingPosY,
+    backgroundImage,
+    frameType,
+    frameId,
+    frameDevice,
     framePosX,
     framePosY,
     frameWidth,
@@ -59,10 +65,16 @@ export function scaleFrameProps(
   } = {},
   scale = 1
 ) {
+  const deviceMeta = scrMeta[frameType].find(({ id }) => id === frameId)
+  const deviceSize = frameDevice || (deviceMeta && deviceMeta.sizes[0])
   return {
     width: width * scale,
     height: height * scale,
+    headingSize: parseInt(headingSize * scale, 10) + 1,
     headingPosX: headingPosX * scale,
+    headingPosY: headingPosY * scale,
+    backgroundImage: backgroundImage.replace('scrPreview/', 'scr/'),
+    frame: `/scr/${frameType}/${frameId}/${deviceSize}.png`,
     framePosX: framePosX * scale,
     framePosY: framePosY * scale,
     frameWidth: frameWidth * scale,
@@ -106,7 +118,7 @@ export function getFrameProps(
     frameType,
     frameId,
     frameDevice,
-    frame: `/scr/${frameType}/${frameId}/${deviceSize}.png`,
+    frame: `/scrPreview/${frameType}/${frameId}/${deviceSize}.png`,
     framePosX: 0,
     framePosY: 0,
     frameWidth: width * scale,
