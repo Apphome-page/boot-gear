@@ -70,8 +70,7 @@ export default function Footer() {
             <Col lg={3}>
               <div className='my-4 h5 font-weight-bold'>About Us</div>
               <p>
-                We make mobile apps dynamic so that your users do not have to
-                upgrade their apps for minor changes
+                We make fast, beautiful and responsive app landing pages for your mobile apps.
               </p>
             </Col>
             <Col lg={3}>
