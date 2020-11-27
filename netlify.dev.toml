@@ -9,7 +9,7 @@
   
 [[redirects]]
   from = "/showcase/*"
-  to = "https://showcase.apphome.page/showcase/:splat"
+  to = "https://showcase.applanding.page/showcase/:splat"
   status = 200
 
 [[redirects]]
