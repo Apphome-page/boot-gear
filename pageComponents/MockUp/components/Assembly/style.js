@@ -10,9 +10,12 @@ export const Wrap = styled.div`
 `
 
 export const Dummy = styled.div`
-  height: 448px;
-  width: 256px;
+  height: 200px;
+  width: 120px;
   &:before {
     content: '+';
+  }
+  &:hover {
+    filter: blur(1px);
   }
 `

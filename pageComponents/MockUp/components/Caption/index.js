@@ -69,9 +69,9 @@ export default function Caption() {
             }
           }}
         >
-          <option value='18'>Small</option>
-          <option value='24'>Medium</option>
-          <option value='28'>Large</option>
+          <option value='10'>Small</option>
+          <option value='12'>Medium</option>
+          <option value='14'>Large</option>
         </FormControl>
       </InputGroup>
       <InputGroup className='m-1'>

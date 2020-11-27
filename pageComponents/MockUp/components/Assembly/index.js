@@ -82,7 +82,7 @@ export default function Assembly() {
       ))}
       <Dummy
         onClick={addMockStore}
-        className='mt-5 mx-2 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center display-1 cursor-pointer hover-blur'
+        className='mt-4 mx-2 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center display-1 cursor-pointer'
       />
     </div>
   )

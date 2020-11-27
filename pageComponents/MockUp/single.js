@@ -66,9 +66,7 @@ export default function FrameTemplateSingle({ preset = '' }) {
         )
         break
     }
-    return {
-      ...frameDefaults,
-    }
+    return { ...frameDefaults }
   })
   const showAndroidDevice = !preset || preset.toLowerCase() === 'android'
   const showAppleDevice =
@@ -158,7 +156,8 @@ export default function FrameTemplateSingle({ preset = '' }) {
               <Col md className='m-1'>
                 <FormFile
                   id='scrFile'
-                  label='Upload a screenshot'
+                  className='cursor-pointer'
+                  label='Upload Screenshot'
                   accept='image/*'
                   custom
                   onChange={(e) =>

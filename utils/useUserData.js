@@ -1,5 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 
+import getPlanDetails from './getPlanDetails'
+
 import { StoreContext } from './storeProvider'
 
 export default function useUserData() {
@@ -10,11 +12,11 @@ export default function useUserData() {
 
   useEffect(() => {
     const userDataRef = firebase.database().ref(`users/${userId}`)
-
     userDataRef.on('value', (snapshot) => {
-      setUserData(snapshot.val())
+      const snapVal = snapshot.val()
+      snapVal.plan = getPlanDetails(snapVal.plan_id)
+      setUserData(snapVal)
     })
-
     return () => {
       userDataRef.off()
     }

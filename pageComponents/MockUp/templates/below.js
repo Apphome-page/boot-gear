@@ -19,18 +19,17 @@ export default {
       height,
       width,
     }).getContext('2d')
+    const headingText = heading || 'Add your text here'
     const headingHeight =
-      heading && headingSize
-        ? renderText(ctx, {
-            text: heading,
-            x: headingPosX,
-            y: headingSize + 16,
-            size: headingSize,
-            face: headingFont,
-            color: headingColor,
-          }) + 4
-        : 0
-    const updatedHeadingPosY = height - headingHeight + 16
+      renderText(ctx, {
+        text: headingText,
+        x: headingPosX,
+        y: headingSize + 16,
+        size: headingSize,
+        face: headingFont,
+        color: headingColor,
+      }) + 4
+    const updatedHeadingPosY = height - headingHeight + height / 32
     const isOverlap = framePosY + frameHeight > updatedHeadingPosY
     const updatedFramePosY = isOverlap ? 0 - headingHeight : framePosY
     const updatedScreenshotPosY = isOverlap
@@ -39,6 +38,7 @@ export default {
 
     return {
       ...newProps,
+      heading: headingText,
       headingPosY: updatedHeadingPosY,
       framePosY: updatedFramePosY,
       screenshotPosY: updatedScreenshotPosY,

@@ -52,18 +52,17 @@ export default function Design() {
       <Tab eventKey='image' title='Image'>
         <PreviewContainer onClick={eventBgImage}>
           {scrBg.map(({ path }, index) => {
-            const bgLink = `/scr/bg/${path}`
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
               <PreviewButton
                 key={index}
                 variant='outline-light'
                 className={`m-1${
-                  currentMockStore.backgroundImage === bgLink
+                  currentMockStore.backgroundImage === bgPreviewLink
                     ? ' border-dark'
                     : ' border'
                 }`}
-                data-value={bgLink}
+                data-value={bgPreviewLink}
               >
                 <PreviewImage src={bgPreviewLink} height='100' width='100' />
               </PreviewButton>
