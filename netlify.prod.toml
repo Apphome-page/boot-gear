@@ -6,6 +6,11 @@
   from = "/blog/*"
   to = "https://cms.apphome.page/blog/:splat"
   status = 200
+  
+[[redirects]]
+  from = "/showcase/*"
+  to = "https://showcase.applanding.page/showcase/:splat"
+  status = 200
 
 [[redirects]]
   from = "/:slug"
