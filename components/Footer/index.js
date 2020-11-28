@@ -11,6 +11,10 @@ import SubscriptionInline from '../Subscription/inline'
 
 const resourceLinks = [
   {
+    name: 'App Landing Pages Showcase',
+    path: '/showcase',
+  },
+  {
     name: 'Privacy Policy',
     path: '/privacy-policy',
   },
