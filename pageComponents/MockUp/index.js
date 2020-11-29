@@ -26,9 +26,9 @@ import Layout from './components/Layout'
 
 import MockProvider from './helpers/MockProvider'
 
-export default function MockUp() {
+export default function MockUp({ preset }) {
   return (
-    <MockProvider>
+    <MockProvider preset={preset}>
       <TabContainer defaultActiveKey='layout'>
         <Container fluid>
           <Row className='mt-3'>

@@ -14,9 +14,42 @@ const maxHeight = 256
 
 export const MockupContext = createContext(null)
 
-export default function MockProvider({ children }) {
+export default function MockProvider({ preset, children }) {
   const [currentMockUp, setCurrentMockUp] = useState(0)
-  const [mockStore, setMockStore] = useState([frameDefaultProps(maxHeight)])
+  const [mockStore, setMockStore] = useState(() => {
+    const frameDefaults = frameDefaultProps(maxHeight)
+    const lastFrame = preset === 'android' || preset === 'ios'
+    switch (preset) {
+      case 'android':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('android', 'NEXUS5X_BLACK', {
+            maxHeight,
+            lastFrame,
+          })
+        )
+        break
+      case 'iphone':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight })
+        )
+        break
+      case 'ios':
+        Object.assign(
+          frameDefaults,
+          getFrameProps('ios', 'IPHONE_BLACK', { maxHeight, lastFrame })
+        )
+        break
+      default:
+        Object.assign(
+          frameDefaults,
+          getFrameProps('android', 'NEXUS5X_BLACK', { maxHeight })
+        )
+        break
+    }
+    return [frameDefaults]
+  })
 
   const addMockStore = useCallback(() => {
     setMockStore((prevStore) => [
