@@ -1,4 +1,5 @@
 import { Container, Button, Row, Col } from 'react-bootstrap'
+import Link from 'next/link'
 
 export default function HomeShowcase() {
   return (
@@ -15,9 +16,11 @@ export default function HomeShowcase() {
               host it on your custom domain, you can use our paid plans, or just
               host it on applanding.page for free
             </p>
-            <Button variant='light' className='my-5 btn-alt2 bg-white'>
-              Browse free Demo
-            </Button>
+            <Link href='/app-website-builder'>
+              <Button variant='light' className='my-5 btn-alt'>
+                Browse free Demo
+              </Button>
+            </Link>
           </Col>
           <Col lg={6} className='d-none d-lg-block'>
             <img src='/img/hero/hero-bg.png' alt='' className='w-100' />

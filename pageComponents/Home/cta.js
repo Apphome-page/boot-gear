@@ -1,19 +1,30 @@
+import { useContext } from 'react'
 import { Container, Button } from 'react-bootstrap'
+import Link from 'next/link'
+
+import { StoreContext } from '../../utils/storeProvider'
 
 export default function HomeCTA() {
+  const [, modStore] = useContext(StoreContext)
   return (
     <section className='py-5 bg-alt text-center text-white'>
       <Container className='my-5'>
         <div className='h1 mb-5'>
           Fallen in Love with our features? Get a free trial!
         </div>
+        <Link href='/dashboard'>
+          <Button
+            variant='light'
+            className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-4 py-2'
+          >
+            Start Free Trial
+          </Button>
+        </Link>
         <Button
-          variant='light'
-          className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-4 py-2'
+          variant='outline-light'
+          className='rounded-0 px-4 py-2'
+          onClick={() => modStore({ signPop: true })}
         >
-          Start Free Trial
-        </Button>
-        <Button variant='outline-light' className='rounded-0 px-4 py-2'>
           Sign Up
         </Button>
       </Container>

@@ -1,4 +1,5 @@
 import { Container, Button } from 'react-bootstrap'
+import Link from 'next/link'
 
 import { CardIcon } from './style'
 
@@ -15,9 +16,11 @@ export default function HomeBlog() {
           We are thought leaders in mobile app industry. Check out what our
           editors have written recently !
         </p>
-        <Button variant='light' className='btn-alt'>
-          Browse More
-        </Button>
+        <Link href='/blog'>
+          <Button variant='light' className='btn-alt'>
+            Browse More
+          </Button>
+        </Link>
       </Container>
     </section>
   )

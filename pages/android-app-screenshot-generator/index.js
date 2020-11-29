@@ -3,7 +3,7 @@ import { Container, Jumbotron } from 'react-bootstrap'
 
 import FAQ from '../../components/FAQ'
 
-import MockUpSingle from '../../pageComponents/MockUp/single'
+import MockUp from '../../pageComponents/MockUp'
 
 const faqList = [
   {
@@ -49,8 +49,8 @@ export default function AppScr() {
           <h1>Android App Screenshot Generator</h1>
         </Container>
       </Jumbotron>
-      <Container className='my-3'>
-        <MockUpSingle preset='android' />
+      <Container fluid className='my-3'>
+        <MockUp preset='android' />
       </Container>
       {faqList.length ? (
         <Container fluid className='py-5 bg-light'>

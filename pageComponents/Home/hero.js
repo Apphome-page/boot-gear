@@ -1,8 +1,13 @@
+import { useContext } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
+import Link from 'next/link'
+
+import { StoreContext } from '../../utils/storeProvider'
 
 import { Hero } from './style'
 
 export default function HomeHero() {
+  const [, modStore] = useContext(StoreContext)
   return (
     <Hero className='d-flex align-items-center'>
       <Container className='py-5'>
@@ -19,12 +24,18 @@ export default function HomeHero() {
               <br />
               Sign Up !
             </p>
-            <Button variant='light' className='btn-alt mr-1 mr-sm-3'>
+            <Button
+              variant='light'
+              className='btn-alt mr-1 mr-sm-3'
+              onClick={() => modStore({ signPop: true })}
+            >
               Sign Up
             </Button>
-            <Button variant='light' className='btn-alt2 mt-4 mt-sm-0'>
-              View Pricing
-            </Button>
+            <Link href='/pricing'>
+              <Button variant='light' className='btn-alt2 mt-4 mt-sm-0'>
+                View Pricing
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Container>
