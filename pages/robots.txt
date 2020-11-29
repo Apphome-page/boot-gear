@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /dashboard
-
-Sitemap: https://applanding.page/sitemap.xml
