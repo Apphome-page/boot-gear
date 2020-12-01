@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /dashboard
 
 Sitemap: https://applanding.page/sitemap.xml
+Sitemap: https://applanding.page/sitemap-blog.xml
+Sitemap: https://applanding.page/sitemap-showcase.xml

@@ -13,6 +13,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "aws-sdk": "^2.799.0",
     "base-64": "^1.0.0",
     "cors": "^2.8.5",
     "cross-fetch": "^3.0.6",
