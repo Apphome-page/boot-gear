@@ -6,9 +6,7 @@ import { StoreContext } from '../../utils/storeProvider'
 export default function Subscription() {
   const emailRef = useRef(null)
 
-  const [{ firebase, userAuth }] = useContext(StoreContext)
-
-  const userId = userAuth && userAuth.uid
+  const [{ firebase }] = useContext(StoreContext)
 
   const actionSub = useCallback(async () => {
     if (emailRef.current.reportValidity()) {
@@ -24,9 +22,7 @@ export default function Subscription() {
     }
   }, [firebase])
 
-  return userId ? (
-    ''
-  ) : (
+  return (
     <Container fluid className='p-0'>
       <InputGroup>
         <FormControl type='email' required ref={emailRef} />
