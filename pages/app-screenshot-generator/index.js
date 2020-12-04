@@ -34,26 +34,25 @@ const faqList = [
   {
     title: 'How do I know that the app screenshot is of right size?',
     desc:
-      'We are aware how crucial right app icon sizes are. Our screenshot generator makes sure we follow this format 	
-iOS App Screenshot Sizes for iPhones				
-Device Size	Device	Portrait Screenshot Size	Landscape Screenshot Size	Requirement
-6.5 inch	iPhone 11 Pro Max, iPhone 11, iPhone XS Max, iPhone XR	1242 x 2688 pixels	2688 x 1242 pixels	Required if app runs on iPhone
-5.8 inch	iPhone 11 Pro, iPhone X, iPhone XS	1125 x 2436 pixels	2436 x 1125 pixels	Required if app runs on iPhone and 6.5 inch screenshots are not provided
-5.5 inch	iPhone 6s Plus, iPhone 7 Plus, iPhone 8 Plus	1242 x 2208 pixels	2208 x 1242 pixels	Required if app runs on iPhone
-4.7 inch	iPhone 6, iPhone 6s, iPhone 7, iPhone 8	750 x 1334 pixels	1334 x 750 pixels	Required if app runs on iPhone and 5.5-inch screenshots are not provided
-4 inch	iPhone SE	640 x 1096 pixels (without status bar)
-
-640 x 1136 pixels (with status bar)	"1136 x 600 pixels (without status bar)
-
-1136 x 640 pixels (with status bar)	Required if app runs on iPhone and 5.5- or 4.7-inch screenshots are not provided
-3.5 inch	iPhone 4s	"640 x 920 pixels (without status bar)
-
-640 x 960 pixels (with status bar)	960 x 600 pixels (without status bar)
-
-960 x 640 pixels (with status bar)	Required if app runs on iPhone and 5.5 inch iPhone screenshots are not provided
-				
-Google Play Store				
-The screenshots should not be less than 320 pixels or more than 3840 pixels.				
+      'We are aware how crucial right app icon sizes are. Our screenshot generator makes sure we follow this format 	\
+iOS App Screenshot Sizes for iPhones				\
+Device Size	Device	Portrait Screenshot Size	Landscape Screenshot Size	Requirement\
+6.5 inch	iPhone 11 Pro Max, iPhone 11, iPhone XS Max, iPhone XR	1242 x 2688 pixels	2688 x 1242 pixels	Required if app runs on iPhone\
+5.8 inch	iPhone 11 Pro, iPhone X, iPhone XS	1125 x 2436 pixels	2436 x 1125 pixels	Required if app runs on iPhone and 6.5 inch screenshots are not provided\
+5.5 inch	iPhone 6s Plus, iPhone 7 Plus, iPhone 8 Plus	1242 x 2208 pixels	2208 x 1242 pixels	Required if app runs on iPhone\
+4.7 inch	iPhone 6, iPhone 6s, iPhone 7, iPhone 8	750 x 1334 pixels	1334 x 750 pixels	Required if app runs on iPhone and 5.5-inch screenshots are not provided\
+4 inch	iPhone SE	640 x 1096 pixels (without status bar)\
+\
+640 x 1136 pixels (with status bar)	"1136 x 600 pixels (without status bar)\
+\
+1136 x 640 pixels (with status bar)	Required if app runs on iPhone and 5.5- or 4.7-inch screenshots are not provided\
+3.5 inch	iPhone 4s	"640 x 920 pixels (without status bar)\
+\
+640 x 960 pixels (with status bar)	960 x 600 pixels (without status bar)\
+\
+960 x 640 pixels (with status bar)	Required if app runs on iPhone and 5.5 inch iPhone screenshots are not provided \
+				\
+Google Play Store. The screenshots should not be less than 320 pixels or more than 3840 pixels.				\
 The files need to be in a JPEG or PNG format of 24 bits, in a 2:1 ratio if it is a portrait and a 16:9 ratio for landscapes				',
   }
 ]
