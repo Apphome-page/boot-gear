@@ -7,7 +7,7 @@ import { Facebook as IconFacebook } from '@emotion-icons/feather/Facebook'
 import { Twitter as IconTwitter } from '@emotion-icons/feather/Twitter'
 import { Linkedin as IconLinkedin } from '@emotion-icons/feather/Linkedin'
 
-import SubscriptionInline from '../Subscription/inline'
+import { SubscriptionBox } from '../Subscription'
 
 const resourceLinks = [
   {
@@ -80,7 +80,8 @@ export default function Footer() {
             <Col lg={3}>
               <div className='my-4 h5 font-weight-bold'>About Us</div>
               <p>
-                We make fast, beautiful and responsive app landing pages for your mobile apps.
+                We make fast, beautiful and responsive app landing pages for
+                your mobile apps.
               </p>
             </Col>
             <Col lg={3}>
@@ -119,7 +120,7 @@ export default function Footer() {
               <p>
                 You can trust us. we only send promo offers, not a single spam.
               </p>
-              <SubscriptionInline />
+              <SubscriptionBox />
             </Col>
           </Row>
           <Row className='my-3 py-3 border-top'>
