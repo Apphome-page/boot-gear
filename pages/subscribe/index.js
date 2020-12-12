@@ -7,6 +7,7 @@ export default function PrivacyPolicy() {
     <>
       <Head>
         <title>Subscribe</title>
+        <meta name='robots' content='noindex, follow' />
       </Head>
       <Subscription />
     </>
