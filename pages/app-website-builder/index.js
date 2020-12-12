@@ -9,23 +9,7 @@ import FAQ from '../../components/FAQ'
 import WebsiteBuilder from '../../pageComponents/Website'
 import { Hero } from '../../pageComponents/Website/style'
 
-const faqList = [
-  {
-    title: 'App Website Builder',
-    desc:
-      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
-  },
-  {
-    title: 'App Website Builder',
-    desc:
-      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
-  },
-  {
-    title: 'App Website Builder',
-    desc:
-      'Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.',
-  },
-]
+import faqList from '../../pageData/app-website-builder/faq.json'
 
 export default function Website() {
   const { query: { edit: websiteKey = '' } = {} } = useRouter()

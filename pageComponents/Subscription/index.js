@@ -12,17 +12,11 @@ export default function PrivacyPolicy() {
         <Container>
           <Row className='py-5 align-items-center'>
             <Col lg={6}>
-              <h1 className='my-2 display-4 font-weight-bold text-center'>
-                Subscribe Now!
+              <h1 className='my-5 display-4 font-weight-bold text-center'>
+                Create stunning app landing pages
               </h1>
-              <p>
-                to stay up-to-date with new features, promotions, & our latest
-                blog posts.
-              </p>
+              <p>Enter your email id to get started.</p>
               <SubscribeInline append={false} className='my-3' />
-              <sub className='font-italic text-white-50'>
-                You can trust us. we only send promo offers, not a single spam.
-              </sub>
             </Col>
           </Row>
         </Container>
