@@ -10,7 +10,7 @@ import {
   scaleFrameProps,
 } from './defaults'
 
-const maxHeight = 256
+const maxHeight = 378
 
 export const MockupContext = createContext(null)
 
