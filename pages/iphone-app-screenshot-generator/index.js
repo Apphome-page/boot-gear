@@ -5,23 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import MockUp from '../../pageComponents/MockUp'
 
-const faqList = [
-  {
-    title: 'iPhone App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone apps. Use multiple theme and templates for free and enhance your appstore listings.',
-  },
-  {
-    title: 'iPhone App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone apps. Use multiple theme and templates for free and enhance your appstore listings.',
-  },
-  {
-    title: 'iPhone App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone apps. Use multiple theme and templates for free and enhance your appstore listings.',
-  },
-]
+import faqList from '../../pageData/iphone-app-screenshot-generator/faq.json'
 
 export default function AppScr() {
   return (

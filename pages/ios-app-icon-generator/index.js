@@ -5,28 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import IconGen from '../../pageComponents/IconGen'
 
-const faqList = [
-  {
-    title: 'In which formats are icons created by Applanding.page for iOS apps?',
-    desc:
-      'Icons are created in PNG format.',
-  },
-  {
-    title: 'What features should be looked for in an app icon maker?',
-    desc:
-      'An app icon maker should be able to make high quality icons, instantly and securely, to increase recognizability and uniqueness of apps.',
-  },
-  {
-    title: 'Can we make iOS app icons for free?',
-    desc:
-      'Yes, iOS app icons can be created for free using applanding.page',
-  },
-  {
-    title: 'How to generate iOS app icons online?',
-    desc:
-      'Using Applanding.page you can create icons for iOS apps without installing any software, online',
-  }
-]
+import faqList from '../../pageData/ios-app-icon-generator/faq.json'
 
 export default function AppIcon() {
   return (

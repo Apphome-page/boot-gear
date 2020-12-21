@@ -5,23 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import IconGen from '../../pageComponents/IconGen'
 
-const faqList = [
-  {
-    title: 'What is the easiest way to create iPhone app icons ?',
-    desc:
-      'Applanding.page provides easiest way to create iPhone app icons',
-  },
-  {
-    title: 'Of what size and format app icons are created for iPhone?',
-    desc:
-      'The app icons for iPhone are sized at 1024*1024 pixels. The screenshots are saved in PNG files.',
-  },
-  {
-    title: 'What is the USP of Applanding.page icon generator for iPhone?',
-    desc:
-      'It is really easy to use. The USP of Applanding.page is that it is user friendly and allows to you generate app icons for iphone easily with just few clicks',
-  },
-]
+import faqList from '../../pageData/iphone-app-icon-generator/faq.json'
 
 export default function AppIcon() {
   return (

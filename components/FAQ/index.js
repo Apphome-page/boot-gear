@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import { Container } from 'react-bootstrap'
 
 export default function FAQ({ fluid, faqList = [] }) {
@@ -15,8 +16,11 @@ export default function FAQ({ fluid, faqList = [] }) {
           }`}
           key={index}
         >
-          <summary className='lead'>{title}</summary>
-          <p className='ml-5 py-2'>{desc}</p>
+          <summary
+            className='lead'
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
+          <p className='ml-5 py-2' dangerouslySetInnerHTML={{ __html: desc }} />
         </details>
       ))}
     </Container>

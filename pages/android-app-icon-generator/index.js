@@ -5,23 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import IconGen from '../../pageComponents/IconGen'
 
-const faqList = [
-  {
-    title: 'How to generate app icons for android ?',
-    desc:
-      'Using Applanding.page, just drag or upload an app icon image to generate app icon for android.',
-  },
-  {
-    title: 'How much time is requied to generate app icon for android ?',
-    desc:
-      'Using Applanding.page you can create professional app icons instantly.',
-  },
-  {
-    title: 'What is the easiest way to generate app icons for android',
-    desc:
-      'Just with a few clicks you can create app icons for android using Applandingpage.',
-  },
-]
+import faqList from '../../pageData/android-app-icon-generator/faq.json'
 
 export default function AppIcon() {
   return (

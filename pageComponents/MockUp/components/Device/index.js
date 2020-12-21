@@ -43,7 +43,9 @@ export default function Device() {
 
   return (
     <Tabs
-      defaultActiveKey='device-style-ios'
+      defaultActiveKey={`device-style-${
+        currentMockStore.frameType === 'android' ? 'android' : 'ios'
+      }`}
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='device-style-ios' title='iOS'>
@@ -68,7 +70,7 @@ export default function Device() {
           ))}
         </PreviewContainer>
       </Tab>
-      <Tab eventKey='device-model-android' title='Android'>
+      <Tab eventKey='device-style-android' title='Android'>
         <PreviewContainer onClick={eventFrame} data-type='android'>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
             <PreviewButton

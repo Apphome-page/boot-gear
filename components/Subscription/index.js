@@ -1,5 +1,6 @@
 import { useContext, useCallback, useEffect, useRef } from 'react'
 import {
+  Container,
   Button,
   FormControl,
   Modal,
@@ -7,8 +8,73 @@ import {
   ModalFooter,
   InputGroup,
 } from 'react-bootstrap'
+import { ArrowRightCircle as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightCircle'
 
 import { StoreContext } from '../../utils/storeProvider'
+
+const addSubscriber = async (firebase, email) => {
+  if (!firebase || !email) {
+    return
+  }
+  await firebase
+    .database()
+    .ref(`subs/${email.replace(/\W/gi, '_')}`)
+    .set({
+      email,
+      location: window.location.href,
+      timestamp: new Date().getTime(),
+    })
+  window.alert('Thank You! for subscribing.')
+}
+
+export const SubscriptionBox = function SubscriptionBox({
+  append = true,
+  className,
+}) {
+  const emailRef = useRef(null)
+
+  const [{ firebase }] = useContext(StoreContext)
+
+  const actionSub = useCallback(async () => {
+    if (emailRef.current.reportValidity()) {
+      const validEmail = emailRef.current.value
+      await addSubscriber(firebase, validEmail)
+    }
+  }, [firebase])
+
+  return (
+    <Container fluid className={className}>
+      {append ? (
+        <InputGroup>
+          <FormControl
+            type='email'
+            placeholder='email@example.com'
+            required
+            ref={emailRef}
+          />
+          <InputGroup.Append>
+            <Button onClick={actionSub} variant='light' className='border'>
+              <IconArrowRight size='20' />
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+      ) : (
+        <>
+          <FormControl
+            type='email'
+            placeholder='email@example.com'
+            required
+            ref={emailRef}
+            className='m-1'
+          />
+          <Button onClick={actionSub} variant='success' className='m-1'>
+            Subscribe
+          </Button>
+        </>
+      )}
+    </Container>
+  )
+}
 
 export default function Subscription({ show, onComplete }) {
   const emailRef = useRef(null)
@@ -19,14 +85,7 @@ export default function Subscription({ show, onComplete }) {
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
-      await firebase
-        .database()
-        .ref(`subs/${validEmail.replace(/\W/gi, '_')}`)
-        .set({
-          email: validEmail,
-          location: window.location.href,
-          timestamp: new Date().getTime(),
-        })
+      await addSubscriber(firebase, validEmail)
       if (onComplete && typeof onComplete === 'function') {
         onComplete()
       }
@@ -55,7 +114,12 @@ export default function Subscription({ show, onComplete }) {
           <InputGroup.Prepend>
             <InputGroup.Text>Email</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl type='email' required ref={emailRef} />
+          <FormControl
+            type='email'
+            placeholder='email@example.com'
+            required
+            ref={emailRef}
+          />
         </InputGroup>
       </ModalBody>
       <ModalFooter>

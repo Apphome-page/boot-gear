@@ -5,38 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import IconGen from '../../pageComponents/IconGen'
 
-const faqList = [
-  {
-    title: 'Can we generate app icons on linux using Applanding.page\'s icon generator?',
-    desc:
-      'Yes, using Applanding.page you can generate app icons on linux as well, since you do not need to install any software to use Applanding.page\'s icon generator. ',
-  },
-  {
-    title: 'What is the USP of Applanding.page\'s icon generator ?',
-    desc:
-      'The best thing about Applanding.page\'s icon generator is that it does not send any data to server, hence is it fully secure and your data does not leave your browser.',
-  },
-  {
-    title: 'Is Applanding.page icon generator free ?',
-    desc:
-      'Yes, using Applanding.page you can generate app icons for free',
-  },
-  {
-    title: 'Which platforms are supported for creating app icons ?',
-    desc:
-      'Using Applanding.page you can create app icons for android, mac, watch and iOS',
-  },
-  {
-    title: 'Is Applanding.page icon generator secure ? ?',
-    desc:
-      'Yes, it is fully secure as no data is transferred to server for icon generation.',
-  },
-  {
-    title: 'Is Applanding.page icon generator free ?',
-    desc:
-      'Yes, using Applanding.page you can generate app icons for free',
-  },
-]
+import faqList from '../../pageData/app-icon-generator/faq.json'
 
 export default function AppIcon() {
   return (

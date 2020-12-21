@@ -5,23 +5,7 @@ import FAQ from '../../components/FAQ'
 
 import MockUp from '../../pageComponents/MockUp'
 
-const faqList = [
-  {
-    title: 'App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
-  },
-  {
-    title: 'App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
-  },
-  {
-    title: 'App Screenshot Generator',
-    desc:
-      'Best screenshot generator for your iPhone and Android apps.  Use it for free without login in.',
-  },
-]
+import faqList from '../../pageData/app-screenshot-generator/faq.json'
 
 export default function AppScr() {
   return (
