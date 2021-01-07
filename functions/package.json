@@ -13,6 +13,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
     "aws-sdk": "^2.799.0",
     "base-64": "^1.0.0",
     "cors": "^2.8.5",
@@ -21,6 +22,8 @@
     "firebase-functions": "^3.11.0"
   },
   "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-plugin-promise": "^4.2.1",
     "firebase-functions-test": "^0.2.0"
   },
   "private": true

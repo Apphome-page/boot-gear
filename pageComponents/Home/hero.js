@@ -31,7 +31,7 @@ export default function HomeHero() {
             >
               Sign Up
             </Button>
-            <Link href='/pricing'>
+            <Link href='/pricing' prefetch={false}>
               <Button variant='light' className='btn-alt2 mt-4 mt-sm-0'>
                 View Pricing
               </Button>

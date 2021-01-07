@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { useState, useCallback } from 'react'
 import {
@@ -142,6 +143,20 @@ export default function FrameTemplateSingle({ preset = '' }) {
 
   return (
     <>
+      <Head>
+        <link
+          href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
+          rel='stylesheet'
+        />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'
+          rel='stylesheet'
+        />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Poppins&display=swap'
+          rel='stylesheet'
+        />
+      </Head>
       <Subscription
         show={subShow}
         onComplete={() => {

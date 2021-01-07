@@ -1,18 +1,42 @@
+/* eslint-disable promise/always-return */
+/* eslint-disable no-case-declarations */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable camelcase */
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const fetch = require('cross-fetch')
 const cors = require('cors')({ origin: true })
 const base64 = require('base-64')
+const {
+  S3Client,
+  PutObjectCommand,
+  CreateBucketCommand,
+  PutBucketWebsiteCommand,
+  PutBucketPolicyCommand,
+  DeleteBucketCommand,
+} = require('@aws-sdk/client-s3')
 
 // INIT CLOUD FUNCTION
 admin.initializeApp()
 
 // Secrets
 const {
-  pabbly: { username: PABBLY_USERNAME, password: PABBLY_PASSWORD } = {},
+  pabbly: {
+    username: PABBLY_USERNAME,
+    password: PABBLY_PASSWORD,
+    silver: PABBLY_SILVER,
+    gold: PABBLY_GOLD,
+  } = {},
+  aws: { id: AWS_ACCESS_ID, key: AWS_ACCESS_KEY },
 } = functions.config()
-const PABBLY_AUTH_HEAD =
-  'Basic ' + base64.encode(PABBLY_USERNAME + ':' + PABBLY_PASSWORD)
+const PABBLY_AUTH_HEAD = `Basic ${base64.encode(
+  `${PABBLY_USERNAME}:${PABBLY_PASSWORD}`
+)}`
+
+// AWS Configs
+const AWS_REGION = 'ap-south-1'
+const UUID = () => new Date().getTime().toString(36)
 
 // PABBLY APIs
 const PABBLY_API_CREATE_CUSTOMER = async (displayName, email) => {
@@ -32,8 +56,34 @@ const PABBLY_API_CREATE_CUSTOMER = async (displayName, email) => {
   resBody = await response.json()
   if (response.status >= 400 || resBody.status === 'error') {
     throw new Error(
-      'Something Went Wrong.' + resBody && resBody.message
-        ? ' ' + resBody.message
+      `Something Went Wrong.${resBody}` && resBody.message
+        ? ` ${resBody.message}`
+        : ''
+    )
+  }
+  return resBody
+}
+
+const PABBLY_API_GET_CUSTOMER_PLANS = async (customerId) => {
+  let resBody = {}
+  if (!customerId) {
+    throw new Error('No customerId')
+  }
+  const response = await fetch(
+    `https://payments.pabbly.com/api/v1/subscriptions/${customerId}`,
+    {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: PABBLY_AUTH_HEAD,
+      },
+    }
+  )
+  resBody = await response.json()
+  if (response.status >= 400 || resBody.status === 'error') {
+    throw new Error(
+      `Something Went Wrong.${resBody}` && resBody.message
+        ? ` ${resBody.message}`
         : ''
     )
   }
@@ -45,7 +95,7 @@ const PABBLY_API_UPDATE_CUSTOMER = async (
   customerDetails = {}
 ) => {
   const response = await fetch(
-    'https://payments.pabbly.com/api/v1/customer/' + customer_id,
+    `https://payments.pabbly.com/api/v1/customer/${customer_id}`,
     {
       method: 'PUT',
       headers: {
@@ -58,8 +108,8 @@ const PABBLY_API_UPDATE_CUSTOMER = async (
   resBody = await response.json()
   if (response.status >= 400 || resBody.status === 'error') {
     throw new Error(
-      'Something Went Wrong.' + resBody && resBody.message
-        ? ' ' + resBody.message
+      `Something Went Wrong.${resBody}` && resBody.message
+        ? ` ${resBody.message}`
         : ''
     )
   }
@@ -87,6 +137,7 @@ const PABBLY_API_VERIFYHOSTED = async (hostedpage) => {
   return resBody
 }
 
+// eslint-disable-next-line consistent-return
 const validateFirebaseIdToken = async (request, response, next) => {
   let idToken
   if (
@@ -97,13 +148,13 @@ const validateFirebaseIdToken = async (request, response, next) => {
   } else if (request.cookies && request.cookies.__session) {
     idToken = request.cookies.__session
   } else {
-    next(new Error('Unauthorized'))
+    return next(new Error('Unauthorized'))
   }
   try {
     const decodedIdToken = await admin.auth().verifyIdToken(idToken)
     request.user = decodedIdToken
   } catch (e) {
-    next(e)
+    return next(e)
   }
   next()
 }
@@ -124,22 +175,21 @@ const customerToUserId = async (customer_id) => {
 
 const syncUser = async (uid, customClaims = {}) => {
   // Set customerId in customerClaim
-  await admin
-    .auth()
-    .setCustomUserClaims(uid, Object.assign({}, customClaims || {}))
+  await admin.auth().setCustomUserClaims(uid, { ...(customClaims || {}) })
   // Set Shared Claims in Realtime Database
   const shareClaims = ['customer_id', 'plan_id', 'product_id']
-  for (let i = 0; i < shareClaims.length; i += 1) {
-    const claimLabel = shareClaims[i]
-    const claimValue = customClaims[claimLabel]
-    if (claimValue) {
-      await admin
-        .database()
-        .ref('users/' + uid + '/' + claimLabel)
-        .set(claimValue)
-    }
-  }
-  return
+  await Promise.all(
+    shareClaims.map((claimLabel) => {
+      const claimValue = customClaims[claimLabel]
+      if (claimValue) {
+        return admin
+          .database()
+          .ref(`users/${uid}/${claimLabel}`)
+          .set(claimValue)
+      }
+      return null
+    })
+  )
 }
 
 /*
@@ -151,7 +201,7 @@ const syncUser = async (uid, customClaims = {}) => {
 //   .onCreate(async ({ uid, customClaims, displayName, email }) => {
 //     const {
 //       data: { id: customer_id },
-//     } = PABBLY_API_CREATE_CUSTOMER(displayName, email)
+//     } = await PABBLY_API_CREATE_CUSTOMER(displayName, email)
 //     try {
 //       await syncUser(
 //         uid,
@@ -163,7 +213,7 @@ const syncUser = async (uid, customClaims = {}) => {
 //     return
 //   })
 
-//TODO: Pabbly webhook Events
+// TODO: Pabbly webhook Events
 exports.pabblyEvent = functions.https.onRequest((request, response) => {
   cors(request, response, async () => {
     // TODO: Add Basic Authentication (same username/password as pabbly)
@@ -218,11 +268,12 @@ exports.pabblyEvent = functions.https.onRequest((request, response) => {
           }
 
           // Sync User customClaim
-          const updatedClaims = Object.assign({}, user.customClaims || {}, {
+          const updatedClaims = {
+            ...(user.customClaims || {}),
             customer_id,
             plan_id,
             product_id,
-          })
+          }
           await syncUser(user.uid, updatedClaims)
           break
 
@@ -235,7 +286,6 @@ exports.pabblyEvent = functions.https.onRequest((request, response) => {
     } catch (e) {
       response.status(500).send(e.toString())
     }
-    return
   })
 })
 
@@ -258,7 +308,7 @@ exports.userSync = functions.https.onRequest((request, response) => {
         if (!customer_id) {
           const customerIdSnap = await admin
             .database()
-            .ref('users/' + uid + '/customer_id')
+            .ref(`users/${uid}/customer_id`)
             .once('value')
           customer_id = customerIdSnap.val()
         }
@@ -276,18 +326,14 @@ exports.userSync = functions.https.onRequest((request, response) => {
             email,
           }),
           // Sync Customer to Firebase
-          syncUser(
-            uid,
-            Object.assign({}, customClaims || {}, {
-              customer_id,
-            })
-          ),
+          syncUser(uid, {
+            ...(customClaims || {}, customer_id),
+          }),
         ])
         response.json({ uid, customerId: customer_id })
       } catch (e) {
         response.status(500).json(e.toString())
       }
-      return
     })
   })
 })
@@ -332,43 +378,164 @@ exports.payValidate = functions.https.onRequest((request, response) => {
       }
 
       // update & sync user customClaims
-      await syncUser(
-        user.uid,
-        Object.assign({}, user.customClaims || {}, {
-          customer_id,
-          plan_id,
-          product_id,
-        })
-      )
+      await syncUser(user.uid, {
+        ...(user.customClaims || {}),
+        customer_id,
+        plan_id,
+        product_id,
+      })
       response.json({ uid: user.uid, customerId: customer_id })
     } catch (e) {
       response.status(500).json(e.toString())
     }
-    return
   })
 })
 
-exports.customSite = functions.https.onRequest((request, response) => {
+exports.webHost = functions.https.onRequest((request, response) => {
   cors(request, response, async () => {
     validateFirebaseIdToken(request, response, async (error) => {
       try {
         if (error instanceof Error) {
           throw error
         }
+
         // Get User from authentication
-        // Get User customer_id & plan_id
+        const { uid } = request.user
+
         // Get websiteKey from request
-        // Get Website Details from websiteKey
+        const { website_key: websiteKey } = request.body
+        if (!uid || !websiteKey) {
+          throw new Error('Invalid Request')
+        }
+
+        // Get User customer_id, plan_id, & Website Details from website_key
+        const customerIdSnap = await admin
+          .database()
+          .ref(`users/${uid}`)
+          .once('value')
+        const {
+          customer_id: customerId,
+          sites: { [websiteKey]: websiteData = {} } = {},
+        } = customerIdSnap.val()
+        const userDataBucketName = admin.database.ref(
+          `users/${uid}/sites/${websiteKey}/bucketName`
+        )
+
         // Get Customer Active Plans from Pabbly
-        // Sync customer_id & plan_id
+        const {
+          data: customerPlans = [],
+        } = await PABBLY_API_GET_CUSTOMER_PLANS(customerId)
+
+        // TODO: Sync customer_id & plan_id
+
         // Verify if plan is active
-        // Fetch All assets from firebase bucket at websiteKey
-        // Refer: https://docs.aws.amazon.com/AmazonS3/latest/dev/HostingWebsiteOnS3Setup.html
-        // Create new S3 Bucket
+        const planValid = [PABBLY_SILVER, PABBLY_GOLD]
+        const planActive = customerPlans.some(
+          ({ plan_id: planId, expiry_date: expiryDate }) =>
+            planValid.includes(planId) && new Date(expiryDate) > new Date()
+        )
+        if (!planActive) {
+          throw new Error('Inactive Plan')
+        }
+
+        // Instantiate S3 Client
+        const s3 = new S3Client({
+          credentials: {
+            accessKeyId: AWS_ACCESS_ID,
+            secretAccessKey: AWS_ACCESS_KEY,
+          },
+          region: AWS_REGION,
+        })
+
+        // Remove Existing S3 Bucket
+        if (websiteData.bucketName) {
+          await s3.send(
+            new DeleteBucketCommand({
+              Bucket: websiteData.bucketName,
+            })
+          )
+          await userDataBucketName.remove()
+        }
+
+        // Setup a new S3 Bucket
+        const bucketName = `applanding-page-${appKey}-${UUID()}`
+        await s3.send(new CreateBucketCommand({ Bucket: bucketName }))
         // Clear `Block all public access`
+        await s3.send(
+          new PutBucketWebsiteCommand({
+            Bucket: bucketName,
+            ContentMD5: '',
+            WebsiteConfiguration: {
+              ErrorDocument: {
+                Key: 'error.html',
+              },
+              IndexDocument: {
+                Suffix: 'index.html',
+              },
+            },
+          })
+        )
         // Attach a bucket policy
+        await s3.send(
+          new PutBucketPolicyCommand({
+            Bucket: bucketName,
+            Policy: JSON.stringify({
+              Version: '2012-10-17',
+              Statement: [
+                {
+                  Sid: 'PublicReadGetObject',
+                  Effect: 'Allow',
+                  Principal: '*',
+                  Action: 's3:GetObject',
+                  Resource: `arn:aws:s3:::${bucketName}/*`,
+                },
+              ],
+            }),
+          })
+        )
+        // Update Firebase Realtime Database
+        await userDataBucketName.set(bucketName)
+
+        // Fetch All assets from firebase bucket at websiteKey
+        const storagePrefixKey = `public/${appKey}`
+        const storageFiles = {}
+        const [storageItems] = await admin.storage().bucket().getFiles({
+          prefix: storagePrefixKey,
+        })
+        await Promise.all(
+          storageItems.map((storageItem) =>
+            storageItem
+              .download()
+              .then((downloadResponse) => downloadResponse[0])
+              .then(async (downloadBlob) => {
+                const [{ name }] = await storageItem.getMetadata()
+                const storageKey = name.replace(
+                  new RegExp(`^${storagePrefixKey}`),
+                  ''
+                )
+                storageFiles[storageKey] = downloadBlob
+              })
+          )
+        )
+
+        // Save Bucket Details into Firebase Realtime Database
         // Push All assets at S3 Bucket
-        // Create Route53
+        await Promise.all(
+          Object.keys(storageFiles).map((storageKey) =>
+            s3.send(
+              new PutObjectCommand({
+                Bucket: bucketName,
+                Key: storageKey,
+                Body: storageFiles[storageKey],
+              })
+            )
+          )
+        )
+        // Save Endpoint in Storage
+        response.send(
+          `http://${bucketName}.s3-website.${AWS_REGION}.amazonaws.com`
+        )
+        // Create Cloudfront DNS
         // Point to S3 Bucket
         // return NS from Route 53
       } catch (e) {

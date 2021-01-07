@@ -12,7 +12,7 @@ export default function HomeCTA() {
         <div className='h1 mb-5'>
           Fallen in Love with our features? Get a free trial!
         </div>
-        <Link href='/dashboard'>
+        <Link href='/dashboard' prefetch={false}>
           <Button
             variant='light'
             className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-4 py-2'

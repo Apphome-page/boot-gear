@@ -8,10 +8,12 @@ const FIRECLOUD_PAY_VALIDATE = process.env.NEXT_PUBLIC_FIRECLOUD_PAY_VALIDATE
 export default function Payment() {
   const [payState, setPayState] = useState(false)
 
+  const router = useRouter()
   const {
     query: { hostedpage },
-  } = useRouter()
+  } = router
 
+  // TODO: Use cross-fetch
   const { post: verifyPay } = useFetch(FIRECLOUD_PAY_VALIDATE)
 
   const verifyAction = useCallback(async () => {
@@ -23,10 +25,11 @@ export default function Payment() {
         hostedpage,
       })
       setPayState(true)
+      router.push('/dashboard')
     } catch (e) {
       setPayState(false)
     }
-  }, [hostedpage, verifyPay])
+  }, [hostedpage, router, verifyPay])
 
   useEffect(() => {
     verifyAction()
