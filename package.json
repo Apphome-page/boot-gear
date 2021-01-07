@@ -12,6 +12,7 @@
     "deploy:dev": "cp netlify.dev.toml netlify.toml && cp .env.development .env.local && firebase.dev.json firebase.json && npm run export",
     "fire-install": "cd ./functions && npm install",
     "fire-serve": "firebase functions:config:get > ./functions/.runtimeconfig.json && env-cmd -f ./.env.development firebase emulators:start --only functions",
+    "fire-dev": "firebase emulators:start --only functions",
     "fire-deploy": "firebase deploy --only functions"
   },
   "dependencies": {

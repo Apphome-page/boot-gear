@@ -6,10 +6,20 @@
   from = "/blog/*"
   to = "https://cms.applanding.page/blog/:splat"
   status = 200
-  
+
+[[redirects]]
+  from = "/sitemap-blog.xml"
+  to = "https://cms.applanding.page/sitemap.xml"
+  status = 200
+
 [[redirects]]
   from = "/showcase/*"
   to = "https://showcase.applanding.page/showcase/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap-showcase.xml"
+  to = "https://showcase.applanding.page/sitemap.xml"
   status = 200
 
 [[redirects]]

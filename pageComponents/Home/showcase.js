@@ -16,7 +16,7 @@ export default function HomeShowcase() {
               host it on your custom domain, you can use our paid plans, or just
               host it on applanding.page for free
             </p>
-            <Link href='/app-website-builder'>
+            <Link href='/app-website-builder' prefetch={false}>
               <Button variant='light' className='my-5 btn-alt'>
                 Browse free Demo
               </Button>
