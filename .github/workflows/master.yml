@@ -35,7 +35,7 @@ jobs:
       - name: Set Firebase Config
         uses: w9jds/firebase-action@master
         with:
-          args: functions:config:set aws.id=${{ secrets.PROD_AWS_ID }} aws.key=${{ secrets.PROD_AWS_KEY }} pabbly.username=${{ secrets.PROD_PABBLY_USERNAME }} pabbly.password=${{ secrets.PROD_PABBLY_PASSWORD }} pabbly.silver=${{ NEXT_PUBLIC_PABBLY_PLAN_SILVER }} pabbly.gold=${{ NEXT_PUBLIC_PABBLY_PLAN_GOLD }}
+          args: functions:config:set aws.id=${{ secrets.PROD_AWS_ID }} aws.key=${{ secrets.PROD_AWS_KEY }} cf.id=${{secrets.PROD_CF_ID}} cf.email=${{secrets.PROD_CF_EMAIL}} cf.key=${{secrets.PROD_CF_KEY}} cf.token=${{secrets.PROD_CF_TOKEN}} pabbly.username=${{ secrets.PROD_PABBLY_USERNAME }} pabbly.password=${{ secrets.PROD_PABBLY_PASSWORD }} pabbly.silver=${{ NEXT_PUBLIC_PABBLY_PLAN_SILVER }} pabbly.gold=${{ NEXT_PUBLIC_PABBLY_PLAN_GOLD }}
         env:
           FIREBASE_TOKEN: ${{ secrets.PROD_FIREBASE_TOKEN }}
           PROJECT_ID : ${{ secrets.PROD_FIREBASE_PROJECT}}
