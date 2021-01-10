@@ -54,7 +54,6 @@ export default function Payment() {
       }
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
-      console.error(e)
       window.alert('Something went wrong. Please Sign in again to continue.')
       firebase.auth().signOut()
     }

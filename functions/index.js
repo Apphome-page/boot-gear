@@ -278,7 +278,6 @@ exports.domainSetup = functions.https.onRequest((request, response) => {
           zoneNameServers,
         })
       } catch (e) {
-        console.error(e)
         response.status(500).json(e.toString())
       }
     })
@@ -363,7 +362,6 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         // Fetch All assets from firebase bucket at websiteKey
         const storagePrefixKey = `public/${webKey}/`
         const storageFilesMap = await storageFiles(storagePrefixKey)
-
         // Push All assets at S3 Bucket
         await putHostedBucket(bucketName, storageFilesMap)
 
@@ -404,12 +402,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
 
           // Clean up Realtime Database
           await Promise.all(
-            [
-              'webKey', // Shared Key Name
-              'webDomain', // Custom Domain Name
-              'webZone', // Cloudflare Zone
-              'webNameservers', // Cloudflare Zone Nameservers
-            ].map((siteWebDetailKey) =>
+            ['webHost', 'webBucket'].map((siteWebDetailKey) =>
               siteWebDetailRef.child(siteWebDetailKey).remove()
             )
           )
