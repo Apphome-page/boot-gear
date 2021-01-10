@@ -35,7 +35,7 @@ jobs:
       - name: Set Firebase Config
         uses: w9jds/firebase-action@master
         with:
-          args: functions:config:set aws.id=${{ secrets.BETA_AWS_ID }} aws.key=${{ secrets.BETA_AWS_KEY }} cf.id=${{secrets.BETA_CF_ID}} cf.email=${{secrets.BETA_CF_EMAIL}} cf.key=${{secrets.BETA_CF_KEY}} cf.token=${{secrets.BETA_CF_TOKEN}} pabbly.username=${{ secrets.BETA_PABBLY_USERNAME }} pabbly.password=${{ secrets.BETA_PABBLY_PASSWORD }} pabbly.silver=${{ NEXT_PUBLIC_PABBLY_PLAN_SILVER }} pabbly.gold=${{ NEXT_PUBLIC_PABBLY_PLAN_GOLD }}
+          args: functions:config:set aws.id=${{ secrets.BETA_AWS_ID }} aws.key=${{ secrets.BETA_AWS_KEY }} cf.id=${{secrets.BETA_CF_ID}} cf.email=${{secrets.BETA_CF_EMAIL}} cf.key=${{secrets.BETA_CF_KEY}} cf.token=${{secrets.BETA_CF_TOKEN}} pabbly.username=${{ secrets.BETA_PABBLY_USERNAME }} pabbly.password=${{ secrets.BETA_PABBLY_PASSWORD }} pabbly.silver=${{ GITHUB_ENV.NEXT_PUBLIC_PABBLY_PLAN_SILVER }} pabbly.gold=${{ GITHUB_ENV.NEXT_PUBLIC_PABBLY_PLAN_GOLD }}
         env:
           FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
           PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
