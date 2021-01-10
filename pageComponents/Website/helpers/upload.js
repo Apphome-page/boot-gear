@@ -1,8 +1,13 @@
 import renderTemplate from './index'
-import removeTemplate from './remove'
+import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 
 export default async function upload(firebase, userId, appKey, templateProps) {
-  await removeTemplate(firebase, userId, appKey)
+  await removeWebsite({
+    firebase,
+    webKey: appKey,
+    removeDomain: false,
+    removeStorage: true,
+  })
 
   const storagePath = `public/${appKey}/index.html`
   const databasePath = `users/${userId}/sites/${appKey}`
