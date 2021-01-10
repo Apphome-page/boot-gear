@@ -59,6 +59,7 @@ export default function HomeWebsite({ initProps = {} }) {
 
     try {
       await uploadWebsite(firebase, userId, appKey, templateProps)
+      // TODO: if custom domain is set, update s3 bucket (call verifyDomain)
       formRef.current.reset()
       window.alert(
         `Your website is generated!\nVisit your website at: https://applanding.page/${appKey}`

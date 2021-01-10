@@ -20,7 +20,6 @@ const checkDomain = (cf) => async (zoneId) => {
     active: preListStatus === 'active',
     paused: preListPaused,
   }
-
   if (checkResult.active) {
     return checkResult
   }
@@ -59,6 +58,13 @@ const dnsDomain = (cf) => async (
 }
 
 const deleteDomain = (cf) => async (zoneId) => {
+  const domainExists = await cf.zones
+    .read(zoneId)
+    .then(({ result: { id } }) => !!id)
+    .catch((e) => false)
+  if (!domainExists) {
+    return {}
+  }
   const { success, result: domainResult } = await cf.zones.del(zoneId)
   if (!success) {
     throw new Error('Failed Request')

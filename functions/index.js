@@ -48,7 +48,11 @@ const {
 const { syncUser, syncCustomer, storageFiles } = require('./helpers/firebase')(
   admin
 )
-const { createHostedBucket, deleteHostedBucket } = require('./helpers/aws')(s3)
+const {
+  createHostedBucket,
+  putHostedBucket,
+  deleteHostedBucket,
+} = require('./helpers/aws')(s3)
 const {
   setDomain,
   checkDomain,
@@ -333,7 +337,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         const { active: webActive, paused: webPaused } = domainResult
         if (webPaused || !webActive) {
           response.json({
-            active: webStatus,
+            active: webActive,
             paused: webPaused,
           })
           return
@@ -347,8 +351,9 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         }
 
         // Create new Bucket
-        const bucketName = `applanding-page-${webKey}-${UUID()}`
-        const bucketHost = `http://${bucketName}.s3-website.${AWS_REGION}.amazonaws.com`
+        // https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#VirtualHostingCustomURLs
+        const bucketName = webDomain
+        const bucketHost = `${bucketName}.s3-website.${AWS_REGION}.amazonaws.com`
         await createHostedBucket(bucketName)
 
         // Update Firebase Realtime Database
@@ -356,15 +361,16 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         await siteDataRef.child('webHost').set(bucketHost)
 
         // Fetch All assets from firebase bucket at websiteKey
-        const storagePrefixKey = `public/${appKey}`
+        const storagePrefixKey = `public/${webKey}/`
         const storageFilesMap = await storageFiles(storagePrefixKey)
 
         // Push All assets at S3 Bucket
-        await putHostedBucket(storageFilesMap)
+        await putHostedBucket(bucketName, storageFilesMap)
 
         // Connect DNS
         const dnsResult = await dnsDomain(webZone, {
-          name: webDomain,
+          type: 'CNAME',
+          name: '@',
           content: bucketHost,
         })
 
@@ -373,15 +379,44 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
 
         response.json({
           ...connectedWebData,
-          active: webStatus,
+          active: webActive,
           paused: webPaused,
           domain: domainResult,
           dns: dnsResult,
           plans: customerPlans,
         })
       } catch (e) {
-        console.error(e)
-        response.status(500).json(e.toString())
+        let errorString = e.toString()
+        try {
+          const { uid } = request.user
+          const { webKey } = request.body
+          const siteWebDetailRef = admin
+            .database()
+            .ref(`users/${uid}/sites/${webKey}`)
+          const siteWebDetailSnapshot = await siteWebDetailRef.once('value')
+          const siteWebDetail = siteWebDetailSnapshot.val()
+
+          if (siteWebDetail.webBucket) {
+            // Cleanup S3 Storage
+            await deleteHostedBucket(siteWebDetail.webBucket)
+            // TODO: Disconnect DNS
+          }
+
+          // Clean up Realtime Database
+          await Promise.all(
+            [
+              'webKey', // Shared Key Name
+              'webDomain', // Custom Domain Name
+              'webZone', // Cloudflare Zone
+              'webNameservers', // Cloudflare Zone Nameservers
+            ].map((siteWebDetailKey) =>
+              siteWebDetailRef.child(siteWebDetailKey).remove()
+            )
+          )
+        } catch (e2) {
+          errorString = `${errorString} || ${e2.toString()}`
+        }
+        response.status(500).json(errorString)
       }
     })
   })
