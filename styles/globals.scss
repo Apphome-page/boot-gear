@@ -26,6 +26,13 @@ body {
   color: #50668f;
   font-size: 16px;
   line-height: 30px;
+  .modal-content,
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    border: 0;
+    border-radius: 0;
+  }
 }
 textarea {
   resize: none;

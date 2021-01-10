@@ -4,23 +4,28 @@ import getPlanDetails from './getPlanDetails'
 
 import { StoreContext } from './storeProvider'
 
-export default function useUserData() {
+export default function useUserData(refKey = '') {
   const [userData, setUserData] = useState({})
   const [{ firebase, userAuth }] = useContext(StoreContext)
 
   const userId = userAuth && userAuth.uid
 
   useEffect(() => {
-    const userDataRef = firebase.database().ref(`users/${userId}`)
+    const userDataRef = firebase
+      .database()
+      .ref(`users/${userId}${refKey ? `/${refKey}` : ''}`)
     userDataRef.on('value', (snapshot) => {
       const snapVal = snapshot.val()
-      snapVal.plan = getPlanDetails(snapVal.plan_id)
+      if (snapVal && !refKey) {
+        // Add plan details into root request
+        snapVal.plan = getPlanDetails(snapVal.plan_id)
+      }
       setUserData(snapVal)
     })
     return () => {
       userDataRef.off()
     }
-  }, [firebase, userId])
+  }, [firebase, refKey, userId])
 
   return userData
 }
