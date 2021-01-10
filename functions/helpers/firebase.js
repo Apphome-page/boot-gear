@@ -77,9 +77,11 @@ const syncCustomer = (admin) => async (
 
 const storageFiles = (admin) => async (storagePrefixKey) => {
   const storageFilesMap = {}
+  console.log('start here')
   const [storageItems] = await admin.storage().bucket().getFiles({
     prefix: storagePrefixKey,
   })
+  console.log('rest here')
   await Promise.all(
     storageItems.map((storageItem) =>
       storageItem

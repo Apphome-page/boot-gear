@@ -44,6 +44,19 @@ const dnsDomain = (cf) => async (
   zoneId,
   { type = 'A', name, content, ttl = 1, proxied = true } = {}
 ) => {
+  // Remove existing Entry
+  const { result: existingDNS } = await cf.dnsRecords.browse(zoneId)
+  const { id: existingDNSId } =
+    existingDNS.find(
+      ({ type: eZType, name: eZName, content: eZContent }) =>
+        eZType === type &&
+        eZContent === content &&
+        (name === '@' || eZName === name)
+    ) || {}
+  if (existingDNSId) {
+    await cf.dnsRecords.del(zoneId, existingDNSId)
+  }
+  // Add new Entry
   const { success, result: dnsResult } = await cf.dnsRecords.add(zoneId, {
     type,
     name,

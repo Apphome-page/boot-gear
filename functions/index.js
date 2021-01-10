@@ -362,8 +362,9 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
 
         // Fetch All assets from firebase bucket at websiteKey
         const storagePrefixKey = `public/${webKey}/`
+        console.log('here')
         const storageFilesMap = await storageFiles(storagePrefixKey)
-
+        console.log('there')
         // Push All assets at S3 Bucket
         await putHostedBucket(bucketName, storageFilesMap)
 
@@ -404,12 +405,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
 
           // Clean up Realtime Database
           await Promise.all(
-            [
-              'webKey', // Shared Key Name
-              'webDomain', // Custom Domain Name
-              'webZone', // Cloudflare Zone
-              'webNameservers', // Cloudflare Zone Nameservers
-            ].map((siteWebDetailKey) =>
+            ['webHost', 'webBucket'].map((siteWebDetailKey) =>
               siteWebDetailRef.child(siteWebDetailKey).remove()
             )
           )
