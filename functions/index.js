@@ -278,7 +278,6 @@ exports.domainSetup = functions.https.onRequest((request, response) => {
           zoneNameServers,
         })
       } catch (e) {
-        console.error(e)
         response.status(500).json(e.toString())
       }
     })
@@ -362,9 +361,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
 
         // Fetch All assets from firebase bucket at websiteKey
         const storagePrefixKey = `public/${webKey}/`
-        console.log('here')
         const storageFilesMap = await storageFiles(storagePrefixKey)
-        console.log('there')
         // Push All assets at S3 Bucket
         await putHostedBucket(bucketName, storageFilesMap)
 
