@@ -7,6 +7,7 @@ import {
   Button,
   Col,
 } from 'react-bootstrap'
+import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
 
 import { StoreContext } from '../../utils/storeProvider'
@@ -16,6 +17,7 @@ import uploadWebsite from './helpers/upload'
 export default function HomeWebsite({ initProps = {} }) {
   const formRef = useRef(null)
   const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
+  const router = useRouter()
   const userId = userAuth && userAuth.uid
 
   const [templateProps, setTemplateProps] = useState({
@@ -61,11 +63,12 @@ export default function HomeWebsite({ initProps = {} }) {
       window.alert(
         `Your website is generated!\nVisit your website at: https://applanding.page/${appKey}`
       )
+      router.push('/dashboard')
       window.open(`https://applanding.page/${appKey}`, '_blank')
     } catch (e) {
       window.alert('Something went wrong while updating your website.')
     }
-  }, [firebase, modStore, templateProps, userId])
+  }, [firebase, modStore, router, templateProps, userId])
 
   useEffect(() => {
     modTemplateProps(initProps)

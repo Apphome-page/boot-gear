@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { StoreContext } from '../../utils/storeProvider'
 
-export default function AuthWrapper({ children }) {
+export default function AuthWrapper({ children, placeholder }) {
   const [{ userAuth }, modStore] = useContext(StoreContext)
 
   const userId = userAuth && userAuth.uid
@@ -21,5 +21,5 @@ export default function AuthWrapper({ children }) {
   if (userId) {
     return children
   }
-  return <></>
+  return placeholder || <></>
 }

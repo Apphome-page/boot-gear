@@ -1,0 +1,34 @@
+[
+  {
+    "name": "App Icon Generator",
+    "path": "/app-icon-generator"
+  },
+  {
+    "name": "Android Icon Generator",
+    "path": "/android-app-icon-generator"
+  },
+  {
+    "name": "iPhone Icon Generator",
+    "path": "/iphone-app-icon-generator"
+  },
+  {
+    "name": "iOS icon Generator",
+    "path": "/ios-app-icon-generator"
+  },
+  {
+    "name": "App Screenshot Generator",
+    "path": "/app-screenshot-generator"
+  },
+  {
+    "name": "Android App Screenshot Generator",
+    "path": "/android-app-screenshot-generator"
+  },
+  {
+    "name": "iPhone App Screenshot Generator",
+    "path": "/iphone-app-screenshot-generator"
+  },
+  {
+    "name": "iOS App Screenshot Generator",
+    "path": "/ios-app-screenshot-generator"
+  }
+]

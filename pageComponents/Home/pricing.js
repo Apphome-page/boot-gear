@@ -40,7 +40,7 @@ export default function HomePricing() {
                     <ListGroupItem key={detailIndex}>{detail}</ListGroupItem>
                   ))}
                 </ListGroup>
-                <Link href={`/payments/pre?plan=${planKey}`}>
+                <Link href={`/payments/pre?plan=${planKey}`} prefetch={false}>
                   <Button variant='light' className='btn-alt m-5'>
                     Get Started
                   </Button>

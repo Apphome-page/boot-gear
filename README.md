@@ -44,10 +44,10 @@ _Deployment is undetaken by Github Action & can also be done via CLI through `np
 
 #### Firebase Realtime Database
 
-- `ccLookup/$customer_id`: Pabbly Customer to User Map
 - `subs/\email`: Subscriber Information
 - `/users/$user_id`: User Information
   - `customer_id`: User to Pabbly Customer Map
+  - `plan_id`: User to Plan Map
   - `/sites/$slug/timeStamp`: Last Access TimeStamp to verify ownership
 
 ```json
@@ -59,6 +59,7 @@ _Deployment is undetaken by Github Action & can also be done via CLI through `np
     },
     "users": {
       "$user_id": {
+        ".indexOn": ["customer_id"],
         ".read": "$user_id === auth.uid",
         "sites": {
           ".write": "$user_id === auth.uid"

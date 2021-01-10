@@ -9,17 +9,23 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "8"
+    "node": "12"
   },
   "main": "index.js",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "aws-sdk": "^2.799.0",
     "base-64": "^1.0.0",
+    "body-parser": "^1.19.0",
+    "cloudflare": "^2.7.0",
     "cors": "^2.8.5",
     "cross-fetch": "^3.0.6",
     "firebase-admin": "^9.2.0",
-    "firebase-functions": "^3.11.0"
+    "firebase-functions": "^3.13.0"
   },
   "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-plugin-promise": "^4.2.1",
     "firebase-functions-test": "^0.2.0"
   },
   "private": true

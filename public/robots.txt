@@ -1,4 +1,7 @@
 User-agent: *
 Disallow: /dashboard
+Disallow: /payments
 
 Sitemap: https://applanding.page/sitemap.xml
+Sitemap: https://applanding.page/sitemap-blog.xml
+Sitemap: https://applanding.page/sitemap-showcase.xml

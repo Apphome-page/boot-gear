@@ -43,17 +43,18 @@ export default function Payment() {
       const idToken = await firebase.auth().currentUser.getIdToken()
       const syncResp = await fetch(FIRECLOUD_USER_SYNC, {
         method: 'POST',
-        'content-type': 'application/json',
         headers: {
           Authorization: `Bearer ${idToken}`,
+          'content-type': 'application/json',
         },
       }) // Move to Pabbly Checkout using customerId
       const syncData = await syncResp.json()
       if (syncResp.status >= 400) {
-        throw new Error(`Something went wrong. ${JSON.stringify(syncData)}`)
+        throw new Error(syncData)
       }
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
+      console.error(e)
       window.alert('Something went wrong. Please Sign in again to continue.')
       firebase.auth().signOut()
     }

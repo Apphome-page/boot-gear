@@ -9,71 +9,33 @@ import { Linkedin as IconLinkedin } from '@emotion-icons/feather/Linkedin'
 
 import { SubscriptionBox } from '../Subscription'
 
-const resourceLinks = [
-  {
-    name: 'App Landing Pages Showcase',
-    path: '/showcase',
-  },
-  {
-    name: 'Privacy Policy',
-    path: '/privacy-policy',
-  },
-  {
-    name: 'Terms & Conditions',
-    path: '/terms-and-conditions',
-  },
-  {
-    name: 'Disclaimer',
-    path: '/disclaimer',
-  },
-  {
-    name: 'Contact Us',
-    path: '/contact-us',
-  },
-]
-
-const productLinks = [
-  { name: 'App Icon Generator', path: '/app-icon-generator' },
-  { name: 'Android Icon Generator', path: '/android-app-icon-generator' },
-  { name: 'iPhone Icon Generator', path: '/iphone-app-icon-generator' },
-  { name: 'iOS icon Generator', path: '/ios-app-icon-generator' },
-  { name: 'App Screenshot Generator', path: '/app-screenshot-generator' },
-  {
-    name: 'Android App Screenshot Generator',
-    path: '/android-app-screenshot-generator',
-  },
-  {
-    name: 'iPhone App Screenshot Generator',
-    path: '/iphone-app-screenshot-generator',
-  },
-  {
-    name: 'iOS App Screenshot Generator',
-    path: '/ios-app-screenshot-generator',
-  },
-]
+import resourceLinks from '../../pageData/links/footerLinks.json'
+import productLinks from '../../pageData/links/footerProducts.json'
 
 export default function Footer() {
   return (
     <>
-      <Container className='my-4 py-4 shadow'>
-        <Row>
-          <Col lg={12} className='mb-4 h1 font-weight-bold text-center'>
-            Supported Products
-          </Col>
-          {productLinks.map(({ name, path }, index) => (
-            <Col lg={3} key={index}>
-              <Link passHref href={path} key={index}>
-                <a
-                  className='d-block my-2 text-muted text-decoration-none text-truncate'
-                  href={path}
-                >
-                  {name}
-                </a>
-              </Link>
+      <div className='my-4 py-4 shadow'>
+        <Container>
+          <Row>
+            <Col lg={12} className='mb-4 h1 font-weight-bold text-center'>
+              Supported Products
             </Col>
-          ))}
-        </Row>
-      </Container>
+            {productLinks.map(({ name, path }, index) => (
+              <Col lg={3} key={index}>
+                <Link passHref href={path} key={index} prefetch={false}>
+                  <a
+                    className='d-block my-2 text-muted text-decoration-none text-truncate'
+                    href={path}
+                  >
+                    {name}
+                  </a>
+                </Link>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </div>
       <Container fluid className='bg-alt text-white py-5'>
         <Container>
           <Row>
@@ -87,7 +49,7 @@ export default function Footer() {
             <Col lg={3}>
               <div className='my-4 h5 font-weight-bold'>Resources</div>
               {resourceLinks.map(({ name, path }, index) => (
-                <Link passHref href={path} key={index}>
+                <Link passHref href={path} key={index} prefetch={false}>
                   <a className='d-block my-2 text-white' href={path}>
                     {name}
                   </a>

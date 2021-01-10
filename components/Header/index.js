@@ -12,44 +12,16 @@ import {
   NavLink,
   NavDropdown,
 } from 'react-bootstrap'
+import { GearFill as IconGear } from '@emotion-icons/bootstrap/GearFill'
+import { ClipboardData as IconDash } from '@emotion-icons/bootstrap/ClipboardData'
+import { BoxArrowRight as IconOut } from '@emotion-icons/bootstrap/BoxArrowRight'
 
 import { StoreContext } from '../../utils/storeProvider'
 
 import { AuthWrap } from './style'
 
-const productLinks = [
-  {
-    name: 'App Icon Generator',
-    path: '/app-icon-generator',
-  },
-  {
-    name: 'App Screenshot Generator',
-    path: '/app-screenshot-generator',
-  },
-  {
-    name: 'App Website Builder',
-    path: '/app-website-builder',
-  },
-]
-
-const headerLinks = [
-  {
-    name: 'Features',
-    path: '/features',
-  },
-  {
-    name: 'Pricing',
-    path: '/pricing',
-  },
-  { name: 'Blog', path: '/blog' },
-]
-
-const userLinks = [
-  {
-    name: 'Dashboard',
-    path: '/dashboard',
-  },
-]
+import productLinks from '../../pageData/links/headerProducts.json'
+import headerLinks from '../../pageData/links/headerLinks.json'
 
 export default function Header() {
   const router = useRouter()
@@ -100,7 +72,7 @@ export default function Header() {
         sticky='top'
         className='shadow px-lg-5 py-lg-2'
       >
-        <Link href='/'>
+        <Link href='/' prefetch={false}>
           <div className='navbar-brand cursor-pointer'>AppLanding</div>
         </Link>
         <Navbar.Collapse id='basic-navbar-nav'>
@@ -108,7 +80,7 @@ export default function Header() {
             <NavDropdown alignRight title='Products'>
               {productLinks.map(({ name, path }, index) => (
                 <NavDropdown.Item key={index} as='div'>
-                  <Link href={path} passHref>
+                  <Link href={path} passHref prefetch={false}>
                     <Nav.Link
                       href={path}
                       className={router.pathname === path ? 'active' : ''}
@@ -121,7 +93,7 @@ export default function Header() {
             </NavDropdown>
             {headerLinks.map(({ name, path }, index) => (
               <NavItem key={index}>
-                <Link href={path} passHref>
+                <Link href={path} passHref prefetch={false}>
                   <NavLink
                     href={path}
                     className={router.pathname === path ? 'active' : ''}
@@ -132,30 +104,32 @@ export default function Header() {
               </NavItem>
             ))}
             {userAuth ? (
-              <NavDropdown alignRight title={`Hi! ${userAuth.displayName}`}>
-                {userLinks.map(({ name, path }, index) => (
-                  <NavDropdown.Item key={index} as='div'>
-                    <Link href={path} passHref>
-                      <Nav.Link
-                        href={path}
-                        className={router.pathname === path ? 'active' : ''}
-                      >
-                        {name}
-                      </Nav.Link>
-                    </Link>
-                  </NavDropdown.Item>
-                ))}
+              <NavDropdown alignRight title={<IconGear size='20' />}>
+                <NavDropdown.Item as='div' className='px-3 mini text-muted'>
+                  {userAuth.displayName}
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item>
-                  <Button
-                    variant='outline-danger'
-                    onClick={() => {
-                      router.push('/')
-                      firebase.auth().signOut()
-                    }}
-                  >
-                    Sign Out
-                  </Button>
+                <NavDropdown.Item
+                  as='div'
+                  className='px-3 text-muted cursor-pointer'
+                >
+                  <Link href='/dashboard' prefetch={false}>
+                    <div>
+                      <IconDash size='18' className='mr-2' />
+                      Dashboard
+                    </div>
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  as='div'
+                  className='px-3 text-danger cursor-pointer'
+                  onClick={() => {
+                    router.push('/')
+                    firebase.auth().signOut()
+                  }}
+                >
+                  <IconOut size='18' className='mr-2' />
+                  Sign Out
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (

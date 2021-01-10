@@ -7,7 +7,7 @@ export default function HomeCards() {
   return (
     <Container className='my-5'>
       <CardDeck>
-        <Link href='/app-website-builder'>
+        <Link href='/app-website-builder' prefetch={false}>
           <Card bg='light' className='rounded-0 border-0 p-4 cursor-pointer'>
             <Card.Body>
               <CardIcon data-src='/img/feature/i1.png' className='mb-5' />
@@ -21,7 +21,7 @@ export default function HomeCards() {
             </Card.Body>
           </Card>
         </Link>
-        <Link href='/app-screenshot-generator'>
+        <Link href='/app-screenshot-generator' prefetch={false}>
           <Card bg='light' className='rounded-0 border-0 p-4 cursor-pointer'>
             <Card.Body>
               <CardIcon data-src='/img/feature/i3.png' className='mb-5' />
@@ -35,7 +35,7 @@ export default function HomeCards() {
             </Card.Body>
           </Card>
         </Link>
-        <Link href='/app-icon-generator'>
+        <Link href='/app-icon-generator' prefetch={false}>
           <Card bg='light' className='rounded-0 border-0 p-4 cursor-pointer'>
             <Card.Body>
               <CardIcon data-src='/img/feature/i4.png' className='mb-5' />

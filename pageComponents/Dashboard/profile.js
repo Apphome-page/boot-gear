@@ -1,11 +1,5 @@
 import { useCallback, useContext, useRef } from 'react'
-import {
-  Container,
-  Form,
-  InputGroup,
-  FormControl,
-  Button,
-} from 'react-bootstrap'
+import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 
 import useUserData from '../../utils/useUserData'
 import { StoreContext } from '../../utils/storeProvider'
@@ -43,8 +37,8 @@ export default function Profile() {
   }, [firebase, modStore, userAuth])
   return (
     <>
-      <div className='pb-2 mb-2 border-bottom lead text-dark'>Your Details</div>
-      <Form ref={formRef}>
+      <div className='pb-1 mb-2 border-bottom lead text-dark'>Your Details</div>
+      <Form ref={formRef} className='mb-5 p-2 border shadow-sm'>
         <InputGroup className='my-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>Name</InputGroup.Text>
@@ -57,18 +51,28 @@ export default function Profile() {
           </InputGroup.Prepend>
           <FormControl name='email' defaultValue={email} />
         </InputGroup>
+        <div className='text-right'>
+          <Button variant='success' onClick={actionUpdate}>
+            Update
+          </Button>
+        </div>
+      </Form>
+      <div className='pb-1 mb-2 border-bottom lead text-dark'>
+        Your Subscriptions
+      </div>
+      <div className='mb-5 p-2 border shadow-sm'>
         <InputGroup className='my-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>Plan</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl name='plan' defaultValue={planTitle} disabled />
         </InputGroup>
-        <Container className='mt-5 text-right'>
-          <Button variant='success' onClick={actionUpdate}>
-            Update
+        <div className='text-center'>
+          <Button variant='secondary' className='btn-alt'>
+            View All Plans
           </Button>
-        </Container>
-      </Form>
+        </div>
+      </div>
     </>
   )
 }

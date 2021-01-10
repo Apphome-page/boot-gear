@@ -16,7 +16,7 @@ export default function HomeBlog() {
           We are thought leaders in mobile app industry. Check out what our
           editors have written recently !
         </p>
-        <Link href='/blog'>
+        <Link href='/blog' prefetch={false}>
           <Button variant='light' className='btn-alt'>
             Browse More
           </Button>

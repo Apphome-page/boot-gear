@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Features",
+    "path": "/features"
+  },
+  {
+    "name": "Pricing",
+    "path": "/pricing"
+  },
+  { "name": "Blog",
+    "path": "/blog"
+  }
+]

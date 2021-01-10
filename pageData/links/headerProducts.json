@@ -1,0 +1,14 @@
+[
+  {
+    "name": "App Icon Generator",
+    "path": "/app-icon-generator"
+  },
+  {
+    "name": "App Screenshot Generator",
+    "path": "/app-screenshot-generator"
+  },
+  {
+    "name": "App Website Builder",
+    "path": "/app-website-builder"
+  }
+]
