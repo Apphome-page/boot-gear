@@ -8,10 +8,10 @@ export default function HomeShowcase() {
         <Row className='align-items-center'>
           <Col lg={6}>
             <p className='display-4 pb-3 pt-5'>
-              Want to create a website for your mobile app?
+              Want to create a landing page for your mobile app?
             </p>
             <p>
-              Your app is awesome. It needs an awesome website. Create it using
+              Your app is awesome. It needs an awesome landing page. Create it using
               applanding.page. We have both paid and free plans. If you wish to
               host it on your custom domain, you can use our paid plans, or just
               host it on applanding.page for free
