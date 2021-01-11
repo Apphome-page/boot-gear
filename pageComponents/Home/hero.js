@@ -14,10 +14,10 @@ export default function HomeHero() {
         <Row>
           <Col lg={6}>
             <h1 className='my-4 display-4 font-weight-bold'>
-              Create websites for your mobile apps
+              Create app landing pages for your mobile apps
             </h1>
             <p className='my-5'>
-              Easily create feature rich, fast and responsive websites for your
+              Easily create feature rich, fast and responsive app landing pages for your
               apps.
               <br />
               Creating stunning screenshots for app store listings.
