@@ -30,15 +30,15 @@ export default function Website() {
         </title>
         <meta
           name='description'
-          content='Smart App Website Builder - Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.'
+          content='Smart App Website Builder - Create app landing pages without learning web development and nuances of webhosting to create perfect landing pages for your apps.'
         />
         <meta
           property='og:title'
-          content='App Website Builder - Create beautiful, responsive and feature rich website for your mobile apps'
+          content='App Website Builder - Create beautiful, responsive and feature rich app landing pages for your mobile apps'
         />
         <meta
           property='og:description'
-          content='Smart App Website Builder - Create websites without learning web development and nuances of webhosting to create perfect websites for your apps.'
+          content='Smart App Website Builder - Create websites without learning web development and nuances of webhosting to create perfect app landing pages for your apps.'
         />
       </Head>
       <div className='min-vh-100'>
