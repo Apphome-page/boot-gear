@@ -48,7 +48,7 @@ _Deployment is undetaken by Github Action & can also be done via CLI through `np
 - `/users/$user_id`: User Information
   - `customer_id`: User to Pabbly Customer Map
   - `plan_id`: User to Plan Map
-  - `/sites/$slug/timeStamp`: Last Access TimeStamp to verify ownership
+  - `/sites/$slug/timestamp`: Last Access timestamp to verify ownership
 
 ```json
 {
@@ -159,7 +159,7 @@ service firebase.storage {
                                         +------------------------------+   |   |       | |      `appName         | |
                                                                            |   |       | |      `appScreenshot   | |
                                                                            |   |       | |      `appTwitterLink  | |
-                                                                           |   |       | |      `timeStamp       | |
+                                                                           |   |       | |      `timestamp       | |
                                                                            |   +--------->   /subs               | |
                                                                            |           | |     `email            | |
                                                                            |           | |     `location         | |

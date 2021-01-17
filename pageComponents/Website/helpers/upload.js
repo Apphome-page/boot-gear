@@ -25,7 +25,7 @@ export default async function upload(firebase, userId, appKey, templateProps) {
 
   // 2. Path is accessible || User Owns Path
   const snapshot = await databaseRef.once('value')
-  const { timeStamp: userWebsite } = snapshot.val() || {}
+  const { timestamp: userWebsite } = snapshot.val() || {}
   let freeWebsitePath = true
   try {
     const {
@@ -81,6 +81,6 @@ export default async function upload(firebase, userId, appKey, templateProps) {
     ...templateProps,
     appIcon: appIconPath,
     appScreenshot: appScreenshotPath,
-    timeStamp: new Date().getTime(),
+    timestamp: new Date().getTime(),
   })
 }

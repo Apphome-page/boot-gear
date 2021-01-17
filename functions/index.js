@@ -45,9 +45,12 @@ const {
   cleanRequest,
   validateFirebaseIdToken,
 } = require('./helpers/middleware')(admin)
-const { syncUser, syncCustomer, storageFiles } = require('./helpers/firebase')(
-  admin
-)
+const {
+  syncUser,
+  syncCustomer,
+  setWebTimestamp,
+  storageFiles,
+} = require('./helpers/firebase')(admin)
 const {
   createHostedBucket,
   putHostedBucket,
@@ -268,6 +271,7 @@ exports.domainSetup = functions.https.onRequest((request, response) => {
           webDataRef.child('webDomain').set(webDomain),
           webDataRef.child('webZone').set(zoneId),
           webDataRef.child('webNameservers').set(zoneNameServers),
+          setWebTimestamp(uid, webKey),
         ])
 
         // Return nameservers
@@ -343,11 +347,14 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         }
 
         // Remove Existing S3 Bucket
-        if (webBucket) {
-          await deleteHostedBucket(webBucket)
-          await siteDataRef.child('webBucket').remove()
-          await siteDataRef.child('webHost').remove()
-        }
+        await Promise.all([
+          deleteHostedBucket(webDomain).catch((e) => {}),
+          deleteHostedBucket(webBucket).catch((e) => {}),
+        ])
+        await Promise.all([
+          siteDataRef.child('webBucket').remove(),
+          siteDataRef.child('webHost').remove(),
+        ])
 
         // Create new Bucket
         // https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#VirtualHostingCustomURLs
@@ -371,6 +378,8 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
           name: '@',
           content: bucketHost,
         })
+
+        await setWebTimestamp(uid, webKey)
 
         const connectedWebDataSnapshot = await siteDataRef.once('value')
         const connectedWebData = connectedWebDataSnapshot.val()

@@ -19,6 +19,13 @@ const setUserClaims = async (admin, uid, customClaims) => {
   )
 }
 
+const setWebTimestamp = async (admin, uid, webKey) => {
+  await admin
+    .database()
+    .ref(`users/${uid}/sites/${webKey}/timestamp`)
+    .set(new Date().getTime())
+}
+
 // Get Firebase UserId from Pabbly customerId
 // Queries Firebase Realtime Database
 const customerToUserId = async (admin, customerId) => {
@@ -103,5 +110,6 @@ module.exports = (admin) => ({
   customerToUserId: customerToUserId.bind(null, admin),
   syncCustomer: syncCustomer(admin),
   syncUser: setUserClaims.bind(null, admin),
+  setWebTimestamp: setWebTimestamp.bind(null, admin),
   storageFiles: storageFiles(admin),
 })

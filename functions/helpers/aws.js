@@ -57,7 +57,7 @@ const putHostedBucket = (s3) => async (bucketName, storageFilesMap) => {
           Key: storageKey,
           Body: storageFilesMap[storageKey],
           // TODO: Set appropriate mime-type while uploading
-          // ContentType: mime.lookup(storageKey),
+          ContentType: mime.lookup(storageKey),
         })
       )
     )
