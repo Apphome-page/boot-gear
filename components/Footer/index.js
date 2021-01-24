@@ -23,7 +23,7 @@ export default function Footer() {
             </Col>
             {productLinks.map(({ name, path }, index) => (
               <Col lg={3} key={index}>
-                <Link passHref href={path} key={index} prefetch={false}>
+                <Link passHref href={path} key={index}>
                   <a
                     className='d-block my-2 text-muted text-decoration-none text-truncate'
                     href={path}
@@ -49,7 +49,7 @@ export default function Footer() {
             <Col lg={3}>
               <div className='my-4 h5 font-weight-bold'>Resources</div>
               {resourceLinks.map(({ name, path }, index) => (
-                <Link passHref href={path} key={index} prefetch={false}>
+                <Link passHref href={path} key={index}>
                   <a className='d-block my-2 text-white' href={path}>
                     {name}
                   </a>

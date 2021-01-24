@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta property="og:url" content="/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charSet="utf-8"/>
+    <link rel="canonical" href="/"/>
+    <base href="/" target="_blank"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&amp;display=swap"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>App landing page for mobile apps, with free screenshots tools</title>
+    <style>
+      ::selection {
+        background-color: #7b10ff;
+        color: #fff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
+        font-family: 'Montserrat', sans-serif;
+        outline: none !important;
+        text-decoration: none;
+      }
+      body {
+        color: #50668f;
+        font-size: 16px;
+        line-height: 30px;
+      }
+      a,a:hover,a:visited {
+        color: #50668f;
+        text-decoration: none;
+      }
+      textarea {
+        resize: none;
+      }
+      em {
+        font-weight: 600;
+      }
+      small {
+        color: #666;
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      .bg-alt {
+        background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+        background-color: #f2f5fa;
+      }
+
+      .btn-alt {
+        padding: 12px 32px;
+        border: 0;
+        border-radius: 0;
+        background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+        background-color: #7b10ff;
+        color: #fff;
+      }
+      .btn-alt:hover {
+        background: #f2f5fa;
+        color: #1e283c;
+      }
+      .btn-alt2 {
+        padding: 12px 32px;
+        border: 0;
+        border-radius: 0;
+        background-image: none;
+        background: #f2f5fa;
+        color: #1e283c;
+      }
+      .btn-alt2:hover {
+        background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+        background-color: #7b10ff;
+        color: #fff;
+      }
+
+      .cursor-pointer {
+        cursor: pointer;
+      }
+      .mini {
+        font-size: 12px;
+        line-height: 1.4;
+        letter-spacing: 1px;
+      }
+      .fsize-32 {
+        height: 32px;
+        width: 32px;
+      }
+
+      .feature-1 {
+        position: relative;
+        height: 86px;
+        width: 86px;
+        border-radius: 50%;
+        background: #ffffff url(/img/feature/i1.png) no-repeat center;
+        background-size: 40px;
+      }
+      .hero-bg {
+        position: relative;
+        background: url(/img/hero/hero-bg.png) no-repeat left center/cover;
+        background-color: #7b10ff;
+        color: #fff;
+      }
+      .feature-3 {
+        position: relative;
+        height: 86px;
+        width: 86px;
+        border-radius: 50%;
+        background: #ffffff url(/img/feature/i3.png) no-repeat center;
+        background-size: 40px;
+      }
+      .feature-4 {
+        position: relative;
+        height: 86px;
+        width: 86px;
+        border-radius: 50%;
+        background: #ffffff url(/img/feature/i4.png) no-repeat center;
+        background-size: 40px;
+      }
+      .logo-bg {
+        position: relative;
+        height: 86px;
+        width: 86px;
+        border-radius: 50%;
+        background: #ffffff url(/img/logo.png) no-repeat center;
+        background-size: 40px;
+      }
+      .emotion-icon {
+        display: inline-block;
+        vertical-align: middle;
+        overflow: hidden;
+      }
+      @media (min-width:992px) {
+        .hero-bg {
+          min-height: 100vh;
+        }
+        .hero-bg:before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 3rem;
+          bottom: 3rem;
+          left: 50%;
+          right: 0;
+          background: url(/img/hero/hero-img.png) no-repeat right bottom;
+          background-size: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+      <nav class="shadow px-lg-5 py-lg-2 navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="navbar-brand cursor-pointer">AppLanding</div>
+        <div class="navbar-collapse collapse" id="basic-navbar-nav">
+          <div class="ml-auto navbar-nav">
+            <div class="nav-item"><a href="/app-icon-generator" class="nav-link">App Icon Generator</a></div>
+            <div class="nav-item"><a href="/app-screenshot-generator" class="nav-link">App Screenshot Generator</a></div>
+            <div class="nav-item"><a href="/app-website-builder" class="nav-link">App Website Builder</a></div>
+          </div>
+        </div>
+        <a href="/dashboard" class="btn-alt ml-auto ml-lg-3 mr-3 btn btn-light">Sign In</a>
+      </nav>
+      <section class="d-flex align-items-center hero-bg">
+        <div class="py-5 container">
+          <div class="row">
+            <div class="col-lg-6">
+              <h1 class="my-4 display-4 font-weight-bold">Create app landing pages for your mobile apps</h1>
+              <p class="my-5">Easily create feature rich, fast and responsive app landing pages for your apps.<br/>Creating stunning screenshots for app store listings.<br/>Sign Up !</p>
+              <a href="/dashboard" class="btn-alt mr-1 mr-sm-3 btn btn-light">
+                Sign Up
+              </a>
+              <a href="/pricing" class="btn-alt2 mt-4 mt-sm-0 btn btn-light">
+                View Pricing
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="my-5 container">
+        <div class="card-deck">
+          <div class="rounded-0 border-0 p-4 cursor-pointer card bg-light">
+            <a href="/app-website-builder" class="card-body">
+              <div class="mb-5 feature-1"></div>
+              <div class="font-weight-bold card-title h5">Landing page for Apps</div>
+              <p class="card-text">Build landing page for your mobile app. We have both free and paid plans.</p>
+            </a>
+          </div>
+          <div class="rounded-0 border-0 p-4 cursor-pointer card bg-light">
+            <a href="/app-screenshot-generator" class="card-body">
+              <div class="mb-5 feature-3"></div>
+              <div class="font-weight-bold card-title h5">Stunning screenshots</div>
+              <p class="card-text">Create stunning screen shots for your app store listing using our free tools.</p>
+            </a>
+          </div>
+          <div class="rounded-0 border-0 p-4 cursor-pointer card bg-light">
+            <a href="/app-icon-generator" class="card-body">
+              <div class="mb-5 feature-4"></div>
+              <div class="font-weight-bold card-title h5">Free icon generator</div>
+              <p class="card-text">Resize and create icons for mmobile devices using our free tool.</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      <section class="bg-light">
+        <div class="py-5 container">
+          <div class="align-items-center row">
+            <div class="col-lg-6">
+              <p class="display-4 pb-3 pt-5">Want to create a landing page for your mobile app?</p>
+              <p>Your app is awesome. It needs an awesome landing page. Create it using applanding.page. We have both paid and free plans. If you wish to host it on your custom domain, you can use our paid plans, or just host it on applanding.page for free</p>
+              <a href="/app-website-builder" class="my-5 btn-alt btn btn-light">Browse free Demo</a>
+            </div>
+            <div class="d-none d-lg-block col-lg-6"><img src="/img/hero/hero-bg.png" alt="" class="w-100"/></div>
+          </div>
+        </div>
+      </section>
+      <section class="py-5 bg-alt text-center text-white">
+        <div class="my-5 container">
+          <div class="h1 mb-5">Fallen in Love with our features? Get a free trial!</div>
+          <a href="/pricing" class="rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-4 py-2 btn btn-light">Start Free Trial</a>
+          <a href="/dashboard" class="rounded-0 px-4 py-2 btn btn-outline-light">Sign Up</a>
+        </div>
+      </section>
+      <section class="py-5 bg-light text-center text-dark">
+        <div class="container">
+          <div class="my-3 mx-auto border-bottom logo-bg"></div>
+          <p class="h2 font-weight-bold">Plans &amp; Pricing</p>
+          <p class="mt-3 mb-5">No credit card required. No risk. Free trial !</p>
+          <div class="card-deck">
+            <div class="rounded-0 border-0 p-4 card">
+              <div class="card-body">
+                <div class="my-4 card-title h5">Free</div>
+                <p class="card-text"><span class="h1 font-weight-bold">$0</span>/year</p>
+              </div>
+              <div class="my-3 text-secondary list-group list-group-flush">
+                <div class="list-group-item">1 website on applanding.page</div>
+                <div class="list-group-item">Fully featured</div>
+                <div class="list-group-item">5 templates for Screenshot Generator</div>
+              </div>
+              <a href="/payments/pre?plan=free" class="btn-alt m-5 btn btn-light">Get Started</a>
+            </div>
+            <div class="rounded-0 border-0 p-4 card">
+              <div class="card-body">
+                <div class="my-4 card-title h5">Pro</div>
+                <p class="card-text"><span class="h1 font-weight-bold">$79</span>/year</p>
+              </div>
+              <div class="my-3 text-secondary list-group list-group-flush">
+                <div class="list-group-item">1 website on your domain</div>
+                <div class="list-group-item">Fully featured</div>
+                <div class="list-group-item">All templates available for Screenshot Generator</div>
+              </div>
+              <a href="/payments/pre?plan=silver" class="btn-alt m-5 btn btn-light">Get Started</a>
+            </div>
+            <div class="rounded-0 border-0 p-4 card">
+              <div class="card-body">
+                <div class="my-4 card-title h5">Startup</div>
+                <p class="card-text"><span class="h1 font-weight-bold">$199+</span>/year</p>
+              </div>
+              <div class="my-3 text-secondary list-group list-group-flush">
+                <div class="list-group-item">3+ websites on your domains</div>
+                <div class="list-group-item">Fully featured</div>
+                <div class="list-group-item">All templates available for Screenshot Generator</div>
+              </div>
+              <a href="/payments/pre?plan=gold" class="btn-alt m-5 btn btn-light">Get Started</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="my-5 container">
+        <div class="text-center row">
+          <div class="col">
+            <div class="my-3 mx-auto border-bottom logo-bg"></div>
+            <p class="h2 font-weight-bold">Features that make us Stand Out</p>
+            <p class="mt-3 mb-5">We provide simple solutions to complex problems</p>
+          </div>
+        </div>
+        <div class="align-items-center border-top py-3 row">
+          <div class="col">
+            <div class="px-2 bg-dark text-right rounded-top"><span class="d-inline-block mx-1 p-1 bg-white rounded-circle"></span><span class="d-inline-block mx-1 p-1 bg-warning rounded-circle"></span><span class="d-inline-block mx-1 p-1 bg-danger rounded-circle"></span></div>
+            <img src="/img/feature/landing.jpg" alt="App Landing Page" class="border border-dark w-100"/>
+          </div>
+          <div class="col">
+            <div class="pb-3 lead font-weight-bold">Landing page for mobile apps</div>
+            <p>You can create landing page on web for your mobile apps using applanding.page for free !</p>
+          </div>
+        </div>
+        <div class="align-items-center border-top py-3 row">
+          <div class="col">
+            <div class="px-2 bg-dark text-right rounded-top"><span class="d-inline-block mx-1 p-1 bg-white rounded-circle"></span><span class="d-inline-block mx-1 p-1 bg-warning rounded-circle"></span><span class="d-inline-block mx-1 p-1 bg-danger rounded-circle"></span></div>
+            <img src="/img/feature/scr.jpg" alt="App Screenshot Generator" class="w-100 border border-dark"/>
+          </div>
+          <div class="col">
+            <div class="pb-3 lead font-weight-bold">Enhance your presence on app stores</div>
+            <p>Applanding.page&#x27;s powerful screenshot generator helps you create stunning screenshots for your mobile apps !</p>
+          </div>
+        </div>
+        <div class="align-items-center border-top row"></div>
+      </div>
+      <section class="bg-light">
+        <div class="py-5 text-center container">
+          <div class="my-3 mx-auto border-bottom logo-bg"></div>
+          <p class="h2 font-weight-bold">Latest Posts from our Blog</p>
+          <p class="mt-3 mb-5">We are thought leaders in mobile app industry. Check out what our editors have written recently !</p>
+          <a href="/blog" class="btn-alt btn btn-light">Browse More</a>
+        </div>
+      </section>
+      <div class="my-4 py-4 shadow">
+        <div class="container">
+          <div class="row">
+            <div class="mb-4 h1 font-weight-bold text-center col-lg-12">Supported Products</div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/app-icon-generator">App Icon Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/android-app-icon-generator">Android Icon Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/iphone-app-icon-generator">iPhone Icon Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/ios-app-icon-generator">iOS icon Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/app-screenshot-generator">App Screenshot Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/android-app-screenshot-generator">Android App Screenshot Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/iphone-app-screenshot-generator">iPhone App Screenshot Generator</a></div>
+            <div class="col-lg-3"><a class="d-block my-2 text-muted text-decoration-none text-truncate" href="/ios-app-screenshot-generator">iOS App Screenshot Generator</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-alt text-white py-5 container-fluid">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="my-4 h5 font-weight-bold">About Us</div>
+              <p>We make fast, beautiful and responsive app landing pages for your mobile apps.</p>
+            </div>
+            <div class="col-lg-3">
+              <div class="my-4 h5 font-weight-bold">Resources</div>
+              <a class="d-block my-2 text-white" href="/showcase">App Landing Pages Showcase</a><a class="d-block my-2 text-white" href="/privacy-policy">Privacy Policy</a><a class="d-block my-2 text-white" href="/terms-and-conditions">Terms &amp; Conditions</a><a class="d-block my-2 text-white" href="/disclaimer">Disclaimer</a><a class="d-block my-2 text-white" href="/contact-us">Contact Us</a>
+            </div>
+            <div class="col-lg-3">
+              <div class="my-4 h5 font-weight-bold">Connect</div>
+              <div class="mb-3 media">
+                <svg viewBox="0 0 16 16" height="24" width="24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="emotion-icon ex0cdmw0">
+                  <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V7h1v6.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5zm11-11V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z"></path>
+                  <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z"></path>
+                </svg>
+                <div class="ml-2 media-body">Noida, India</div>
+              </div>
+              <div class="mb-3 media">
+                <svg viewBox="0 0 16 16" height="24" width="24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="emotion-icon ex0cdmw0">
+                  <path fill-rule="evenodd" d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 004.168 6.608 17.569 17.569 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.062a1.745 1.745 0 01-.46-1.657l.548-2.19a.678.678 0 00-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 012.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 00.178.643l2.457 2.457a.678.678 0 00.644.178l2.189-.547a1.745 1.745 0 011.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 01-7.01-4.42 18.634 18.634 0 01-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"></path>
+                </svg>
+                <div class="ml-2 media-body">
+                  +91 8750348350
+                  <p class="text-white-50">Mon to Fri 9am to 6 pm</p>
+                </div>
+              </div>
+              <div class="mb-3 media">
+                <svg viewBox="0 0 16 16" height="24" width="24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="emotion-icon ex0cdmw0">
+                  <path fill-rule="evenodd" d="M0 4a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H2a2 2 0 01-2-2V4zm2-1a1 1 0 00-1 1v.217l7 4.2 7-4.2V4a1 1 0 00-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 002 13h12a1 1 0 00.966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"></path>
+                </svg>
+                <div class="ml-2 media-body">
+                  support@applanding.page
+                  <p class="text-white-50">Send us your query anytime!</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="my-4 h5 font-weight-bold">Newsletter</div>
+              <p>You can trust us. we only send promo offers, not a single spam.</p>
+              <div class="container-fluid">
+                <div class="input-group">
+                  <input type="email" placeholder="email@example.com" required="" class="form-control"/>
+                  <div class="input-group-append">
+                    <button type="button" class="border btn btn-light">
+                      <svg viewBox="0 0 16 16" height="20" width="20" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="emotion-icon ex0cdmw0">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"></path>
+                        <path fill-rule="evenodd" d="M4 8a.5.5 0 00.5.5h5.793l-2.147 2.146a.5.5 0 00.708.708l3-3a.5.5 0 000-.708l-3-3a.5.5 0 10-.708.708L10.293 7.5H4.5A.5.5 0 004 8z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="my-3 py-3 border-top row">
+            <div class="col-lg-8">Copyright © 2020 | All rights reserved to Applanding.page</div>
+            <div class="text-right col-lg-4">
+              <a href="https://www.facebook.com/applanding.page" class="text-white d-inline-block mx-1">
+                <svg viewBox="0 0 24 24" height="28" width="28" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="emotion-icon ex0cdmw0">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                </svg>
+              </a>
+              <a href="https://twitter.com/ApplandingP" class="text-white d-inline-block mx-1">
+                <svg viewBox="0 0 24 24" height="28" width="28" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="emotion-icon ex0cdmw0">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                </svg>
+              </a>
+              <a href="https://www.linkedin.com/in/applanding-page-845a941ba/" class="text-white d-inline-block mx-1">
+                <svg viewBox="0 0 24 24" height="28" width="28" aria-hidden="true" focusable="false" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="emotion-icon ex0cdmw0">
+                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"></path>
+                  <rect width="4" height="12" x="2" y="9"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+</html>

@@ -17,8 +17,8 @@ export default function HomeHero() {
               Create app landing pages for your mobile apps
             </h1>
             <p className='my-5'>
-              Easily create feature rich, fast and responsive app landing pages for your
-              apps.
+              Easily create feature rich, fast and responsive app landing pages
+              for your apps.
               <br />
               Creating stunning screenshots for app store listings.
               <br />
@@ -31,7 +31,7 @@ export default function HomeHero() {
             >
               Sign Up
             </Button>
-            <Link href='/pricing' prefetch={false}>
+            <Link href='/pricing'>
               <Button variant='light' className='btn-alt2 mt-4 mt-sm-0'>
                 View Pricing
               </Button>

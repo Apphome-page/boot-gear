@@ -12,7 +12,10 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>App landing page for mobile apps, with free screenshots tools</title>
+        <title>
+          App landing page for mobile apps, with free screenshots tools
+        </title>
+        <meta name='robots' content='noindex' />
       </Head>
       <HomeHero />
       <HomeCards />

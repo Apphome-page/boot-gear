@@ -13,8 +13,10 @@ import {
   NavDropdown,
 } from 'react-bootstrap'
 import { GearFill as IconGear } from '@emotion-icons/bootstrap/GearFill'
-import { ClipboardData as IconDash } from '@emotion-icons/bootstrap/ClipboardData'
+import { PersonCircle as IconDash } from '@emotion-icons/bootstrap/PersonCircle'
 import { BoxArrowRight as IconOut } from '@emotion-icons/bootstrap/BoxArrowRight'
+import { Newspaper as IconPlan } from '@emotion-icons/bootstrap/Newspaper'
+import { CardHeading as IconWebsite } from '@emotion-icons/bootstrap/CardHeading'
 
 import { StoreContext } from '../../utils/storeProvider'
 
@@ -72,7 +74,7 @@ export default function Header() {
         sticky='top'
         className='shadow px-lg-5 py-lg-2'
       >
-        <Link href='/' prefetch={false}>
+        <Link href='/'>
           <div className='navbar-brand cursor-pointer'>AppLanding</div>
         </Link>
         <Navbar.Collapse id='basic-navbar-nav'>
@@ -80,7 +82,7 @@ export default function Header() {
             <NavDropdown alignRight title='Products'>
               {productLinks.map(({ name, path }, index) => (
                 <NavDropdown.Item key={index} as='div'>
-                  <Link href={path} passHref prefetch={false}>
+                  <Link href={path} passHref>
                     <Nav.Link
                       href={path}
                       className={router.pathname === path ? 'active' : ''}
@@ -93,7 +95,7 @@ export default function Header() {
             </NavDropdown>
             {headerLinks.map(({ name, path }, index) => (
               <NavItem key={index}>
-                <Link href={path} passHref prefetch={false}>
+                <Link href={path} passHref>
                   <NavLink
                     href={path}
                     className={router.pathname === path ? 'active' : ''}
@@ -105,21 +107,41 @@ export default function Header() {
             ))}
             {userAuth ? (
               <NavDropdown alignRight title={<IconGear size='20' />}>
-                <NavDropdown.Item as='div' className='px-3 mini text-muted'>
-                  {userAuth.displayName}
+                <NavDropdown.Item
+                  as='div'
+                  className='px-3 text-muted cursor-pointer'
+                >
+                  <Link href='/dashboard'>
+                    <div>
+                      <IconDash size='18' className='mr-2' />
+                      {userAuth.displayName}
+                    </div>
+                  </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item
                   as='div'
                   className='px-3 text-muted cursor-pointer'
                 >
-                  <Link href='/dashboard' prefetch={false}>
+                  <Link href='/dashboard/subscriptions'>
                     <div>
-                      <IconDash size='18' className='mr-2' />
-                      Dashboard
+                      <IconPlan size='18' className='mr-2' />
+                      My Subscriptions
                     </div>
                   </Link>
                 </NavDropdown.Item>
+                <NavDropdown.Item
+                  as='div'
+                  className='px-3 text-muted cursor-pointer'
+                >
+                  <Link href='/dashboard/websites'>
+                    <div>
+                      <IconWebsite size='18' className='mr-2' />
+                      My Websites
+                    </div>
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
                 <NavDropdown.Item
                   as='div'
                   className='px-3 text-danger cursor-pointer'
