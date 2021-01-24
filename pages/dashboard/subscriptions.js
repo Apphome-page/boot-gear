@@ -1,6 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import DashboardProfile from '../../pageComponents/Dashboard/profile'
-import DashboardSecurity from '../../pageComponents/Dashboard/security'
+import DashboardSubscriptions from '../../pageComponents/Dashboard/subscriptions'
 import DashboardProducts from '../../pageComponents/Dashboard/products'
 
 import AuthWrapper from '../../components/AuthWrapper'
@@ -8,14 +7,13 @@ import { FAQList } from '../../components/FAQ'
 
 import faqList from '../../pageData/dashboard/faq.json'
 
-export default function Dashboard() {
+export default function Subscriptions() {
   return (
     <AuthWrapper placeholder={<Container className='min-vh-100' />}>
       <Container fluid className='min-vh-100 pt-5 pb-3'>
         <Row>
           <Col lg={8} className=''>
-            <DashboardProfile />
-            <DashboardSecurity />
+            <DashboardSubscriptions />
           </Col>
           <Col lg={4}>
             <DashboardProducts />

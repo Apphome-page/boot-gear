@@ -19,7 +19,7 @@ export default function WebsiteDetails({
         alt=''
       />
       <Media.Body className='w-75'>
-        <Link href={webLink} prefetch={false}>
+        <Link href={webLink}>
           <div className='cursor-pointer'>
             <p className='m-0 lead'>{appName}</p>
             <p className='mini text-truncate'>{appDescription}</p>

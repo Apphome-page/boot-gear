@@ -11,12 +11,12 @@ export default function HomeShowcase() {
               Want to create a landing page for your mobile app?
             </p>
             <p>
-              Your app is awesome. It needs an awesome landing page. Create it using
-              applanding.page. We have both paid and free plans. If you wish to
-              host it on your custom domain, you can use our paid plans, or just
-              host it on applanding.page for free
+              Your app is awesome. It needs an awesome landing page. Create it
+              using applanding.page. We have both paid and free plans. If you
+              wish to host it on your custom domain, you can use our paid plans,
+              or just host it on applanding.page for free
             </p>
-            <Link href='/app-website-builder' prefetch={false}>
+            <Link href='/app-website-builder'>
               <Button variant='light' className='my-5 btn-alt'>
                 Browse free Demo
               </Button>
