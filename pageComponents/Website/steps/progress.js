@@ -21,7 +21,7 @@ export default function ProgressStatus({ activeIndex }) {
     appRating,
     appTitle,
     appVideo,
-  } = useUserData(`sites/${webEdit}`) || {}
+  } = useUserData(`sites/${webEdit}`)
   useEffect(() => {
     modContext({
       appAbout,
