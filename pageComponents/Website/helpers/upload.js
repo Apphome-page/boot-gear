@@ -1,7 +1,12 @@
-import renderTemplate from './index'
+import keyValidate from './keyValidate'
+import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 
-export default async function upload(firebase, userId, appKey, templateProps) {
+export default async function upload(
+  firebase,
+  appKey,
+  { templateProps, userId = firebase.auth().currentUser } = {}
+) {
   await removeWebsite({
     firebase,
     webKey: appKey,
@@ -15,38 +20,25 @@ export default async function upload(firebase, userId, appKey, templateProps) {
   const storageRef = firebase.storage().ref(storagePath)
   const databaseRef = firebase.database().ref(databasePath)
 
-  // 1. User Limit
-  const userSitesPromise = await firebase
-    .database()
-    .ref(`users/${userId}/sites`)
-    .once('value')
-  const userSites = userSitesPromise.val() || {}
-  delete userSites[appKey]
-
-  // 2. Path is accessible || User Owns Path
-  const snapshot = await databaseRef.once('value')
-  const { timestamp: userWebsite } = snapshot.val() || {}
-  let freeWebsitePath = true
-  try {
-    const {
-      customMetadata: { owner },
-    } = await storageRef.getMetadata()
-    freeWebsitePath = !owner || owner === userId
-  } catch (e) {
-    // Path Does not exist
-  }
-
-  // EXIT: Already owns 1 Website || Path is inaccessible
-  if (Object.keys(userSites).length > 0) {
-    window.alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
-    return
-  }
-  if (!(freeWebsitePath || userWebsite)) {
-    window.alert(`${appKey} is already taken`)
+  const keyValidated = await keyValidate(firebase, appKey, { userId })
+  if (!keyValidated) {
     return
   }
 
-  const { appIcon, appScreenshot } = templateProps
+  const {
+    appAbout,
+    appAddress,
+    appAndroid,
+    appDescription,
+    appDownloads,
+    appIcon,
+    appIos,
+    appName,
+    appRating,
+    appScreenshot,
+    appTitle,
+    appVideo,
+  } = templateProps
   const appIconName = appIcon.name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
   const appIconPath = `public/${appKey}/bin/${appIconName}`
   const appScreenshotName = appScreenshot.name
@@ -77,8 +69,18 @@ export default async function upload(firebase, userId, appKey, templateProps) {
   firebase.storage().ref(appIconPath).put(appIcon, customMeta)
   firebase.storage().ref(appScreenshotPath).put(appScreenshot, customMeta)
   // Update ownership
+
   await databaseRef.set({
-    ...templateProps,
+    appAbout,
+    appAddress,
+    appAndroid,
+    appDescription,
+    appDownloads,
+    appIos,
+    appName,
+    appRating,
+    appTitle,
+    appVideo,
     appIcon: appIconPath,
     appScreenshot: appScreenshotPath,
     timestamp: new Date().getTime(),
