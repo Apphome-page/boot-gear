@@ -86,7 +86,7 @@ export default async function upload(
 
   // Compress & Upload Screenshot
   const ScreenshotPromise = compress
-    .compress([appIcon], {
+    .compress([appScreenshot], {
       size: 2,
       quality: 0.75,
       maxWidth: 720,

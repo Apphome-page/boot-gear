@@ -39,13 +39,6 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
           PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
-      - name: Clean Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: functions:delete pabblyEvent userSync domainVerify payValidate domainSetup domainRemove --force
-        env:
-          FIREBASE_TOKEN: ${{ secrets.BETA_FIREBASE_TOKEN }}
-          PROJECT_ID : ${{ secrets.BETA_FIREBASE_PROJECT}}
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
