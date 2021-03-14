@@ -16,6 +16,7 @@
       crossorigin="anonymous"
     />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="{{=it.SITE_URL}}"/>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap"
       rel="stylesheet"
@@ -103,7 +104,7 @@
       <nav id="nav" class="container py-3 navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand flex-shrink-0" href="#">
           <img
-            src="./bin/{{=it.appIconName}}"
+            src="{{=it.SITE_URL}}/{{=it.appKey}}/bin/{{=it.appIconName}}"
             width="30"
             height="30"
             class="d-inline-block align-top"
@@ -161,7 +162,7 @@
           <div class="col-lg-6">
             <img
               loading="lazy"
-              src="./bin/{{=it.appScreenshotName}}"
+              src="{{=it.SITE_URL}}/{{=it.appKey}}/bin/{{=it.appScreenshotName}}"
               alt=""
               width="100%"
             />

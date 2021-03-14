@@ -4,7 +4,8 @@ import { useRouter } from 'next/router'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
-import uploadWebsite from '../helpers/upload'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
 
 const createObjectURI = (url) => {
   let returnObj = null
@@ -42,15 +43,16 @@ export default function Step() {
     updateStore({ processing: true })
 
     try {
+      const { default: uploadWebsite } = await import('../helpers/upload')
       await uploadWebsite(firebase, templateProps.appKey, {
         templateProps,
         userId,
       })
       window.alert(
-        `Your website is generated!\nVisit your website at: https://applanding.page/${templateProps.appKey}`
+        `Your website is generated!\nVisit your website at: ${SITE_URL}/${templateProps.appKey}`
       )
       router.push('/dashboard/websites')
-      window.open(`https://applanding.page/${templateProps.appKey}`, '_blank')
+      window.open(`${SITE_URL}/${templateProps.appKey}`, '_blank')
     } catch (e) {
       window.alert('Something went wrong while updating your website.')
     }
