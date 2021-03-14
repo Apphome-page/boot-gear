@@ -13,6 +13,7 @@
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
       crossorigin="anonymous"
     />
+    <link rel="preconnect" href="{{=it.SITE_URL}}"/>
     <style>
       .min-vh-50 {
         min-height: 50vh;
@@ -98,7 +99,7 @@
       <div class="container py-3 navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand flex-shrink-0" href="#">
           <img
-            src="./bin/{{=it.appIconName}}"
+            src="{{=it.SITE_URL}}/{{=it.appKey}}/bin/{{=it.appIconName}}"
             width="30"
             height="30"
             class="d-inline-block align-top"
@@ -164,7 +165,7 @@
           <div class="col-lg-6">
             <img
               loading="lazy"
-              src="./bin/{{=it.appScreenshotName}}"
+              src="{{=it.SITE_URL}}/{{=it.appKey}}/bin/{{=it.appScreenshotName}}"
               alt=""
               width="100%"
             />

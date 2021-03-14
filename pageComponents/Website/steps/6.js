@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
-import uploadWebsite from '../helpers/upload'
 
 const createObjectURI = (url) => {
   let returnObj = null
@@ -42,6 +41,7 @@ export default function Step() {
     updateStore({ processing: true })
 
     try {
+      const { default: uploadWebsite } = await import('../helpers/upload')
       await uploadWebsite(firebase, templateProps.appKey, {
         templateProps,
         userId,
@@ -52,6 +52,7 @@ export default function Step() {
       router.push('/dashboard/websites')
       window.open(`https://applanding.page/${templateProps.appKey}`, '_blank')
     } catch (e) {
+      console.error(e)
       window.alert('Something went wrong while updating your website.')
     }
     updateStore({ processing: false })

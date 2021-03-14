@@ -16,7 +16,7 @@ import { StoreContext } from '../helpers/store'
 export default function Step() {
   const appFormRef = useRef(null)
   const [
-    { nextAction, prevAction, appTitle, appDescription },
+    { theme, nextAction, prevAction, appTitle, appDescription },
     updateStore,
   ] = useContext(StoreContext)
   const nextBtnAction = useCallback(
@@ -36,6 +36,7 @@ export default function Step() {
           appIcon: formIcon.files[0],
           appScreenshot: formScreenshot.files[0],
         })
+        console.log({ theme })
         nextAction()
       }
     },

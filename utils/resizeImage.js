@@ -1,7 +1,9 @@
 import Pica from 'pica'
 
 export default function ResizeImage({ blob, extension, size, scale, base }) {
-  const pica = Pica()
+  const pica = new Pica({
+    features: ['all'],
+  })
   return new Promise((resolve) => {
     const img = new Image()
     const toCanvas = document.createElement('canvas')
@@ -35,7 +37,7 @@ export default function ResizeImage({ blob, extension, size, scale, base }) {
           unsharpThreshold: 2,
           alpha: true,
         })
-        .then((result) => pica.toBlob(result, exportType, 0.9))
+        .then((result) => pica.toBlob(result, exportType, 0.8))
         .then(resolve)
     })
     img.setAttribute('src', blob)

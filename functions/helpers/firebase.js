@@ -94,10 +94,10 @@ const storageFiles = (admin) => async (storagePrefixKey) => {
         .then((downloadResponse) => downloadResponse[0])
         .then(async (downloadBlob) => {
           const [{ name }] = await storageItem.getMetadata()
-          const storageKey = name.replace(
-            new RegExp(`^${storagePrefixKey}`),
-            ''
-          )
+          const storageKey =
+            name.replace(new RegExp(`^${storagePrefixKey}`), '') ||
+            name.replace(/.*\/(.*?)$/, '$1') ||
+            name
           storageFilesMap[storageKey] = downloadBlob
           return true
         })

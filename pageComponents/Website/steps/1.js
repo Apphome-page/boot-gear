@@ -15,12 +15,11 @@ import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
-import keyValidate from '../helpers/keyValidate'
 
 const THEMES = [
   {
-    key: 'bubble',
-    src: '/img/template/bubble.jpg',
+    key: 'gum',
+    src: '/img/template/gum.jpg',
   },
   {
     key: 'wave',
@@ -55,6 +54,8 @@ export default function Step() {
     const formElements = formRef.current.elements
     const formName = formElements.namedItem('appName').value
     const appKey = formName.replace(/\W/gi, '-').toLowerCase()
+
+    const { default: keyValidate } = await import('../helpers/keyValidate')
     const keyValidated = await keyValidate(firebase, appKey, { userId })
     if (!keyValidated) {
       updateStore({ processing: false })
@@ -66,6 +67,7 @@ export default function Step() {
       theme: selectedTheme,
       processing: false,
     })
+    console.log({ theme, selectedTheme })
     nextAction()
   }, [userId, firebase, updateStore, selectedTheme, nextAction, modStore])
   const themeBtnAction = useCallback(
