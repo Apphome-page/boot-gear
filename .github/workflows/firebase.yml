@@ -1,5 +1,9 @@
 name: CLEAN_FIREBASE
 
+on:
+  push:
+    branches: [ clean ]
+
 jobs:
   deploy:
     name: DEPLOY_FIREBASE
