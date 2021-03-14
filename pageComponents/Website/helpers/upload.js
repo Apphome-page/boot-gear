@@ -1,13 +1,19 @@
-import renderTemplate from './index'
+import Compress from 'compress.js'
+import keyValidate from './keyValidate'
+import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 
-export default async function upload(firebase, userId, appKey, templateProps) {
-  await removeWebsite({
-    firebase,
-    webKey: appKey,
-    removeDomain: false,
-    removeStorage: true,
-  })
+export default async function upload(
+  firebase,
+  appKey,
+  { templateProps, userId = firebase.auth().currentUser } = {}
+) {
+  const keyValidated = await keyValidate(firebase, appKey, { userId })
+  if (!keyValidated) {
+    return
+  }
+
+  const compress = new Compress()
 
   const storagePath = `public/${appKey}/index.html`
   const databasePath = `users/${userId}/sites/${appKey}`
@@ -15,38 +21,20 @@ export default async function upload(firebase, userId, appKey, templateProps) {
   const storageRef = firebase.storage().ref(storagePath)
   const databaseRef = firebase.database().ref(databasePath)
 
-  // 1. User Limit
-  const userSitesPromise = await firebase
-    .database()
-    .ref(`users/${userId}/sites`)
-    .once('value')
-  const userSites = userSitesPromise.val() || {}
-  delete userSites[appKey]
-
-  // 2. Path is accessible || User Owns Path
-  const snapshot = await databaseRef.once('value')
-  const { timestamp: userWebsite } = snapshot.val() || {}
-  let freeWebsitePath = true
-  try {
-    const {
-      customMetadata: { owner },
-    } = await storageRef.getMetadata()
-    freeWebsitePath = !owner || owner === userId
-  } catch (e) {
-    // Path Does not exist
-  }
-
-  // EXIT: Already owns 1 Website || Path is inaccessible
-  if (Object.keys(userSites).length > 0) {
-    window.alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
-    return
-  }
-  if (!(freeWebsitePath || userWebsite)) {
-    window.alert(`${appKey} is already taken`)
-    return
-  }
-
-  const { appIcon, appScreenshot } = templateProps
+  const {
+    appAbout = '',
+    appAddress = '',
+    appAndroid = '',
+    appDescription = '',
+    appDownloads = '',
+    appIcon,
+    appIos = '',
+    appName,
+    appRating = '',
+    appScreenshot,
+    appTitle = '',
+    appVideo = '',
+  } = templateProps
   const appIconName = appIcon.name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
   const appIconPath = `public/${appKey}/bin/${appIconName}`
   const appScreenshotName = appScreenshot.name
@@ -55,13 +43,22 @@ export default async function upload(firebase, userId, appKey, templateProps) {
   const appScreenshotPath = `public/${appKey}/bin/${appScreenshotName}`
   const customMeta = {
     // cacheControl: 'public,max-age=300',
+    // Update ownership
     customMetadata: {
       owner: userId,
     },
   }
 
+  // Remove Older Data
+  await removeWebsite({
+    firebase,
+    webKey: appKey,
+    removeDomain: false,
+    removeStorage: true,
+  })
+
   // Update file in storage
-  await storageRef.putString(
+  const HTMLPromise = storageRef.putString(
     renderTemplate({
       ...templateProps,
       appKey,
@@ -74,13 +71,48 @@ export default async function upload(firebase, userId, appKey, templateProps) {
       contentType: 'text/html; charset=utf-8',
     }
   )
-  firebase.storage().ref(appIconPath).put(appIcon, customMeta)
-  firebase.storage().ref(appScreenshotPath).put(appScreenshot, customMeta)
-  // Update ownership
-  await databaseRef.set({
-    ...templateProps,
+
+  // Compress & Upload Icon
+  const IconPromise = compress
+    .compress([appIcon], {
+      size: 1,
+      quality: 0.75,
+      maxWidth: 256,
+      maxHeight: 256,
+      resize: true,
+    })
+    .then(([{ data, ext }]) => Compress.convertBase64ToFile(data, ext))
+    .then((file) => firebase.storage().ref(appIconPath).put(file, customMeta))
+
+  // Compress & Upload Screenshot
+  const ScreenshotPromise = compress
+    .compress([appIcon], {
+      size: 2,
+      quality: 0.75,
+      maxWidth: 720,
+      maxHeight: 720,
+      resize: true,
+    })
+    .then(([{ data, ext }]) => Compress.convertBase64ToFile(data, ext))
+    .then((file) =>
+      firebase.storage().ref(appScreenshotPath).put(file, customMeta)
+    )
+
+  const DBPromise = databaseRef.set({
+    appAbout,
+    appAddress,
+    appAndroid,
+    appDescription,
+    appDownloads,
+    appIos,
+    appName,
+    appRating,
+    appTitle,
+    appVideo,
     appIcon: appIconPath,
     appScreenshot: appScreenshotPath,
     timestamp: new Date().getTime(),
   })
+
+  await Promise.all([HTMLPromise, IconPromise, ScreenshotPromise, DBPromise])
 }

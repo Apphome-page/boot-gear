@@ -1,13 +1,11 @@
 import { useCallback, useContext, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 
-import useUserData from '../../utils/useUserData'
 import { StoreContext } from '../../utils/storeProvider'
 
 export default function Profile() {
   const formRef = useRef(null)
   const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
-  const { plan: { title: planTitle } = {} } = useUserData()
   const { displayName, email } = userAuth || {}
   const actionUpdate = useCallback(async () => {
     const {

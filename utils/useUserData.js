@@ -27,5 +27,5 @@ export default function useUserData(refKey = '') {
     }
   }, [firebase, refKey, userId])
 
-  return userData
+  return userData || {}
 }

@@ -1,10 +1,16 @@
 import { useContext, useState } from 'react'
 import { Button, Spinner, ProgressBar } from 'react-bootstrap'
 import { FileEarmarkArrowDown as Download } from '@emotion-icons/bootstrap/FileEarmarkArrowDown'
-
-import Subscription from '../../../../components/Subscription'
+import dynamic from 'next/dynamic'
 
 import { MockupContext } from '../../helpers/MockProvider'
+
+const Subscription = dynamic(
+  () => import('../../../../components/Subscription'),
+  {
+    ssr: false,
+  }
+)
 
 export default function Actions() {
   const { eventSave } = useContext(MockupContext)

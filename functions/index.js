@@ -145,6 +145,7 @@ exports.userSync = functions.https.onRequest((request, response) => {
         } = await admin.auth().getUser(request.user.uid)
 
         let { customer_id: customerId } = customClaims || {}
+        // Get customerID from realtime-database
         if (!customerId) {
           const customerIdSnap = await admin
             .database()
@@ -152,13 +153,14 @@ exports.userSync = functions.https.onRequest((request, response) => {
             .once('value')
           customerId = customerIdSnap.val()
         }
+        // TODO: Get customerID from Pabbly
+        // Create new Pabbly customerID
         if (!customerId) {
           const {
             data: { id },
           } = await PABBLY_API_CREATE_CUSTOMER(displayName, email)
           customerId = id
         }
-
         await Promise.all([
           // Sync User details to Pabbly
           PABBLY_API_UPDATE_CUSTOMER(customerId, {
@@ -367,7 +369,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         await siteDataRef.child('webHost').set(bucketHost)
 
         // Fetch All assets from firebase bucket at websiteKey
-        const storagePrefixKey = `public/${webKey}/`
+        const storagePrefixKey = `public/${webKey}/index.html`
         const storageFilesMap = await storageFiles(storagePrefixKey)
         // Push All assets at S3 Bucket
         await putHostedBucket(bucketName, storageFilesMap)
