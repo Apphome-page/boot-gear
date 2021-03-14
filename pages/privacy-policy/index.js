@@ -12,11 +12,11 @@ export default function PrivacyPolicy() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         <p>
-          We, <em>Applandingpage LLP</em>, registered under the provisions of the
-          Limited Liability Partnership Act 2008, having its registered office
-          at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245 304,
-          INDIA&quot; represented by its Directors, hereinafter referred to as
-          the &quot;<b>FIRM</b>&quot; (where such expression shall, unless
+          We, <em>Applandingpage LLP</em>, registered under the provisions of
+          the Limited Liability Partnership Act 2008, having its registered
+          office at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245
+          304, INDIA&quot; represented by its Directors, hereinafter referred to
+          as the &quot;<b>FIRM</b>&quot; (where such expression shall, unless
           repugnant to the context thereof, be deemed to include its respective
           legal heirs, representatives, administrators, permitted successors and
           assigns).
@@ -27,8 +27,8 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           This privacy policy contains information about the Website &nbsp;
-          <a href='https://applanding.page'>https://applanding.page</a> (hereinafter
-          referred to as the &quot;<b>Platforms</b>&quot;).
+          <a href='https://applanding.page'>https://applanding.page</a>{' '}
+          (hereinafter referred to as the &quot;<b>Platforms</b>&quot;).
         </p>
         <p>
           In order to provide You with Our uninterrupted use of services, We may
