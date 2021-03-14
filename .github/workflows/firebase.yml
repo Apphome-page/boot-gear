@@ -1,0 +1,44 @@
+name: CLEAN_FIREBASE
+
+jobs:
+  deploy:
+    name: DEPLOY_FIREBASE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Firebase Dependencies
+        run: npm install
+        working-directory: functions
+      - name: Firebase Config
+        run: cp ./firebase.prod.json ./firebase.json
+      - name: Load dotenv
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .env.production
+      - name: Set Firebase Config
+        uses: w9jds/firebase-action@master
+        with:
+          args: functions:config:set aws.id=${{ secrets.PROD_AWS_ID }} aws.key=${{ secrets.PROD_AWS_KEY }} cf.id=${{secrets.PROD_CF_ID}} cf.email=${{secrets.PROD_CF_EMAIL}} cf.key=${{secrets.PROD_CF_KEY}} cf.token=${{secrets.PROD_CF_TOKEN}} pabbly.username=${{ secrets.PROD_PABBLY_USERNAME }} pabbly.password=${{ secrets.PROD_PABBLY_PASSWORD }} pabbly.silver=$NEXT_PUBLIC_PABBLY_PLAN_SILVER pabbly.gold=$NEXT_PUBLIC_PABBLY_PLAN_GOLD
+        env:
+          FIREBASE_TOKEN: ${{ secrets.PROD_FIREBASE_TOKEN }}
+          PROJECT_ID : ${{ secrets.PROD_FIREBASE_PROJECT}}
+      - name: Clean Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: functions:delete pabblyEvent userSync domainVerify payValidate domainSetup domainRemove --force
+        env:
+          FIREBASE_TOKEN: ${{ secrets.PROD_FIREBASE_TOKEN }}
+          PROJECT_ID : ${{ secrets.PROD_FIREBASE_PROJECT}}
