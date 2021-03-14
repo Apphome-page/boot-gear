@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           This privacy policy contains information about the Website &nbsp;
-          <a href='https://applanding.page'>https://applanding.page</a>{' '}
+          <a href='https://applanding.page'>https://applanding.page</a>
           (hereinafter referred to as the &quot;<b>Platforms</b>&quot;).
         </p>
         <p>
