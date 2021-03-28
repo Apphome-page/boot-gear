@@ -5,6 +5,8 @@ import { ProgressBar } from 'react-bootstrap'
 import { StoreContext } from '../../../utils/storeProvider'
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
 
+import { ProgressButton, ProgressStart, ProgressEnd } from '../style'
+
 export default function ProgressStatus({ activeIndex }) {
   const router = useRouter()
 
@@ -50,15 +52,61 @@ export default function ProgressStatus({ activeIndex }) {
   }, [modContext, userData.timestamp])
 
   return (
-    <ProgressBar
-      now={activeIndex + 1}
-      min={0}
-      max={maxSlide + 1}
-      srOnly
-      animated={processing}
-      variant={processing ? 'warning' : 'success'}
-      className='rounded-0'
-      style={{ height: '4px' }}
-    />
+    <div className='position-relative my-3 mx-5'>
+      <ProgressBar
+        now={activeIndex}
+        min={0}
+        max={maxSlide}
+        srOnly
+        animated={processing}
+        variant={processing ? 'warning' : 'success'}
+        className='rounded-0'
+        style={{ height: '4px' }}
+      />
+      {(() => {
+        const StageButtons = [
+          <ProgressStart
+            key={0}
+            size={32}
+            className='position-absolute rounded-circle border border-light bg-light text-success'
+          />,
+        ]
+        for (let i = 1; i < maxSlide; i += 1) {
+          const isActive = i < activeIndex + 1
+          StageButtons.push(
+            <ProgressButton
+              key={i}
+              size={32}
+              className={`position-absolute rounded-circle border border-light ${
+                isActive
+                  ? 'cursor-pointer bg-light text-success'
+                  : 'bg-light text-light'
+              }`}
+              currentIndex={i}
+              maxIndex={maxSlide}
+              onClick={
+                isActive
+                  ? () => {
+                      setActiveSlide(i)
+                    }
+                  : null
+              }
+            >
+              Step {i}
+            </ProgressButton>
+          )
+        }
+        const isLast = activeIndex === maxSlide
+        StageButtons.push(
+          <ProgressEnd
+            size={isLast ? 42 : 32}
+            className={`position-absolute rounded-circle border border-light ${
+              isLast ? 'bg-light text-success' : 'bg-light text-light'
+            }`}
+          />
+        )
+        return StageButtons
+      })()}
+    </div>
   )
 }
