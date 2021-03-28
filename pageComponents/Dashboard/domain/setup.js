@@ -8,10 +8,16 @@ import {
   Spinner,
 } from 'react-bootstrap'
 import fetch from 'cross-fetch'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../../utils/storeProvider'
 
 const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
+
+const ExceptionTags = {
+  section: 'Dashboard',
+  subSection: 'Domain',
+}
 
 export default function DomainSetup({ webKey }) {
   const [{ firebase }] = useContext(StoreContext)
@@ -54,10 +60,14 @@ export default function DomainSetup({ webKey }) {
           text: 'Custom Domain successfully added.',
           type: 'info',
         })
-      } catch (e) {
+      } catch (err) {
         setAlertData({
           text: 'Something went wrong.',
           type: 'danger',
+        })
+        captureExceptionSentry(err, (scope) => {
+          scope.setTags(ExceptionTags)
+          return scope
         })
       }
       setProcessing(false)

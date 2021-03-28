@@ -34,10 +34,11 @@ const THEMES = [
 export default function Step() {
   const formRef = useRef(null)
   const [{ firebase, userAuth }, modStore] = useContext(HeadContext)
-  const [{ nextAction, prevAction, theme, appName }, updateStore] = useContext(
-    StoreContext
-  )
-  const [selectedTheme, setSelectedTheme] = useState(theme || THEMES[0].key)
+  const [
+    { nextAction, prevAction, appTheme, appName },
+    updateStore,
+  ] = useContext(StoreContext)
+  const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
   const userId = userAuth && userAuth.uid
 
@@ -50,26 +51,41 @@ export default function Step() {
     if (!formCurrent || !formCurrent.reportValidity()) {
       return
     }
+
     updateStore({ processing: true })
+    modStore({ loadingPop: true })
+
     const formElements = formRef.current.elements
     const formName = formElements.namedItem('appName').value
     const appKey = formName.replace(/\W/gi, '-').toLowerCase()
 
     const { default: keyValidate } = await import('../helpers/keyValidate')
-    const keyValidated = await keyValidate(firebase, appKey, { userId })
+    const {
+      status: keyValidated = false,
+      text: keyText = '',
+      data: keyData = {},
+    } = await keyValidate(firebase, appKey, { userId })
+
+    modStore({ loadingPop: false })
     if (!keyValidated) {
       updateStore({ processing: false })
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: 10,
+        alertText: keyText,
+      })
       return
     }
     updateStore({
+      ...keyData,
       appKey,
       appName: formName,
-      theme: selectedTheme,
+      appTheme: selectedTheme,
       processing: false,
     })
-    console.log({ theme, selectedTheme })
     nextAction()
   }, [userId, firebase, updateStore, selectedTheme, nextAction, modStore])
+
   const themeBtnAction = useCallback(
     ({
       target: {
@@ -82,6 +98,7 @@ export default function Step() {
     },
     [setSelectedTheme]
   )
+
   return (
     <Form ref={formRef}>
       <Container fluid>

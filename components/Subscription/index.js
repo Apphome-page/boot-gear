@@ -24,6 +24,7 @@ const addSubscriber = async (firebase, email) => {
       location: window.location.href,
       timestamp: new Date().getTime(),
     })
+  // TODO: ALERT
   window.alert('Thank You! for subscribing.')
 }
 

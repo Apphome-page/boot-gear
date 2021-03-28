@@ -1,44 +1,57 @@
+import getPlanDetails from '../../../utils/getPlanDetails'
+
 export default async function keyValidate(
   firebase,
   appKey,
   { userId = firebase.auth().currentUser } = {}
 ) {
   const storagePath = `public/${appKey}/index.html`
-  const databasePath = `users/${userId}/sites/${appKey}`
+  const databasePathPrefix = `users/${userId}`
 
-  const storageRef = firebase.storage().ref(storagePath)
-  const databaseRef = firebase.database().ref(databasePath)
+  const storageInst = firebase.storage()
+  const databaseInst = firebase.database()
 
   // 1. User Limit
-  const userSitesPromise = await firebase
-    .database()
-    .ref(`users/${userId}/sites`)
+  const userSitesPromise = await databaseInst
+    .ref(databasePathPrefix)
     .once('value')
-  const userSites = userSitesPromise.val() || {}
-  delete userSites[appKey]
+  const { plan_id: planId, sites: userSites = {} } =
+    userSitesPromise.val() || {}
+  const userWebsite = (userSites || {})[appKey] || {}
+  const { webLimit } = getPlanDetails(planId)
+  if (userSites) {
+    delete userSites[appKey]
+  }
+
+  // EXIT: Already owns 1 Website
+  if (Object.keys(userSites).length >= webLimit) {
+    return {
+      status: false,
+      text: `You already have ${webLimit} websites hosted.`,
+    }
+  }
 
   // 2. Path is accessible || User Owns Path
-  const snapshot = await databaseRef.once('value')
-  const { timestamp: userWebsite } = snapshot.val() || {}
   let freeWebsitePath = true
   try {
     const {
       customMetadata: { owner },
-    } = await storageRef.getMetadata()
+    } = await storageInst.ref(storagePath).getMetadata()
     freeWebsitePath = !owner || owner === userId
   } catch (e) {
     // Path Does not exist
   }
 
-  // EXIT: Already owns 1 Website || Path is inaccessible
-  if (Object.keys(userSites).length > 0) {
-    window.alert(`You already have 1 website hosted: ${Object.keys(userSites)}`)
-    return false
-  }
-  if (!(freeWebsitePath || userWebsite)) {
-    window.alert(`${appKey} is already taken`)
-    return false
+  // Exit: Path is inaccessible
+  if (!(freeWebsitePath || userWebsite.timestamp)) {
+    return {
+      status: false,
+      text: `${appKey} is already taken`,
+    }
   }
 
-  return true
+  return {
+    status: true,
+    data: userWebsite,
+  }
 }

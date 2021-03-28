@@ -1,53 +1,54 @@
-import { useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { ProgressBar } from 'react-bootstrap'
 
-import useUserData from '../../../utils/useUserData'
-import { StoreContext } from '../helpers/store'
+import { StoreContext } from '../../../utils/storeProvider'
+import { StoreContext as BuilderStoreContext } from '../helpers/store'
 
 export default function ProgressStatus({ activeIndex }) {
-  const {
-    query: { edit: webEdit },
-  } = useRouter()
-  const [{ processing, maxSlide }, modContext] = useContext(StoreContext)
-  const {
-    appAbout,
-    appAddress,
-    appAndroid,
-    appDescription,
-    appDownloads,
-    appIos,
-    appName,
-    appRating,
-    appTitle,
-    appVideo,
-  } = useUserData(`sites/${webEdit}`)
+  const router = useRouter()
+
+  const [userData, setUserData] = useState({})
+
+  const [{ firebase, userAuth }] = useContext(StoreContext)
+  const [templateProps, modContext] = useContext(BuilderStoreContext)
+
+  const userId = userAuth && userAuth.uid
+  const { appKey, processing, maxSlide, setActiveSlide } = templateProps
+
   useEffect(() => {
-    modContext({
-      appAbout,
-      appAddress,
-      appAndroid,
-      appDescription,
-      appDownloads,
-      appIos,
-      appName,
-      appRating,
-      appTitle,
-      appVideo,
-    })
-  }, [
-    appAbout,
-    appAddress,
-    appAndroid,
-    appDescription,
-    appDownloads,
-    appIos,
-    appName,
-    appRating,
-    appTitle,
-    appVideo,
-    modContext,
-  ])
+    let userDataRef = null
+    if (userId && router.query.webEdit) {
+      userDataRef = firebase
+        .database()
+        .ref(`users/${userId}/sites/${router.query.webEdit}`)
+      userDataRef.once('value').then((snap) => {
+        const snapVal = snap.val() || {}
+        setUserData(snapVal)
+      })
+    }
+    return () => {
+      if (userDataRef) {
+        userDataRef.off()
+      }
+    }
+  }, [firebase, userId, router.query.webEdit])
+
+  useEffect(() => {
+    // TODO: Validate Stage and push to appropriate place
+    if (!appKey) {
+      setActiveSlide(0)
+    } else if (router.query.webStep) {
+      setActiveSlide(parseInt(router.query.webStep, 10))
+    }
+  }, [appKey, setActiveSlide, router.query.webStep])
+
+  // Update All Values individually else looping occurs
+  useEffect(() => {
+    modContext(userData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modContext, userData.timestamp])
+
   return (
     <ProgressBar
       now={activeIndex + 1}

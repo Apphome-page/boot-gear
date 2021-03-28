@@ -12,14 +12,13 @@ import { Hero } from '../../pageComponents/Website/style'
 import faqList from '../../pageData/app-website-builder/faq.json'
 
 export default function Website() {
-  const { query: { edit: websiteKey = '' } = {} } = useRouter()
+  const { query: { webEdit = '' } = {} } = useRouter()
 
   const userData = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
 
   const initTemplateProps =
-    (websiteKey && userData && userData.sites && userData.sites[websiteKey]) ||
-    {}
+    (webEdit && userData && userData.sites && userData.sites[webEdit]) || {}
 
   return (
     <>
@@ -44,14 +43,14 @@ export default function Website() {
       <Hero className='min-vh-100 pt-3 pb-5'>
         <Container>
           <h1 className='display-4 py-3'>App website builder</h1>
-          {websiteKey && userSites.includes(websiteKey) ? (
+          {webEdit && userSites.includes(webEdit) ? (
             <div className='lead border-bottom lead my-2'>
               Editing{' '}
               <a
-                href={`/${websiteKey}`}
+                href={`/${webEdit}`}
                 className='text-decoration-none text-white-50'
               >
-                {websiteKey}
+                {webEdit}
               </a>
             </div>
           ) : (

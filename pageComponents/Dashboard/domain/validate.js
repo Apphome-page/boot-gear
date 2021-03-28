@@ -12,7 +12,7 @@ const ExceptionTags = {
   subSection: 'Domain',
 }
 
-export default function DomainVerify({
+export default function DomainNameServer({
   webKey,
   webData: { webDomain = '', webNameservers = [] },
 }) {
@@ -43,13 +43,12 @@ export default function DomainVerify({
         text:
           verifyData.active && !verifyData.paused
             ? 'Custom Domain Validated!'
-            : 'Please verify the nameservers, or wait sometime before verifying again.',
+            : 'Something went wrong. Remove the domain & try again.',
         type: 'info',
       })
     } catch (err) {
       setAlertData({
-        text:
-          'Something went wrong. Please verify your nameservers and try after a while.',
+        text: 'Something went wrong. Remove the domain & try again.',
         type: 'danger',
       })
       captureExceptionSentry(err, (scope) => {
@@ -64,13 +63,13 @@ export default function DomainVerify({
       <Row>
         <Col className='lead text-center'>
           <Alert variant='success'>
-            Your domain ({webDomain}) was added successfully.
+            Your domain ({webDomain}) is set up successfully.
           </Alert>
         </Col>
       </Row>
       <Row className='my-3'>
         <Col className='mini'>
-          Please add following Nameservers at your registrar.
+          Verify following Nameservers at your registrar.
         </Col>
       </Row>
       <Row className='align-items-center'>
@@ -89,7 +88,7 @@ export default function DomainVerify({
             {isProcessing ? (
               <Spinner animation='border' variant='light' size='sm' />
             ) : (
-              'Connect'
+              'Validate'
             )}
           </Button>
         </Col>

@@ -54,10 +54,6 @@ export default function HomeWebsite({ initProps = {} }) {
     })
   }, [router, setActiveSlide])
 
-  useEffect(() => {
-    setActiveSlide(parseInt(router.query.webStep || 0, 10))
-  }, [router.query.webStep])
-
   return (
     <WebStore
       store={{
@@ -66,6 +62,7 @@ export default function HomeWebsite({ initProps = {} }) {
         maxSlide: STEPS.length - 1,
         nextAction,
         prevAction,
+        setActiveSlide,
       }}
     >
       <Container>

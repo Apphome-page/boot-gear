@@ -1,14 +1,28 @@
+import { useContext, useEffect } from 'react'
 import { Button, Container, Row, Col } from 'react-bootstrap'
 import Link from 'next/link'
 
+import { StoreContext } from '../../../utils/storeProvider'
 import useUserData from '../../../utils/useUserData'
 
 import WebsiteDetails from './details'
 import WebsiteActions from './actions'
 
 export default function Website({ domainAction = () => {} }) {
+  const [, modStore] = useContext(StoreContext)
   const userData = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
+
+  useEffect(() => {
+    modStore({
+      loadingPop: userData.firstLaunch,
+    })
+    return () => {
+      modStore({
+        loadingPop: false,
+      })
+    }
+  }, [userData.firstLaunch, modStore])
 
   return (
     <>

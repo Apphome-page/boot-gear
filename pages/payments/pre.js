@@ -13,7 +13,7 @@ const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_GOLD
 
 export default function Payment() {
   const router = useRouter()
-  const [{ firebase }] = useContext(StoreContext)
+  const [{ firebase }, modStore] = useContext(StoreContext)
 
   const {
     query: { plan },
@@ -54,10 +54,14 @@ export default function Payment() {
       }
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
-      window.alert('Something went wrong. Please Sign in again to continue.')
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: -1,
+        alertText: 'Something went wrong. Please Sign in again to continue.',
+      })
       firebase.auth().signOut()
     }
-  }, [firebase, plan, router, uid])
+  }, [firebase, modStore, plan, router, uid])
 
   useEffect(() => {
     syncUser()

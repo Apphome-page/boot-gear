@@ -1,7 +1,13 @@
 import { useCallback, useContext, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../utils/storeProvider'
+
+const ExceptionTags = {
+  section: 'Dashboard',
+  subSection: 'Profile',
+}
 
 export default function Profile() {
   const formRef = useRef(null)
@@ -17,10 +23,18 @@ export default function Profile() {
         await userAuth.updateEmail(newEmail)
       } catch (err) {
         if (err.code === 'auth/requires-recent-login') {
-          window.alert('Please Sign in again to continue.')
           firebase.auth().signOut()
+          modStore({
+            alertTimeout: -1,
+            alertVariant: 'info',
+            alertText: 'Please Sign in again to continue.',
+          })
           return
         }
+        captureExceptionSentry(err, (scope) => {
+          scope.setTags(ExceptionTags)
+          return scope
+        })
       }
     }
     if (newDisplayName !== userAuth.displayName) {
@@ -29,9 +43,11 @@ export default function Profile() {
       })
     }
     modStore({
-      userAuth: firebase.auth().currentUser,
+      userAuth: firebase.auth().currentUser, // Is is necessary?
+      alertVariant: 'success',
+      alertTimeout: -1,
+      alertText: 'Profile Updated Successfully!',
     })
-    window.alert('Updated your Profile!')
   }, [firebase, modStore, userAuth])
   return (
     <>
