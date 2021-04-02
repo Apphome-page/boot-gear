@@ -1,11 +1,9 @@
 import { useContext, useCallback, useMemo } from 'react'
-import { Container, Row, Col, Image, Button, SafeAnchor } from 'react-bootstrap'
+import { Container, Row, Col, Button, Image } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
 
 const ExceptionTags = {
   section: 'Website-Builder',
@@ -23,6 +21,7 @@ export default function Step() {
     appTitle,
     appDescription,
     prevAction,
+    nextAction,
   } = templateProps
 
   const appIconURI = useMemo(() => {
@@ -60,31 +59,24 @@ export default function Step() {
     updateStore({ processing: false })
     modStore({
       loadingPop: false,
-      alertVariant: uploadSuccess ? 'success' : 'danger',
-      alertTimeout: -1,
-      alertText: uploadSuccess ? (
-        <>
-          Your website is generated!
-          <br />
-          Visit your website at:
-          <SafeAnchor
-            href={`${SITE_URL}/${templateProps.appKey}`}
-            className='px-1'
-          >
-            {SITE_URL}/{templateProps.appKey}
-          </SafeAnchor>
-        </>
-      ) : (
-        'Something went wrong.'
-      ),
+      ...(uploadSuccess
+        ? {}
+        : {
+            alertVariant: 'danger',
+            alertTimeout: -1,
+            alertText: 'Something went wrong, while updating your website.',
+          }),
     })
-  }, [firebase, modStore, templateProps, updateStore, userId])
+    if (uploadSuccess) {
+      nextAction()
+    }
+  }, [firebase, modStore, nextAction, templateProps, updateStore, userId])
 
   return (
     <Container fluid>
       <Row>
         <Col>
-          <Image src={appIconURI} thumbnail rounded />
+          {appIconURI ? <Image src={appIconURI} thumbnail rounded /> : ''}
         </Col>
         <Col>
           <p>

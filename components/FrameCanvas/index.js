@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Spinner } from 'react-bootstrap'
+import classNames from 'classnames'
 import debounce from 'lodash/debounce'
 
 import render from '../../utils/renderCanvas'
@@ -34,15 +35,20 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
 
   return (
     <div
-      className={`mx-2 d-inline-block position-relative${
-        className ? ` ${className}` : ''
-      }`}
+      className={classNames('mx-2', 'd-inline-block', 'position-relative', {
+        [className]: className,
+      })}
       style={{ height: `${height}px` }}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restProps}
     >
       <canvas ref={canvasRef} />
-      <CanvasLoader style={{ width }} className={isLoading ? '' : 'd-none'}>
+      <CanvasLoader
+        style={{ width }}
+        className={classNames({
+          'd-none': !isLoading,
+        })}
+      >
         <Spinner animation='border' variant='light' />
       </CanvasLoader>
     </div>

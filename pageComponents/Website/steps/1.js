@@ -4,14 +4,18 @@ import {
   Row,
   Col,
   Button,
-  Image,
   Form,
   FormControl,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import Image from 'next/image'
+import classNames from 'classnames'
+
 import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+
+import { ThemeImage } from '../style'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
@@ -157,20 +161,35 @@ export default function Step() {
             </OverlayTrigger>
           </Col>
         </Row>
-        <Row className='ml-3' onClick={themeBtnAction}>
-          {THEMES.map(({ key, src }) => (
-            <Col lg={6} className='py-3' key={key}>
-              <Image
-                src={src}
-                data-theme={key}
-                thumbnail
-                className={`cursor-pointer${
-                  selectedTheme === key ? ' border-warning shadow' : ''
-                }`}
-                style={{ borderWidth: '4px' }}
-              />
-            </Col>
-          ))}
+        <Row className='ml-3'>
+          <Col onClick={themeBtnAction}>
+            {THEMES.map(({ key, src }) => (
+              <ThemeImage
+                key={key}
+                className={classNames(
+                  'd-inline-flex',
+                  'm-1',
+                  'p-0',
+                  'border',
+                  'rounded',
+                  'cursor-pointer',
+                  'bg-light',
+                  {
+                    'border-warning': selectedTheme === key,
+                    shadow: selectedTheme === key,
+                  }
+                )}
+              >
+                <Image
+                  src={src}
+                  width='200'
+                  height='105'
+                  className='m-0 p-0'
+                  data-theme={key}
+                />
+              </ThemeImage>
+            ))}
+          </Col>
         </Row>
         <Row className='py-5'>
           <Col>

@@ -44,7 +44,16 @@ export function renderText(
 
 export function renderImage(
   context,
-  { url, posX, posY, rot = 0, width, height }
+  {
+    url,
+    width,
+    height,
+    posX,
+    posY,
+    rot = 0,
+    rotCenterX = posX + width / 2,
+    rotCenterY = posY + height / 2,
+  }
 ) {
   if (!context || !url) {
     return Promise.resolve()
@@ -59,7 +68,7 @@ export function renderImage(
       width,
       onload: ({ target }) => {
         if (rotRad) {
-          context.translate(posX + width / 2, posY + height / 2)
+          context.translate(rotCenterX, rotCenterY)
           context.rotate(rotRad)
         }
         const drawParams = [
@@ -68,8 +77,8 @@ export function renderImage(
           0,
           target.naturalWidth,
           target.naturalHeight,
-          rotRad ? -width / 2 : posX,
-          rotRad ? -height / 2 : posY,
+          rotRad ? posX - rotCenterX : posX,
+          rotRad ? posY - rotCenterY : posY,
           width,
           height,
         ]
@@ -131,6 +140,8 @@ export default async function render(ctx, renderValues) {
     posX: screenshotPosX,
     posY: screenshotPosY,
     rot: screenshotRot,
+    rotCenterX: frameWidth / 2 + framePosX,
+    rotCenterY: frameHeight / 2 + framePosY,
     width: screenshotWidth,
     height: screenshotHeight,
   })

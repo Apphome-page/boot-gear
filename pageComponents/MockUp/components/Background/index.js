@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 import { Tabs, Tab } from 'react-bootstrap'
+import classNames from 'classnames'
 import { Panel as ColorPickerPanel } from 'rc-color-picker'
 
 import { MockupContext } from '../../helpers/MockProvider'
@@ -57,11 +58,11 @@ export default function Design() {
               <PreviewButton
                 key={index}
                 variant='outline-light'
-                className={`m-1${
-                  currentMockStore.backgroundImage === bgPreviewLink
-                    ? ' border-dark'
-                    : ' border'
-                }`}
+                className={classNames('m-1', {
+                  'border-dark':
+                    currentMockStore.backgroundImage === bgPreviewLink,
+                  border: currentMockStore.backgroundImage === bgPreviewLink,
+                })}
                 data-value={bgPreviewLink}
               >
                 <PreviewImage src={bgPreviewLink} height='100' width='100' />

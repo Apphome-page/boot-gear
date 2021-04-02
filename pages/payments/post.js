@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
 import { useRouter } from 'next/router'
-import useFetch from 'use-http'
+import fetch from 'cross-fetch'
 
 const FIRECLOUD_PAY_VALIDATE = process.env.NEXT_PUBLIC_FIRECLOUD_PAY_VALIDATE
 
@@ -13,23 +13,24 @@ export default function Payment() {
     query: { hostedpage },
   } = router
 
-  // TODO: Use cross-fetch
-  const { post: verifyPay } = useFetch(FIRECLOUD_PAY_VALIDATE)
-
   const verifyAction = useCallback(async () => {
     if (!hostedpage) {
       return
     }
     try {
-      await verifyPay({
-        hostedpage,
+      // TODO: Verify cross-fetch
+      await fetch(FIRECLOUD_PAY_VALIDATE, {
+        method: 'POST',
+        body: JSON.stringify({
+          hostedpage,
+        }),
       })
       setPayState(true)
       router.push('/dashboard')
     } catch (e) {
       setPayState(false)
     }
-  }, [hostedpage, router, verifyPay])
+  }, [hostedpage, router])
 
   useEffect(() => {
     verifyAction()

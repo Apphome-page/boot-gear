@@ -1,5 +1,7 @@
 import { useContext } from 'react'
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import classNames from 'classnames'
+
 import { X as IconX } from '@emotion-icons/bootstrap/X'
 import { Back as IconCopy } from '@emotion-icons/bootstrap/Back'
 // import { ChevronDoubleLeft as IconDoubleLeft } from '@emotion-icons/bootstrap/ChevronDoubleLeft'
@@ -26,9 +28,9 @@ export default function Assembly() {
     <div className='p-2 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
       {mockStore.map((mockItem, mockIndex) => (
         <Wrap
-          className={`flex-shrink-0 cursor-pointer${
-            mockIndex === currentMockUp ? ' border-dark' : ''
-          }`}
+          className={classNames('flex-shrink-0', 'cursor-pointer', {
+            'border-dark': mockIndex === currentMockUp,
+          })}
           key={mockIndex}
         >
           <div className='mx-2 text-right'>

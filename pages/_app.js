@@ -5,6 +5,7 @@ import '../styles/globals.scss'
 
 import dynamic from 'next/dynamic'
 import Router from 'next/router'
+import { useAmp } from 'next/amp'
 import NProgress from 'nprogress'
 import * as firebase from 'firebase/app'
 // Add the Firebase services that are used
@@ -37,6 +38,8 @@ const AlertDialog = dynamic(() => import('../components/AlertDialog'), {
 })
 
 // initialize Sentry
+// TODO: Replace with actual Sentry dsn
+// TODO: Set Environment Tag
 initSentry({ dsn: 'https://examplePublicKey@o0.ingest.sentry.io/0' })
 
 // initialize nprogress
@@ -65,7 +68,10 @@ function ErrorFallback() {
 }
 
 function Bootgear({ Component, pageProps }) {
-  return (
+  const isAmp = useAmp()
+  return isAmp ? (
+    <Component {...pageProps} />
+  ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
       <SEO />
       <StoreProvider

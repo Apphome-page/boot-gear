@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback, useRef, useContext } from 'react'
 import { Modal, ModalBody } from 'react-bootstrap'
+import classNames from 'classnames'
 
 import { StoreContext } from '../../utils/storeProvider'
 
@@ -16,12 +17,20 @@ export default function AlertDialog() {
     StoreContext
   )
   const [expired, setExpired] = useState(alertTimeout === 0)
-  const [, setTimeoutRef] = useState(null)
+  const setTimeoutRef = useRef(null)
+
+  const clearTimeoutRef = useCallback(() => {
+    if (setTimeoutRef.current) {
+      clearTimeout(setTimeoutRef.current)
+      setTimeoutRef.current = null
+    }
+  }, [])
 
   const closeActionCb = useCallback(() => {
+    clearTimeoutRef()
     setExpired(true)
     modStore(resetAlertProps)
-  }, [modStore])
+  }, [clearTimeoutRef, modStore])
 
   useEffect(() => {
     const isAlertReset =
@@ -35,24 +44,15 @@ export default function AlertDialog() {
   }, [alertTimeout, alertVariant, alertText, modStore])
 
   useEffect(() => {
-    setTimeoutRef((prevTimeoutRef) => {
-      if (prevTimeoutRef) {
-        clearTimeout(prevTimeoutRef)
-      }
-      if (alertTimeout > 0) {
-        return setTimeout(closeActionCb, alertTimeout * 1000)
-      }
-      return null
-    })
-    return () => {
-      setTimeoutRef((prevTimeoutRef) => {
-        if (prevTimeoutRef) {
-          clearTimeout(prevTimeoutRef)
-        }
-        return null
-      })
+    clearTimeoutRef()
+    if (alertTimeout > 0) {
+      setTimeoutRef.current = setTimeout(closeActionCb, alertTimeout * 1000)
     }
-  }, [alertTimeout, closeActionCb])
+    return clearTimeoutRef
+  }, [alertTimeout, clearTimeoutRef, closeActionCb])
+
+  const basicVariant =
+    !alertVariant || alertVariant === resetAlertProps.alertVariant
 
   return (
     <Modal
@@ -67,7 +67,10 @@ export default function AlertDialog() {
         as={AlertBody}
         onClose={closeActionCb}
         variant={alertVariant}
-        className={`m-0${alertVariant ? '' : ' bg-alt text-white'}`}
+        className={classNames('m-0', {
+          'bg-alt': basicVariant,
+          'text-white': basicVariant,
+        })}
         timeout={alertTimeout}
       >
         {alertText}

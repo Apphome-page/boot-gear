@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import classNames from 'classnames'
 import { GearFill as IconGear } from '@emotion-icons/bootstrap/GearFill'
 import { PersonCircle as IconDash } from '@emotion-icons/bootstrap/PersonCircle'
 import { BoxArrowRight as IconOut } from '@emotion-icons/bootstrap/BoxArrowRight'
@@ -42,7 +43,9 @@ export default function Header() {
                 <Link href={path} passHref>
                   <Nav.Link
                     href={path}
-                    className={router.pathname === path ? 'active' : ''}
+                    className={classNames({
+                      active: router.pathname === path,
+                    })}
                   >
                     {name}
                   </Nav.Link>
@@ -55,7 +58,9 @@ export default function Header() {
               <Link href={path} passHref>
                 <NavLink
                   href={path}
-                  className={router.pathname === path ? 'active' : ''}
+                  className={classNames({
+                    active: router.pathname === path,
+                  })}
                 >
                   {name}
                 </NavLink>

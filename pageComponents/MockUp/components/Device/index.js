@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 import { Tabs, Tab } from 'react-bootstrap'
+import classNames from 'classnames'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
@@ -52,9 +53,10 @@ export default function Device() {
         <PreviewContainer onClick={eventFrame} data-type='ios'>
           {scrMeta.ios.map(({ id, name, sizes }, key) => (
             <PreviewButton
-              className={`m-1 ${
+              className={classNames(
+                'm-1',
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
-              }`}
+              )}
               variant='outline-light'
               key={key}
               data-value={id}
@@ -74,9 +76,10 @@ export default function Device() {
         <PreviewContainer onClick={eventFrame} data-type='android'>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
             <PreviewButton
-              className={`m-1 ${
+              className={classNames(
+                'm-1',
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
-              }`}
+              )}
               variant='outline-light'
               key={key}
               data-value={id}

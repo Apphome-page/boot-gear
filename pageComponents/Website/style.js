@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import { ProgressBar } from 'react-bootstrap'
+
 import { ArrowRightCircleFill as IconNext } from '@emotion-icons/bootstrap/ArrowRightCircleFill'
 import { CheckCircleFill as IconCheck } from '@emotion-icons/bootstrap/CheckCircleFill'
 import { PlayCircleFill as IconPlay } from '@emotion-icons/bootstrap/PlayCircleFill'
@@ -10,6 +12,14 @@ export const Hero = styled.section`
   background: url(/img/hero/hero-bg.png) no-repeat left center/cover;
   background-color: #7b10ff;
   color: #fff;
+`
+
+export const ThemeImage = styled.div`
+  border-width: 4px !important;
+`
+
+export const ProgressRail = styled(ProgressBar)`
+  height: 4px;
 `
 
 export const ProgressButton = styled(IconNext)(

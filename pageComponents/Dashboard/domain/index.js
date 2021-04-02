@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useContext } from 'react'
-import { Image, Button, Modal, ModalBody } from 'react-bootstrap'
+import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../../utils/storeProvider'

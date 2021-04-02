@@ -1,11 +1,16 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { ProgressBar } from 'react-bootstrap'
+import classNames from 'classnames'
 
 import { StoreContext } from '../../../utils/storeProvider'
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
 
-import { ProgressButton, ProgressStart, ProgressEnd } from '../style'
+import {
+  ProgressRail,
+  ProgressButton,
+  ProgressStart,
+  ProgressEnd,
+} from '../style'
 
 export default function ProgressStatus({ activeIndex }) {
   const router = useRouter()
@@ -17,6 +22,38 @@ export default function ProgressStatus({ activeIndex }) {
 
   const userId = userAuth && userAuth.uid
   const { appKey, processing, maxSlide, setActiveSlide } = templateProps
+
+  const isLast = activeIndex === maxSlide
+
+  const progressPoints = useMemo(() => {
+    const stageButtons = []
+    for (let i = 1; i < maxSlide; i += 1) {
+      const isActive = i < activeIndex + 1
+      stageButtons.push(
+        <ProgressButton
+          key={i}
+          size={32}
+          className={classNames(
+            'position-absolute',
+            'rounded-circle',
+            'border',
+            'border-light',
+            'bg-light',
+            isActive ? 'text-success' : 'text-light',
+            {
+              'cursor-pointer': isActive && !isLast,
+            }
+          )}
+          currentIndex={i}
+          maxIndex={maxSlide}
+          onClick={() => (isActive && !isLast ? setActiveSlide(i) : null)}
+        >
+          Step {i}
+        </ProgressButton>
+      )
+    }
+    return stageButtons
+  }, [activeIndex, isLast, maxSlide, setActiveSlide])
 
   useEffect(() => {
     let userDataRef = null
@@ -37,10 +74,11 @@ export default function ProgressStatus({ activeIndex }) {
   }, [firebase, userId, router.query.webEdit])
 
   useEffect(() => {
-    // TODO: Validate Stage and push to appropriate place
     if (!appKey) {
+      // TODO: Validate with formik and push to appropriate place
       setActiveSlide(0)
     } else if (router.query.webStep) {
+      // TODO: Validate Stage
       setActiveSlide(parseInt(router.query.webStep, 10))
     }
   }, [appKey, setActiveSlide, router.query.webStep])
@@ -53,7 +91,7 @@ export default function ProgressStatus({ activeIndex }) {
 
   return (
     <div className='position-relative my-3 mx-5'>
-      <ProgressBar
+      <ProgressRail
         now={activeIndex}
         min={0}
         max={maxSlide}
@@ -61,52 +99,25 @@ export default function ProgressStatus({ activeIndex }) {
         animated={processing}
         variant={processing ? 'warning' : 'success'}
         className='rounded-0'
-        style={{ height: '4px' }}
       />
-      {(() => {
-        const StageButtons = [
-          <ProgressStart
-            key={0}
-            size={32}
-            className='position-absolute rounded-circle border border-light bg-light text-success'
-          />,
-        ]
-        for (let i = 1; i < maxSlide; i += 1) {
-          const isActive = i < activeIndex + 1
-          StageButtons.push(
-            <ProgressButton
-              key={i}
-              size={32}
-              className={`position-absolute rounded-circle border border-light ${
-                isActive
-                  ? 'cursor-pointer bg-light text-success'
-                  : 'bg-light text-light'
-              }`}
-              currentIndex={i}
-              maxIndex={maxSlide}
-              onClick={
-                isActive
-                  ? () => {
-                      setActiveSlide(i)
-                    }
-                  : null
-              }
-            >
-              Step {i}
-            </ProgressButton>
-          )
-        }
-        const isLast = activeIndex === maxSlide
-        StageButtons.push(
-          <ProgressEnd
-            size={isLast ? 42 : 32}
-            className={`position-absolute rounded-circle border border-light ${
-              isLast ? 'bg-light text-success' : 'bg-light text-light'
-            }`}
-          />
-        )
-        return StageButtons
-      })()}
+      <ProgressStart
+        key={0}
+        size={32}
+        className='position-absolute rounded-circle border border-light bg-light text-success'
+      />
+      {progressPoints}
+      <ProgressEnd
+        key={maxSlide}
+        size={isLast ? 42 : 32}
+        className={classNames(
+          'position-absolute',
+          'rounded-circle',
+          'border',
+          'border-light',
+          'bg-light',
+          isLast ? 'text-success' : 'text-light'
+        )}
+      />
     </div>
   )
 }

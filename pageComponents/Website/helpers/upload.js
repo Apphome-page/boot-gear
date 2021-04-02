@@ -96,7 +96,8 @@ export default async function upload(
         // Preserve Initial Value
         const appDataValue =
           appDataObj[appDataKey] || appDataSet[appDataKey] || ''
-        return typeof appDataValue === 'function'
+        return typeof appDataValue === 'function' ||
+          appDataKey.indexOf('app') !== 0
           ? appDataObj
           : Object.assign(appDataObj, { [appDataKey]: appDataValue })
       },

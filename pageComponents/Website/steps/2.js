@@ -23,6 +23,7 @@ export default function Step() {
     (event) => {
       event.preventDefault()
       event.stopPropagation()
+      updateStore({ processing: true })
       const appForm = appFormRef.current
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
@@ -35,8 +36,13 @@ export default function Step() {
           appDescription: formDescription,
           appIcon: formIcon.files[0],
           appScreenshot: formScreenshot.files[0],
+          processing: false,
         })
         nextAction()
+      } else {
+        updateStore({
+          processing: false,
+        })
       }
     },
     [nextAction, updateStore]

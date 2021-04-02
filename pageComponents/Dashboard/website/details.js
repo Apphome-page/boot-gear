@@ -8,7 +8,6 @@ export default function WebsiteDetails({
   webLink = `/${webKey}/`,
   webData: { appName, appIcon, appDescription, timestamp } = {},
 } = {}) {
-  // TODO: Update with custom Domain if present
   return (
     <Media>
       <Image

@@ -8,6 +8,9 @@ import HomePricing from '../pageComponents/Home/pricing'
 import HomeFeatures from '../pageComponents/Home/features'
 import HomeBlog from '../pageComponents/Home/blog'
 
+// TODO: Convert home to AMP
+export const config = { amp: true }
+
 export default function Home() {
   return (
     <>
@@ -15,6 +18,9 @@ export default function Home() {
         <title>
           App landing page for mobile apps, with free screenshots tools
         </title>
+        {
+          // TODO: Remove this after successful AMP Migration
+        }
         <meta name='robots' content='noindex' />
       </Head>
       <HomeHero />

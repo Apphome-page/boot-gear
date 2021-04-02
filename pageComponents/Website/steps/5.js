@@ -38,6 +38,7 @@ export default function Step() {
       event.preventDefault()
       event.stopPropagation()
       const appForm = formRef.current
+      updateStore({ processing: true })
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
         const formDiscord = formElements.namedItem('appDiscord').value
@@ -63,8 +64,13 @@ export default function Step() {
           appTwitter: formTwitter,
           appWhatsapp: formWhatsapp,
           appYoutube: formYoutube,
+          processing: false,
         })
         nextAction()
+      } else {
+        updateStore({
+          processing: false,
+        })
       }
     },
     [nextAction, updateStore]

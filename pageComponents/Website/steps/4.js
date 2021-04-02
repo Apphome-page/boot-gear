@@ -28,6 +28,7 @@ export default function Step() {
       event.preventDefault()
       event.stopPropagation()
       const appForm = formRef.current
+      updateStore({ processing: true })
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
         const formAbout = formElements.namedItem('appAbout').value
@@ -48,8 +49,13 @@ export default function Step() {
           appAbout: formAbout,
           appAddress: formAddress,
           appTestim: formTestim.filter(({ text }) => text),
+          processing: false,
         })
         nextAction()
+      } else {
+        updateStore({
+          processing: false,
+        })
       }
     },
     [nextAction, tesimonialCount, updateStore]

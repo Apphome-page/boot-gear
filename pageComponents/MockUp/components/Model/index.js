@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 import { Container } from 'react-bootstrap'
+import classNames from 'classnames'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
@@ -48,9 +49,10 @@ export default function Design() {
         .find(({ id }) => id === currentMockStore.frameId)
         .sizes.map((model, key) => (
           <PreviewButton
-            className={`m-1 ${
+            className={classNames(
+              'm-1',
               currentMockStore.frameDevice === model ? 'border-dark' : 'border'
-            }`}
+            )}
             variant='outline-light'
             key={key}
             data-value={model}
