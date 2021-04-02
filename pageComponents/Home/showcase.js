@@ -2,6 +2,8 @@ import { Container, Button, Row, Col } from 'react-bootstrap'
 import Link from 'next/link'
 import Image from 'next/image'
 
+import imageLoader from '../../utils/imageLoader'
+
 export default function HomeShowcase() {
   return (
     <section className='bg-light'>
@@ -25,6 +27,7 @@ export default function HomeShowcase() {
           </Col>
           <Col lg={6} className='d-none d-lg-block'>
             <Image
+              loader={imageLoader}
               src='/img/hero/hero-bg.png'
               alt=''
               height='300'

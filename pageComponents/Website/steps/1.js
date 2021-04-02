@@ -15,10 +15,11 @@ import classNames from 'classnames'
 
 import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
 
-import { ThemeImage } from '../style'
-
+import imageLoader from '../../../utils/imageLoader'
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
+
+import { ThemeImage } from '../style'
 
 const THEMES = [
   {
@@ -181,6 +182,7 @@ export default function Step() {
                 )}
               >
                 <Image
+                  loader={imageLoader}
                   src={src}
                   width='200'
                   height='105'

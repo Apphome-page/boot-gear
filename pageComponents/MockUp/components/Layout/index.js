@@ -19,10 +19,11 @@ import { ArrowDownShort as IconArrowDown } from '@emotion-icons/bootstrap/ArrowD
 import { ArrowClockwise as IconRotateRight } from '@emotion-icons/bootstrap/ArrowClockwise'
 import { ArrowCounterclockwise as IconRotateLeft } from '@emotion-icons/bootstrap/ArrowCounterclockwise'
 
-import { MockupContext } from '../../helpers/MockProvider'
+import imageLoader from '../../../../utils/imageLoader'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
+import { MockupContext } from '../../helpers/MockProvider'
 
 import { PreviewContainer } from '../../style'
 
@@ -126,6 +127,7 @@ export default function Layout() {
                 )}
               >
                 <Image
+                  loader={imageLoader}
                   src={`/scrPreview/template/${fTemplate}.png`}
                   alt='Device Template'
                   data-value={fTemplate}
