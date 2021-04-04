@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Alert,
   Button,
@@ -7,10 +7,9 @@ import {
   InputGroup,
   Spinner,
 } from 'react-bootstrap'
-import fetch from 'cross-fetch'
-import { captureException as captureExceptionSentry } from '@sentry/react'
+import { useAuth } from 'reactfire'
 
-import { StoreContext } from '../../../utils/storeProvider'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
 
@@ -20,9 +19,11 @@ const ExceptionTags = {
 }
 
 export default function DomainSetup({ webKey }) {
-  const [{ firebase }] = useContext(StoreContext)
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
+
+  const userAuth = useAuth()
+
   const formSubmit = useCallback(
     async (formEvent) => {
       formEvent.preventDefault()
@@ -39,7 +40,12 @@ export default function DomainSetup({ webKey }) {
       }
       setProcessing(true)
       setAlertData({})
-      const idToken = await firebase.auth().currentUser.getIdToken()
+
+      const [idToken, { default: fetch }] = await Promise.all([
+        userAuth.currentUser.getIdToken(),
+        import('cross-fetch'),
+      ])
+
       try {
         const setupResp = await fetch(FIRECLOUD_DOMAIN_SETUP, {
           method: 'POST',
@@ -72,7 +78,7 @@ export default function DomainSetup({ webKey }) {
       }
       setProcessing(false)
     },
-    [firebase]
+    [userAuth.currentUser]
   )
   return (
     <Form className='py-2' onSubmit={formSubmit}>

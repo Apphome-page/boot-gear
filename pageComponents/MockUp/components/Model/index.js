@@ -6,6 +6,8 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 import scrMeta from '../../../../config/scrMeta.json'
 
+import imageLoader from '../../../../utils/imageLoader'
+
 import { getFrameProps } from '../../helpers/defaults'
 
 import { PreviewButton, PreviewImage } from '../../style'
@@ -20,18 +22,14 @@ export default function Design() {
   const currentMockStore = mockStore[currentMockUp]
 
   const eventModel = useCallback(
-    (e) => {
+    ({
+      currentTarget: {
+        dataset: { value },
+      },
+    }) => {
       const { frameType, frameId, height: maxHeight } = currentMockStore
-      let value = ''
-      if (e.target.tagName === 'BUTTON') {
-        value = e.target.dataset.value
-      } else if (
-        e.target.tagName === 'IMG' &&
-        e.target.parentElement.tagName === 'BUTTON'
-      ) {
-        value = e.target.parentElement.dataset.value
-      } else {
-        value = e.target.value
+      if (!value) {
+        return
       }
       modCurrentMockUp({
         ...getFrameProps(frameType, frameId, {
@@ -44,7 +42,7 @@ export default function Design() {
   )
 
   return (
-    <Container className='text-center' onClick={eventModel}>
+    <Container className='text-center'>
       {scrMeta[currentMockStore.frameType]
         .find(({ id }) => id === currentMockStore.frameId)
         .sizes.map((model, key) => (
@@ -60,10 +58,14 @@ export default function Design() {
               .replace(/(\d+)/g, ' $1')
               .replace(/_/g, ' ')
               .replace('custom', '')}
+            onClick={eventModel}
           >
             <PreviewImage
               src={`/scrPreview/${currentMockStore.frameType}/${currentMockStore.frameId}/${model}.png`}
               alt='Device Model'
+              height='90'
+              width='60'
+              loader={imageLoader}
             />
           </PreviewButton>
         ))}

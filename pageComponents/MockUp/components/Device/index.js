@@ -6,6 +6,8 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 import scrMeta from '../../../../config/scrMeta.json'
 
+import imageLoader from '../../../../utils/imageLoader'
+
 import { getFrameProps } from '../../helpers/defaults'
 
 import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
@@ -20,20 +22,12 @@ export default function Device() {
   const currentMockStore = mockStore[currentMockUp]
 
   const eventFrame = useCallback(
-    (e) => {
+    ({
+      currentTarget: {
+        dataset: { value, type },
+      },
+    }) => {
       const { height: maxHeight } = currentMockStore
-      let value = ''
-      let type = ''
-      if (e.target.tagName === 'BUTTON') {
-        value = e.target.dataset.value
-        type = e.currentTarget.dataset.type
-      } else if (
-        e.target.tagName === 'IMG' &&
-        e.target.parentElement.tagName === 'BUTTON'
-      ) {
-        value = e.target.parentElement.dataset.value
-        type = e.currentTarget.dataset.type
-      }
       if (!value) {
         return
       }
@@ -50,7 +44,7 @@ export default function Device() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='device-style-ios' title='iOS'>
-        <PreviewContainer onClick={eventFrame} data-type='ios'>
+        <PreviewContainer>
           {scrMeta.ios.map(({ id, name, sizes }, key) => (
             <PreviewButton
               className={classNames(
@@ -59,21 +53,24 @@ export default function Device() {
               )}
               variant='outline-light'
               key={key}
+              data-type='ios'
               data-value={id}
               data-name={name}
+              onClick={eventFrame}
             >
               <PreviewImage
                 src={`/scrPreview/ios/${id}/${sizes[0]}.png`}
-                height='100'
-                width='100'
+                height='90'
+                width='60'
                 alt='iOS Device Style Preview'
+                loader={imageLoader}
               />
             </PreviewButton>
           ))}
         </PreviewContainer>
       </Tab>
       <Tab eventKey='device-style-android' title='Android'>
-        <PreviewContainer onClick={eventFrame} data-type='android'>
+        <PreviewContainer>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
             <PreviewButton
               className={classNames(
@@ -82,14 +79,17 @@ export default function Device() {
               )}
               variant='outline-light'
               key={key}
+              data-type='android'
               data-value={id}
               data-name={name}
+              onClick={eventFrame}
             >
               <PreviewImage
                 src={`/scrPreview/android/${id}/${sizes[0]}.png`}
-                height='100'
-                width='100'
+                height='90'
+                width='60'
                 alt='Android Device Style Preview'
+                loader={imageLoader}
               />
             </PreviewButton>
           ))}

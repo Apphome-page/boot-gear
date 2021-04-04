@@ -1,9 +1,7 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
+import { useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
-import fetch from 'cross-fetch'
-
-import { StoreContext } from '../../../utils/storeProvider'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
@@ -16,13 +14,18 @@ export default function DomainNameServer({
   webKey,
   webData: { webDomain = '', webNameservers = [] },
 }) {
-  const [{ firebase }] = useContext(StoreContext)
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
+
+  const userAuth = useAuth()
+
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
-    const idToken = await firebase.auth().currentUser.getIdToken()
+    const [idToken, { default: fetch }] = await Promise.all([
+      userAuth.currentUser.getIdToken(),
+      import('cross-fetch'),
+    ])
     try {
       const verifyResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {
         method: 'POST',
@@ -57,7 +60,7 @@ export default function DomainNameServer({
       })
     }
     setProcessing(false)
-  }, [firebase, webKey])
+  }, [userAuth.currentUser, webKey])
   return (
     <Container fluid>
       <Row>

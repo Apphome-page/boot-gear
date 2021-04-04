@@ -6,14 +6,14 @@ import { StoreContext } from '../../utils/storeProvider'
 import { BigSpinner } from './style'
 
 export default function Loading() {
-  const [{ loadingPop }] = useContext(StoreContext)
+  const [{ loadingMutex }] = useContext(StoreContext)
   return (
     <Modal
       centered
       backdrop
       size='sm'
       contentClassName='bg-transparent'
-      show={loadingPop}
+      show={!!loadingMutex}
       onHide={() => {}}
     >
       <ModalBody className='position-relative d-flex justify-content-center align-items-center'>

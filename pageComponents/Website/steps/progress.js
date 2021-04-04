@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
 
-import { StoreContext } from '../../../utils/storeProvider'
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
+import useUserData from '../../../utils/useUserData'
 
 import {
   ProgressRail,
@@ -12,66 +12,46 @@ import {
   ProgressEnd,
 } from '../style'
 
+function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
+  const stageButtons = []
+  for (let i = 1; i < maxSlide; i += 1) {
+    const isActive = i < activeIndex + 1
+    stageButtons.push(
+      <ProgressButton
+        key={i}
+        size={32}
+        className={classNames(
+          'position-absolute',
+          'rounded-circle',
+          'border',
+          'border-light',
+          'bg-light',
+          isActive ? 'text-success' : 'text-light',
+          {
+            'cursor-pointer': isActive && !isLast,
+          }
+        )}
+        currentIndex={i}
+        maxIndex={maxSlide}
+        onClick={() => (isActive && !isLast ? actionCallback(i) : null)}
+      >
+        Step {i}
+      </ProgressButton>
+    )
+  }
+  return <>{stageButtons}</>
+}
+
 export default function ProgressStatus({ activeIndex }) {
   const router = useRouter()
 
-  const [userData, setUserData] = useState({})
+  const [{ appKey, maxSlide, setActiveSlide }, modContext] = useContext(
+    BuilderStoreContext
+  )
 
-  const [{ firebase, userAuth }] = useContext(StoreContext)
-  const [templateProps, modContext] = useContext(BuilderStoreContext)
-
-  const userId = userAuth && userAuth.uid
-  const { appKey, processing, maxSlide, setActiveSlide } = templateProps
+  const userSiteData = useUserData(`sites/${router.query.webEdit}`)
 
   const isLast = activeIndex === maxSlide
-
-  const progressPoints = useMemo(() => {
-    const stageButtons = []
-    for (let i = 1; i < maxSlide; i += 1) {
-      const isActive = i < activeIndex + 1
-      stageButtons.push(
-        <ProgressButton
-          key={i}
-          size={32}
-          className={classNames(
-            'position-absolute',
-            'rounded-circle',
-            'border',
-            'border-light',
-            'bg-light',
-            isActive ? 'text-success' : 'text-light',
-            {
-              'cursor-pointer': isActive && !isLast,
-            }
-          )}
-          currentIndex={i}
-          maxIndex={maxSlide}
-          onClick={() => (isActive && !isLast ? setActiveSlide(i) : null)}
-        >
-          Step {i}
-        </ProgressButton>
-      )
-    }
-    return stageButtons
-  }, [activeIndex, isLast, maxSlide, setActiveSlide])
-
-  useEffect(() => {
-    let userDataRef = null
-    if (userId && router.query.webEdit) {
-      userDataRef = firebase
-        .database()
-        .ref(`users/${userId}/sites/${router.query.webEdit}`)
-      userDataRef.once('value').then((snap) => {
-        const snapVal = snap.val() || {}
-        setUserData(snapVal)
-      })
-    }
-    return () => {
-      if (userDataRef) {
-        userDataRef.off()
-      }
-    }
-  }, [firebase, userId, router.query.webEdit])
 
   useEffect(() => {
     if (!appKey) {
@@ -85,9 +65,11 @@ export default function ProgressStatus({ activeIndex }) {
 
   // Update All Values individually else looping occurs
   useEffect(() => {
-    modContext(userData)
+    if (!userSiteData.firstLaunch) {
+      modContext(userSiteData)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modContext, userData.timestamp])
+  }, [modContext, userSiteData.timestamp])
 
   return (
     <div className='position-relative my-3 mx-5'>
@@ -96,8 +78,7 @@ export default function ProgressStatus({ activeIndex }) {
         min={0}
         max={maxSlide}
         srOnly
-        animated={processing}
-        variant={processing ? 'warning' : 'success'}
+        variant='success'
         className='rounded-0'
       />
       <ProgressStart
@@ -105,7 +86,12 @@ export default function ProgressStatus({ activeIndex }) {
         size={32}
         className='position-absolute rounded-circle border border-light bg-light text-success'
       />
-      {progressPoints}
+      <ProgressPoints
+        activeIndex={activeIndex}
+        isLast={isLast}
+        maxSlide={maxSlide}
+        actionCallback={setActiveSlide}
+      />
       <ProgressEnd
         key={maxSlide}
         size={isLast ? 42 : 32}

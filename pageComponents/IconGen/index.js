@@ -81,10 +81,13 @@ export default function AppIcon({ preset = [] }) {
 
     updateProgress(0)
 
-    const { default: ResizeImage } = await import('../../utils/resizeImage')
-    const { default: AppIconSizes } = await import(
-      '../../config/appIconSizes.json'
-    )
+    const [
+      { default: ResizeImage },
+      { default: AppIconSizes },
+    ] = await Promise.all([
+      import('../../utils/resizeImage'),
+      import('../../config/appIconSizes.json'),
+    ])
 
     const validPlatforms = Object.keys(platforms)
     const progressDelta =

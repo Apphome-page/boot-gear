@@ -32,7 +32,6 @@ export default function Step() {
       event.preventDefault()
       event.stopPropagation()
       const appForm = formRef.current
-      updateStore({ processing: true })
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
         const formAndroid = formElements.namedItem('appAndroid').value
@@ -46,13 +45,8 @@ export default function Step() {
           appDownloads: formDownloads,
           appRatings: formRatings,
           appVideo: formVideo,
-          processing: false,
         })
         nextAction()
-      } else {
-        updateStore({
-          processing: false,
-        })
       }
     },
     [nextAction, updateStore]

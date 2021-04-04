@@ -10,6 +10,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import { useFirebaseApp } from 'reactfire'
+
 import Image from 'next/image'
 import classNames from 'classnames'
 
@@ -38,14 +40,17 @@ const THEMES = [
 
 export default function Step() {
   const formRef = useRef(null)
-  const [{ firebase, userAuth }, modStore] = useContext(HeadContext)
+
+  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
   const [
     { nextAction, prevAction, appTheme, appName },
     updateStore,
   ] = useContext(StoreContext)
+
   const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
-  const userId = userAuth && userAuth.uid
+  const firebase = useFirebaseApp()
+  const { uid: userId } = firebase.auth().currentUser || {}
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {
@@ -57,8 +62,7 @@ export default function Step() {
       return
     }
 
-    updateStore({ processing: true })
-    modStore({ loadingPop: true })
+    queueLoading()
 
     const formElements = formRef.current.elements
     const formName = formElements.namedItem('appName').value
@@ -71,9 +75,8 @@ export default function Step() {
       data: keyData = {},
     } = await keyValidate(firebase, appKey, { userId })
 
-    modStore({ loadingPop: false })
+    unqueueLoading()
     if (!keyValidated) {
-      updateStore({ processing: false })
       modStore({
         alertVariant: 'danger',
         alertTimeout: 10,
@@ -86,10 +89,18 @@ export default function Step() {
       appKey,
       appName: formName,
       appTheme: selectedTheme,
-      processing: false,
     })
     nextAction()
-  }, [userId, firebase, updateStore, selectedTheme, nextAction, modStore])
+  }, [
+    firebase,
+    modStore,
+    nextAction,
+    queueLoading,
+    selectedTheme,
+    unqueueLoading,
+    updateStore,
+    userId,
+  ])
 
   const themeBtnAction = useCallback(
     ({

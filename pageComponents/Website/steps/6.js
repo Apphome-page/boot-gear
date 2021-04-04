@@ -1,5 +1,6 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
+import { useFirebaseApp, useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
@@ -11,10 +12,13 @@ const ExceptionTags = {
 }
 
 export default function Step() {
-  const [{ firebase, userAuth }, modStore] = useContext(HeadContext)
+  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
   const [templateProps, updateStore] = useContext(StoreContext)
 
-  const userId = userAuth && userAuth.uid
+  const firebase = useFirebaseApp()
+  const firebaseAuth = useAuth()
+
+  const { uid: userId } = firebaseAuth.currentUser || {}
   const {
     appIcon,
     appName,
@@ -39,8 +43,7 @@ export default function Step() {
       modStore({ signPop: true })
       return
     }
-    modStore({ loadingPop: true })
-    updateStore({ processing: true })
+    queueLoading()
     let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
@@ -56,21 +59,26 @@ export default function Step() {
       })
       uploadSuccess = false
     }
-    updateStore({ processing: false })
-    modStore({
-      loadingPop: false,
-      ...(uploadSuccess
-        ? {}
-        : {
-            alertVariant: 'danger',
-            alertTimeout: -1,
-            alertText: 'Something went wrong, while updating your website.',
-          }),
-    })
+    unqueueLoading()
     if (uploadSuccess) {
       nextAction()
+    } else {
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: -1,
+        alertText: 'Something went wrong, while updating your website.',
+      })
     }
-  }, [firebase, modStore, nextAction, templateProps, updateStore, userId])
+  }, [
+    firebase,
+    modStore,
+    nextAction,
+    queueLoading,
+    templateProps,
+    unqueueLoading,
+    updateStore,
+    userId,
+  ])
 
   return (
     <Container fluid>

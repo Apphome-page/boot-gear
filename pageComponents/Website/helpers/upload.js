@@ -1,4 +1,3 @@
-import Compress from 'compress.js'
 import keyValidate from './keyValidate'
 import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
@@ -6,9 +5,13 @@ import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 export default async function upload(
   firebase,
   appKey,
-  { templateProps, userId = firebase.auth().currentUser } = {}
+  { templateProps, userId = firebase.auth().currentUser.uid } = {}
 ) {
-  const keyValidated = await keyValidate(firebase, appKey, { userId })
+  const [keyValidated, { default: Compress }] = await Promise.all([
+    keyValidate(firebase, appKey, { userId }),
+    import('compress.js'),
+  ])
+
   if (!keyValidated.status) {
     return keyValidated
   }

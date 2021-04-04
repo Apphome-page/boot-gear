@@ -1,37 +1,35 @@
 import { useRouter } from 'next/router'
-
 import { useEffect, useContext } from 'react'
 import { Modal, ModalBody } from 'react-bootstrap'
+import { useAuth, useUser } from 'reactfire'
 import {
   setUser as setUserSentry,
   configureScope as configureScopeSentry,
 } from '@sentry/react'
 
 import { StoreContext } from '../../utils/storeProvider'
+import SignInProviders from '../../utils/getSignInProviders'
 
 import { AuthWrap } from './style'
 
 export default function Login() {
   const router = useRouter()
-  const [{ firebase, userAuth, signPop, signForced }, modStore] = useContext(
-    StoreContext
-  )
-  const userId = userAuth && userAuth.uid
-  const userFirstLaunch = userAuth && userAuth.firstLaunch
+  const [
+    { signPop, signForced, queueLoading, unqueueLoading },
+    modStore,
+  ] = useContext(StoreContext)
+  const userAuth = useAuth()
+  const { data: userData, hasEmitted: firstLaunch } = useUser()
+
+  const { uid: userId } = userData || {}
 
   useEffect(() => {
-    if (userFirstLaunch) {
-      modStore({
-        loadingPop: true,
-      })
+    if (!firstLaunch) {
+      queueLoading()
     }
-    const firebaseStateListener = firebase
-      .auth()
-      .onAuthStateChanged((userAuthState) => {
-        modStore({
-          userAuth: userAuthState,
-          loadingPop: false,
-        })
+    const firebaseStateListener = userAuth.onAuthStateChanged(
+      (userAuthState) => {
+        unqueueLoading()
         // IIFE to create setry-legible data
         if (userAuthState) {
           const sentryUserObj = (({
@@ -52,29 +50,23 @@ export default function Login() {
         } else {
           configureScopeSentry((scope) => scope.setUser(null))
         }
-      })
+      }
+    )
     return () => {
       // Clear Sentry User data
       configureScopeSentry((scope) => scope.setUser(null))
       firebaseStateListener()
     }
-  }, [firebase, modStore, userFirstLaunch])
+  }, [firstLaunch, queueLoading, unqueueLoading, userAuth])
 
   return (
     <Modal
-      show={
-        // Do not show Modal it at start itself
-        !userFirstLaunch &&
-        // Do not show Modal if user is already signed-in
-        !userId &&
-        // Show modal if any of sign Flags is true, albiet previous conditions are satisfied
-        (signPop || signForced)
-      }
+      show={firstLaunch && !userId && (signPop || signForced)}
       onHide={() => {
         if (signForced && !userId) {
           router.replace('/')
         }
-        modStore({ signPop: false })
+        modStore({ signPop: false, signForced: false })
       }}
       backdrop={signForced ? 'static' : true}
     >
@@ -83,14 +75,14 @@ export default function Login() {
         <AuthWrap
           uiConfig={{
             signInFlow: 'popup',
-            signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+            signInOptions: SignInProviders,
             callbacks: {
               signInSuccessWithAuthResult: () => {
-                modStore({ signPop: false })
+                modStore({ signPop: false, signForced: false })
               },
             },
           }}
-          firebaseAuth={firebase.auth()}
+          firebaseAuth={userAuth}
         />
       </ModalBody>
     </Modal>

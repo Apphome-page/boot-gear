@@ -9,7 +9,10 @@ import {
 } from 'react-bootstrap'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useAuth } from 'reactfire'
+
 import classNames from 'classnames'
+
 import { GearFill as IconGear } from '@emotion-icons/bootstrap/GearFill'
 import { PersonCircle as IconDash } from '@emotion-icons/bootstrap/PersonCircle'
 import { BoxArrowRight as IconOut } from '@emotion-icons/bootstrap/BoxArrowRight'
@@ -23,7 +26,10 @@ import headerLinks from '../../pageData/links/headerLinks.json'
 
 export default function Header() {
   const router = useRouter()
-  const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
+  const userAuth = useAuth()
+  const [, modStore] = useContext(StoreContext)
+
+  const { currentUser } = userAuth
 
   return (
     <Navbar
@@ -53,21 +59,23 @@ export default function Header() {
               </NavDropdown.Item>
             ))}
           </NavDropdown>
-          {headerLinks.map(({ name, path }, index) => (
-            <NavItem key={index}>
-              <Link href={path} passHref>
-                <NavLink
-                  href={path}
-                  className={classNames({
-                    active: router.pathname === path,
-                  })}
-                >
-                  {name}
-                </NavLink>
-              </Link>
-            </NavItem>
-          ))}
-          {userAuth ? (
+          {currentUser
+            ? ''
+            : headerLinks.map(({ name, path }, index) => (
+                <NavItem key={index}>
+                  <Link href={path} passHref>
+                    <NavLink
+                      href={path}
+                      className={classNames({
+                        active: router.pathname === path,
+                      })}
+                    >
+                      {name}
+                    </NavLink>
+                  </Link>
+                </NavItem>
+              ))}
+          {currentUser ? (
             <NavDropdown alignRight title={<IconGear size='20' />}>
               <NavDropdown.Item
                 as='div'
@@ -76,7 +84,7 @@ export default function Header() {
                 <Link href='/dashboard'>
                   <div>
                     <IconDash size='18' className='mr-2' />
-                    {userAuth.displayName}
+                    {currentUser.displayName}
                   </div>
                 </Link>
               </NavDropdown.Item>
@@ -108,8 +116,8 @@ export default function Header() {
                 as='div'
                 className='px-3 text-danger cursor-pointer'
                 onClick={() => {
+                  userAuth.signOut()
                   router.push('/')
-                  firebase.auth().signOut()
                 }}
               >
                 <IconOut size='18' className='mr-2' />
@@ -117,22 +125,20 @@ export default function Header() {
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            ''
+            <Button
+              className='btn-alt mx-3'
+              variant='light'
+              onClick={() => modStore({ signPop: true })}
+            >
+              Sign In
+            </Button>
           )}
         </Nav>
       </Navbar.Collapse>
-      {!userAuth ? (
-        <Button
-          className='btn-alt ml-auto ml-lg-3 mr-3'
-          variant='light'
-          onClick={() => modStore({ signPop: true })}
-        >
-          Sign In
-        </Button>
-      ) : (
-        ''
-      )}
-      <Navbar.Toggle aria-controls='headerContent' className='my-3 my-lg-0' />
+      <Navbar.Toggle
+        aria-controls='headerContent'
+        className='my-1 my-lg-0 mr-0 ml-auto'
+      />
     </Navbar>
   )
 }

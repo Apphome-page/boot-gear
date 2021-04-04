@@ -17,7 +17,7 @@ const maxHeight = 378
 export const MockupContext = createContext(null)
 
 export default function MockProvider({ preset, children }) {
-  const [, modStoreContext] = useContext(StoreContext)
+  const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
   const [currentMockUp, setCurrentMockUp] = useState(0)
   const [mockStore, setMockStore] = useState(() => {
     const frameDefaults = frameDefaultProps(maxHeight)
@@ -127,9 +127,7 @@ export default function MockProvider({ preset, children }) {
 
   const eventSave = useCallback(
     async (setProgress) => {
-      modStoreContext({
-        loadingPop: true,
-      })
+      queueLoading()
       setProgress(1)
       const progressDelta = parseFloat((50 / mockStore.length).toFixed(2))
       const mockPromise = mockStore.map(async (currentMockStore) => {
@@ -200,9 +198,7 @@ export default function MockProvider({ preset, children }) {
       saveAs(zipBundle, 'AppScreenshots.zip')
 
       setProgress(0)
-      modStoreContext({
-        loadingPop: false,
-      })
+      unqueueLoading()
     },
     [mockStore]
   )

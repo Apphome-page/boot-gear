@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import 'rc-color-picker/assets/index.css'
 import 'nprogress/nprogress.css'
 import '../styles/globals.scss'
 
@@ -7,12 +6,11 @@ import dynamic from 'next/dynamic'
 import Router from 'next/router'
 import { useAmp } from 'next/amp'
 import NProgress from 'nprogress'
-import * as firebase from 'firebase/app'
-// Add the Firebase services that are used
+
+import { FirebaseAppProvider } from 'reactfire'
 import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/storage'
 import 'firebase/database'
+import 'firebase/storage'
 
 import { Modal, ModalBody, Alert } from 'react-bootstrap'
 import {
@@ -48,15 +46,6 @@ Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-// initialize firebase
-try {
-  firebase.initializeApp(firebaseConfig)
-} catch (e) {
-  if (e.code !== 'app/duplicate-app') {
-    throw e
-  }
-}
-
 function ErrorFallback() {
   return (
     <Modal backdrop size='lg' contentClassName='shadow-lg' onHide={() => {}}>
@@ -73,27 +62,17 @@ function Bootgear({ Component, pageProps }) {
     <Component {...pageProps} />
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
-      <SEO />
-      <StoreProvider
-        // TODO: Init all store variables to maintain logic
-        store={{
-          firebase, // Firebase global variable
-          userAuth: { firstLaunch: true }, // Current User Auth Details
-          alertTimeout: 0, // Alert Popup timeout - Reset Condition
-          alertText: '', // Alert Text - Reset Condition
-          alertVariant: 'default', // Alert Variant - Reset Condition
-          loadingPop: false, // Full screen blocking Loader
-          signPop: false, // Dismissable Sign-In PopUp
-          signForced: false, // Un-dismissable Sign-In PopUp
-        }}
-      >
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-        <AlertDialog />
-        <Loading />
-        <Login />
-      </StoreProvider>
+      <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
+        <SEO />
+        <StoreProvider>
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+          <AlertDialog />
+          <Loading />
+          <Login />
+        </StoreProvider>
+      </FirebaseAppProvider>
     </SentryErrorBoundary>
   )
 }

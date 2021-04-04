@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
 import { useRouter } from 'next/router'
-import fetch from 'cross-fetch'
 
 const FIRECLOUD_PAY_VALIDATE = process.env.NEXT_PUBLIC_FIRECLOUD_PAY_VALIDATE
 
@@ -18,7 +17,7 @@ export default function Payment() {
       return
     }
     try {
-      // TODO: Verify cross-fetch
+      const { default: fetch } = await import('cross-fetch')
       await fetch(FIRECLOUD_PAY_VALIDATE, {
         method: 'POST',
         body: JSON.stringify({

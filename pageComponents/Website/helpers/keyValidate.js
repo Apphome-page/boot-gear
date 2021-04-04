@@ -3,7 +3,7 @@ import getPlanDetails from '../../../utils/getPlanDetails'
 export default async function keyValidate(
   firebase,
   appKey,
-  { userId = firebase.auth().currentUser } = {}
+  { userId = firebase.auth().currentUser.uid } = {}
 ) {
   const storagePath = `public/${appKey}/index.html`
   const databasePathPrefix = `users/${userId}`

@@ -1,16 +1,17 @@
-import { useState, useContext, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useFirebaseApp } from 'reactfire'
 
 import getPlanDetails from './getPlanDetails'
-
-import { StoreContext } from './storeProvider'
 
 export default function useUserData(refKey = '', { once = false } = {}) {
   const [userData, setUserData] = useState({
     firstLaunch: true, // to indicate the userData has not been fetched
   })
-  const [{ firebase, userAuth }] = useContext(StoreContext)
 
-  const userId = userAuth && userAuth.uid
+  const firebase = useFirebaseApp()
+  const userId = useMemo(() => (firebase.auth().currentUser || {}).uid, [
+    firebase,
+  ])
 
   const snapValue = useCallback(
     (snapshot) => {

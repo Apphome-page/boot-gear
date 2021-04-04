@@ -1,13 +1,22 @@
 import { useCallback, useContext } from 'react'
 import { Tabs, Tab } from 'react-bootstrap'
+import { Code as CodeLoader } from 'react-content-loader'
+
+import dynamic from 'next/dynamic'
 import classNames from 'classnames'
-import { Panel as ColorPickerPanel } from 'rc-color-picker'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 import scrBg from '../../../../config/scrBg.json'
 
+import imageLoader from '../../../../utils/imageLoader'
+
 import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
+
+const ColorPicker = dynamic(() => import('../ColorPicker'), {
+  ssr: false,
+  loading: CodeLoader,
+})
 
 export default function Design() {
   const {
@@ -19,16 +28,11 @@ export default function Design() {
   const currentMockStore = mockStore[currentMockUp]
 
   const eventBgImage = useCallback(
-    (e) => {
-      let value = ''
-      if (e.target.tagName === 'BUTTON') {
-        value = e.target.dataset.value
-      } else if (
-        e.target.tagName === 'IMG' &&
-        e.target.parentElement.tagName === 'BUTTON'
-      ) {
-        value = e.target.parentElement.dataset.value
-      }
+    ({
+      currentTarget: {
+        dataset: { value },
+      },
+    }) => {
       if (!value) {
         return
       }
@@ -40,10 +44,10 @@ export default function Design() {
   )
 
   const eventBgColor = useCallback(
-    ({ color }) =>
+    (color) =>
       modCurrentMockUp({
         backgroundImage: '',
-        backgroundColor: color,
+        backgroundColor: color.hex,
       }),
     [modCurrentMockUp]
   )
@@ -51,7 +55,7 @@ export default function Design() {
   return (
     <Tabs defaultActiveKey='image' className='justify-content-center mt-1 mb-3'>
       <Tab eventKey='image' title='Image'>
-        <PreviewContainer onClick={eventBgImage}>
+        <PreviewContainer>
           {scrBg.map(({ path }, index) => {
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
@@ -64,23 +68,24 @@ export default function Design() {
                   border: currentMockStore.backgroundImage === bgPreviewLink,
                 })}
                 data-value={bgPreviewLink}
+                onClick={eventBgImage}
               >
-                <PreviewImage src={bgPreviewLink} height='100' width='100' />
+                <PreviewImage
+                  src={bgPreviewLink}
+                  height='90'
+                  width='60'
+                  loader={imageLoader}
+                />
               </PreviewButton>
             )
           })}
         </PreviewContainer>
       </Tab>
       <Tab eventKey='color' title='Color'>
-        <ColorPickerPanel
-          className='input-group-text my-3 mx-auto p-0'
-          enableAlpha={false}
-          defaultColor={currentMockStore.backgroundColor}
+        <ColorPicker
           color={currentMockStore.backgroundColor}
           onChange={eventBgColor}
-        >
-          <span className='rc-color-picker-trigger h-100 m-0 p-0 border-0 fsize-32' />
-        </ColorPickerPanel>
+        />
       </Tab>
     </Tabs>
   )

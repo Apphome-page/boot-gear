@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useContext } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
+import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../../utils/storeProvider'
@@ -23,8 +24,10 @@ const ExceptionTags = {
 }
 
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
-  const [{ firebase }, modStore] = useContext(StoreContext)
   const [isLoading, setLoading] = useState(false)
+  const [, modStore] = useContext(StoreContext)
+
+  const firebase = useFirebaseApp()
 
   const userPlan = useUserData('/plan_id')
   const userProduct = useUserData('/product_id')

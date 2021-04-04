@@ -1,5 +1,6 @@
 import { useCallback, useContext, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../utils/storeProvider'
@@ -11,7 +12,9 @@ const ExceptionTags = {
 
 export default function Security() {
   const passRef = useRef(null)
-  const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
+  const [, modStore] = useContext(StoreContext)
+  const userAuth = useAuth()
+
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value
     // TODO: Enforce Password Format
@@ -27,7 +30,7 @@ export default function Security() {
       await userAuth.updatePassword(newPass)
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
-        firebase.auth().signOut()
+        userAuth.signOut()
         modStore({
           alertVariant: 'info',
           alertTimeout: -1,
@@ -42,12 +45,11 @@ export default function Security() {
     }
     passRef.current.value = ''
     modStore({
-      userAuth: firebase.auth().currentUser,
       alertVariant: 'success',
       alertTimeout: -1,
       alertText: 'Password Updated Successfully!',
     })
-  }, [firebase, modStore, userAuth])
+  }, [modStore, userAuth])
   return (
     <>
       <div className='pb-1 my-2 border-bottom lead text-dark'>Security</div>

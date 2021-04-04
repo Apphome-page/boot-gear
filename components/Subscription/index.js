@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useRef } from 'react'
+import { useContext, useMemo, useCallback, useEffect, useRef } from 'react'
 import {
   Container,
   Button,
@@ -8,23 +8,21 @@ import {
   ModalFooter,
   InputGroup,
 } from 'react-bootstrap'
+import { useUser, useDatabase } from 'reactfire'
 
 import { ArrowRightCircle as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightCircle'
 
 import { StoreContext } from '../../utils/storeProvider'
 
-const addSubscriber = async (firebase, email) => {
-  if (!firebase || !email) {
+const addSubscriber = async (fireDatabase, email) => {
+  if (!fireDatabase || !email) {
     return
   }
-  await firebase
-    .database()
-    .ref(`subs/${email.replace(/\W/gi, '_')}`)
-    .set({
-      email,
-      location: window.location.href,
-      timestamp: new Date().getTime(),
-    })
+  await fireDatabase.ref(`subs/${email.replace(/\W/gi, '_')}`).set({
+    email,
+    location: window.location.href,
+    timestamp: new Date().getTime(),
+  })
 }
 
 export const SubscriptionBox = function SubscriptionBox({
@@ -32,20 +30,20 @@ export const SubscriptionBox = function SubscriptionBox({
   className,
 }) {
   const emailRef = useRef(null)
-
-  const [{ firebase }, modStoreContext] = useContext(StoreContext)
+  const [, modStoreContext] = useContext(StoreContext)
+  const userDatabase = useDatabase()
 
   const actionSub = useCallback(async () => {
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
-      await addSubscriber(firebase, validEmail)
+      await addSubscriber(userDatabase, validEmail)
       modStoreContext({
         alertTimeout: 10,
         alertText: 'Thank you for subscribing!',
         alertVariant: 'success',
       })
     }
-  }, [firebase, modStoreContext])
+  }, [modStoreContext, userDatabase])
 
   return (
     <Container fluid className={className}>
@@ -83,14 +81,18 @@ export const SubscriptionBox = function SubscriptionBox({
 
 export default function Subscription({ show, onComplete }) {
   const emailRef = useRef(null)
+  const [, modStoreContext] = useContext(StoreContext)
 
-  const [{ firebase, userAuth }, modStoreContext] = useContext(StoreContext)
+  const userDatabase = useDatabase()
+  const { data: userData, hasEmitted: firstLaunch } = useUser()
+
+  const userId = useMemo(() => userData || {}, [userData])
 
   const actionSub = useCallback(async () => {
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
-      await addSubscriber(firebase, validEmail)
+      await addSubscriber(userDatabase, validEmail)
       modStoreContext({
         alertTimeout: 10,
         alertText: 'Thank you for subscribing!',
@@ -102,15 +104,15 @@ export default function Subscription({ show, onComplete }) {
     } else {
       emailRef.current.reportValidity()
     }
-  }, [firebase, modStoreContext, onComplete])
+  }, [modStoreContext, onComplete, userDatabase])
 
   useEffect(() => {
-    if (show && userAuth) {
+    if (show && firstLaunch && userId) {
       onComplete()
     }
-  }, [show, onComplete, userAuth])
+  }, [show, onComplete, firstLaunch, userId])
 
-  if (show && userAuth) {
+  if (firstLaunch && userId) {
     return ''
   }
 

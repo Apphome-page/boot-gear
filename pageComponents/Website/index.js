@@ -60,7 +60,6 @@ export default function HomeWebsite({ initProps = {} }) {
     <WebStore
       store={{
         ...initProps,
-        processing: false,
         maxSlide: STEPS.length - 1,
         nextAction,
         prevAction,
@@ -94,7 +93,7 @@ export default function HomeWebsite({ initProps = {} }) {
             </Carousel>
           </Col>
           <Col lg={6}>
-            <Image src='/img/feature/web-landing.svg' className='p-3' />
+            <Image fluid src='/img/feature/web-landing.svg' className='p-3' />
           </Col>
         </Row>
       </Container>

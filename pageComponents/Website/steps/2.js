@@ -11,6 +11,9 @@ import {
   Tooltip,
 } from 'react-bootstrap'
 import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+
+import FileInput from '../../../components/FileInput'
+
 import { StoreContext } from '../helpers/store'
 
 export default function Step() {
@@ -23,7 +26,6 @@ export default function Step() {
     (event) => {
       event.preventDefault()
       event.stopPropagation()
-      updateStore({ processing: true })
       const appForm = appFormRef.current
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
@@ -36,13 +38,8 @@ export default function Step() {
           appDescription: formDescription,
           appIcon: formIcon.files[0],
           appScreenshot: formScreenshot.files[0],
-          processing: false,
         })
         nextAction()
-      } else {
-        updateStore({
-          processing: false,
-        })
       }
     },
     [nextAction, updateStore]
@@ -109,27 +106,27 @@ export default function Step() {
             <hr />
           </Col>
         </Row>
-        <Row className='mt-1 mb-3 ml-3 mr-0'>
-          <Col>
-            <FormFile
+        <Row className='mt-1 mb-3 ml-3 mr-0 text-center'>
+          <Col lg={6}>
+            <FileInput
+              size='128'
               id='appIcon'
               name='appIcon'
+              label='Attach App Icon'
               accept='image/*'
               required
-              label='Attach App Icon'
-              custom
+              className='w-100'
             />
           </Col>
-        </Row>
-        <Row className='mt-1 mb-3 ml-3 mr-0'>
-          <Col>
-            <FormFile
+          <Col lg={6}>
+            <FileInput
+              size='128'
               id='appScreenshot'
               name='appScreenshot'
+              label='Attach App Screenshot'
               accept='image/*'
               required
-              label='Attach App Screenshot'
-              custom
+              className='w-100'
             />
           </Col>
         </Row>

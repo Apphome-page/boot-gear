@@ -1,7 +1,7 @@
-import fetch from 'cross-fetch'
 import { useRouter } from 'next/router'
 import { useContext, useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
+import { useAuth } from 'reactfire'
 
 import AuthWrapper from '../../components/AuthWrapper'
 
@@ -13,12 +13,15 @@ const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_GOLD
 
 export default function Payment() {
   const router = useRouter()
-  const [{ firebase }, modStore] = useContext(StoreContext)
+  const [, modStore] = useContext(StoreContext)
+
+  const userAuth = useAuth()
 
   const {
     query: { plan },
   } = router
-  const { uid } = firebase.auth().currentUser || {}
+
+  const { uid } = userAuth.currentUser || {}
 
   const syncUser = useCallback(async () => {
     let checkoutLink = ''
@@ -39,8 +42,11 @@ export default function Payment() {
     if (!uid) {
       return
     }
+    const [idToken, { default: fetch }] = await Promise.all([
+      userAuth.currentUser.getIdToken(),
+      import('cross-fetch'),
+    ])
     try {
-      const idToken = await firebase.auth().currentUser.getIdToken()
       const syncResp = await fetch(FIRECLOUD_USER_SYNC, {
         method: 'POST',
         headers: {
@@ -59,9 +65,9 @@ export default function Payment() {
         alertTimeout: -1,
         alertText: 'Something went wrong. Please Sign in again to continue.',
       })
-      firebase.auth().signOut()
+      userAuth.signOut()
     }
-  }, [firebase, modStore, plan, router, uid])
+  }, [modStore, plan, router, uid, userAuth])
 
   useEffect(() => {
     syncUser()
