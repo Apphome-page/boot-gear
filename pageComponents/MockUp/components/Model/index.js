@@ -1,9 +1,12 @@
 import { useCallback, useContext } from 'react'
 import { Container } from 'react-bootstrap'
+import classNames from 'classnames'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 import scrMeta from '../../../../config/scrMeta.json'
+
+import imageLoader from '../../../../utils/imageLoader'
 
 import { getFrameProps } from '../../helpers/defaults'
 
@@ -19,18 +22,14 @@ export default function Design() {
   const currentMockStore = mockStore[currentMockUp]
 
   const eventModel = useCallback(
-    (e) => {
+    ({
+      currentTarget: {
+        dataset: { value },
+      },
+    }) => {
       const { frameType, frameId, height: maxHeight } = currentMockStore
-      let value = ''
-      if (e.target.tagName === 'BUTTON') {
-        value = e.target.dataset.value
-      } else if (
-        e.target.tagName === 'IMG' &&
-        e.target.parentElement.tagName === 'BUTTON'
-      ) {
-        value = e.target.parentElement.dataset.value
-      } else {
-        value = e.target.value
+      if (!value) {
+        return
       }
       modCurrentMockUp({
         ...getFrameProps(frameType, frameId, {
@@ -43,14 +42,15 @@ export default function Design() {
   )
 
   return (
-    <Container className='text-center' onClick={eventModel}>
+    <Container className='text-center'>
       {scrMeta[currentMockStore.frameType]
         .find(({ id }) => id === currentMockStore.frameId)
         .sizes.map((model, key) => (
           <PreviewButton
-            className={`m-1 ${
+            className={classNames(
+              'm-1',
               currentMockStore.frameDevice === model ? 'border-dark' : 'border'
-            }`}
+            )}
             variant='outline-light'
             key={key}
             data-value={model}
@@ -58,10 +58,14 @@ export default function Design() {
               .replace(/(\d+)/g, ' $1')
               .replace(/_/g, ' ')
               .replace('custom', '')}
+            onClick={eventModel}
           >
             <PreviewImage
               src={`/scrPreview/${currentMockStore.frameType}/${currentMockStore.frameId}/${model}.png`}
               alt='Device Model'
+              height='90'
+              width='60'
+              loader={imageLoader}
             />
           </PreviewButton>
         ))}

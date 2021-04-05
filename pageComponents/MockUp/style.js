@@ -1,4 +1,5 @@
-import { Button, Container, Image } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
+import Image from 'next/image'
 import styled from '@emotion/styled'
 
 export default ''
@@ -27,6 +28,4 @@ export const PreviewImage = styled(Image)`
   object-fit: contain;
   border-radius: 4px;
   cursor: pointer;
-  &:hover {
-  }
 `

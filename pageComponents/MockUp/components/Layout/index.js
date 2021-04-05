@@ -6,9 +6,12 @@ import {
   ButtonGroup,
   Tabs,
   Tab,
-  Image,
 } from 'react-bootstrap'
+import Image from 'next/image'
+
+import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+
 import { ArrowLeftShort as IconArrowLeft } from '@emotion-icons/bootstrap/ArrowLeftShort'
 import { ArrowRightShort as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightShort'
 import { ArrowUpShort as IconArrowUp } from '@emotion-icons/bootstrap/ArrowUpShort'
@@ -16,10 +19,11 @@ import { ArrowDownShort as IconArrowDown } from '@emotion-icons/bootstrap/ArrowD
 import { ArrowClockwise as IconRotateRight } from '@emotion-icons/bootstrap/ArrowClockwise'
 import { ArrowCounterclockwise as IconRotateLeft } from '@emotion-icons/bootstrap/ArrowCounterclockwise'
 
-import { MockupContext } from '../../helpers/MockProvider'
+import imageLoader from '../../../../utils/imageLoader'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
+import { MockupContext } from '../../helpers/MockProvider'
 
 import { PreviewContainer } from '../../style'
 
@@ -110,18 +114,27 @@ export default function Layout() {
               key={fTemplate}
               overlay={<Tooltip>{frameTemplates[fTemplate].name}</Tooltip>}
             >
-              <Image
-                src={`/scrPreview/template/${fTemplate}.png`}
-                alt='Device Template'
-                data-value={fTemplate}
-                height='80'
-                width='auto'
-                className={`m-1 rounded cursor-pointer ${
+              <div
+                className={classNames(
+                  'd-inline-block',
+                  'm-1',
+                  'p-0',
+                  'rounded',
+                  'cursor-pointer',
                   currentMockStore.template === fTemplate
                     ? 'bg-warning'
                     : 'bg-alt'
-                }`}
-              />
+                )}
+              >
+                <Image
+                  loader={imageLoader}
+                  src={`/scrPreview/template/${fTemplate}.png`}
+                  alt='Device Template'
+                  data-value={fTemplate}
+                  height='100'
+                  width='64'
+                />
+              </div>
             </OverlayTrigger>
           ))}
         </PreviewContainer>

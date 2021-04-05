@@ -1,11 +1,11 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Carousel,
   CarouselItem,
-  Image,
   Container,
   Row,
   Col,
+  Image,
 } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 
@@ -17,8 +17,10 @@ import Step3 from './steps/3'
 import Step4 from './steps/4'
 import Step5 from './steps/5'
 import Step6 from './steps/6'
+import Step7 from './steps/7'
 
-const STEPS = [Step1, Step2, Step3, Step4, Step5, Step6]
+// TODO: Use formik for multi-staging
+const STEPS = [Step1, Step2, Step3, Step4, Step5, Step6, Step7]
 
 export default function HomeWebsite({ initProps = {} }) {
   const router = useRouter()
@@ -54,18 +56,14 @@ export default function HomeWebsite({ initProps = {} }) {
     })
   }, [router, setActiveSlide])
 
-  useEffect(() => {
-    setActiveSlide(parseInt(router.query.webStep || 0, 10))
-  }, [router.query.webStep])
-
   return (
     <WebStore
       store={{
         ...initProps,
-        processing: false,
         maxSlide: STEPS.length - 1,
         nextAction,
         prevAction,
+        setActiveSlide,
       }}
     >
       <Container>
@@ -95,7 +93,7 @@ export default function HomeWebsite({ initProps = {} }) {
             </Carousel>
           </Col>
           <Col lg={6}>
-            <Image src='/img/feature/web-landing.svg' fluid className='p-3' />
+            <Image fluid src='/img/feature/web-landing.svg' className='p-3' />
           </Col>
         </Row>
       </Container>

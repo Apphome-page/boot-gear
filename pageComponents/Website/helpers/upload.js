@@ -1,4 +1,3 @@
-import Compress from 'compress.js'
 import keyValidate from './keyValidate'
 import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
@@ -6,11 +5,15 @@ import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 export default async function upload(
   firebase,
   appKey,
-  { templateProps, userId = firebase.auth().currentUser } = {}
+  { templateProps, userId = firebase.auth().currentUser.uid } = {}
 ) {
-  const keyValidated = await keyValidate(firebase, appKey, { userId })
-  if (!keyValidated) {
-    return
+  const [keyValidated, { default: Compress }] = await Promise.all([
+    keyValidate(firebase, appKey, { userId }),
+    import('compress.js'),
+  ])
+
+  if (!keyValidated.status) {
+    return keyValidated
   }
 
   const compress = new Compress()
@@ -21,23 +24,14 @@ export default async function upload(
   const storageRef = firebase.storage().ref(storagePath)
   const databaseRef = firebase.database().ref(databasePath)
 
-  const {
-    appAbout = '',
-    appAddress = '',
-    appAndroid = '',
-    appDescription = '',
-    appDownloads = '',
-    appIcon,
-    appIos = '',
-    appName,
-    appRating = '',
-    appScreenshot,
-    appTitle = '',
-    appVideo = '',
-  } = templateProps
-  const appIconName = appIcon.name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
+  // Pre-fill if existing data exists
+  const appDataSet = { ...(keyValidated.data || {}), ...(templateProps || {}) }
+
+  const appIconName = appDataSet.appIcon.name
+    .replace(/[^a-zA-Z0-9.]/gi, '-')
+    .toLowerCase()
   const appIconPath = `public/${appKey}/bin/${appIconName}`
-  const appScreenshotName = appScreenshot.name
+  const appScreenshotName = appDataSet.appScreenshot.name
     .replace(/[^a-zA-Z0-9.]/gi, '-')
     .toLowerCase()
   const appScreenshotPath = `public/${appKey}/bin/${appScreenshotName}`
@@ -74,7 +68,7 @@ export default async function upload(
 
   // Compress & Upload Icon
   const IconPromise = compress
-    .compress([appIcon], {
+    .compress([appDataSet.appIcon], {
       size: 1,
       quality: 0.75,
       maxWidth: 256,
@@ -86,7 +80,7 @@ export default async function upload(
 
   // Compress & Upload Screenshot
   const ScreenshotPromise = compress
-    .compress([appScreenshot], {
+    .compress([appDataSet.appScreenshot], {
       size: 2,
       quality: 0.75,
       maxWidth: 720,
@@ -98,21 +92,30 @@ export default async function upload(
       firebase.storage().ref(appScreenshotPath).put(file, customMeta)
     )
 
-  const DBPromise = databaseRef.set({
-    appAbout,
-    appAddress,
-    appAndroid,
-    appDescription,
-    appDownloads,
-    appIos,
-    appName,
-    appRating,
-    appTitle,
-    appVideo,
-    appIcon: appIconPath,
-    appScreenshot: appScreenshotPath,
-    timestamp: new Date().getTime(),
-  })
+  const DBPromise = databaseRef.set(
+    // remove functional properties from appDataSet
+    Object.keys(appDataSet).reduce(
+      (appDataObj, appDataKey) => {
+        // Preserve Initial Value
+        const appDataValue =
+          appDataObj[appDataKey] || appDataSet[appDataKey] || ''
+        return typeof appDataValue === 'function' ||
+          appDataKey.indexOf('app') !== 0
+          ? appDataObj
+          : Object.assign(appDataObj, { [appDataKey]: appDataValue })
+      },
+      // Override `File` Values with Strings
+      {
+        appIcon: appIconPath,
+        appScreenshot: appScreenshotPath,
+        timestamp: new Date().getTime(),
+      }
+    )
+  )
 
   await Promise.all([HTMLPromise, IconPromise, ScreenshotPromise, DBPromise])
+
+  return {
+    status: true,
+  }
 }

@@ -8,6 +8,9 @@ import HomePricing from '../pageComponents/Home/pricing'
 import HomeFeatures from '../pageComponents/Home/features'
 import HomeBlog from '../pageComponents/Home/blog'
 
+// TODO: Convert home to AMP
+// export const config = { amp: true }
+
 export default function Home() {
   return (
     <>

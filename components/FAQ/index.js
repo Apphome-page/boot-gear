@@ -1,14 +1,15 @@
 /* eslint-disable react/no-danger */
 import { Container } from 'react-bootstrap'
+import classNames from 'classnames'
 
 export function FAQList({ faqList = [] }) {
   return (
     <>
       {faqList.map(({ title, desc }, index) => (
         <details
-          className={`py-3${
-            index !== faqList.length - 1 ? ' border-bottom' : ''
-          }`}
+          className={classNames('py-3', {
+            'border-bottom': index !== faqList.length - 1,
+          })}
           key={index}
         >
           <summary

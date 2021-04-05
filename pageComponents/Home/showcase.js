@@ -1,5 +1,8 @@
 import { Container, Button, Row, Col } from 'react-bootstrap'
 import Link from 'next/link'
+import Image from 'next/image'
+
+import imageLoader from '../../utils/imageLoader'
 
 export default function HomeShowcase() {
   return (
@@ -23,7 +26,16 @@ export default function HomeShowcase() {
             </Link>
           </Col>
           <Col lg={6} className='d-none d-lg-block'>
-            <img src='/img/hero/hero-bg.png' alt='' className='w-100' />
+            <Image
+              loader={imageLoader}
+              src='/img/hero/hero-bg.png'
+              alt=''
+              height='300'
+              width='600'
+              className='w-100'
+              layout='responsive'
+              sizes='50vw'
+            />
           </Col>
         </Row>
       </Container>

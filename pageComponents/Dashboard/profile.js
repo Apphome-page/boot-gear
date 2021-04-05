@@ -1,26 +1,45 @@
 import { useCallback, useContext, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { useAuth } from 'reactfire'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../utils/storeProvider'
 
+const ExceptionTags = {
+  section: 'Dashboard',
+  subSection: 'Profile',
+}
+
 export default function Profile() {
   const formRef = useRef(null)
-  const [{ firebase, userAuth }, modStore] = useContext(StoreContext)
-  const { displayName, email } = userAuth || {}
+  const [, modStore] = useContext(StoreContext)
+
+  const userAuth = useAuth()
+
+  const { displayName, email } = userAuth.currentUser || {}
+
   const actionUpdate = useCallback(async () => {
     const {
       displayName: { value: newDisplayName },
       email: { value: newEmail },
     } = formRef.current.elements
-    if (newEmail !== userAuth.email) {
+    if (newEmail !== email) {
       try {
         await userAuth.updateEmail(newEmail)
       } catch (err) {
         if (err.code === 'auth/requires-recent-login') {
-          window.alert('Please Sign in again to continue.')
-          firebase.auth().signOut()
+          userAuth.signOut()
+          modStore({
+            alertTimeout: -1,
+            alertVariant: 'info',
+            alertText: 'Please Sign in again to continue.',
+          })
           return
         }
+        captureExceptionSentry(err, (scope) => {
+          scope.setTags(ExceptionTags)
+          return scope
+        })
       }
     }
     if (newDisplayName !== userAuth.displayName) {
@@ -29,10 +48,11 @@ export default function Profile() {
       })
     }
     modStore({
-      userAuth: firebase.auth().currentUser,
+      alertVariant: 'success',
+      alertTimeout: -1,
+      alertText: 'Profile Updated Successfully!',
     })
-    window.alert('Updated your Profile!')
-  }, [firebase, modStore, userAuth])
+  }, [email, modStore, userAuth])
   return (
     <>
       <div className='pb-1 mb-2 border-bottom lead text-dark'>Your Details</div>

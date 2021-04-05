@@ -1,22 +1,31 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
-import fetch from 'cross-fetch'
-
-import { StoreContext } from '../../../utils/storeProvider'
+import { useAuth } from 'reactfire'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
+
+const ExceptionTags = {
+  section: 'Dashboard',
+  subSection: 'Domain',
+}
 
 export default function DomainVerify({
   webKey,
   webData: { webDomain = '', webNameservers = [] },
 }) {
-  const [{ firebase }] = useContext(StoreContext)
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
+
+  const userAuth = useAuth()
+
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
-    const idToken = await firebase.auth().currentUser.getIdToken()
+    const [idToken, { default: fetch }] = await Promise.all([
+      userAuth.currentUser.getIdToken(),
+      import('cross-fetch'),
+    ])
     try {
       const verifyResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {
         method: 'POST',
@@ -40,15 +49,19 @@ export default function DomainVerify({
             : 'Please verify the nameservers, or wait sometime before verifying again.',
         type: 'info',
       })
-    } catch (e) {
+    } catch (err) {
       setAlertData({
         text:
           'Something went wrong. Please verify your nameservers and try after a while.',
         type: 'danger',
       })
+      captureExceptionSentry(err, (scope) => {
+        scope.setTags(ExceptionTags)
+        return scope
+      })
     }
     setProcessing(false)
-  }, [firebase, webKey])
+  }, [userAuth.currentUser, webKey])
   return (
     <Container fluid>
       <Row>

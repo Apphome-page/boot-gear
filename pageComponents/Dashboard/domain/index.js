@@ -1,13 +1,7 @@
 import { useState, useMemo, useCallback, useContext } from 'react'
-import {
-  Image,
-  Button,
-  Modal,
-  ModalBody,
-  Spinner,
-  Alert,
-} from 'react-bootstrap'
-import Link from 'next/link'
+import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
+import { useFirebaseApp } from 'reactfire'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext } from '../../../utils/storeProvider'
 import useUserData from '../../../utils/useUserData'
@@ -17,48 +11,23 @@ import removeWebsite from '../helpers/removeWebsite'
 import DomainSetup from './setup'
 import DomainVerify from './verify'
 import DomainNameserver from './nameserver'
+import RemoveLoading from './removeLoading'
+import PayInfo from './pay'
 
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_PLAN_SILVER
 const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_PLAN_GOLD
 const FIRESTORE_BASE = process.env.NEXT_PUBLIC_FIRESTORE_URL
 
-function LoadingSpinner() {
-  return (
-    <>
-      <Alert variant='info' className='lead text-center'>
-        Removing custom Domain
-      </Alert>
-      <Spinner
-        animation='grow'
-        variant='dark'
-        className='d-block my-5 mx-auto text-center bg-alt'
-      />
-    </>
-  )
-}
-
-function PayAlert() {
-  return (
-    <>
-      <Alert variant='info' className='mx-auto mt-5 mb-2 lead text-center'>
-        Buy a Paid Plan to begin adding your custom domain!
-      </Alert>
-      <Link href='/pricing'>
-        <Button
-          block
-          variant='secondary'
-          className='mt-2 mb-5 mx-auto w-75 btn-alt'
-        >
-          View Plans
-        </Button>
-      </Link>
-    </>
-  )
+const ExceptionTags = {
+  section: 'Dashboard',
+  subSection: 'Domain',
 }
 
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
-  const [{ firebase }] = useContext(StoreContext)
   const [isLoading, setLoading] = useState(false)
+  const [, modStore] = useContext(StoreContext)
+
+  const firebase = useFirebaseApp()
 
   const userPlan = useUserData('/plan_id')
   const userProduct = useUserData('/product_id')
@@ -67,24 +36,36 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
   const { appIcon, appName, webDomain, webHost } = webData || {}
 
   const removeDomain = useCallback(async () => {
+    // TODO: CONFIRM
     if (!window.confirm('Are you sure?')) {
       return
     }
+    setLoading(true)
     try {
-      setLoading(true)
       await removeWebsite({
         firebase,
         webKey,
         removeDomain: true,
-        removeStorage: false,
+        removeStorage: true,
       })
-      window.alert('Removed custom Domain successfully')
-    } catch (e) {
-      window.alert('Something went wrong')
-    } finally {
-      setLoading(false)
+      modStore({
+        alertVariant: 'success',
+        alertTimeout: -1,
+        alertText: 'Removed custom Domain successfully',
+      })
+    } catch (err) {
+      captureExceptionSentry(err, (scope) => {
+        scope.setTags(ExceptionTags)
+        return scope
+      })
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: -1,
+        alertText: 'Something went wrong',
+      })
     }
-  }, [firebase, webKey])
+    setLoading(false)
+  }, [firebase, modStore, webKey])
 
   // Changes Modal Body based on conditions
   const DomainForm = useMemo(() => {
@@ -92,7 +73,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
     const validPlan =
       paidPlans.includes(userPlan) || paidPlans.includes(userProduct)
     if (isLoading) {
-      return LoadingSpinner
+      return RemoveLoading
     }
     if (validPlan) {
       if (webDomain && !webHost) {
@@ -103,7 +84,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
       }
       return DomainSetup
     }
-    return PayAlert
+    return PayInfo
   }, [isLoading, userPlan, userProduct, webDomain, webHost])
 
   return (

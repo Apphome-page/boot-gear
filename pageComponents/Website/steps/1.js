@@ -4,17 +4,24 @@ import {
   Row,
   Col,
   Button,
-  Image,
   Form,
   FormControl,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import { useFirebaseApp } from 'reactfire'
+
+import Image from 'next/image'
+import classNames from 'classnames'
+
 import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
 
+import imageLoader from '../../../utils/imageLoader'
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
+
+import { ThemeImage } from '../style'
 
 const THEMES = [
   {
@@ -33,13 +40,17 @@ const THEMES = [
 
 export default function Step() {
   const formRef = useRef(null)
-  const [{ firebase, userAuth }, modStore] = useContext(HeadContext)
-  const [{ nextAction, prevAction, theme, appName }, updateStore] = useContext(
-    StoreContext
-  )
-  const [selectedTheme, setSelectedTheme] = useState(theme || THEMES[0].key)
 
-  const userId = userAuth && userAuth.uid
+  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
+  const [
+    { nextAction, prevAction, appTheme, appName },
+    updateStore,
+  ] = useContext(StoreContext)
+
+  const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
+
+  const firebase = useFirebaseApp()
+  const { uid: userId } = firebase.auth().currentUser || {}
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {
@@ -50,26 +61,47 @@ export default function Step() {
     if (!formCurrent || !formCurrent.reportValidity()) {
       return
     }
-    updateStore({ processing: true })
+
+    queueLoading()
+
     const formElements = formRef.current.elements
     const formName = formElements.namedItem('appName').value
     const appKey = formName.replace(/\W/gi, '-').toLowerCase()
 
     const { default: keyValidate } = await import('../helpers/keyValidate')
-    const keyValidated = await keyValidate(firebase, appKey, { userId })
+    const {
+      status: keyValidated = false,
+      text: keyText = '',
+      data: keyData = {},
+    } = await keyValidate(firebase, appKey, { userId })
+
+    unqueueLoading()
     if (!keyValidated) {
-      updateStore({ processing: false })
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: 10,
+        alertText: keyText,
+      })
       return
     }
     updateStore({
+      ...keyData,
       appKey,
       appName: formName,
-      theme: selectedTheme,
-      processing: false,
+      appTheme: selectedTheme,
     })
-    console.log({ theme, selectedTheme })
     nextAction()
-  }, [userId, firebase, updateStore, selectedTheme, nextAction, modStore])
+  }, [
+    firebase,
+    modStore,
+    nextAction,
+    queueLoading,
+    selectedTheme,
+    unqueueLoading,
+    updateStore,
+    userId,
+  ])
+
   const themeBtnAction = useCallback(
     ({
       target: {
@@ -82,6 +114,7 @@ export default function Step() {
     },
     [setSelectedTheme]
   )
+
   return (
     <Form ref={formRef}>
       <Container fluid>
@@ -140,20 +173,36 @@ export default function Step() {
             </OverlayTrigger>
           </Col>
         </Row>
-        <Row className='ml-3' onClick={themeBtnAction}>
-          {THEMES.map(({ key, src }) => (
-            <Col lg={6} className='py-3' key={key}>
-              <Image
-                src={src}
-                data-theme={key}
-                thumbnail
-                className={`cursor-pointer${
-                  selectedTheme === key ? ' border-warning shadow' : ''
-                }`}
-                style={{ borderWidth: '4px' }}
-              />
-            </Col>
-          ))}
+        <Row className='ml-3'>
+          <Col onClick={themeBtnAction}>
+            {THEMES.map(({ key, src }) => (
+              <ThemeImage
+                key={key}
+                className={classNames(
+                  'd-inline-flex',
+                  'm-1',
+                  'p-0',
+                  'border',
+                  'rounded',
+                  'cursor-pointer',
+                  'bg-light',
+                  {
+                    'border-warning': selectedTheme === key,
+                    shadow: selectedTheme === key,
+                  }
+                )}
+              >
+                <Image
+                  loader={imageLoader}
+                  src={src}
+                  width='200'
+                  height='105'
+                  className='m-0 p-0'
+                  data-theme={key}
+                />
+              </ThemeImage>
+            ))}
+          </Col>
         </Row>
         <Row className='py-5'>
           <Col>

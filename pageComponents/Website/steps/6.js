@@ -1,38 +1,41 @@
 import { useContext, useCallback, useMemo } from 'react'
-import { Container, Row, Col, Image, Button } from 'react-bootstrap'
-import { useRouter } from 'next/router'
+import { Container, Row, Col, Button, Image } from 'react-bootstrap'
+import { useFirebaseApp, useAuth } from 'reactfire'
+import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
-
-const createObjectURI = (url) => {
-  let returnObj = null
-  try {
-    returnObj = window.URL.createObjectURL(url)
-  } catch (e) {
-    // Nothing
-  }
-  return returnObj
+const ExceptionTags = {
+  section: 'Website-Builder',
+  subSection: 'Step-6',
 }
 
 export default function Step() {
-  const [{ firebase, userAuth }, modStore] = useContext(HeadContext)
+  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
   const [templateProps, updateStore] = useContext(StoreContext)
-  const router = useRouter()
 
-  const userId = userAuth && userAuth.uid
+  const firebase = useFirebaseApp()
+  const firebaseAuth = useAuth()
+
+  const { uid: userId } = firebaseAuth.currentUser || {}
   const {
     appIcon,
     appName,
     appTitle,
     appDescription,
     prevAction,
+    nextAction,
   } = templateProps
 
   const appIconURI = useMemo(() => {
-    return createObjectURI(appIcon)
+    let returnObj = null
+    try {
+      returnObj = window.URL.createObjectURL(appIcon)
+    } catch (e) {
+      returnObj = null
+    }
+    return returnObj
   }, [appIcon])
 
   const actionUpload = useCallback(async () => {
@@ -40,30 +43,48 @@ export default function Step() {
       modStore({ signPop: true })
       return
     }
-    updateStore({ processing: true })
-
+    queueLoading()
+    let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
       await uploadWebsite(firebase, templateProps.appKey, {
         templateProps,
         userId,
       })
-      window.alert(
-        `Your website is generated!\nVisit your website at: ${SITE_URL}/${templateProps.appKey}`
-      )
-      router.push('/dashboard/websites')
-      window.open(`${SITE_URL}/${templateProps.appKey}`, '_blank')
-    } catch (e) {
-      window.alert('Something went wrong while updating your website.')
+      uploadSuccess = true
+    } catch (err) {
+      captureExceptionSentry(err, (scope) => {
+        scope.setTags(ExceptionTags)
+        return scope
+      })
+      uploadSuccess = false
     }
-    updateStore({ processing: false })
-  }, [firebase, modStore, router, templateProps, updateStore, userId])
+    unqueueLoading()
+    if (uploadSuccess) {
+      nextAction()
+    } else {
+      modStore({
+        alertVariant: 'danger',
+        alertTimeout: -1,
+        alertText: 'Something went wrong, while updating your website.',
+      })
+    }
+  }, [
+    firebase,
+    modStore,
+    nextAction,
+    queueLoading,
+    templateProps,
+    unqueueLoading,
+    updateStore,
+    userId,
+  ])
 
   return (
     <Container fluid>
       <Row>
         <Col>
-          <Image src={appIconURI} thumbnail rounded />
+          {appIconURI ? <Image src={appIconURI} thumbnail rounded /> : ''}
         </Col>
         <Col>
           <p>

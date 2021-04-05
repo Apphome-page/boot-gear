@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import dynamic from 'next/dynamic'
+import classNames from 'classnames'
 
 import { IconSource, IconGen, Progress, Source, Options } from './style'
 
@@ -80,10 +81,13 @@ export default function AppIcon({ preset = [] }) {
 
     updateProgress(0)
 
-    const { default: ResizeImage } = await import('../../utils/resizeImage')
-    const { default: AppIconSizes } = await import(
-      '../../config/appIconSizes.json'
-    )
+    const [
+      { default: ResizeImage },
+      { default: AppIconSizes },
+    ] = await Promise.all([
+      import('../../utils/resizeImage'),
+      import('../../config/appIconSizes.json'),
+    ])
 
     const validPlatforms = Object.keys(platforms)
     const progressDelta =
@@ -199,7 +203,12 @@ export default function AppIcon({ preset = [] }) {
                     : true
 
                   return (
-                    <div key={key} className={isChecked ? 'order-first' : ''}>
+                    <div
+                      key={key}
+                      className={classNames({
+                        'order-first': isChecked,
+                      })}
+                    >
                       <input
                         data-platform={platform}
                         type='checkbox'

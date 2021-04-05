@@ -16,8 +16,8 @@
     "plugin:import/warnings",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
-    "prettier",
-    "prettier/react"
+    "prettier"
+    // "prettier/react"
     // always put prettier at last
   ],
   "globals": {

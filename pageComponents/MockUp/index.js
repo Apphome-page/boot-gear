@@ -53,8 +53,8 @@ export default function MockUp({ preset }) {
                 <Actions />
               </Col>
             </Row>
-            <Row className='p-2'>
-              <Col lg={4}>
+            <Row>
+              <Col lg={4} className='my-3'>
                 <Row className='h-100'>
                   <Col sm={3} className='p-0 border rounded-left'>
                     <ListGroup
@@ -156,7 +156,7 @@ export default function MockUp({ preset }) {
                   </Col>
                 </Row>
               </Col>
-              <Col lg={8} className=''>
+              <Col lg={8} className='my-3'>
                 <Assembly />
               </Col>
             </Row>

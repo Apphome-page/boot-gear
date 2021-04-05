@@ -12,11 +12,11 @@ export default function TermsConditions() {
       </Jumbotron>
       <Container className='min-vh-100 my-5 text-justify'>
         <p>
-          We, <em>Applandingpage LLP</em>, registered under the provisions of the
-          Limited Liability Partnership Act 2008, having its registered office
-          at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245 304,
-          INDIA&quot; represented by its Directors, hereinafter referred to as
-          the &quot;<b>FIRM</b>&quot; (where such expression shall, unless
+          We, <em>Applandingpage LLP</em>, registered under the provisions of
+          the Limited Liability Partnership Act 2008, having its registered
+          office at &quot;493 Saket, Pilkhuwa, Ghaziabad, Uttar Pradesh – 245
+          304, INDIA&quot; represented by its Directors, hereinafter referred to
+          as the &quot;<b>FIRM</b>&quot; (where such expression shall, unless
           repugnant to the context thereof, be deemed to include its respective
           legal heirs, representatives, administrators, permitted successors and
           assigns).
@@ -25,8 +25,8 @@ export default function TermsConditions() {
           The Firm ensures steady commitment to Your usage of the Platform and
           privacy with regard to the protection of Your invaluable information.
           This document contains information about the Website and domain &nbsp;
-          <a href='https://applanding.page'>https://applanding.page</a> (hereinafter
-          referred to as the &quot;<b>Platform</b>&quot;).
+          <a href='https://applanding.page'>https://applanding.page</a>{' '}
+          (hereinafter referred to as the &quot;<b>Platform</b>&quot;).
         </p>
         <p>
           For the purpose of these Terms of Use (&quot;<b>Terms</b>&quot;),
@@ -138,9 +138,9 @@ export default function TermsConditions() {
         </ol>
         <h2 className='mt-5 mb-2'>PLATFORM OVERVIEW</h2>
         <p>
-          Applanding.page is a platform owned and operated by Applandingpage LLP which
-          is a limited liability partnership registered under the provisions of
-          the Limited Liability Partnership Act, 2008.
+          Applanding.page is a platform owned and operated by Applandingpage LLP
+          which is a limited liability partnership registered under the
+          provisions of the Limited Liability Partnership Act, 2008.
         </p>
         <p>
           Servers for this website are hosted on Firebase. User is not required

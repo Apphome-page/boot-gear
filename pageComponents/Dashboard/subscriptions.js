@@ -1,9 +1,25 @@
+import { useEffect, useContext } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap'
 
+import { StoreContext } from '../../utils/storeProvider'
 import useUserData from '../../utils/useUserData'
 
 export default function Subscription() {
-  const { plan: { title: planTitle } = {} } = useUserData()
+  const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
+  const { firstLaunch, plan: { title: planTitle } = {} } = useUserData()
+
+  useEffect(() => {
+    const isPopped = !!firstLaunch
+    if (isPopped) {
+      queueLoading()
+    }
+    return () => {
+      if (isPopped) {
+        unqueueLoading()
+      }
+    }
+  }, [firstLaunch, queueLoading, unqueueLoading])
+
   return (
     <>
       <div className='pb-1 mb-2 border-bottom lead text-dark'>

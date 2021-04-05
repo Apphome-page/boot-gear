@@ -1,4 +1,7 @@
-import { Container, Row, Col, Image } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
+import Image from 'next/image'
+
+import imageLoader from '../../utils/imageLoader'
 
 import { CardIcon } from './style'
 
@@ -25,7 +28,12 @@ export default function HomeFeatures() {
             <span className='d-inline-block mx-1 p-1 bg-danger rounded-circle' />
           </div>
           <Image
+            loader={imageLoader}
             className='border border-dark w-100'
+            width='600'
+            height='272'
+            layout='responsive'
+            sizes='50vw'
             src='/img/feature/landing.jpg'
             alt='App Landing Page'
           />
@@ -48,7 +56,12 @@ export default function HomeFeatures() {
             <span className='d-inline-block mx-1 p-1 bg-danger rounded-circle' />
           </div>
           <Image
+            loader={imageLoader}
             className='w-100 border border-dark'
+            width='600'
+            height='249'
+            layout='responsive'
+            sizes='50vw'
             src='/img/feature/scr.jpg'
             alt='App Screenshot Generator'
           />
