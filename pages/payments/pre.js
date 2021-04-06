@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router'
-import { useContext, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
 import { useAuth } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 
 import AuthWrapper from '../../components/AuthWrapper'
-
-import { StoreContext } from '../../utils/storeProvider'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
@@ -13,7 +12,7 @@ const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_GOLD
 
 export default function Payment() {
   const router = useRouter()
-  const [, modStore] = useContext(StoreContext)
+  const { addToast } = useToasts()
 
   const userAuth = useAuth()
 
@@ -60,14 +59,13 @@ export default function Payment() {
       }
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong. Please Sign in again to continue.',
+      addToast('Something went wrong. Please Sign in again to continue.', {
+        appearance: 'error',
+        autoDismiss: false,
       })
       userAuth.signOut()
     }
-  }, [modStore, plan, router, uid, userAuth])
+  }, [addToast, plan, router, uid, userAuth])
 
   useEffect(() => {
     syncUser()

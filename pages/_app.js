@@ -2,7 +2,6 @@
 import 'nprogress/nprogress.css'
 import '../styles/globals.scss'
 
-import dynamic from 'next/dynamic'
 import Router from 'next/router'
 import { useAmp } from 'next/amp'
 import NProgress from 'nprogress'
@@ -13,6 +12,7 @@ import 'firebase/database'
 import 'firebase/storage'
 
 import { Modal, ModalBody, Alert } from 'react-bootstrap'
+import { ToastProvider } from 'react-toast-notifications'
 import {
   init as initSentry,
   ErrorBoundary as SentryErrorBoundary,
@@ -24,16 +24,6 @@ import StoreProvider from '../utils/storeProvider'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
-
-const Login = dynamic(() => import('../components/Login'), {
-  ssr: false,
-})
-const Loading = dynamic(() => import('../components/LoadingDialog'), {
-  ssr: false,
-})
-const AlertDialog = dynamic(() => import('../components/AlertDialog'), {
-  ssr: false,
-})
 
 // initialize Sentry
 // TODO: Replace with actual Sentry dsn
@@ -64,14 +54,18 @@ function Bootgear({ Component, pageProps }) {
     <SentryErrorBoundary fallback={<ErrorFallback />}>
       <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
         <SEO />
-        <StoreProvider>
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-          <AlertDialog />
-          <Loading />
-          <Login />
-        </StoreProvider>
+
+        <ToastProvider
+          placement='bottom-left'
+          autoDismiss
+          transitionDuration={55}
+        >
+          <StoreProvider>
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </StoreProvider>
+        </ToastProvider>
       </FirebaseAppProvider>
     </SentryErrorBoundary>
   )

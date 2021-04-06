@@ -1,3 +1,5 @@
+// DEPRECATED IN FAVOR OF 'react-toast-notifications'
+// Only to be used for non-text Alerts
 import { useState, useEffect, useCallback, useRef, useContext } from 'react'
 import { Modal, ModalBody } from 'react-bootstrap'
 import classNames from 'classnames'

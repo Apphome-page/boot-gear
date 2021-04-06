@@ -1,9 +1,8 @@
-import { useCallback, useContext, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useAuth } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
-
-import { StoreContext } from '../../utils/storeProvider'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -12,17 +11,17 @@ const ExceptionTags = {
 
 export default function Security() {
   const passRef = useRef(null)
-  const [, modStore] = useContext(StoreContext)
+
+  const { addToast } = useToasts()
   const userAuth = useAuth()
 
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value
     // TODO: Enforce Password Format
     if (!newPass) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Enter New Password!',
+      addToast('Enter New Password!', {
+        appearance: 'error',
+        autoDismiss: false,
       })
       return
     }
@@ -31,10 +30,9 @@ export default function Security() {
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
         userAuth.signOut()
-        modStore({
-          alertVariant: 'info',
-          alertTimeout: -1,
-          alertText: 'Please Sign in again to continue.',
+        addToast('Please Sign in again to continue.', {
+          appearance: 'info',
+          autoDismiss: false,
         })
         return
       }
@@ -44,12 +42,10 @@ export default function Security() {
       })
     }
     passRef.current.value = ''
-    modStore({
-      alertVariant: 'success',
-      alertTimeout: -1,
-      alertText: 'Password Updated Successfully!',
+    addToast('Password Updated Successfully!', {
+      appearance: 'success',
     })
-  }, [modStore, userAuth])
+  }, [addToast, userAuth])
   return (
     <>
       <div className='pb-1 my-2 border-bottom lead text-dark'>Security</div>

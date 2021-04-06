@@ -1,4 +1,4 @@
-import { useContext, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useMemo, useCallback, useEffect, useRef } from 'react'
 import {
   Container,
   Button,
@@ -9,10 +9,9 @@ import {
   InputGroup,
 } from 'react-bootstrap'
 import { useUser, useDatabase } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 
 import { ArrowRightCircle as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightCircle'
-
-import { StoreContext } from '../../utils/storeProvider'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -30,20 +29,16 @@ export const SubscriptionBox = function SubscriptionBox({
   className,
 }) {
   const emailRef = useRef(null)
-  const [, modStoreContext] = useContext(StoreContext)
   const userDatabase = useDatabase()
+  const { addToast } = useToasts()
 
   const actionSub = useCallback(async () => {
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
       await addSubscriber(userDatabase, validEmail)
-      modStoreContext({
-        alertTimeout: 10,
-        alertText: 'Thank you for subscribing!',
-        alertVariant: 'success',
-      })
+      addToast('Thank you for subscribing!', { appearance: 'success' })
     }
-  }, [modStoreContext, userDatabase])
+  }, [addToast, userDatabase])
 
   return (
     <Container fluid className={className}>
@@ -81,7 +76,7 @@ export const SubscriptionBox = function SubscriptionBox({
 
 export default function Subscription({ show, onComplete }) {
   const emailRef = useRef(null)
-  const [, modStoreContext] = useContext(StoreContext)
+  const { addToast } = useToasts()
 
   const userDatabase = useDatabase()
   const { data: userData, hasEmitted: firstLaunch } = useUser()
@@ -93,18 +88,14 @@ export default function Subscription({ show, onComplete }) {
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
       await addSubscriber(userDatabase, validEmail)
-      modStoreContext({
-        alertTimeout: 10,
-        alertText: 'Thank you for subscribing!',
-        alertVariant: 'success',
-      })
+      addToast('Thank you for subscribing!', { appearance: 'success' })
       if (onComplete && typeof onComplete === 'function') {
         onComplete()
       }
     } else {
       emailRef.current.reportValidity()
     }
-  }, [modStoreContext, onComplete, userDatabase])
+  }, [addToast, onComplete, userDatabase])
 
   useEffect(() => {
     if (show && firstLaunch && userId) {

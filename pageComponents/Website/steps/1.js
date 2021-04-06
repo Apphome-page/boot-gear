@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 
 import Image from 'next/image'
 import classNames from 'classnames'
@@ -49,6 +50,8 @@ export default function Step() {
 
   const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
+  const { addToast } = useToasts()
+
   const firebase = useFirebaseApp()
   const { uid: userId } = firebase.auth().currentUser || {}
 
@@ -77,10 +80,8 @@ export default function Step() {
 
     unqueueLoading()
     if (!keyValidated) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: 10,
-        alertText: keyText,
+      addToast(keyText, {
+        appearance: 'error',
       })
       return
     }
@@ -92,6 +93,7 @@ export default function Step() {
     })
     nextAction()
   }, [
+    addToast,
     firebase,
     modStore,
     nextAction,

@@ -1,9 +1,9 @@
-import { useState, useMemo, useCallback, useContext } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { StoreContext } from '../../../utils/storeProvider'
 import useUserData from '../../../utils/useUserData'
 
 import removeWebsite from '../helpers/removeWebsite'
@@ -25,7 +25,8 @@ const ExceptionTags = {
 
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
   const [isLoading, setLoading] = useState(false)
-  const [, modStore] = useContext(StoreContext)
+
+  const { addToast } = useToasts()
 
   const firebase = useFirebaseApp()
 
@@ -48,24 +49,21 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
         removeDomain: true,
         removeStorage: true,
       })
-      modStore({
-        alertVariant: 'success',
-        alertTimeout: -1,
-        alertText: 'Removed custom Domain successfully',
+      addToast('Removed custom Domain successfully', {
+        appearance: 'success',
       })
     } catch (err) {
       captureExceptionSentry(err, (scope) => {
         scope.setTags(ExceptionTags)
         return scope
       })
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong',
+      addToast('Something went wrong', {
+        appearance: 'error',
+        autoDismiss: false,
       })
     }
     setLoading(false)
-  }, [firebase, modStore, webKey])
+  }, [addToast, firebase, webKey])
 
   // Changes Modal Body based on conditions
   const DomainForm = useMemo(() => {

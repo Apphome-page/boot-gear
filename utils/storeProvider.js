@@ -1,13 +1,18 @@
 import { createContext, useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
+
+const Login = dynamic(() => import('../components/Login'), {
+  ssr: false,
+})
+const Loading = dynamic(() => import('../components/LoadingDialog'), {
+  ssr: false,
+})
 
 export const StoreContext = createContext({})
 
 export default function StoreProvider({ store, children }) {
   const [folioStore, setFolioStore] = useState(
     store || {
-      alertTimeout: 0, // Alert Popup timeout - Reset Condition
-      alertText: '', // Alert Text - Reset Condition
-      alertVariant: 'default', // Alert Variant - Reset Condition,
       loadingMutex: 0, // Full screen blocking Loader - Please Do not Access Directly.
       signPop: false, // Dismissable Sign-In PopUp
       signForced: false, // Un-dismissable Sign-In PopUp
@@ -44,6 +49,8 @@ export default function StoreProvider({ store, children }) {
       ]}
     >
       {children}
+      <Loading />
+      <Login />
     </StoreContext.Provider>
   )
 }

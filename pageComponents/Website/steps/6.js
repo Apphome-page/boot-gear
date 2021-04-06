@@ -1,6 +1,7 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
 import { useFirebaseApp, useAuth } from 'reactfire'
+import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
@@ -13,8 +14,8 @@ const ExceptionTags = {
 
 export default function Step() {
   const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
-  const [templateProps, updateStore] = useContext(StoreContext)
-
+  const [templateProps] = useContext(StoreContext)
+  const { addToast } = useToasts()
   const firebase = useFirebaseApp()
   const firebaseAuth = useAuth()
 
@@ -63,20 +64,19 @@ export default function Step() {
     if (uploadSuccess) {
       nextAction()
     } else {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong, while updating your website.',
+      addToast('Something went wrong while updating your website.', {
+        appearance: 'error',
+        autoDismiss: false,
       })
     }
   }, [
+    addToast,
     firebase,
     modStore,
     nextAction,
     queueLoading,
     templateProps,
     unqueueLoading,
-    updateStore,
     userId,
   ])
 
