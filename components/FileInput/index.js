@@ -13,7 +13,8 @@ const FileInput = forwardRef(
       onChange = noop,
       className = '',
       inputClassName = '',
-      size = 128,
+      height = 128,
+      width = 128,
       required = false,
       disabled = false,
     },
@@ -80,7 +81,7 @@ const FileInput = forwardRef(
           className={className('file-input-drop', viewClassName)}
           onChange={onChangeCb}
         />
-        <style jsx>
+        {/* <style jsx>
           {`
             .file-input-wrap {
               height: ${size}px;
@@ -124,7 +125,7 @@ const FileInput = forwardRef(
               z-index: 4;
             }
           `}
-        </style>
+        </style> */}
       </div>
     )
   }

@@ -26,7 +26,7 @@ export default function PrivacyPolicy() {
       </section>
       <Features />
       <Pricing />
-      <style jsx>
+      {/* <style jsx>
         {`
           .subscription-wrap .subscription-box {
             display: inline-block;
@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
             }
           }
         `}
-      </style>
+      </style> */}
     </div>
   )
 }

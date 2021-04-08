@@ -39,8 +39,7 @@
     "react-error-boundary": "^3.1.1",
     "react-firebaseui": "^4.1.0",
     "react-toast-notifications": "^2.4.3",
-    "reactfire": "^3.0.0-rc.0",
-    "sass": "^1.32.8"
+    "reactfire": "^3.0.0-rc.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
@@ -59,6 +58,7 @@
     "html-webpack-plugin": "^5.3.1",
     "prettier": "^2.2.1",
     "raw-loader": "^4.0.2",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "sass": "^1.32.8"
   }
 }

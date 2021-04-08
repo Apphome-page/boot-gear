@@ -143,7 +143,7 @@ function Bootgear({ Component, pageProps }) {
             display: block;
           }
           [tabindex='-1']:focus:not(:focus-visible) {
-            outline: 0 !important;
+            outline: 0;
           }
           h1 {
             margin-top: 0;
@@ -631,155 +631,155 @@ function Bootgear({ Component, pageProps }) {
             opacity: 0.75;
           }
           .bg-warning {
-            background-color: #ffc107 !important;
+            background-color: #ffc107;
           }
           .bg-danger {
-            background-color: #dc3545 !important;
+            background-color: #dc3545;
           }
           .bg-light {
-            background-color: #f8f9fa !important;
+            background-color: #f8f9fa;
           }
           .bg-dark {
-            background-color: #343a40 !important;
+            background-color: #343a40;
           }
           .bg-white {
-            background-color: #fff !important;
+            background-color: #fff;
           }
           .border {
-            border: 1px solid #dee2e6 !important;
+            border: 1px solid #dee2e6;
           }
           .border-top {
-            border-top: 1px solid #dee2e6 !important;
+            border-top: 1px solid #dee2e6;
           }
           .border-bottom {
-            border-bottom: 1px solid #dee2e6 !important;
+            border-bottom: 1px solid #dee2e6;
           }
           .border-0 {
-            border: 0 !important;
+            border: 0;
           }
           .border-dark {
-            border-color: #343a40 !important;
+            border-color: #343a40;
           }
           .rounded-top {
-            border-top-left-radius: 0.25rem !important;
-            border-top-right-radius: 0.25rem !important;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
           }
           .rounded-circle {
-            border-radius: 50% !important;
+            border-radius: 50%;
           }
           .rounded-0 {
-            border-radius: 0 !important;
+            border-radius: 0;
           }
           .d-none {
-            display: none !important;
+            display: none;
           }
           .d-inline-block {
-            display: inline-block !important;
+            display: inline-block;
           }
           .d-flex {
-            display: -ms-flexbox !important;
-            display: flex !important;
+            display: -ms-flexbox;
+            display: flex;
           }
           @media (min-width: 992px) {
             .d-lg-block {
-              display: block !important;
+              display: block;
             }
           }
           .align-items-center {
-            -ms-flex-align: center !important;
-            align-items: center !important;
+            -ms-flex-align: center;
+            align-items: center;
           }
           @supports ((position: -webkit-sticky) or (position: sticky)) {
           }
           .w-100 {
-            width: 100% !important;
+            width: 100%;
           }
           .mr-1,
           .mx-1 {
-            margin-right: 0.25rem !important;
+            margin-right: 0.25rem;
           }
           .mx-1 {
-            margin-left: 0.25rem !important;
+            margin-left: 0.25rem;
           }
           .mt-3,
           .my-3 {
-            margin-top: 1rem !important;
+            margin-top: 1rem;
           }
           .mb-3,
           .my-3 {
-            margin-bottom: 1rem !important;
+            margin-bottom: 1rem;
           }
           .m-5 {
-            margin: 3rem !important;
+            margin: 3rem;
           }
           .my-5 {
-            margin-top: 3rem !important;
+            margin-top: 3rem;
           }
           .mb-5,
           .my-5 {
-            margin-bottom: 3rem !important;
+            margin-bottom: 3rem;
           }
           .p-1 {
-            padding: 0.25rem !important;
+            padding: 0.25rem;
           }
           .p-3 {
-            padding: 1rem !important;
+            padding: 1rem;
           }
           .py-3 {
-            padding-top: 1rem !important;
+            padding-top: 1rem;
           }
           .px-3 {
-            padding-right: 1rem !important;
+            padding-right: 1rem;
           }
           .pb-3,
           .py-3 {
-            padding-bottom: 1rem !important;
+            padding-bottom: 1rem;
           }
           .px-3 {
-            padding-left: 1rem !important;
+            padding-left: 1rem;
           }
           .pt-5,
           .py-5 {
-            padding-top: 3rem !important;
+            padding-top: 3rem;
           }
           .py-5 {
-            padding-bottom: 3rem !important;
+            padding-bottom: 3rem;
           }
           @media (min-width: 576px) {
             .mt-sm-0 {
-              margin-top: 0 !important;
+              margin-top: 0;
             }
             .mb-sm-0 {
-              margin-bottom: 0 !important;
+              margin-bottom: 0;
             }
             .mr-sm-3 {
-              margin-right: 1rem !important;
+              margin-right: 1rem;
             }
           }
           .text-right {
-            text-align: right !important;
+            text-align: right;
           }
           .text-center {
-            text-align: center !important;
+            text-align: center;
           }
           .font-weight-bold {
-            font-weight: 700 !important;
+            font-weight: 700;
           }
           .text-white {
-            color: #fff !important;
+            color: #fff;
           }
           .text-secondary {
-            color: #6c757d !important;
+            color: #6c757d;
           }
           .text-dark {
-            color: #343a40 !important;
+            color: #343a40;
           }
           @media print {
             *,
             ::after,
             ::before {
-              text-shadow: none !important;
-              box-shadow: none !important;
+              text-shadow: none;
+              box-shadow: none;
             }
             img {
               page-break-inside: avoid;
@@ -792,10 +792,10 @@ function Bootgear({ Component, pageProps }) {
               size: a3;
             }
             body {
-              min-width: 992px !important;
+              min-width: 992px;
             }
             .container {
-              min-width: 992px !important;
+              min-width: 992px;
             }
           }
           /*# sourceMappingURL=bootstrap.min.css.map */

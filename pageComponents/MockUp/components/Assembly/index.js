@@ -90,7 +90,7 @@ export default function Assembly() {
         onClick={addMockStore}
         className='assembly-dummy mt-3 mx-1 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center display-1 cursor-pointer'
       />
-      <style jsx>
+      {/* <style jsx>
         {`
           .assembly-wrap {
             border: 1px solid transparent;
@@ -109,7 +109,7 @@ export default function Assembly() {
             filter: blur(1px);
           }
         `}
-      </style>
+      </style> */}
     </div>
   )
 }

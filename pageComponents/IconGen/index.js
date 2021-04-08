@@ -233,7 +233,7 @@ export default function AppIcon({ preset = [] }) {
           </Col>
         </Row>
       </Container>
-      <style jsx>
+      {/* <style jsx>
         {`
           .icon-source-wrap {
             background-image: ${source.url ? `url('${source.url}')` : ''};
@@ -337,7 +337,7 @@ export default function AppIcon({ preset = [] }) {
             vertical-align: middle;
           }
         `}
-      </style>
+      </style> */}
     </>
   )
 }

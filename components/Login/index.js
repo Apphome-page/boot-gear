@@ -84,7 +84,7 @@ export default function Login() {
           }}
           firebaseAuth={userAuth}
         >
-          <style jsx>
+          {/* <style jsx>
             {`
               .firebaseui-container {
                 max-width: none;
@@ -113,7 +113,7 @@ export default function Login() {
                 background-color: #7b10ff;
               }
             `}
-          </style>
+          </style> */}
         </StyledFirebaseAuth>
       </ModalBody>
     </Modal>

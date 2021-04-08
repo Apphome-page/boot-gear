@@ -34,12 +34,12 @@ function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
         onClick={() => (isActive && !isLast ? actionCallback(i) : null)}
       >
         Step {i}
-        <style jsx>{`
+        {/* <style jsx>{`
           .progress-next {
             left: ${((100 * i) / maxSlide).toFixed(3)}%;
             transition: all 0.1s linear ${(2 / maxSlide).toFixed(2)}s;
           }
-        `}</style>
+        `}</style> */}
       </IconNext>
     )
   }
@@ -111,7 +111,7 @@ export default function ProgressStatus({ activeIndex }) {
           isLast ? 'text-success' : 'text-light'
         )}
       />
-      <style jsx>{`
+      {/* <style jsx>{`
         .progress-wrap .progress-rail {
           height: 4px;
         }
@@ -138,7 +138,7 @@ export default function ProgressStatus({ activeIndex }) {
           transform: translate(50%, -50%);
           transition: all 0.1s linear 0.3s;
         }
-      `}</style>
+      `}</style> */}
     </div>
   )
 }

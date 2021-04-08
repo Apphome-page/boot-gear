@@ -228,13 +228,13 @@ export default function Step() {
           </Col>
         </Row>
       </Container>
-      <style jsx>
+      {/* <style jsx>
         {`
           .form-wrap-step-1 .icon-theme {
             border-width: 4px !important;
           }
         `}
-      </style>
+      </style> */}
     </Form>
   )
 }

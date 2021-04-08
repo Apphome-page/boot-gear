@@ -2,7 +2,7 @@
 module.exports = {
   poweredByHeader: false,
   // reactStrictMode: true,
-  webpack: (config, { dev }) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.html?$/,
       use: 'raw-loader',
