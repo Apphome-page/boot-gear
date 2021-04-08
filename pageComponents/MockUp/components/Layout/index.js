@@ -6,18 +6,19 @@ import {
   ButtonGroup,
   Tabs,
   Tab,
+  Container,
 } from 'react-bootstrap'
 import Image from 'next/image'
 
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
 
-import { ArrowLeftShort as IconArrowLeft } from '@emotion-icons/bootstrap/ArrowLeftShort'
-import { ArrowRightShort as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightShort'
-import { ArrowUpShort as IconArrowUp } from '@emotion-icons/bootstrap/ArrowUpShort'
-import { ArrowDownShort as IconArrowDown } from '@emotion-icons/bootstrap/ArrowDownShort'
-import { ArrowClockwise as IconRotateRight } from '@emotion-icons/bootstrap/ArrowClockwise'
-import { ArrowCounterclockwise as IconRotateLeft } from '@emotion-icons/bootstrap/ArrowCounterclockwise'
+import IconArrowLeft from '@svg-icons/bootstrap/arrow-left-short.svg'
+import IconArrowRight from '@svg-icons/bootstrap/arrow-right-short.svg'
+import IconArrowUp from '@svg-icons/bootstrap/arrow-up-short.svg'
+import IconArrowDown from '@svg-icons/bootstrap/arrow-down-short.svg'
+import IconRotateRight from '@svg-icons/bootstrap/arrow-clockwise.svg'
+import IconRotateLeft from '@svg-icons/bootstrap/arrow-counterclockwise.svg'
 
 import imageLoader from '../../../../utils/imageLoader'
 
@@ -25,7 +26,7 @@ import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
 import { MockupContext } from '../../helpers/MockProvider'
 
-import { PreviewContainer } from '../../style'
+import { previewContainer } from '../../style'
 
 export default function Layout() {
   const {
@@ -108,7 +109,11 @@ export default function Layout() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='template' title='Template'>
-        <PreviewContainer fluid onClick={eventTemplate}>
+        <Container
+          fluid
+          className={previewContainer.className}
+          onClick={eventTemplate}
+        >
           {Object.keys(frameTemplates).map((fTemplate) => (
             <OverlayTrigger
               key={fTemplate}
@@ -137,42 +142,47 @@ export default function Layout() {
               </div>
             </OverlayTrigger>
           ))}
-        </PreviewContainer>
+        </Container>
       </Tab>
       <Tab eventKey='alignment' title='Alignment' className='text-center'>
         <ButtonGroup onClick={eventDevice} className='text-center'>
           <OverlayTrigger overlay={<Tooltip>Move Left</Tooltip>}>
             <Button variant='outline-secondary' data-direction='left'>
-              <IconArrowLeft size='18' data-direction='left' />
+              <IconArrowLeft height='18' width='18' data-direction='left' />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger overlay={<Tooltip>Move Up</Tooltip>}>
             <Button variant='outline-secondary' data-direction='up'>
-              <IconArrowUp size='18' data-direction='up' />
+              <IconArrowUp height='18' width='18' data-direction='up' />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger overlay={<Tooltip>Move Down</Tooltip>}>
             <Button variant='outline-secondary' data-direction='down'>
-              <IconArrowDown size='18' data-direction='down' />
+              <IconArrowDown height='18' width='18' data-direction='down' />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger overlay={<Tooltip>Move Right</Tooltip>}>
             <Button variant='outline-secondary' data-direction='right'>
-              <IconArrowRight size='18' data-direction='right' />
+              <IconArrowRight height='18' width='18' data-direction='right' />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger overlay={<Tooltip>Rotate Left</Tooltip>}>
             <Button variant='outline-secondary' data-direction='rotLeft'>
-              <IconRotateLeft size='18' data-direction='rotLeft' />
+              <IconRotateLeft height='18' width='18' data-direction='rotLeft' />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger overlay={<Tooltip>Rotate Right</Tooltip>}>
             <Button variant='outline-secondary' data-direction='rotRight'>
-              <IconRotateRight size='18' data-direction='rotRight' />
+              <IconRotateRight
+                height='18'
+                width='18'
+                data-direction='rotRight'
+              />
             </Button>
           </OverlayTrigger>
         </ButtonGroup>
       </Tab>
+      {previewContainer.styles}
     </Tabs>
   )
 }

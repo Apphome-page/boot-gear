@@ -5,7 +5,8 @@
   "scripts": {
     "inspect": "cross-env NODE_OPTIONS='--inspect' next dev",
     "dev": "next dev",
-    "build": "next build",
+    "clean": "rimraf .next out",
+    "build": "next build --debug",
     "start": "next start",
     "export": "rimraf .next out && next build && next export",
     "deploy:prod": "cp netlify.prod.toml netlify.toml && cp .env.production .env.local && cp firebase.prod.json firebase.json && npm run export",
@@ -16,11 +17,8 @@
     "fire-deploy": "firebase deploy --only functions"
   },
   "dependencies": {
-    "@emotion-icons/bootstrap": "^3.11.0",
-    "@emotion-icons/feather": "^3.0.0",
-    "@emotion/react": "^11.1.5",
-    "@emotion/styled": "^11.1.5",
     "@sentry/react": "^6.2.5",
+    "@svg-icons/bootstrap": "^1.45.0",
     "bootstrap": "^4.6.0",
     "classnames": "^2.3.0",
     "compress.js": "^1.1.2",
@@ -45,6 +43,7 @@
     "sass": "^1.32.8"
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.3",
     "env-cmd": "^10.1.0",

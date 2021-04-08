@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react'
-import { Tabs, Tab } from 'react-bootstrap'
+import { Tabs, Tab, Container, Button } from 'react-bootstrap'
 import { Code as CodeLoader } from 'react-content-loader'
+import Image from 'next/image'
 
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
@@ -11,7 +12,7 @@ import scrBg from '../../../../config/scrBg.json'
 
 import imageLoader from '../../../../utils/imageLoader'
 
-import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
+import { previewContainer, previewButton, previewImage } from '../../style'
 
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
@@ -55,14 +56,14 @@ export default function Design() {
   return (
     <Tabs defaultActiveKey='image' className='justify-content-center mt-1 mb-3'>
       <Tab eventKey='image' title='Image'>
-        <PreviewContainer>
+        <Container className={previewContainer.className}>
           {scrBg.map(({ path }, index) => {
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
-              <PreviewButton
+              <Button
                 key={index}
                 variant='outline-light'
-                className={classNames('m-1', {
+                className={classNames('m-1', previewButton.className, {
                   'border-dark':
                     currentMockStore.backgroundImage === bgPreviewLink,
                   border: currentMockStore.backgroundImage === bgPreviewLink,
@@ -70,16 +71,17 @@ export default function Design() {
                 data-value={bgPreviewLink}
                 onClick={eventBgImage}
               >
-                <PreviewImage
+                <Image
                   src={bgPreviewLink}
                   height='90'
                   width='60'
                   loader={imageLoader}
+                  className={previewImage.className}
                 />
-              </PreviewButton>
+              </Button>
             )
           })}
-        </PreviewContainer>
+        </Container>
       </Tab>
       <Tab eventKey='color' title='Color'>
         <ColorPicker
@@ -87,6 +89,9 @@ export default function Design() {
           onChange={eventBgColor}
         />
       </Tab>
+      {previewContainer.styles}
+      {previewButton.styles}
+      {previewImage.styles}
     </Tabs>
   )
 }

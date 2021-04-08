@@ -9,12 +9,12 @@ import {
   TabContent,
   TabPane,
 } from 'react-bootstrap'
-import { ChatSquareText as IconCaption } from '@emotion-icons/bootstrap/ChatSquareText'
-import { Columns as IconLayout } from '@emotion-icons/bootstrap/Columns'
-import { Collection as IconBackground } from '@emotion-icons/bootstrap/Collection'
-import { Fullscreen as IconScreen } from '@emotion-icons/bootstrap/Fullscreen'
-import { Phone as IconPhone } from '@emotion-icons/bootstrap/Phone'
-import { MusicPlayer as IconModel } from '@emotion-icons/bootstrap/MusicPlayer'
+import IconCaption from '@svg-icons/bootstrap/chat-square-text.svg'
+import IconLayout from '@svg-icons/bootstrap/columns.svg'
+import IconBackground from '@svg-icons/bootstrap/collection.svg'
+import IconScreen from '@svg-icons/bootstrap/fullscreen.svg'
+import IconPhone from '@svg-icons/bootstrap/phone.svg'
+import IconModel from '@svg-icons/bootstrap/music-player.svg'
 
 import Actions from './components/Actions'
 import Assembly from './components/Assembly'
@@ -68,7 +68,8 @@ export default function MockUp({ preset }) {
                         className='p-1'
                       >
                         <IconLayout
-                          size='18'
+                          height='18'
+                          width='18'
                           className='d-block my-1 mx-auto'
                         />
                         Layout
@@ -80,7 +81,8 @@ export default function MockUp({ preset }) {
                         className='p-1'
                       >
                         <IconCaption
-                          size='18'
+                          height='18'
+                          width='18'
                           className='d-block my-1 mx-auto'
                         />
                         Caption
@@ -92,7 +94,8 @@ export default function MockUp({ preset }) {
                         className='p-1'
                       >
                         <IconScreen
-                          size='18'
+                          height='18'
+                          width='18'
                           className='d-block my-1 mx-auto'
                         />
                         Screenshot
@@ -103,7 +106,11 @@ export default function MockUp({ preset }) {
                         variant='light'
                         className='p-1'
                       >
-                        <IconPhone size='18' className='d-block my-1 mx-auto' />
+                        <IconPhone
+                          height='18'
+                          width='18'
+                          className='d-block my-1 mx-auto'
+                        />
                         Device
                       </ListGroupItem>
                       <ListGroupItem
@@ -112,7 +119,11 @@ export default function MockUp({ preset }) {
                         variant='light'
                         className='p-1'
                       >
-                        <IconModel size='18' className='d-block my-1 mx-auto' />
+                        <IconModel
+                          height='18'
+                          width='18'
+                          className='d-block my-1 mx-auto'
+                        />
                         Model
                       </ListGroupItem>
                       <ListGroupItem
@@ -122,7 +133,8 @@ export default function MockUp({ preset }) {
                         className='p-1'
                       >
                         <IconBackground
-                          size='18'
+                          height='18'
+                          width='18'
                           className='d-block my-1 mx-auto'
                         />
                         Background

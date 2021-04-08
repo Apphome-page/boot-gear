@@ -51,8 +51,8 @@ export default function Profile() {
   }, [addToast, email, userAuth])
   return (
     <>
-      <div className='pb-1 mb-2 border-bottom lead text-dark'>Your Details</div>
-      <Form ref={formRef} className='mb-5 p-2 border shadow-sm'>
+      <div className='pb-1 mb-1 border-bottom lead text-dark'>Your Details</div>
+      <Form ref={formRef} className='mb-5 p-3 border shadow-sm'>
         <InputGroup className='my-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>Name</InputGroup.Text>

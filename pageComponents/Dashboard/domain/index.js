@@ -99,14 +99,14 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
           alt={webKey}
           height='48'
           width='48'
-          className='mr-2 rounded'
+          className='mr-1 rounded'
         />
         <div className='lead text-white'>{appName}</div>
       </Modal.Footer>
       <ModalBody>
         <DomainForm webKey={webKey} webData={webData} />
       </ModalBody>
-      <Modal.Header className='border-top py-2'>
+      <Modal.Header className='border-top py-3'>
         <Button
           size='sm'
           variant='light'

@@ -4,8 +4,12 @@ module.exports = {
   // reactStrictMode: true,
   webpack: (config, { dev }) => {
     config.module.rules.push({
-      test: /\.html$/,
+      test: /\.html?$/,
       use: 'raw-loader',
+    })
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: '@svgr/webpack',
     })
     return config
   },

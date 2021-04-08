@@ -16,13 +16,11 @@ import { useToasts } from 'react-toast-notifications'
 import Image from 'next/image'
 import classNames from 'classnames'
 
-import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import imageLoader from '../../../utils/imageLoader'
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
-
-import { ThemeImage } from '../style'
 
 const THEMES = [
   {
@@ -118,7 +116,7 @@ export default function Step() {
   )
 
   return (
-    <Form ref={formRef}>
+    <Form ref={formRef} class='form-wrap-step-1'>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -132,7 +130,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -169,7 +168,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -178,9 +178,10 @@ export default function Step() {
         <Row className='ml-3'>
           <Col onClick={themeBtnAction}>
             {THEMES.map(({ key, src }) => (
-              <ThemeImage
+              <div
                 key={key}
                 className={classNames(
+                  'icon-theme',
                   'd-inline-flex',
                   'm-1',
                   'p-0',
@@ -202,7 +203,7 @@ export default function Step() {
                   className='m-0 p-0'
                   data-theme={key}
                 />
-              </ThemeImage>
+              </div>
             ))}
           </Col>
         </Row>
@@ -227,6 +228,13 @@ export default function Step() {
           </Col>
         </Row>
       </Container>
+      <style jsx>
+        {`
+          .form-wrap-step-1 .icon-theme {
+            border-width: 4px !important;
+          }
+        `}
+      </style>
     </Form>
   )
 }

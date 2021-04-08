@@ -6,8 +6,6 @@ import debounce from 'lodash/debounce'
 
 import render from '../../utils/renderCanvas'
 
-import { CanvasLoader } from './style'
-
 // TODO:
 const debouncedRender = () =>
   debounce(async (canvas, props, setLoading) => {
@@ -35,7 +33,7 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
 
   return (
     <div
-      className={classNames('mx-2', 'd-inline-block', 'position-relative', {
+      className={classNames('mx-1', 'd-inline-block', 'position-relative', {
         [className]: className,
       })}
       style={{ height: `${height}px` }}
@@ -43,14 +41,35 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
       {...restProps}
     >
       <canvas ref={canvasRef} />
-      <CanvasLoader
-        style={{ width }}
-        className={classNames({
+      <div
+        className={classNames('canvas-loader', {
           'd-none': !isLoading,
         })}
       >
         <Spinner animation='border' variant='light' />
-      </CanvasLoader>
+      </div>
+      <style jsx>
+        {`
+          .canvas-loader {
+            width: ${width}px;
+          }
+        `}
+      </style>
+      <style jsx>
+        {`
+          .canvas-loader {
+            display: flex;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            align-items: center;
+            justify-content: center;
+            background-color: #000d;
+          }
+        `}
+      </style>
     </div>
   )
 }

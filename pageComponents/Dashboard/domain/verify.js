@@ -78,15 +78,15 @@ export default function DomainVerify({
       </Row>
       <Row className='align-items-center'>
         <Col lg='8'>
-          <pre className='d-block mx-auto my-0 p-2 w-75 text-dark bg-light shadow-sm'>
+          <pre className='d-block mx-auto my-0 p-3 w-75 text-dark bg-light shadow-sm'>
             {webNameservers.join('\n')}
           </pre>
         </Col>
         <Col lg='4'>
           <Button
-            variant='secondary'
+            variant='alt'
             disabled={isProcessing}
-            className='w-100 btn-alt'
+            className='w-100'
             onClick={verifySubmit}
           >
             {isProcessing ? (
@@ -100,7 +100,7 @@ export default function DomainVerify({
       <Row>
         <Col>
           {alertData.text ? (
-            <Alert variant={alertData.type} className='my-2 mini text-center'>
+            <Alert variant={alertData.type} className='my-1 mini text-center'>
               {alertData.text}
             </Alert>
           ) : (

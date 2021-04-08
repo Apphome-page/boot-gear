@@ -1,5 +1,7 @@
 import { useCallback, useContext } from 'react'
-import { Container } from 'react-bootstrap'
+import { Container, Button } from 'react-bootstrap'
+
+import Image from 'next/image'
 import classNames from 'classnames'
 
 import { MockupContext } from '../../helpers/MockProvider'
@@ -10,7 +12,7 @@ import imageLoader from '../../../../utils/imageLoader'
 
 import { getFrameProps } from '../../helpers/defaults'
 
-import { PreviewButton, PreviewImage } from '../../style'
+import { previewButton, previewContainer, previewImage } from '../../style'
 
 export default function Design() {
   const {
@@ -46,9 +48,10 @@ export default function Design() {
       {scrMeta[currentMockStore.frameType]
         .find(({ id }) => id === currentMockStore.frameId)
         .sizes.map((model, key) => (
-          <PreviewButton
+          <Button
             className={classNames(
               'm-1',
+              previewButton.className,
               currentMockStore.frameDevice === model ? 'border-dark' : 'border'
             )}
             variant='outline-light'
@@ -60,15 +63,18 @@ export default function Design() {
               .replace('custom', '')}
             onClick={eventModel}
           >
-            <PreviewImage
+            <Image
+              className={previewImage.className}
               src={`/scrPreview/${currentMockStore.frameType}/${currentMockStore.frameId}/${model}.png`}
               alt='Device Model'
               height='90'
               width='60'
               loader={imageLoader}
             />
-          </PreviewButton>
+          </Button>
         ))}
+      {previewContainer.styles}
+      {previewImage.styles}
     </Container>
   )
 }

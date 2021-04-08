@@ -4,6 +4,7 @@ import { useFirebaseApp } from 'reactfire'
 import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 import Link from 'next/link'
+import noop from 'lodash/noop'
 
 import { StoreContext } from '../../../utils/storeProvider'
 
@@ -16,7 +17,7 @@ const ExceptionTags = {
 
 export default function WebsiteActions({
   webKey,
-  webAction = () => {},
+  webAction = noop,
   webActionText = 'Add Custom Domain',
 } = {}) {
   const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)

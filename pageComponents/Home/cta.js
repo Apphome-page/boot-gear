@@ -15,14 +15,14 @@ export default function HomeCTA() {
         <Link href='/dashboard'>
           <Button
             variant='light'
-            className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-4 py-2'
+            className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-3 py-3'
           >
             Start Free Trial
           </Button>
         </Link>
         <Button
           variant='outline-light'
-          className='rounded-0 px-4 py-2'
+          className='rounded-0 px-3 py-3'
           onClick={() => modStore({ signPop: true })}
         >
           Sign Up

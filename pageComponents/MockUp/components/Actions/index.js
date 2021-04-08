@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { Button, Spinner, ProgressBar } from 'react-bootstrap'
-import { FileEarmarkArrowDown as Download } from '@emotion-icons/bootstrap/FileEarmarkArrowDown'
+import IconDownload from '@svg-icons/bootstrap/file-earmark-arrow-down.svg'
 import dynamic from 'next/dynamic'
 
 import { MockupContext } from '../../helpers/MockProvider'
@@ -28,8 +28,8 @@ export default function Actions() {
         }}
       />
       <Button
-        variant='light'
-        className='w-100 btn-alt d-flex justify-content-center align-items-center'
+        variant='alt'
+        className='w-100 d-flex justify-content-center align-items-center'
         onClick={() => {
           setSubShow(true)
         }}
@@ -37,7 +37,7 @@ export default function Actions() {
         {isLoading ? (
           <>
             <span className='mr-1'>Save & Download</span>
-            <Download size='24' />
+            <IconDownload height='24' width='24' />
           </>
         ) : (
           <>

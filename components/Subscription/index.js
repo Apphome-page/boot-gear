@@ -11,7 +11,7 @@ import {
 import { useUser, useDatabase } from 'reactfire'
 import { useToasts } from 'react-toast-notifications'
 
-import { ArrowRightCircle as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightCircle'
+import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -52,7 +52,7 @@ export const SubscriptionBox = function SubscriptionBox({
           />
           <InputGroup.Append>
             <Button onClick={actionSub} variant='light' className='border'>
-              <IconArrowRight size='20' />
+              <IconArrowRight height='20' width='20' />
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -110,7 +110,7 @@ export default function Subscription({ show, onComplete }) {
   return (
     <Modal show={show} backdrop='static'>
       <ModalBody>
-        <div className='my-2'>
+        <div className='my-1'>
           Please provide your email address, before resuming your download.
         </div>
         <InputGroup>

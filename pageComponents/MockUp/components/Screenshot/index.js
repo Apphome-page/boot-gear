@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { FormFile } from 'react-bootstrap'
-import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { getFrameProps } from '../../helpers/defaults'
 
@@ -33,7 +33,7 @@ export default function Design() {
         }}
       />
       <div className='m-1 d-flex align-items-center mini'>
-        <IconInfo size='24' className='mr-2' />
+        <IconInfo height='24' width='24' className='mr-1' />
         Screenshot should be of height {screenshotHeight}px, & width{' '}
         {screenshotWidth}px.
       </div>

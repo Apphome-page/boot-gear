@@ -4,13 +4,12 @@ import {
   Row,
   Col,
   Form,
-  FormFile,
   FormControl,
   Button,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
-import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import FileInput from '../../../components/FileInput'
 
@@ -57,7 +56,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -83,7 +83,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -109,7 +110,8 @@ export default function Step() {
         <Row className='mt-1 mb-3 ml-3 mr-0 text-center'>
           <Col lg={6}>
             <FileInput
-              size='128'
+              height='128'
+              width='128'
               id='appIcon'
               name='appIcon'
               label='Attach App Icon'
@@ -120,7 +122,8 @@ export default function Step() {
           </Col>
           <Col lg={6}>
             <FileInput
-              size='128'
+              height='128'
+              width='128'
               id='appScreenshot'
               name='appScreenshot'
               label='Attach App Screenshot'

@@ -18,7 +18,7 @@ export default function Subscriptions() {
           <Col lg={4}>
             <DashboardProducts />
             <Container fluid>
-              <Row className='my-4 p-2 border shadow-sm'>
+              <Row className='my-3 p-3 border shadow-sm'>
                 <Col>
                   <FAQList faqList={faqList} />
                 </Col>

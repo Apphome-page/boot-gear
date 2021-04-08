@@ -58,25 +58,35 @@ small {
   background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
   background-color: #7b10ff;
   color: #fff;
-  &:hover {
-    background: #f2f5fa;
-    color: #1e283c;
-  }
+}
+.btn-alt:hover,
+.btn-alt:focus {
+  background: #f2f5fa;
+  color: #1e283c;
 }
 .btn-alt2 {
   padding: 12px 32px;
   border: 0;
   border-radius: 0;
-  background-image: none;
   background: #f2f5fa;
   color: #1e283c;
-  &:hover {
-    background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
-    background-color: #7b10ff;
-    color: #fff;
-  }
+}
+.btn-alt2:hover,
+.btn-alt2:focus {
+  background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+  background-color: #7b10ff;
+  color: #fff;
 }
 
+.tight-wrap {
+  display: inline-block;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  font-size: 0;
+  line-height: 0;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -85,7 +95,10 @@ small {
   line-height: 1.4;
   letter-spacing: 1px;
 }
-.fsize-32 {
-  height: 32px;
-  width: 32px;
+
+.hero {
+  position: relative;
+  background: url(/img/hero/hero-bg.png) no-repeat left center/cover;
+  background-color: #7b10ff;
+  color: #fff;
 }

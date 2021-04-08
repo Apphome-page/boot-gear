@@ -19,7 +19,7 @@ export default function DomainNameServer({
       </Row>
       <Row className='align-items-center'>
         <Col>
-          <pre className='d-block mx-auto my-0 p-2 w-75 text-dark bg-light shadow-sm'>
+          <pre className='d-block mx-auto my-0 p-3 w-75 text-dark bg-light shadow-sm'>
             {webNameservers.join('\n')}
           </pre>
         </Col>

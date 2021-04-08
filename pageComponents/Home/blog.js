@@ -1,25 +1,22 @@
 import { Container, Button } from 'react-bootstrap'
 import Link from 'next/link'
 
-import { CardIcon } from './style'
+import ImageTag from '../../components/ImageTag'
 
 export default function HomeBlog() {
   return (
     <section className='bg-light'>
       <Container className='py-5 text-center'>
-        <CardIcon
-          data-src='/img/logo.png'
-          className='my-3 mx-auto border-bottom'
-        />
+        <div className='tight-wrap my-3 p-3 border-bottom rounded-circle'>
+          <ImageTag src='/img/logo.png' height='32' width='32' />
+        </div>
         <p className='h2 font-weight-bold'>Latest Posts from our Blog</p>
         <p className='mt-3 mb-5'>
           We are thought leaders in mobile app industry. Check out what our
           editors have written recently !
         </p>
         <Link href='/blog'>
-          <Button variant='light' className='btn-alt'>
-            Browse More
-          </Button>
+          <Button variant='alt'>Browse More</Button>
         </Link>
       </Container>
     </section>

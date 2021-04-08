@@ -48,8 +48,8 @@ export default function Security() {
   }, [addToast, userAuth])
   return (
     <>
-      <div className='pb-1 my-2 border-bottom lead text-dark'>Security</div>
-      <Form className='p-2 mb-5 border shadow-sm'>
+      <div className='pb-1 my-1 border-bottom lead text-dark'>Security</div>
+      <Form className='p-3 mb-5 border shadow-sm'>
         <InputGroup className='my-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>Password</InputGroup.Text>
