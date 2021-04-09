@@ -116,7 +116,7 @@ export default function Step() {
   )
 
   return (
-    <Form ref={formRef} class='form-wrap-step-1'>
+    <Form ref={formRef} className='form-wrap-step-1'>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -228,13 +228,13 @@ export default function Step() {
           </Col>
         </Row>
       </Container>
-      {/* <style jsx>
+      <style jsx>
         {`
           .form-wrap-step-1 .icon-theme {
             border-width: 4px !important;
           }
         `}
-      </style> */}
+      </style>
     </Form>
   )
 }

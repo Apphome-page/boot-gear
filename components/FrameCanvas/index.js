@@ -48,7 +48,7 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
       >
         <Spinner animation='border' variant='light' />
       </div>
-      {/* <style jsx>
+      <style jsx>
         {`
           .canvas-loader {
             width: ${width}px;
@@ -69,7 +69,7 @@ export default function FrameCanvas({ renderProps, className, ...restProps }) {
             background-color: #000d;
           }
         `}
-      </style> */}
+      </style>
     </div>
   )
 }

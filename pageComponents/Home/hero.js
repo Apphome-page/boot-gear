@@ -37,7 +37,7 @@ export default function HomeHero() {
           </Col>
         </Row>
       </Container>
-      {/* <style jsx>{`
+      <style jsx>{`
         .hero-wrap {
           position: relative;
           background: url(/img/hero/hero-bg.png) no-repeat left center/cover;
@@ -60,7 +60,7 @@ export default function HomeHero() {
             background-size: 100%;
           }
         }
-      `}</style> */}
+      `}</style>
     </div>
   )
 }

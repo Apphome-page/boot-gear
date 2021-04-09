@@ -1,5 +1,8 @@
 import { Container, Row, Col, Media } from 'react-bootstrap'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useAmp } from 'next/amp'
+
 import IconHouse from '@svg-icons/bootstrap/house.svg'
 import IconPhone from '@svg-icons/bootstrap/telephone.svg'
 import IconMail from '@svg-icons/bootstrap/envelope.svg'
@@ -7,12 +10,18 @@ import IconFacebook from '@svg-icons/bootstrap/facebook.svg'
 import IconTwitter from '@svg-icons/bootstrap/twitter.svg'
 import IconLinkedin from '@svg-icons/bootstrap/linkedin.svg'
 
-import { SubscriptionBox } from '../Subscription'
-
 import resourceLinks from '../../pageData/links/footerLinks.json'
 import productLinks from '../../pageData/links/footerProducts.json'
 
+const SubscriptionBox = dynamic(
+  () => import('../Subscription').then(({ SubscriptionBox: sBox }) => sBox),
+  {
+    ssr: false,
+  }
+)
+
 export default function Footer() {
+  const isAmp = useAmp()
   return (
     <>
       <div className='my-3 py-3 shadow'>
@@ -79,10 +88,17 @@ export default function Footer() {
             </Col>
             <Col lg={3}>
               <div className='my-3 h5 font-weight-bold'>Newsletter</div>
+              {isAmp ? (
+                <a href='/subscribe' className='p-1 text-white'>
+                  Click here to Subscribe to our Newsletter.
+                </a>
+              ) : (
+                ''
+              )}
               <p>
                 You can trust us. we only send promo offers, not a single spam.
               </p>
-              <SubscriptionBox />
+              {!isAmp ? <SubscriptionBox /> : ''}
             </Col>
           </Row>
           <Row className='my-3 py-3 border-top'>

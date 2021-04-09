@@ -50,14 +50,19 @@ function ErrorFallback() {
 function Bootgear({ Component, pageProps }) {
   const isAmp = useAmp()
   return isAmp ? (
-    <div className='main-amp-wrap'>
+    <>
       <SEO />
       <Component {...pageProps} />
+      <Footer />
       <style jsx global>
         {`
           /*
           * Custom Bootstrap Additions
           */
+          html {
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+          }
           body {
             margin: 0;
             font-family: 'Montserrat', sans-serif;
@@ -97,7 +102,7 @@ function Bootgear({ Component, pageProps }) {
             background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
             background-color: #f2f5fa;
           }
-          .btn-alt {
+          .btn.btn-alt {
             padding: 12px 32px;
             border: 0;
             border-radius: 0;
@@ -105,20 +110,20 @@ function Bootgear({ Component, pageProps }) {
             background-color: #7b10ff;
             color: #fff;
           }
-          .btn-alt:hover,
-          .btn-alt:focus {
+          .btn.btn-alt:hover,
+          .btn.btn-alt:focus {
             background: #f2f5fa;
             color: #1e283c;
           }
-          .btn-alt2 {
+          .btn.btn-alt2 {
             padding: 12px 32px;
             border: 0;
             border-radius: 0;
             background: #f2f5fa;
             color: #1e283c;
           }
-          .btn-alt2:hover,
-          .btn-alt2:focus {
+          .btn.btn-alt2:hover,
+          .btn.btn-alt2:focus {
             background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
             background-color: #7b10ff;
             color: #fff;
@@ -127,17 +132,10 @@ function Bootgear({ Component, pageProps }) {
       </style>
       <style jsx global>
         {`
-          /*!
-          * Stripped Bootstrap v4.6.0 (https://getbootstrap.com/)
-          */
           *,
           ::after,
           ::before {
             box-sizing: border-box;
-          }
-          html {
-            -webkit-text-size-adjust: 100%;
-            -webkit-tap-highlight-color: transparent;
           }
           section {
             display: block;
@@ -153,9 +151,20 @@ function Bootgear({ Component, pageProps }) {
             margin-top: 0;
             margin-bottom: 1rem;
           }
+          a {
+            text-decoration: none;
+            background-color: transparent;
+          }
+          a:hover {
+            filter: opacity(0.6);
+          }
           img {
             vertical-align: middle;
             border-style: none;
+          }
+          svg {
+            overflow: hidden;
+            vertical-align: middle;
           }
           button {
             border-radius: 0;
@@ -221,7 +230,8 @@ function Bootgear({ Component, pageProps }) {
             font-weight: 300;
             line-height: 1.2;
           }
-          .container {
+          .container,
+          .container-fluid {
             width: 100%;
             padding-right: 15px;
             padding-left: 15px;
@@ -257,7 +267,11 @@ function Bootgear({ Component, pageProps }) {
             margin-left: -15px;
           }
           .col,
-          .col-lg-6 {
+          .col-lg-12,
+          .col-lg-3,
+          .col-lg-4,
+          .col-lg-6,
+          .col-lg-8 {
             position: relative;
             width: 100%;
             padding-right: 15px;
@@ -271,10 +285,30 @@ function Bootgear({ Component, pageProps }) {
             max-width: 100%;
           }
           @media (min-width: 992px) {
+            .col-lg-3 {
+              -ms-flex: 0 0 25%;
+              flex: 0 0 25%;
+              max-width: 25%;
+            }
+            .col-lg-4 {
+              -ms-flex: 0 0 33.333333%;
+              flex: 0 0 33.333333%;
+              max-width: 33.333333%;
+            }
             .col-lg-6 {
               -ms-flex: 0 0 50%;
               flex: 0 0 50%;
               max-width: 50%;
+            }
+            .col-lg-8 {
+              -ms-flex: 0 0 66.666667%;
+              flex: 0 0 66.666667%;
+              max-width: 66.666667%;
+            }
+            .col-lg-12 {
+              -ms-flex: 0 0 100%;
+              flex: 0 0 100%;
+              max-width: 100%;
             }
           }
           .custom-control-input.is-valid:focus:not(:checked)
@@ -306,6 +340,7 @@ function Bootgear({ Component, pageProps }) {
             padding: 0.375rem 0.75rem;
             font-size: 1rem;
             line-height: 1.5;
+            border-radius: 0.25rem;
             transition: color 0.15s ease-in-out,
               background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
               box-shadow 0.15s ease-in-out;
@@ -585,6 +620,16 @@ function Bootgear({ Component, pageProps }) {
               margin-left: 15px;
             }
           }
+          .media {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: start;
+            align-items: flex-start;
+          }
+          .media-body {
+            -ms-flex: 1;
+            flex: 1;
+          }
           .list-group {
             display: -ms-flexbox;
             display: flex;
@@ -676,6 +721,9 @@ function Bootgear({ Component, pageProps }) {
           .d-inline-block {
             display: inline-block;
           }
+          .d-block {
+            display: block;
+          }
           .d-flex {
             display: -ms-flexbox;
             display: flex;
@@ -691,13 +739,23 @@ function Bootgear({ Component, pageProps }) {
           }
           @supports ((position: -webkit-sticky) or (position: sticky)) {
           }
+          .shadow {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          }
           .w-100 {
             width: 100%;
+          }
+          .my-1 {
+            margin-top: 0.25rem;
           }
           .mr-1,
           .mx-1 {
             margin-right: 0.25rem;
           }
+          .my-1 {
+            margin-bottom: 0.25rem;
+          }
+          .ml-1,
           .mx-1 {
             margin-left: 0.25rem;
           }
@@ -756,6 +814,11 @@ function Bootgear({ Component, pageProps }) {
               margin-right: 1rem;
             }
           }
+          .text-truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
           .text-right {
             text-align: right;
           }
@@ -774,12 +837,24 @@ function Bootgear({ Component, pageProps }) {
           .text-dark {
             color: #343a40;
           }
+          .text-muted {
+            color: #6c757d;
+          }
+          .text-white-50 {
+            color: rgba(255, 255, 255, 0.5);
+          }
+          .text-decoration-none {
+            text-decoration: none;
+          }
           @media print {
             *,
             ::after,
             ::before {
               text-shadow: none;
               box-shadow: none;
+            }
+            a:not(.btn) {
+              text-decoration: underline;
             }
             img {
               page-break-inside: avoid;
@@ -801,7 +876,7 @@ function Bootgear({ Component, pageProps }) {
           /*# sourceMappingURL=bootstrap.min.css.map */
         `}
       </style>
-    </div>
+    </>
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
       <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>

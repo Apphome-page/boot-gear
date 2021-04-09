@@ -229,11 +229,11 @@ export default function AppIcon({ preset = [] }) {
             >
               ⬇ Generate
             </Button>
-            <ProgressBar value={progress} max='100' class='icon-progress' />
+            <ProgressBar value={progress} max='100' className='icon-progress' />
           </Col>
         </Row>
       </Container>
-      {/* <style jsx>
+      <style jsx>
         {`
           .icon-source-wrap {
             background-image: ${source.url ? `url('${source.url}')` : ''};
@@ -337,7 +337,7 @@ export default function AppIcon({ preset = [] }) {
             vertical-align: middle;
           }
         `}
-      </style> */}
+      </style>
     </>
   )
 }

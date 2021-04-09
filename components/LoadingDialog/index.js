@@ -12,7 +12,7 @@ function BigSpinner({
 }) {
   return (
     <Spinner className='loading-big-spinner'>
-      {/* <style jsx>{`
+      <style jsx>{`
         .loading-big-spinner {
           height: ${sizing}px;
           width: ${sizing}px;
@@ -21,7 +21,7 @@ function BigSpinner({
           animation-direction: ${direction};
           border-right-color: 'rgba(123, 16, 255, 0.1)';
         }
-      `}</style> */}
+      `}</style>
     </Spinner>
   )
 }

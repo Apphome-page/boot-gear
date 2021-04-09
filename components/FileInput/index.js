@@ -78,10 +78,10 @@ const FileInput = forwardRef(
           aria-label={label}
           required={required}
           disabled={disabled}
-          className={className('file-input-drop', viewClassName)}
+          className={classNames('file-input-drop', viewClassName)}
           onChange={onChangeCb}
         />
-        {/* <style jsx>
+        <style jsx>
           {`
             .file-input-wrap {
               height: ${size}px;
@@ -125,7 +125,7 @@ const FileInput = forwardRef(
               z-index: 4;
             }
           `}
-        </style> */}
+        </style>
       </div>
     )
   }
