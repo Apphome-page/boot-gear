@@ -2,8 +2,7 @@ import { Container } from 'react-bootstrap'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import useUserData from '../../utils/useUserData'
-
+import { useUserData } from '../../components/LoginPop'
 import FAQ from '../../components/FAQ'
 
 import WebsiteBuilder from '../../pageComponents/Website'

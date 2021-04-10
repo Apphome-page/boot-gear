@@ -1,11 +1,7 @@
-import { useContext } from 'react'
 import { Modal, ModalBody, Spinner } from 'react-bootstrap'
 import noop from 'lodash/noop'
 
-import { StoreContext } from '../../utils/storeProvider'
-
-export default function Loading() {
-  const [{ loadingMutex }] = useContext(StoreContext)
+export default function Loading({ loadingMutex }) {
   return (
     <Modal
       centered

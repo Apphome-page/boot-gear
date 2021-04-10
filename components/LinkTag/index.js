@@ -25,7 +25,7 @@ export default function LinkTag({ href, children, passHref, ...tagProps }) {
     </a>
   ) : (
     <Link {...tagProps} href={href} passHref={passHref}>
-      {children}
+      {children.length > 1 ? <span>{children}</span> : children}
     </Link>
   )
 }

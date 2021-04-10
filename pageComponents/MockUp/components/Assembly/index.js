@@ -23,7 +23,7 @@ export default function Assembly() {
     eventReset,
   } = useContext(MockupContext)
   return (
-    <div className='p-3 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
+    <div className='assembly-full-wrap p-3 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
       {mockStore.map((mockItem, mockIndex) => (
         <div
           className={classNames(
@@ -92,30 +92,26 @@ export default function Assembly() {
       />
       <style jsx>
         {`
-          .assembly-wrap {
+          .assembly-full-wrap :global(.assembly-wrap) {
             border: 1px solid transparent;
           }
-          .assembly-wrap:hover {
+          .assembly-full-wrap :global(.assembly-wrap:hover) {
             border: 1px dotted #cccccc;
           }
-        `}
-      </style>
-      <style>
-        {`
-          .assembly-dummy {
+          .assembly-full-wrap :global(.assembly-dummy) {
             height: 200px;
             width: 120px;
           }
-          .assembly-dummy:before {
+          .assembly-full-wrap :global(.assembly-dummy:before) {
             content: '+';
             font-size: 96px;
             font-family: monospace;
           }
-          .assembly-dummy:hover {
+          .assembly-full-wrap :global(.assembly-dummy:hover) {
             filter: blur(1px);
           }
         `}
-      </style>
+      </style>{' '}
     </div>
   )
 }

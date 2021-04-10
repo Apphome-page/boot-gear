@@ -1,15 +1,13 @@
 import { useCallback, useContext } from 'react'
 import { Tabs, Tab, Container, Button } from 'react-bootstrap'
 
-import Image from 'next/image'
 import classNames from 'classnames'
 
-import { MockupContext } from '../../helpers/MockProvider'
+import Image from '../../../../components/ImageTag'
 
 import scrMeta from '../../../../config/scrMeta.json'
 
-import imageLoader from '../../../../utils/imageLoader'
-
+import { MockupContext } from '../../helpers/MockProvider'
 import { getFrameProps } from '../../helpers/defaults'
 
 export default function Device() {
@@ -64,7 +62,6 @@ export default function Device() {
                 height='90'
                 width='60'
                 alt='iOS Device Style Preview'
-                loader={imageLoader}
               />
             </Button>
           ))}
@@ -92,7 +89,6 @@ export default function Device() {
                 height='90'
                 width='60'
                 alt='Android Device Style Preview'
-                loader={imageLoader}
               />
             </Button>
           ))}

@@ -1,6 +1,10 @@
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 
-import Subscription from '../../pageComponents/Subscription'
+const Subscription = dynamic(
+  () => import('../../pageComponents/Subscription'),
+  { ssr: false }
+)
 
 export default function PrivacyPolicy() {
   return (

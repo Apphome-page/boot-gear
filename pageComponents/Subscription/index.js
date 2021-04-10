@@ -1,9 +1,18 @@
 import { Container, Row, Col } from 'react-bootstrap'
-
-import { SubscriptionBox } from '../../components/Subscription'
+import dynamic from 'next/dynamic'
 
 import Features from '../Home/features'
 import Pricing from '../Home/pricing'
+
+const SubscriptionBox = dynamic(
+  () =>
+    import('../../components/Subscription').then(
+      ({ SubscriptionBox: SubBox }) => SubBox
+    ),
+  {
+    ssr: false,
+  }
+)
 
 export default function PrivacyPolicy() {
   return (

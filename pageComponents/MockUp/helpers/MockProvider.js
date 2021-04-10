@@ -1,6 +1,6 @@
-import { useState, useCallback, useContext, createContext } from 'react'
+import { useState, useCallback, createContext } from 'react'
 
-import { StoreContext } from '../../../utils/storeProvider'
+import { useLoading } from '../../../components/LoadingPop'
 
 import renderCanvas from '../../../utils/renderCanvas'
 
@@ -17,7 +17,7 @@ const maxHeight = 378
 export const MockupContext = createContext(null)
 
 export default function MockProvider({ preset, children }) {
-  const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
+  const { queueLoading, unqueueLoading } = useLoading()
   const [currentMockUp, setCurrentMockUp] = useState(0)
   const [mockStore, setMockStore] = useState(() => {
     const frameDefaults = frameDefaultProps(maxHeight)

@@ -8,7 +8,6 @@ import {
   Tab,
   Container,
 } from 'react-bootstrap'
-import Image from 'next/image'
 
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -20,7 +19,7 @@ import IconArrowDown from '@svg-icons/bootstrap/arrow-down-short.svg'
 import IconRotateRight from '@svg-icons/bootstrap/arrow-clockwise.svg'
 import IconRotateLeft from '@svg-icons/bootstrap/arrow-counterclockwise.svg'
 
-import imageLoader from '../../../../utils/imageLoader'
+import Image from '../../../../components/ImageTag'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
@@ -126,7 +125,6 @@ export default function Layout() {
                 )}
               >
                 <Image
-                  loader={imageLoader}
                   src={`/scrPreview/template/${fTemplate}.png`}
                   alt='Device Template'
                   data-value={fTemplate}

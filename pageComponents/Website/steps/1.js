@@ -11,15 +11,16 @@ import {
 } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
 
-import Image from 'next/image'
 import classNames from 'classnames'
 
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { useAlerts } from '../../../components/AlertPop'
+import { useLoading } from '../../../components/LoadingPop'
+import { useLogin } from '../../../components/LoginPop'
 
-import imageLoader from '../../../utils/imageLoader'
-import { StoreContext as HeadContext } from '../../../utils/storeProvider'
+import Image from '../../../components/ImageTag'
+
 import { StoreContext } from '../helpers/store'
 
 const THEMES = [
@@ -40,7 +41,7 @@ const THEMES = [
 export default function Step() {
   const formRef = useRef(null)
 
-  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
+  const { signPop } = useLogin()
   const [
     { nextAction, prevAction, appTheme, appName },
     updateStore,
@@ -49,13 +50,14 @@ export default function Step() {
   const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
   const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
 
   const firebase = useFirebaseApp()
   const { uid: userId } = firebase.auth().currentUser || {}
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {
-      modStore({ signPop: true })
+      signPop()
       return
     }
     const formCurrent = formRef.current
@@ -79,7 +81,8 @@ export default function Step() {
     unqueueLoading()
     if (!keyValidated) {
       addAlert(keyText, {
-        variant: 'error',
+        variant: 'danger',
+        autoDismiss: false,
       })
       return
     }
@@ -93,10 +96,10 @@ export default function Step() {
   }, [
     addAlert,
     firebase,
-    modStore,
     nextAction,
     queueLoading,
     selectedTheme,
+    signPop,
     unqueueLoading,
     updateStore,
     userId,
@@ -196,7 +199,6 @@ export default function Step() {
                 )}
               >
                 <Image
-                  loader={imageLoader}
                   src={src}
                   width='200'
                   height='105'

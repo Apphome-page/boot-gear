@@ -4,8 +4,7 @@ import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
-
-import useUserData from '../../../utils/useUserData'
+import { useUserData } from '../../../components/LoginPop'
 
 import removeWebsite from '../helpers/removeWebsite'
 
@@ -59,7 +58,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
         return scope
       })
       addAlert('Something went wrong', {
-        variant: 'error',
+        variant: 'danger',
         autoDismiss: false,
       })
     }

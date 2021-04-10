@@ -1,13 +1,12 @@
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 import noop from 'lodash/noop'
 
 import Link from '../../../components/LinkTag'
+import { useLoading } from '../../../components/LoadingPop'
 import { useAlerts } from '../../../components/AlertPop'
-
-import { StoreContext } from '../../../utils/storeProvider'
 
 // TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'
@@ -22,9 +21,9 @@ export default function WebsiteActions({
   webAction = noop,
   webActionText = 'Add Custom Domain',
 } = {}) {
-  const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
   const firebase = useFirebaseApp()
   const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
 
   const actionDelete = useCallback(
     async (appKey) => {
@@ -44,7 +43,7 @@ export default function WebsiteActions({
             return scope
           })
           addAlert('Something went wrong', {
-            variant: 'error',
+            variant: 'danger',
             autoDismiss: false,
           })
         }

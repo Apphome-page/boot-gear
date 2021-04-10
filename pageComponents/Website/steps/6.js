@@ -4,8 +4,9 @@ import { useFirebaseApp, useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
+import { useLoading } from '../../../components/LoadingPop'
+import { useLogin } from '../../../components/LoginPop'
 
-import { StoreContext as HeadContext } from '../../../utils/storeProvider'
 import { StoreContext } from '../helpers/store'
 
 const ExceptionTags = {
@@ -14,12 +15,13 @@ const ExceptionTags = {
 }
 
 export default function Step() {
-  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
   const [templateProps] = useContext(StoreContext)
   const firebase = useFirebaseApp()
   const firebaseAuth = useAuth()
 
   const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
+  const { signPop } = useLogin()
 
   const { uid: userId } = firebaseAuth.currentUser || {}
   const {
@@ -43,7 +45,7 @@ export default function Step() {
 
   const actionUpload = useCallback(async () => {
     if (!userId) {
-      modStore({ signPop: true })
+      signPop()
       return
     }
     queueLoading()
@@ -67,16 +69,16 @@ export default function Step() {
       nextAction()
     } else {
       addAlert('Something went wrong while updating your website.', {
-        variant: 'error',
+        variant: 'danger',
         autoDismiss: false,
       })
     }
   }, [
     addAlert,
     firebase,
-    modStore,
     nextAction,
     queueLoading,
+    signPop,
     templateProps,
     unqueueLoading,
     userId,

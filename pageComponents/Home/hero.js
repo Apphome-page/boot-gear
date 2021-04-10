@@ -1,11 +1,10 @@
-import { useContext } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 
+import { useLogin } from '../../components/LoginPop'
 import Link from '../../components/LinkTag'
-import { StoreContext } from '../../utils/storeProvider'
 
 export default function HomeHero() {
-  const [, modStore] = useContext(StoreContext)
+  const { signPop } = useLogin()
   return (
     <div className='d-flex align-items-center hero-wrap'>
       <Container className='py-5'>
@@ -20,11 +19,7 @@ export default function HomeHero() {
               <br />
               Creating stunning screenshots for app store listings.
             </p>
-            <Button
-              variant='alt'
-              className='mr-1 mr-sm-3'
-              onClick={() => modStore({ signPop: true })}
-            >
+            <Button variant='alt' className='mr-1 mr-sm-3' onClick={signPop}>
               Sign Up
             </Button>
             <Link href='/pricing'>

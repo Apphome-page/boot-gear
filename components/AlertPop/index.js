@@ -10,7 +10,7 @@ const AlertContext = createContext()
 export default function AlertProvider({
   variant: globalVariant = 'info',
   autoDismiss: globalAutoDismiss = true,
-  autoDismissTimeout: globalAutoDismissTimeout = 500,
+  autoDismissTimeout: globalAutoDismissTimeout = 6,
   callback: globalCallback = noop,
   children,
 }) {
@@ -55,13 +55,19 @@ export default function AlertProvider({
        */}
       <AlertContainer>
         {alerts.map(
-          ({ id, variant, autoDismiss, autoDismissTimeout, content }) => (
+          ({
+            id,
+            variant = globalVariant,
+            autoDismiss = globalAutoDismiss,
+            autoDismissTimeout = globalAutoDismissTimeout,
+            content,
+          }) => (
             <AlertElement
               key={id}
               id={id}
-              variant={variant || globalVariant}
-              dismiss={autoDismiss || globalAutoDismiss}
-              timeout={autoDismissTimeout || globalAutoDismissTimeout}
+              variant={variant}
+              dismiss={autoDismiss}
+              timeout={autoDismissTimeout}
               callback={remove}
             >
               {content}
@@ -74,7 +80,8 @@ export default function AlertProvider({
 }
 
 export const useAlerts = () => {
-  const { add, clear, alerts } = useContext(AlertContext)
+  const { add = noop, clear = noop, alerts = [] } =
+    useContext(AlertContext) || {}
   return {
     addAlert: add,
     clearAlerts: clear,

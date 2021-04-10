@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import {
   Button,
   Navbar,
@@ -20,7 +19,7 @@ import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
 
 import Link from '../LinkTag'
 
-import { StoreContext } from '../../utils/storeProvider'
+import { useLogin } from '../LoginPop'
 
 import productLinks from '../../pageData/links/headerProducts.json'
 import headerLinks from '../../pageData/links/headerLinks.json'
@@ -28,7 +27,7 @@ import headerLinks from '../../pageData/links/headerLinks.json'
 export default function Header() {
   const router = useRouter()
   const userAuth = useAuth()
-  const [, modStore] = useContext(StoreContext)
+  const { signPop } = useLogin()
 
   const { currentUser } = userAuth
 
@@ -121,7 +120,6 @@ export default function Header() {
                 className='px-3 text-danger cursor-pointer'
                 onClick={() => {
                   userAuth.signOut()
-                  router.push('/')
                 }}
               >
                 <IconOut height='18' width='18' className='mr-1' />
@@ -129,11 +127,7 @@ export default function Header() {
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            <Button
-              className='mx-3'
-              variant='alt'
-              onClick={() => modStore({ signPop: true })}
-            >
+            <Button className='mx-3' variant='alt' onClick={signPop}>
               Sign In
             </Button>
           )}

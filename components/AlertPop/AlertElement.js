@@ -61,8 +61,8 @@ export default function AlertElement({
     if (alertTimeoutRef.current) {
       clearTimeout(alertTimeoutRef.current)
       alertTimeoutRef.current = null
-      callback(id)
     }
+    callback(id)
   }, [callback, id])
 
   useEffect(() => {
@@ -124,9 +124,9 @@ export default function AlertElement({
           top: 0;
           left: 0;
           display: block;
-          height: 4px;
+          height: 2px;
           width: 100%;
-          background-color: rgba(128, 128, 128, 0.6);
+          opacity: 0.3;
         }
         .alert-element > :global(.alert-element-close) {
           margin-left: 8px;
@@ -150,6 +150,7 @@ export default function AlertElement({
           animation-delay: ${timeoutDelay};
         }
         .alert-element:before {
+          background-color: ${dismiss ? variantColor : 'transparent'};
           animation: timer-drop ${timeout}s linear;
         }
       `}</style>

@@ -1,20 +1,20 @@
 import { useCallback, useContext } from 'react'
 import { Tabs, Tab, Container, Button } from 'react-bootstrap'
-import { Code as CodeLoader } from 'react-content-loader'
-import Image from 'next/image'
 
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
+
+import Image from '../../../../components/ImageTag'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 import scrBg from '../../../../config/scrBg.json'
 
-import imageLoader from '../../../../utils/imageLoader'
-
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
-  loading: CodeLoader,
+  loading: function LoadingItem() {
+    return <div>Please wait till Color-Picker Loads...</div>
+  },
 })
 
 export default function Design() {
@@ -73,7 +73,6 @@ export default function Design() {
                   src={bgPreviewLink}
                   height='90'
                   width='60'
-                  loader={imageLoader}
                   className='preview-image'
                 />
               </Button>

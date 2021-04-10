@@ -1,12 +1,10 @@
-import { useContext } from 'react'
 import { Container, Button } from 'react-bootstrap'
 
+import { useLogin } from '../../components/LoginPop'
 import Link from '../../components/LinkTag'
 
-import { StoreContext } from '../../utils/storeProvider'
-
 export default function HomeCTA() {
-  const [, modStore] = useContext(StoreContext)
+  const { signPop } = useLogin()
   return (
     <section className='py-5 bg-alt text-center text-white'>
       <Container className='my-5'>
@@ -24,7 +22,7 @@ export default function HomeCTA() {
         <Button
           variant='outline-light'
           className='rounded-0 px-3 py-3'
-          onClick={() => modStore({ signPop: true })}
+          onClick={signPop}
         >
           Sign Up
         </Button>

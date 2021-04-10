@@ -4,8 +4,7 @@ import { Code as LoaderCode } from 'react-content-loader'
 import noop from 'lodash/noop'
 
 import Link from '../../../components/LinkTag'
-
-import useUserData from '../../../utils/useUserData'
+import { useUserData } from '../../../components/LoginPop'
 
 import WebsiteDetails from './details'
 import WebsiteActions from './actions'

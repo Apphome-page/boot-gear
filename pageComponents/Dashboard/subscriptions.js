@@ -1,11 +1,11 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap'
 
-import { StoreContext } from '../../utils/storeProvider'
-import useUserData from '../../utils/useUserData'
+import { useLoading } from '../../components/LoadingPop'
+import { useUserData } from '../../components/LoginPop'
 
 export default function Subscription() {
-  const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
+  const { queueLoading, unqueueLoading } = useLoading()
   const { firstLaunch, plan: { title: planTitle } = {} } = useUserData()
 
   useEffect(() => {

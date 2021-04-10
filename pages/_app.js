@@ -20,14 +20,16 @@ import {
   ErrorBoundary as SentryErrorBoundary,
 } from '@sentry/react'
 
-import firebaseConfig from '../firebase.json'
-
-import StoreProvider from '../utils/storeProvider'
-
 import AlertProvider from '../components/AlertPop'
+import BootProvider from '../components/BootStore'
+import LoadingProvider from '../components/LoadingPop'
+import LoginProvider from '../components/LoginPop'
+
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+
+import firebaseConfig from '../firebase.json'
 
 const AmpGlobalStyles = dynamic(() => import('../components/AmpGlobalStyles'))
 const AmpHeader = dynamic(() => import('../components/AmpHeader'))
@@ -65,16 +67,20 @@ function Bootgear({ Component, pageProps }) {
     </>
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
-      <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
-        <SEO />
-        <AlertProvider>
-          <StoreProvider>
-            <Header />
-            <Component {...pageProps} />
-            <Footer />
-          </StoreProvider>
-        </AlertProvider>
-      </FirebaseAppProvider>
+      <BootProvider>
+        <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
+          <LoadingProvider>
+            <AlertProvider>
+              <LoginProvider>
+                <SEO />
+                <Header />
+                <Component {...pageProps} />
+                <Footer />
+              </LoginProvider>
+            </AlertProvider>
+          </LoadingProvider>
+        </FirebaseAppProvider>
+      </BootProvider>
     </SentryErrorBoundary>
   )
 }

@@ -1,10 +1,10 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useUser } from 'reactfire'
 
-import { StoreContext } from '../../utils/storeProvider'
+import { useLogin } from '../LoginPop'
 
 export default function AuthWrapper({ children, placeholder }) {
-  const [, modStore] = useContext(StoreContext)
+  const { signForced, signClear } = useLogin()
 
   const { data: userData, hasEmitted: firstLaunch } = useUser()
 
@@ -12,16 +12,12 @@ export default function AuthWrapper({ children, placeholder }) {
 
   useEffect(() => {
     if (!firstLaunch || !userId) {
-      modStore({
-        signForced: true,
-      })
+      signForced()
     }
     return () => {
-      modStore({
-        signForced: false,
-      })
+      signClear()
     }
-  }, [firstLaunch, modStore, userId])
+  }, [firstLaunch, userId, signClear, signForced])
 
   if (firstLaunch && userId) {
     return children

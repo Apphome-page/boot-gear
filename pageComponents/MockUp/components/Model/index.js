@@ -1,16 +1,14 @@
 import { useCallback, useContext } from 'react'
 import { Container, Button } from 'react-bootstrap'
 
-import Image from 'next/image'
 import classNames from 'classnames'
 
+import Image from '../../../../components/ImageTag'
+
 import { MockupContext } from '../../helpers/MockProvider'
+import { getFrameProps } from '../../helpers/defaults'
 
 import scrMeta from '../../../../config/scrMeta.json'
-
-import imageLoader from '../../../../utils/imageLoader'
-
-import { getFrameProps } from '../../helpers/defaults'
 
 export default function Design() {
   const {
@@ -67,7 +65,6 @@ export default function Design() {
               alt='Device Model'
               height='90'
               width='60'
-              loader={imageLoader}
             />
           </Button>
         ))}

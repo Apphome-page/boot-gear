@@ -7,17 +7,17 @@ import IconNext from '@svg-icons/bootstrap/arrow-right-circle-fill.svg'
 import IconCheck from '@svg-icons/bootstrap/check-circle-fill.svg'
 import IconPlay from '@svg-icons/bootstrap/play-circle-fill.svg'
 
+import { useUserData } from '../../../components/LoginPop'
+
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
-import useUserData from '../../../utils/useUserData'
 
 function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
   const stageButtons = []
   for (let i = 1; i < maxSlide; i += 1) {
     const isActive = i < activeIndex + 1
     stageButtons.push(
-      <div className='progress-next position-absolute'>
+      <div className='progress-next position-absolute' key={i}>
         <IconNext
-          key={i}
           height='32'
           width='32'
           className={classNames(

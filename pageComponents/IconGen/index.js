@@ -225,7 +225,7 @@ export default function AppIcon({ preset = [] }) {
               onClick={() => {
                 setSubShow(true)
               }}
-              className='icon-gen w-100 m-3 p-3 cursor-pointer'
+              className='icon-gen w-100 my-3 p-3 cursor-pointer'
             >
               ⬇ Generate
             </Button>

@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
-import Image from 'next/image'
 import { useAmp } from 'next/amp'
-
-import imageLoader from '../../utils/imageLoader'
+import Image from 'next/image'
 
 const validAmpImgProps = [
   'src',
@@ -22,6 +20,10 @@ const validAmpImgProps = [
   'height',
   'class',
 ]
+
+function imageLoader({ src = '/img/logo.png', width = -1, quality = -1 }) {
+  return `${src}?w=${width}&q=${quality}`
+}
 
 export default function ImageTag(props) {
   const isAmp = useAmp()

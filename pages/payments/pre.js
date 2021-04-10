@@ -60,7 +60,7 @@ export default function Payment() {
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
       addAlert('Something went wrong. Please Sign in again to continue.', {
-        variant: 'error',
+        variant: 'danger',
         autoDismiss: false,
       })
       userAuth.signOut()
