@@ -38,6 +38,7 @@ export const SubscriptionBox = function SubscriptionBox({
   const actionSub = useCallback(async () => {
     if (!userDatabase) {
       addAlert('Please wait while we load-up.', { variant: 'warning' })
+      return
     }
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
@@ -94,6 +95,7 @@ export default function Subscription({ show, onComplete = noop }) {
   const actionSub = useCallback(async () => {
     if (!userDatabase) {
       addAlert('Please wait while we load-up.', { variant: 'warning' })
+      return
     }
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value

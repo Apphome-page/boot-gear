@@ -41,7 +41,7 @@ const authSentryAction = (authState) => {
  * -> LoadingPop
  */
 export default function LoginProvider({ children }) {
-  const firebaseRef = useRef(null)
+  const [firebaseApp, setFirebaseApp] = useState(null)
   const [isPop, setPop] = useState(false)
   const [isForced, setForced] = useState()
 
@@ -76,16 +76,16 @@ export default function LoginProvider({ children }) {
           throw error
         }
       }
-      firebaseRef.current = firebase
+      setFirebaseApp(firebase)
       firebaseListener = firebase.auth().onAuthStateChanged(authSentryAction)
     })
     return () => {
       // Clear Sentry User data
       configureScopeSentry((scope) => scope.setUser(null))
       firebaseListener()
-      firebaseRef.current = null
+      setFirebaseApp(null)
     }
-  }, [])
+  }, [setFirebaseApp])
 
   return (
     <LoginContext.Provider
@@ -93,7 +93,7 @@ export default function LoginProvider({ children }) {
         signPop,
         signForced,
         signClear,
-        firebaseApp: firebaseRef.current,
+        firebaseApp,
       }}
     >
       {children}
@@ -101,7 +101,7 @@ export default function LoginProvider({ children }) {
         isPop={isPop}
         isForced={isForced}
         signClear={signClear}
-        firebaseApp={firebaseRef.current}
+        firebaseApp={firebaseApp}
       />
     </LoginContext.Provider>
   )
