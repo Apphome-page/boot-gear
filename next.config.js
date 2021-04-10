@@ -1,5 +1,9 @@
-/* eslint-disable no-unused-vars */
-module.exports = {
+// eslint-disable-next-line import/no-extraneous-dependencies
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer({
   poweredByHeader: false,
   // reactStrictMode: true,
   webpack: (config) => {
@@ -19,4 +23,4 @@ module.exports = {
     deviceSizes: [16, 64, 128, 320, 640, 800, 1024, 1280],
     imageSizes: [32, 256, 512],
   },
-}
+})

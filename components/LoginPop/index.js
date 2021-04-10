@@ -5,22 +5,43 @@ import {
   useContext,
   useCallback,
   useEffect,
+  useRef,
 } from 'react'
-import { useFirebaseApp } from 'reactfire'
-
-import LoginElement from './LoginElement'
+import dynamic from 'next/dynamic'
+import {
+  setUser as setUserSentry,
+  configureScope as configureScopeSentry,
+} from '@sentry/react'
 
 import getPlanDetails from '../../utils/getPlanDetails'
 
+const LoginElement = dynamic(() => import('./LoginElement'), { ssr: false })
+
 const LoginContext = createContext()
+
+const authSentryAction = (authState) => {
+  const { uid, displayName, email, phoneNumber, providerId } = authState || {}
+  if (uid) {
+    setUserSentry({
+      id: uid,
+      username: displayName,
+      email,
+      phone_number: phoneNumber,
+      provider_id: providerId,
+      ip_address: '{{auto}}',
+    })
+  } else {
+    configureScopeSentry((scope) => scope.setUser(null))
+  }
+}
 
 /*
  * Should be wrapped under:
  * -> Sentry
- * -> reactfire
  * -> LoadingPop
  */
 export default function LoginProvider({ children }) {
+  const firebaseRef = useRef(null)
   const [isPop, setPop] = useState(false)
   const [isForced, setForced] = useState()
 
@@ -37,17 +58,63 @@ export default function LoginProvider({ children }) {
     setForced(false)
   }, [])
 
+  useEffect(() => {
+    let firebaseListener = () => {}
+    Promise.all([
+      import('../../firebase.json'),
+      // TODO: Per-Need Fetch?
+      import('firebase/app'),
+      import('firebase/auth'),
+      import('firebase/storage'),
+      import('firebase/database'),
+    ]).then(([firebaseConfig, firebase]) => {
+      try {
+        firebase.initializeApp(firebaseConfig)
+      } catch (error) {
+        if (error.code !== 'app/duplicate-app') {
+          // TODO: Send to Sentry
+          throw error
+        }
+      }
+      firebaseRef.current = firebase
+      firebaseListener = firebase.auth().onAuthStateChanged(authSentryAction)
+    })
+    return () => {
+      // Clear Sentry User data
+      configureScopeSentry((scope) => scope.setUser(null))
+      firebaseListener()
+      firebaseRef.current = null
+    }
+  }, [])
+
   return (
-    <LoginContext.Provider value={{ signPop, signForced, signClear }}>
+    <LoginContext.Provider
+      value={{
+        signPop,
+        signForced,
+        signClear,
+        firebaseApp: firebaseRef.current,
+      }}
+    >
       {children}
-      <LoginElement isPop={isPop} isForced={isForced} signClear={signClear} />
+      <LoginElement
+        isPop={isPop}
+        isForced={isForced}
+        signClear={signClear}
+        firebaseApp={firebaseRef.current}
+      />
     </LoginContext.Provider>
   )
 }
 
 export const useLogin = () => {
-  const LoginCtx = useContext(LoginContext) || {}
-  return LoginCtx || {}
+  const { signPop, signForced, signClear } = useContext(LoginContext) || {}
+  return { signPop, signForced, signClear }
+}
+
+export const useFirebaseApp = () => {
+  const { firebaseApp } = useContext(LoginContext) || {}
+  return firebaseApp
 }
 
 export const useUserData = (refKey = '', { once = false } = {}) => {
@@ -55,10 +122,15 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
     firstLaunch: true, // to indicate the userData has not been fetched
   })
 
-  const firebase = useFirebaseApp()
-  const userId = useMemo(() => (firebase.auth().currentUser || {}).uid, [
-    firebase,
-  ])
+  const { firebaseApp } = useContext(LoginContext) || {}
+
+  const userId = useMemo(
+    () =>
+      firebaseApp &&
+      firebaseApp.auth().currentUser &&
+      firebaseApp.auth().currentUser.uid,
+    [firebaseApp]
+  )
 
   const snapValue = useCallback(
     (snapshot) => {
@@ -73,7 +145,12 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
   )
 
   useEffect(() => {
-    const userDataRef = firebase
+    if (!firebaseApp) {
+      setUserData({
+        firstLaunch: true, // to indicate the userData has not been fetched
+      })
+    }
+    const userDataRef = firebaseApp
       .database()
       .ref(`users/${userId}${refKey ? `/${refKey}` : ''}`)
     if (once) {
@@ -87,7 +164,7 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
         firstLaunch: true, // to indicate the userData has not been fetched
       })
     }
-  }, [firebase, once, refKey, snapValue, userId])
+  }, [firebaseApp, once, refKey, snapValue, userId])
 
   return userData || {}
 }

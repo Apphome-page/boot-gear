@@ -1,11 +1,10 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
-import { useFirebaseApp, useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useLogin } from '../../../components/LoginPop'
+import { useFirebaseApp, useLogin } from '../../../components/LoginPop'
 
 import { StoreContext } from '../helpers/store'
 
@@ -16,14 +15,16 @@ const ExceptionTags = {
 
 export default function Step() {
   const [templateProps] = useContext(StoreContext)
-  const firebase = useFirebaseApp()
-  const firebaseAuth = useAuth()
 
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
   const { signPop } = useLogin()
+  const firebaseApp = useFirebaseApp()
+  const userId =
+    firebaseApp &&
+    firebaseApp.auth().currentUser &&
+    firebaseApp.auth().currentUser.uid
 
-  const { uid: userId } = firebaseAuth.currentUser || {}
   const {
     appIcon,
     appName,
@@ -52,7 +53,7 @@ export default function Step() {
     let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
-      await uploadWebsite(firebase, templateProps.appKey, {
+      await uploadWebsite(firebaseApp, templateProps.appKey, {
         templateProps,
         userId,
       })
@@ -75,7 +76,7 @@ export default function Step() {
     }
   }, [
     addAlert,
-    firebase,
+    firebaseApp,
     nextAction,
     queueLoading,
     signPop,

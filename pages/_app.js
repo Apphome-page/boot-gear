@@ -9,11 +9,6 @@ import { useAmp } from 'next/amp'
 import NProgress from 'nprogress'
 import noop from 'lodash/noop'
 
-import { FirebaseAppProvider } from 'reactfire'
-import 'firebase/auth'
-import 'firebase/database'
-import 'firebase/storage'
-
 import { Modal, ModalBody, Alert } from 'react-bootstrap'
 import {
   init as initSentry,
@@ -28,8 +23,6 @@ import LoginProvider from '../components/LoginPop'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
-
-import firebaseConfig from '../firebase.json'
 
 const AmpGlobalStyles = dynamic(() => import('../components/AmpGlobalStyles'))
 const AmpHeader = dynamic(() => import('../components/AmpHeader'))
@@ -68,18 +61,16 @@ function Bootgear({ Component, pageProps }) {
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
       <BootProvider>
-        <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
-          <LoadingProvider>
-            <AlertProvider>
-              <LoginProvider>
-                <SEO />
-                <Header />
-                <Component {...pageProps} />
-                <Footer />
-              </LoginProvider>
-            </AlertProvider>
-          </LoadingProvider>
-        </FirebaseAppProvider>
+        <LoadingProvider>
+          <AlertProvider>
+            <LoginProvider>
+              <SEO />
+              <Header />
+              <Component {...pageProps} />
+              <Footer />
+            </LoginProvider>
+          </AlertProvider>
+        </LoadingProvider>
       </BootProvider>
     </SentryErrorBoundary>
   )

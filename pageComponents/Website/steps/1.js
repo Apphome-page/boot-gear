@@ -9,7 +9,6 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 
 import classNames from 'classnames'
 
@@ -17,7 +16,7 @@ import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useLogin } from '../../../components/LoginPop'
+import { useLogin, useFirebaseApp } from '../../../components/LoginPop'
 
 import Image from '../../../components/ImageTag'
 
@@ -52,8 +51,11 @@ export default function Step() {
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
 
-  const firebase = useFirebaseApp()
-  const { uid: userId } = firebase.auth().currentUser || {}
+  const firebaseApp = useFirebaseApp()
+  const userId =
+    firebaseApp &&
+    firebaseApp.auth().currentUser &&
+    firebaseApp.auth().currentUser.uid
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {
@@ -76,7 +78,7 @@ export default function Step() {
       status: keyValidated = false,
       text: keyText = '',
       data: keyData = {},
-    } = await keyValidate(firebase, appKey, { userId })
+    } = await keyValidate(firebaseApp, appKey, { userId })
 
     unqueueLoading()
     if (!keyValidated) {
@@ -95,7 +97,7 @@ export default function Step() {
     nextAction()
   }, [
     addAlert,
-    firebase,
+    firebaseApp,
     nextAction,
     queueLoading,
     selectedTheme,

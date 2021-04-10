@@ -1,10 +1,9 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
-import { useUserData } from '../../../components/LoginPop'
+import { useUserData, useFirebaseApp } from '../../../components/LoginPop'
 
 import removeWebsite from '../helpers/removeWebsite'
 
@@ -28,7 +27,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
 
   const { addAlert } = useAlerts()
 
-  const firebase = useFirebaseApp()
+  const firebaseApp = useFirebaseApp()
 
   const userPlan = useUserData('/plan_id')
   const userProduct = useUserData('/product_id')
@@ -44,7 +43,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
     setLoading(true)
     try {
       await removeWebsite({
-        firebase,
+        firebaseApp,
         webKey,
         removeDomain: true,
         removeStorage: true,
@@ -63,7 +62,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
       })
     }
     setLoading(false)
-  }, [addAlert, firebase, webKey])
+  }, [addAlert, firebaseApp, webKey])
 
   // Changes Modal Body based on conditions
   const DomainForm = useMemo(() => {

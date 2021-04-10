@@ -7,9 +7,10 @@ import {
   InputGroup,
   Spinner,
 } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useFirebaseApp } from '../../../components/LoginPop'
 
 const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
 
@@ -22,7 +23,8 @@ export default function DomainSetup({ webKey }) {
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
-  const userAuth = useAuth()
+  const firebaseApp = useFirebaseApp()
+  const userDetails = firebaseApp && firebaseApp.auth().currentUser
 
   const formSubmit = useCallback(
     async (formEvent) => {
@@ -42,7 +44,7 @@ export default function DomainSetup({ webKey }) {
       setAlertData({})
 
       const [idToken, { default: fetch }] = await Promise.all([
-        userAuth.currentUser.getIdToken(),
+        userDetails.getIdToken(),
         import('cross-fetch'),
       ])
 
@@ -78,7 +80,7 @@ export default function DomainSetup({ webKey }) {
       }
       setProcessing(false)
     },
-    [userAuth.currentUser]
+    [userDetails]
   )
   return (
     <Form className='py-3' onSubmit={formSubmit}>

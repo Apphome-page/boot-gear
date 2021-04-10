@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 import noop from 'lodash/noop'
 
 import Link from '../../../components/LinkTag'
 import { useLoading } from '../../../components/LoadingPop'
 import { useAlerts } from '../../../components/AlertPop'
+import { useFirebaseApp } from '../../../components/LoginPop'
 
 // TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'
@@ -21,7 +21,7 @@ export default function WebsiteActions({
   webAction = noop,
   webActionText = 'Add Custom Domain',
 } = {}) {
-  const firebase = useFirebaseApp()
+  const firebaseApp = useFirebaseApp()
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
 
@@ -32,7 +32,7 @@ export default function WebsiteActions({
         queueLoading()
         try {
           await removeWebsite({
-            firebase,
+            firebaseApp,
             webKey: appKey,
             removeDomain: true,
             removeStorage: true,
@@ -50,7 +50,7 @@ export default function WebsiteActions({
         unqueueLoading()
       }
     },
-    [addAlert, firebase, queueLoading, unqueueLoading]
+    [addAlert, firebaseApp, queueLoading, unqueueLoading]
   )
   return (
     <>

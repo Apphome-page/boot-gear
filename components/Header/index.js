@@ -7,7 +7,6 @@ import {
   NavDropdown,
 } from 'react-bootstrap'
 import { useRouter } from 'next/router'
-import { useAuth } from 'reactfire'
 
 import classNames from 'classnames'
 
@@ -19,17 +18,18 @@ import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
 
 import Link from '../LinkTag'
 
-import { useLogin } from '../LoginPop'
+import { useLogin, useFirebaseApp } from '../LoginPop'
 
 import productLinks from '../../pageData/links/headerProducts.json'
 import headerLinks from '../../pageData/links/headerLinks.json'
 
 export default function Header() {
   const router = useRouter()
-  const userAuth = useAuth()
-  const { signPop } = useLogin()
 
-  const { currentUser } = userAuth
+  const { signPop } = useLogin()
+  const firebaseApp = useFirebaseApp()
+
+  const currentUser = firebaseApp && firebaseApp.auth().currentUser
 
   return (
     <Navbar
@@ -119,7 +119,9 @@ export default function Header() {
                 as='div'
                 className='px-3 text-danger cursor-pointer'
                 onClick={() => {
-                  userAuth.signOut()
+                  if (firebaseApp && firebaseApp.auth().currentUser) {
+                    firebaseApp.auth().signOut()
+                  }
                 }}
               >
                 <IconOut height='18' width='18' className='mr-1' />

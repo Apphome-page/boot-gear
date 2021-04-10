@@ -1,9 +1,9 @@
 import { useCallback, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../components/AlertPop'
+import { useFirebaseApp } from '../../components/LoginPop'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -12,8 +12,9 @@ const ExceptionTags = {
 
 export default function Security() {
   const passRef = useRef(null)
-  const userAuth = useAuth()
   const { addAlert } = useAlerts()
+  const firebaseApp = useFirebaseApp()
+  const userAuth = firebaseApp && firebaseApp.auth()
 
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value

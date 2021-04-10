@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import {
   Container,
   Button,
@@ -8,11 +8,12 @@ import {
   ModalFooter,
   InputGroup,
 } from 'react-bootstrap'
-import { useUser, useDatabase } from 'reactfire'
+import noop from 'lodash/noop'
 
 import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
 
 import { useAlerts } from '../AlertPop'
+import { useFirebaseApp } from '../LoginPop'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -30,10 +31,14 @@ export const SubscriptionBox = function SubscriptionBox({
   className,
 }) {
   const emailRef = useRef(null)
-  const userDatabase = useDatabase()
   const { addAlert } = useAlerts()
+  const firebaseApp = useFirebaseApp()
+  const userDatabase = firebaseApp && firebaseApp.database()
 
   const actionSub = useCallback(async () => {
+    if (!userDatabase) {
+      addAlert('Please wait while we load-up.', { variant: 'warning' })
+    }
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
       await addSubscriber(userDatabase, validEmail)
@@ -75,36 +80,39 @@ export const SubscriptionBox = function SubscriptionBox({
   )
 }
 
-export default function Subscription({ show, onComplete }) {
+export default function Subscription({ show, onComplete = noop }) {
   const emailRef = useRef(null)
   const { addAlert } = useAlerts()
 
-  const userDatabase = useDatabase()
-  const { data: userData, hasEmitted: firstLaunch } = useUser()
-
-  const userId = useMemo(() => userData || {}, [userData])
+  const firebaseApp = useFirebaseApp()
+  const userDatabase = firebaseApp && firebaseApp.database()
+  const userId =
+    firebaseApp &&
+    firebaseApp.auth().currentUser &&
+    firebaseApp.auth().currentUser.uid
 
   const actionSub = useCallback(async () => {
+    if (!userDatabase) {
+      addAlert('Please wait while we load-up.', { variant: 'warning' })
+    }
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
       await addSubscriber(userDatabase, validEmail)
       addAlert('Thank you for subscribing!', { variant: 'success' })
-      if (onComplete && typeof onComplete === 'function') {
-        onComplete()
-      }
+      onComplete()
     } else {
       emailRef.current.reportValidity()
     }
   }, [addAlert, onComplete, userDatabase])
 
   useEffect(() => {
-    if (show && firstLaunch && userId) {
+    if (show && firebaseApp && userId) {
       onComplete()
     }
-  }, [show, onComplete, firstLaunch, userId])
+  }, [show, onComplete, userId, firebaseApp])
 
-  if (firstLaunch && userId) {
+  if (firebaseApp && userId) {
     return ''
   }
 

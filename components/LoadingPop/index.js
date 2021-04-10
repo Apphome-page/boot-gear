@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 
-import LoadingElement from './LoadingElement'
+const LoadingElement = dynamic(() => import('./LoadingElement'), { ssr: false })
 
 const LoadingContext = createContext()
 
