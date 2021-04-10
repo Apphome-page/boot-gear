@@ -4,19 +4,19 @@ import {
   Row,
   Col,
   Button,
-  Form,
   FormControl,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 
 import Image from 'next/image'
 import classNames from 'classnames'
 
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
+
+import { useAlerts } from '../../../components/AlertPop'
 
 import imageLoader from '../../../utils/imageLoader'
 import { StoreContext as HeadContext } from '../../../utils/storeProvider'
@@ -48,7 +48,7 @@ export default function Step() {
 
   const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
-  const { addToast } = useToasts()
+  const { addAlert } = useAlerts()
 
   const firebase = useFirebaseApp()
   const { uid: userId } = firebase.auth().currentUser || {}
@@ -78,8 +78,8 @@ export default function Step() {
 
     unqueueLoading()
     if (!keyValidated) {
-      addToast(keyText, {
-        appearance: 'error',
+      addAlert(keyText, {
+        variant: 'error',
       })
       return
     }
@@ -91,7 +91,7 @@ export default function Step() {
     })
     nextAction()
   }, [
-    addToast,
+    addAlert,
     firebase,
     modStore,
     nextAction,
@@ -116,7 +116,7 @@ export default function Step() {
   )
 
   return (
-    <Form ref={formRef} className='form-wrap-step-1'>
+    <form ref={formRef} className='form-wrap-step-1'>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -235,6 +235,6 @@ export default function Step() {
           }
         `}
       </style>
-    </Form>
+    </form>
   )
 }

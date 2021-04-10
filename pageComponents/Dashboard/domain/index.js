@@ -1,8 +1,9 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useAlerts } from '../../../components/AlertPop'
 
 import useUserData from '../../../utils/useUserData'
 
@@ -26,7 +27,7 @@ const ExceptionTags = {
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
   const [isLoading, setLoading] = useState(false)
 
-  const { addToast } = useToasts()
+  const { addAlert } = useAlerts()
 
   const firebase = useFirebaseApp()
 
@@ -49,21 +50,21 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
         removeDomain: true,
         removeStorage: true,
       })
-      addToast('Removed custom Domain successfully', {
-        appearance: 'success',
+      addAlert('Removed custom Domain successfully', {
+        variant: 'success',
       })
     } catch (err) {
       captureExceptionSentry(err, (scope) => {
         scope.setTags(ExceptionTags)
         return scope
       })
-      addToast('Something went wrong', {
-        appearance: 'error',
+      addAlert('Something went wrong', {
+        variant: 'error',
         autoDismiss: false,
       })
     }
     setLoading(false)
-  }, [addToast, firebase, webKey])
+  }, [addAlert, firebase, webKey])
 
   // Changes Modal Body based on conditions
   const DomainForm = useMemo(() => {

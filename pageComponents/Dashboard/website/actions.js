@@ -1,13 +1,15 @@
 import { useCallback, useContext } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import { useFirebaseApp } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
-import Link from 'next/link'
 import noop from 'lodash/noop'
+
+import Link from '../../../components/LinkTag'
+import { useAlerts } from '../../../components/AlertPop'
 
 import { StoreContext } from '../../../utils/storeProvider'
 
+// TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'
 
 const ExceptionTags = {
@@ -21,8 +23,8 @@ export default function WebsiteActions({
   webActionText = 'Add Custom Domain',
 } = {}) {
   const [{ queueLoading, unqueueLoading }] = useContext(StoreContext)
-  const { addToast } = useToasts()
   const firebase = useFirebaseApp()
+  const { addAlert } = useAlerts()
 
   const actionDelete = useCallback(
     async (appKey) => {
@@ -41,15 +43,15 @@ export default function WebsiteActions({
             scope.setTags(ExceptionTags)
             return scope
           })
-          addToast('Something went wrong', {
-            appearance: 'error',
+          addAlert('Something went wrong', {
+            variant: 'error',
             autoDismiss: false,
           })
         }
         unqueueLoading()
       }
     },
-    [addToast, firebase, queueLoading, unqueueLoading]
+    [addAlert, firebase, queueLoading, unqueueLoading]
   )
   return (
     <>

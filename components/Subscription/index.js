@@ -9,9 +9,10 @@ import {
   InputGroup,
 } from 'react-bootstrap'
 import { useUser, useDatabase } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 
 import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
+
+import { useAlerts } from '../AlertPop'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -30,15 +31,15 @@ export const SubscriptionBox = function SubscriptionBox({
 }) {
   const emailRef = useRef(null)
   const userDatabase = useDatabase()
-  const { addToast } = useToasts()
+  const { addAlert } = useAlerts()
 
   const actionSub = useCallback(async () => {
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
       await addSubscriber(userDatabase, validEmail)
-      addToast('Thank you for subscribing!', { appearance: 'success' })
+      addAlert('Thank you for subscribing!', { variant: 'success' })
     }
-  }, [addToast, userDatabase])
+  }, [addAlert, userDatabase])
 
   return (
     <Container fluid className={className}>
@@ -76,7 +77,7 @@ export const SubscriptionBox = function SubscriptionBox({
 
 export default function Subscription({ show, onComplete }) {
   const emailRef = useRef(null)
-  const { addToast } = useToasts()
+  const { addAlert } = useAlerts()
 
   const userDatabase = useDatabase()
   const { data: userData, hasEmitted: firstLaunch } = useUser()
@@ -88,14 +89,14 @@ export default function Subscription({ show, onComplete }) {
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
       await addSubscriber(userDatabase, validEmail)
-      addToast('Thank you for subscribing!', { appearance: 'success' })
+      addAlert('Thank you for subscribing!', { variant: 'success' })
       if (onComplete && typeof onComplete === 'function') {
         onComplete()
       }
     } else {
       emailRef.current.reportValidity()
     }
-  }, [addToast, onComplete, userDatabase])
+  }, [addAlert, onComplete, userDatabase])
 
   useEffect(() => {
     if (show && firstLaunch && userId) {

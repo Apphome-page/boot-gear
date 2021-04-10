@@ -1,6 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap'
 
-import ImageTag from '../../components/ImageTag'
+import Image from '../../components/ImageTag'
 
 export default function HomeFeatures() {
   return (
@@ -8,7 +8,7 @@ export default function HomeFeatures() {
       <Row className='text-center'>
         <Col>
           <div className='tight-wrap my-3 p-3 border-bottom rounded-circle'>
-            <ImageTag src='/img/logo.png' height='32' width='32' />
+            <Image src='/img/logo.png' height='32' width='32' />
           </div>
           <p className='h2 font-weight-bold'>Features that make us Stand Out</p>
           <p className='mt-3 mb-5'>
@@ -23,7 +23,7 @@ export default function HomeFeatures() {
             <span className='d-inline-block mx-1 p-1 bg-warning rounded-circle' />
             <span className='d-inline-block mx-1 p-1 bg-danger rounded-circle' />
           </div>
-          <ImageTag
+          <Image
             className='border border-dark bg-dark w-100'
             width='600'
             height='272'
@@ -49,7 +49,7 @@ export default function HomeFeatures() {
             <span className='d-inline-block mx-1 p-1 bg-warning rounded-circle' />
             <span className='d-inline-block mx-1 p-1 bg-danger rounded-circle' />
           </div>
-          <ImageTag
+          <Image
             className='border border-dark bg-dark w-100'
             width='600'
             height='249'

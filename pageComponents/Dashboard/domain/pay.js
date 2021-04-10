@@ -1,5 +1,6 @@
-import Link from 'next/link'
 import { Alert, Button } from 'react-bootstrap'
+
+import Link from '../../../components/LinkTag'
 
 export default function PayAlert() {
   return (

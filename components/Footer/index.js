@@ -1,6 +1,5 @@
 import { Container, Row, Col, Media } from 'react-bootstrap'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { useAmp } from 'next/amp'
 
 import IconHouse from '@svg-icons/bootstrap/house.svg'
@@ -9,6 +8,8 @@ import IconMail from '@svg-icons/bootstrap/envelope.svg'
 import IconFacebook from '@svg-icons/bootstrap/facebook.svg'
 import IconTwitter from '@svg-icons/bootstrap/twitter.svg'
 import IconLinkedin from '@svg-icons/bootstrap/linkedin.svg'
+
+import Link from '../LinkTag'
 
 import resourceLinks from '../../pageData/links/footerLinks.json'
 import productLinks from '../../pageData/links/footerProducts.json'
@@ -93,17 +94,19 @@ export default function Footer() {
                   Click here to Subscribe to our Newsletter.
                 </a>
               ) : (
-                ''
+                <>
+                  <p>
+                    You can trust us. we only send promo offers, not a single
+                    spam.
+                  </p>
+                  <SubscriptionBox />
+                </>
               )}
-              <p>
-                You can trust us. we only send promo offers, not a single spam.
-              </p>
-              {!isAmp ? <SubscriptionBox /> : ''}
             </Col>
           </Row>
           <Row className='my-3 py-3 border-top'>
             <Col lg={8}>
-              Copyright © 2020 | All rights reserved to Applanding.page
+              Copyright © 2021 | All rights reserved to Applanding.page
             </Col>
             <Col lg={4} className='text-right'>
               <a

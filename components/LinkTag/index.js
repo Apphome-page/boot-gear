@@ -1,16 +1,30 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { useAmp } from 'next/amp'
 
-export default function LinkTag({ href, children, ...tagProps }) {
+const BASE_URI = process.env.NEXT_PUBLIC_SITE_URL
+const ABST_PAT = /^https?:\/\/|^\/\//i
+
+export default function LinkTag({ href, children, passHref, ...tagProps }) {
   const isAmp = useAmp()
-  // TODO: linearize `href` for AMP
-  return isAmp ? (
-    <a {...tagProps} href={href}>
+
+  const ampHref = useMemo(() => {
+    if (!isAmp || typeof href !== 'string') {
+      return null
+    }
+    if (ABST_PAT.test(href)) {
+      return href
+    }
+    return `${BASE_URI.replace(/\/$/, '')}/${href.replace(/^\//, '')}`
+  }, [isAmp, href])
+
+  return ampHref ? (
+    <a {...tagProps} href={ampHref}>
       {children}
     </a>
   ) : (
-    <Link {...tagProps} href={href}>
+    <Link {...tagProps} href={href} passHref={passHref}>
       {children}
     </Link>
   )

@@ -12,8 +12,6 @@ import imageLoader from '../../../../utils/imageLoader'
 
 import { getFrameProps } from '../../helpers/defaults'
 
-import { previewButton, previewContainer, previewImage } from '../../style'
-
 export default function Design() {
   const {
     data: mockStore,
@@ -51,7 +49,7 @@ export default function Design() {
           <Button
             className={classNames(
               'm-1',
-              previewButton.className,
+              'preview-button',
               currentMockStore.frameDevice === model ? 'border-dark' : 'border'
             )}
             variant='outline-light'
@@ -64,7 +62,7 @@ export default function Design() {
             onClick={eventModel}
           >
             <Image
-              className={previewImage.className}
+              className='preview-image'
               src={`/scrPreview/${currentMockStore.frameType}/${currentMockStore.frameId}/${model}.png`}
               alt='Device Model'
               height='90'
@@ -73,8 +71,6 @@ export default function Design() {
             />
           </Button>
         ))}
-      {previewContainer.styles}
-      {previewImage.styles}
     </Container>
   )
 }

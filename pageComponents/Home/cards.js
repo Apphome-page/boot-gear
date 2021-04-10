@@ -1,17 +1,17 @@
 import { Container, CardDeck, Card } from 'react-bootstrap'
-import Link from 'next/link'
 
-import ImageTag from '../../components/ImageTag'
+import Link from '../../components/LinkTag'
+import Image from '../../components/ImageTag'
 
 export default function HomeCards() {
   return (
     <Container className='my-5'>
       <CardDeck>
-        <Link href='/app-website-builder'>
-          <Card bg='light' className='rounded-0 border-0 p-3 cursor-pointer'>
-            <Card.Body>
+        <Card bg='light' className='rounded-0 border-0 p-3'>
+          <Card.Body className='cursor-pointer'>
+            <Link href='/app-website-builder'>
               <div className='tight-wrap mb-3 p-3 rounded-circle bg-white'>
-                <ImageTag src='/img/feature/i1.png' height='32' width='32' />
+                <Image src='/img/feature/i1.png' height='32' width='32' />
               </div>
               <Card.Title className='font-weight-bold'>
                 Landing page for Apps
@@ -20,14 +20,14 @@ export default function HomeCards() {
                 Build landing page for your mobile app. We have both free and
                 paid plans.
               </Card.Text>
-            </Card.Body>
-          </Card>
-        </Link>
-        <Link href='/app-screenshot-generator'>
-          <Card bg='light' className='rounded-0 border-0 p-3 cursor-pointer'>
-            <Card.Body>
+            </Link>
+          </Card.Body>
+        </Card>
+        <Card bg='light' className='rounded-0 border-0 p-3'>
+          <Card.Body className='cursor-pointer'>
+            <Link href='/app-screenshot-generator'>
               <div className='tight-wrap mb-3 p-3 rounded-circle bg-white'>
-                <ImageTag src='/img/feature/i3.png' height='32' width='32' />
+                <Image src='/img/feature/i3.png' height='32' width='32' />
               </div>
               <Card.Title className='font-weight-bold'>
                 Stunning screenshots
@@ -36,14 +36,14 @@ export default function HomeCards() {
                 Create stunning screen shots for your app store listing using
                 our free tools.
               </Card.Text>
-            </Card.Body>
-          </Card>
-        </Link>
-        <Link href='/app-icon-generator'>
-          <Card bg='light' className='rounded-0 border-0 p-3 cursor-pointer'>
-            <Card.Body>
+            </Link>
+          </Card.Body>
+        </Card>
+        <Card bg='light' className='rounded-0 border-0 p-3'>
+          <Card.Body className='cursor-pointer'>
+            <Link href='/app-icon-generator'>
               <div className='tight-wrap mb-3 p-3 rounded-circle bg-white'>
-                <ImageTag src='/img/feature/i4.png' height='32' width='32' />
+                <Image src='/img/feature/i4.png' height='32' width='32' />
               </div>
               <Card.Title className='font-weight-bold'>
                 Free icon generator
@@ -51,9 +51,9 @@ export default function HomeCards() {
               <Card.Text>
                 Resize and create icons for mmobile devices using our free tool.
               </Card.Text>
-            </Card.Body>
-          </Card>
-        </Link>
+            </Link>
+          </Card.Body>
+        </Card>
       </CardDeck>
     </Container>
   )

@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { Container, Button } from 'react-bootstrap'
-import Link from 'next/link'
+
+import Link from '../../components/LinkTag'
 
 import { StoreContext } from '../../utils/storeProvider'
 

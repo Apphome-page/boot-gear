@@ -12,8 +12,6 @@ import imageLoader from '../../../../utils/imageLoader'
 
 import { getFrameProps } from '../../helpers/defaults'
 
-import { previewContainer, previewButton, previewImage } from '../../style'
-
 export default function Device() {
   const {
     data: mockStore,
@@ -46,7 +44,7 @@ export default function Device() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='device-style-ios' title='iOS'>
-        <Container className={previewContainer.className}>
+        <Container className='preview-container'>
           {scrMeta.ios.map(({ id, name, sizes }, key) => (
             <Button
               className={classNames(
@@ -61,7 +59,7 @@ export default function Device() {
               onClick={eventFrame}
             >
               <Image
-                className={previewImage.className}
+                className='preview-image'
                 src={`/scrPreview/ios/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'
@@ -73,12 +71,12 @@ export default function Device() {
         </Container>
       </Tab>
       <Tab eventKey='device-style-android' title='Android'>
-        <Container className={previewContainer.className}>
+        <Container className='preview-container'>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
             <Button
               className={classNames(
                 'm-1',
-                previewButton.className,
+                'preview-button',
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
               )}
               variant='outline-light'
@@ -89,7 +87,7 @@ export default function Device() {
               onClick={eventFrame}
             >
               <Image
-                className={previewImage.className}
+                className='preview-image'
                 src={`/scrPreview/android/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'
@@ -100,10 +98,6 @@ export default function Device() {
           ))}
         </Container>
       </Tab>
-
-      {previewContainer.styles}
-      {previewButton.styles}
-      {previewImage.styles}
     </Tabs>
   )
 }

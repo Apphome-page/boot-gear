@@ -1,8 +1,9 @@
 import { useCallback, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useAuth } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useAlerts } from '../../components/AlertPop'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -11,16 +12,15 @@ const ExceptionTags = {
 
 export default function Security() {
   const passRef = useRef(null)
-
-  const { addToast } = useToasts()
   const userAuth = useAuth()
+  const { addAlert } = useAlerts()
 
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value
     // TODO: Enforce Password Format
     if (!newPass) {
-      addToast('Enter New Password!', {
-        appearance: 'error',
+      addAlert('Enter New Password!', {
+        variant: 'danger',
         autoDismiss: false,
       })
       return
@@ -30,8 +30,8 @@ export default function Security() {
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
         userAuth.signOut()
-        addToast('Please Sign in again to continue.', {
-          appearance: 'info',
+        addAlert('Please Sign in again to continue.', {
+          variant: 'info',
           autoDismiss: false,
         })
         return
@@ -42,10 +42,10 @@ export default function Security() {
       })
     }
     passRef.current.value = ''
-    addToast('Password Updated Successfully!', {
-      appearance: 'success',
+    addAlert('Password Updated Successfully!', {
+      variant: 'success',
     })
-  }, [addToast, userAuth])
+  }, [addAlert, userAuth])
   return (
     <>
       <div className='pb-1 my-1 border-bottom lead text-dark'>Security</div>

@@ -12,8 +12,6 @@ import scrBg from '../../../../config/scrBg.json'
 
 import imageLoader from '../../../../utils/imageLoader'
 
-import { previewContainer, previewButton, previewImage } from '../../style'
-
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
   loading: CodeLoader,
@@ -56,14 +54,14 @@ export default function Design() {
   return (
     <Tabs defaultActiveKey='image' className='justify-content-center mt-1 mb-3'>
       <Tab eventKey='image' title='Image'>
-        <Container className={previewContainer.className}>
+        <Container className='preview-container'>
           {scrBg.map(({ path }, index) => {
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
               <Button
                 key={index}
                 variant='outline-light'
-                className={classNames('m-1', previewButton.className, {
+                className={classNames('m-1', 'preview-button', {
                   'border-dark':
                     currentMockStore.backgroundImage === bgPreviewLink,
                   border: currentMockStore.backgroundImage === bgPreviewLink,
@@ -76,7 +74,7 @@ export default function Design() {
                   height='90'
                   width='60'
                   loader={imageLoader}
-                  className={previewImage.className}
+                  className='preview-image'
                 />
               </Button>
             )
@@ -89,9 +87,6 @@ export default function Design() {
           onChange={eventBgColor}
         />
       </Tab>
-      {previewContainer.styles}
-      {previewButton.styles}
-      {previewImage.styles}
     </Tabs>
   )
 }

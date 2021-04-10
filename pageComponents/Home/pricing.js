@@ -6,9 +6,9 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'react-bootstrap'
-import Link from 'next/link'
 
-import ImageTag from '../../components/ImageTag'
+import Link from '../../components/LinkTag'
+import Image from '../../components/ImageTag'
 
 import plans from '../../config/plans.json'
 
@@ -17,7 +17,7 @@ export default function HomePricing() {
     <section className='py-5 bg-light text-center text-dark'>
       <Container>
         <div className='tight-wrap my-3 p-3 border-bottom rounded-circle'>
-          <ImageTag src='/img/logo.png' height='32' width='32' />
+          <Image src='/img/logo.png' height='32' width='32' />
         </div>
         <p className='h2 font-weight-bold'>Plans & Pricing</p>
         <p className='mt-3 mb-5'>

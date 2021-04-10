@@ -7,7 +7,6 @@ import {
   NavLink,
   NavDropdown,
 } from 'react-bootstrap'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useAuth } from 'reactfire'
 
@@ -18,6 +17,8 @@ import IconDash from '@svg-icons/bootstrap/person-circle.svg'
 import IconOut from '@svg-icons/bootstrap/box-arrow-right.svg'
 import IconPlan from '@svg-icons/bootstrap/newspaper.svg'
 import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
+
+import Link from '../LinkTag'
 
 import { StoreContext } from '../../utils/storeProvider'
 
@@ -36,7 +37,7 @@ export default function Header() {
       bg='light'
       expand='lg'
       sticky='top'
-      className='shadow px-lg-5 py-lg-2'
+      className='shadow px-lg-5 py-lg-1'
     >
       <Link href='/'>
         <div className='navbar-brand cursor-pointer'>AppLanding</div>

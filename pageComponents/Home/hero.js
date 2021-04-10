@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import Link from 'next/link'
 
+import Link from '../../components/LinkTag'
 import { StoreContext } from '../../utils/storeProvider'
 
 export default function HomeHero() {
@@ -19,8 +19,6 @@ export default function HomeHero() {
               for your apps.
               <br />
               Creating stunning screenshots for app store listings.
-              <br />
-              Sign Up !
             </p>
             <Button
               variant='alt'

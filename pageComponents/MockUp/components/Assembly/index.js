@@ -88,7 +88,7 @@ export default function Assembly() {
       <Button
         variant='dark'
         onClick={addMockStore}
-        className='assembly-dummy mt-3 mx-1 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center display-1 cursor-pointer'
+        className='assembly-dummy mt-3 mx-1 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center cursor-pointer'
       />
       <style jsx>
         {`
@@ -98,14 +98,20 @@ export default function Assembly() {
           .assembly-wrap:hover {
             border: 1px dotted #cccccc;
           }
-          .assembly-wrap .assembly-dummy {
+        `}
+      </style>
+      <style>
+        {`
+          .assembly-dummy {
             height: 200px;
             width: 120px;
           }
-          .assembly-wrap .assembly-dummy:before {
+          .assembly-dummy:before {
             content: '+';
+            font-size: 96px;
+            font-family: monospace;
           }
-          .assembly-wrap .assembly-dummy:hover {
+          .assembly-dummy:hover {
             filter: blur(1px);
           }
         `}

@@ -1,7 +1,7 @@
 import { Container, Button, Row, Col } from 'react-bootstrap'
-import Link from 'next/link'
 
-import ImageTag from '../../components/ImageTag'
+import Link from '../../components/LinkTag'
+import Image from '../../components/ImageTag'
 
 export default function HomeShowcase() {
   return (
@@ -25,7 +25,7 @@ export default function HomeShowcase() {
             </Link>
           </Col>
           <Col lg={6} className='d-none d-lg-block'>
-            <ImageTag
+            <Image
               src='/img/hero/hero-bg.png'
               alt=''
               height='300'

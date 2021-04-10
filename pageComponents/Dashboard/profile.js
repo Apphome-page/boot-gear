@@ -1,8 +1,9 @@
 import { useCallback, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { useAuth } from 'reactfire'
-import { useToasts } from 'react-toast-notifications'
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useAlerts } from '../../components/AlertPop'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -12,7 +13,7 @@ const ExceptionTags = {
 export default function Profile() {
   const formRef = useRef(null)
 
-  const { addToast } = useToasts()
+  const { addAlert } = useAlerts()
   const userAuth = useAuth()
 
   const { displayName, email } = userAuth.currentUser || {}
@@ -28,8 +29,8 @@ export default function Profile() {
       } catch (err) {
         if (err.code === 'auth/requires-recent-login') {
           userAuth.signOut()
-          addToast('Please Sign in again to continue.', {
-            appearance: 'info',
+          addAlert('Please Sign in again to continue.', {
+            variant: 'info',
             autoDismiss: false,
           })
           return
@@ -45,10 +46,10 @@ export default function Profile() {
         displayName: newDisplayName,
       })
     }
-    addToast('Profile Updated Successfully!', {
-      appearance: 'success',
+    addAlert('Profile Updated Successfully!', {
+      variant: 'success',
     })
-  }, [addToast, email, userAuth])
+  }, [addAlert, email, userAuth])
   return (
     <>
       <div className='pb-1 mb-1 border-bottom lead text-dark'>Your Details</div>

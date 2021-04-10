@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Button, Container, Row, Col } from 'react-bootstrap'
 import { Code as LoaderCode } from 'react-content-loader'
-import Link from 'next/link'
 import noop from 'lodash/noop'
+
+import Link from '../../../components/LinkTag'
 
 import useUserData from '../../../utils/useUserData'
 
