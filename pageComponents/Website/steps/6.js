@@ -4,7 +4,11 @@ import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useFirebaseApp, useLogin } from '../../../components/LoginPop'
+import {
+  useFirebaseApp,
+  useLogin,
+  useUserAuth,
+} from '../../../components/LoginPop'
 
 import { StoreContext } from '../helpers/store'
 
@@ -20,10 +24,8 @@ export default function Step() {
   const { queueLoading, unqueueLoading } = useLoading()
   const { signPop } = useLogin()
   const firebaseApp = useFirebaseApp()
-  const userId =
-    firebaseApp &&
-    firebaseApp.auth().currentUser &&
-    firebaseApp.auth().currentUser.uid
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
   const {
     appIcon,

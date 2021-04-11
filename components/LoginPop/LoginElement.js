@@ -6,16 +6,21 @@ export default function LoginElement({
   isPop,
   isForced,
   signClear,
+  userAuth,
   firebaseApp,
 }) {
   const router = useRouter()
 
-  const userAuth = firebaseApp && firebaseApp.auth()
-  const userId = userAuth && userAuth.currentUser && userAuth.currentUser.uid
+  const userId = userAuth && userAuth.uid
+
+  // TODO: PUT LOADER?
+  if (!firebaseApp) {
+    return <></>
+  }
 
   return (
     <Modal
-      show={firebaseApp && !userId && (isPop || isForced)}
+      show={!userId && (isPop || isForced)}
       onHide={() => {
         if (isForced && !userId) {
           router.replace('/')
@@ -38,7 +43,7 @@ export default function LoginElement({
               },
             },
           }}
-          firebaseAuth={userAuth}
+          firebaseAuth={firebaseApp.auth()}
         />
       </ModalBody>
     </Modal>

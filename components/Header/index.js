@@ -18,7 +18,7 @@ import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
 
 import Link from '../LinkTag'
 
-import { useLogin, useFirebaseApp } from '../LoginPop'
+import { useLogin, useFirebaseApp, useUserAuth } from '../LoginPop'
 
 import productLinks from '../../pageData/links/headerProducts.json'
 import headerLinks from '../../pageData/links/headerLinks.json'
@@ -28,8 +28,7 @@ export default function Header() {
 
   const { signPop } = useLogin()
   const firebaseApp = useFirebaseApp()
-
-  const currentUser = firebaseApp && firebaseApp.auth().currentUser
+  const userAuth = useUserAuth()
 
   return (
     <Navbar
@@ -59,7 +58,7 @@ export default function Header() {
               </NavDropdown.Item>
             ))}
           </NavDropdown>
-          {currentUser
+          {userAuth
             ? ''
             : headerLinks.map(({ name, path }, index) => (
                 <NavItem key={index}>
@@ -75,7 +74,7 @@ export default function Header() {
                   </Link>
                 </NavItem>
               ))}
-          {currentUser ? (
+          {userAuth ? (
             <NavDropdown
               alignRight
               title={<IconGear sizeheight='20' width='20' />}
@@ -87,7 +86,7 @@ export default function Header() {
                 <Link href='/dashboard'>
                   <div>
                     <IconDash height='18' width='18' className='mr-1' />
-                    {currentUser.displayName}
+                    {userAuth.displayName}
                   </div>
                 </Link>
               </NavDropdown.Item>
@@ -119,7 +118,7 @@ export default function Header() {
                 as='div'
                 className='px-3 text-danger cursor-pointer'
                 onClick={() => {
-                  if (firebaseApp && firebaseApp.auth().currentUser) {
+                  if (firebaseApp && userAuth) {
                     firebaseApp.auth().signOut()
                   }
                 }}

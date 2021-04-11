@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useFirebaseApp } from '../../../components/LoginPop'
+import { useUserAuth } from '../../../components/LoginPop'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
@@ -18,14 +18,13 @@ export default function DomainNameServer({
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
-  const firebaseApp = useFirebaseApp()
-  const userDetails = firebaseApp && firebaseApp.auth().currentUser
+  const userAuth = useUserAuth()
 
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
     const [idToken, { default: fetch }] = await Promise.all([
-      userDetails.getIdToken(),
+      userAuth.getIdToken(),
       import('cross-fetch'),
     ])
     try {
@@ -62,7 +61,7 @@ export default function DomainNameServer({
       })
     }
     setProcessing(false)
-  }, [userDetails, webKey])
+  }, [userAuth, webKey])
   return (
     <Container fluid>
       <Row>

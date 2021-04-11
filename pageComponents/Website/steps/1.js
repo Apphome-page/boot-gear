@@ -16,7 +16,11 @@ import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useLogin, useFirebaseApp } from '../../../components/LoginPop'
+import {
+  useLogin,
+  useFirebaseApp,
+  useUserAuth,
+} from '../../../components/LoginPop'
 
 import Image from '../../../components/ImageTag'
 
@@ -52,10 +56,8 @@ export default function Step() {
   const { queueLoading, unqueueLoading } = useLoading()
 
   const firebaseApp = useFirebaseApp()
-  const userId =
-    firebaseApp &&
-    firebaseApp.auth().currentUser &&
-    firebaseApp.auth().currentUser.uid
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {

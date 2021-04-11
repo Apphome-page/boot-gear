@@ -3,7 +3,7 @@ import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../components/AlertPop'
-import { useFirebaseApp } from '../../components/LoginPop'
+import { useFirebaseApp, useUserAuth } from '../../components/LoginPop'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -14,7 +14,7 @@ export default function Security() {
   const passRef = useRef(null)
   const { addAlert } = useAlerts()
   const firebaseApp = useFirebaseApp()
-  const userAuth = firebaseApp && firebaseApp.auth()
+  const userAuth = useUserAuth()
 
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value
@@ -30,7 +30,7 @@ export default function Security() {
       await userAuth.updatePassword(newPass)
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
-        userAuth.signOut()
+        firebaseApp.auth().signOut()
         addAlert('Please Sign in again to continue.', {
           variant: 'info',
           autoDismiss: false,

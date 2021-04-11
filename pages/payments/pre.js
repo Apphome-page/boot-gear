@@ -4,7 +4,7 @@ import { Container, Spinner } from 'react-bootstrap'
 
 import AuthWrapper from '../../components/AuthWrapper'
 import { useAlerts } from '../../components/AlertPop'
-import { useFirebaseApp } from '../../components/LoginPop'
+import { useFirebaseApp, useUserAuth } from '../../components/LoginPop'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
@@ -14,9 +14,10 @@ export default function Payment() {
   const router = useRouter()
 
   const { addAlert } = useAlerts()
+
   const firebaseApp = useFirebaseApp()
-  const userAuth = firebaseApp && firebaseApp.auth()
-  const userId = userAuth && userAuth.currentUser.uid
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
   const {
     query: { plan },
@@ -42,7 +43,7 @@ export default function Payment() {
       return
     }
     const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.currentUser.getIdToken(),
+      userAuth.getIdToken(),
       import('cross-fetch'),
     ])
     try {
@@ -63,9 +64,9 @@ export default function Payment() {
         variant: 'danger',
         autoDismiss: false,
       })
-      userAuth.signOut()
+      firebaseApp.auth().signOut()
     }
-  }, [addAlert, plan, router, userAuth, userId])
+  }, [addAlert, firebaseApp, plan, router, userAuth, userId])
 
   useEffect(() => {
     syncUser()

@@ -1,11 +1,9 @@
 import {
   createContext,
   useState,
-  useMemo,
   useContext,
   useCallback,
   useEffect,
-  useRef,
 } from 'react'
 import dynamic from 'next/dynamic'
 import {
@@ -16,6 +14,8 @@ import {
 import getPlanDetails from '../../utils/getPlanDetails'
 
 const LoginElement = dynamic(() => import('./LoginElement'), { ssr: false })
+
+const EMPTY_PROMISE = new Promise(() => {})
 
 const LoginContext = createContext()
 
@@ -41,7 +41,10 @@ const authSentryAction = (authState) => {
  * -> LoadingPop
  */
 export default function LoginProvider({ children }) {
+  const [firebaseLaunch, setFirebaseLaunch] = useState(false)
+  const [firebasePromise, setFirebasePromise] = useState(EMPTY_PROMISE)
   const [firebaseApp, setFirebaseApp] = useState(null)
+  const [userAuth, setUserAuth] = useState(null)
   const [isPop, setPop] = useState(false)
   const [isForced, setForced] = useState()
 
@@ -58,34 +61,46 @@ export default function LoginProvider({ children }) {
     setForced(false)
   }, [])
 
-  useEffect(() => {
-    let firebaseListener = () => {}
-    Promise.all([
-      import('../../firebase.json'),
-      // TODO: Per-Need Fetch?
+  const fireFall = useCallback(async () => {
+    const [firebase, { default: firebaseConfig }] = await Promise.all([
       import('firebase/app'),
+      import('../../firebase.json'),
+    ])
+    await Promise.all([
       import('firebase/auth'),
       import('firebase/storage'),
       import('firebase/database'),
-    ]).then(([firebaseConfig, firebase]) => {
-      try {
-        firebase.initializeApp(firebaseConfig)
-      } catch (error) {
-        if (error.code !== 'app/duplicate-app') {
-          // TODO: Send to Sentry
-          throw error
-        }
+    ])
+    try {
+      firebase.initializeApp(firebaseConfig)
+    } catch (error) {
+      if (error.code !== 'app/duplicate-app') {
+        // TODO: Send to Sentry
+        throw error
       }
-      setFirebaseApp(firebase)
-      firebaseListener = firebase.auth().onAuthStateChanged(authSentryAction)
+    }
+    setFirebaseApp(firebase)
+    return firebase.auth().onAuthStateChanged((authState) => {
+      authSentryAction(authState)
+      setUserAuth(authState)
+      setFirebaseLaunch(true)
     })
+  }, [])
+
+  useEffect(() => {
+    let firebaseListener = () => {}
+    setFirebasePromise(
+      fireFall().then((authListener) => {
+        firebaseListener = authListener
+      })
+    )
     return () => {
       // Clear Sentry User data
       configureScopeSentry((scope) => scope.setUser(null))
       firebaseListener()
       setFirebaseApp(null)
     }
-  }, [setFirebaseApp])
+  }, [fireFall, setFirebaseApp])
 
   return (
     <LoginContext.Provider
@@ -93,7 +108,10 @@ export default function LoginProvider({ children }) {
         signPop,
         signForced,
         signClear,
+        userAuth,
         firebaseApp,
+        firebasePromise,
+        firebaseLaunch,
       }}
     >
       {children}
@@ -101,6 +119,7 @@ export default function LoginProvider({ children }) {
         isPop={isPop}
         isForced={isForced}
         signClear={signClear}
+        userAuth={userAuth}
         firebaseApp={firebaseApp}
       />
     </LoginContext.Provider>
@@ -117,20 +136,24 @@ export const useFirebaseApp = () => {
   return firebaseApp
 }
 
+export const useFirebaseStatus = () => {
+  const { firebaseLaunch, firebasePromise } = useContext(LoginContext) || {}
+  return { firebaseLaunch, firebasePromise }
+}
+
+export const useUserAuth = () => {
+  const { userAuth } = useContext(LoginContext) || {}
+  return userAuth
+}
+
 export const useUserData = (refKey = '', { once = false } = {}) => {
   const [userData, setUserData] = useState({
     firstLaunch: true, // to indicate the userData has not been fetched
   })
 
-  const { firebaseApp } = useContext(LoginContext) || {}
+  const { firebaseApp, userAuth } = useContext(LoginContext) || {}
 
-  const userId = useMemo(
-    () =>
-      firebaseApp &&
-      firebaseApp.auth().currentUser &&
-      firebaseApp.auth().currentUser.uid,
-    [firebaseApp]
-  )
+  const userId = userAuth && userAuth.uid
 
   const snapValue = useCallback(
     (snapshot) => {
