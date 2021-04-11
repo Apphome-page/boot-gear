@@ -1,9 +1,9 @@
-import { useCallback, useContext, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { StoreContext } from '../../utils/storeProvider'
+import { useAlerts } from '../../components/AlertPop'
+import { useFirebaseApp, useUserAuth } from '../../components/LoginPop'
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -12,17 +12,17 @@ const ExceptionTags = {
 
 export default function Security() {
   const passRef = useRef(null)
-  const [, modStore] = useContext(StoreContext)
-  const userAuth = useAuth()
+  const { addAlert } = useAlerts()
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
 
   const actionUpdate = useCallback(async () => {
     const newPass = passRef.current.value
     // TODO: Enforce Password Format
     if (!newPass) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Enter New Password!',
+      addAlert('Enter New Password!', {
+        variant: 'danger',
+        autoDismiss: false,
       })
       return
     }
@@ -30,11 +30,10 @@ export default function Security() {
       await userAuth.updatePassword(newPass)
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
-        userAuth.signOut()
-        modStore({
-          alertVariant: 'info',
-          alertTimeout: -1,
-          alertText: 'Please Sign in again to continue.',
+        firebaseApp.auth().signOut()
+        addAlert('Please Sign in again to continue.', {
+          variant: 'info',
+          autoDismiss: false,
         })
         return
       }
@@ -44,16 +43,14 @@ export default function Security() {
       })
     }
     passRef.current.value = ''
-    modStore({
-      alertVariant: 'success',
-      alertTimeout: -1,
-      alertText: 'Password Updated Successfully!',
+    addAlert('Password Updated Successfully!', {
+      variant: 'success',
     })
-  }, [modStore, userAuth])
+  }, [addAlert, userAuth])
   return (
     <>
-      <div className='pb-1 my-2 border-bottom lead text-dark'>Security</div>
-      <Form className='p-2 mb-5 border shadow-sm'>
+      <div className='pb-1 my-1 border-bottom lead text-dark'>Security</div>
+      <Form className='p-3 mb-5 border shadow-sm'>
         <InputGroup className='my-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>Password</InputGroup.Text>

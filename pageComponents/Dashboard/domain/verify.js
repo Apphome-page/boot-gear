@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useUserAuth } from '../../../components/LoginPop'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
@@ -17,13 +18,13 @@ export default function DomainVerify({
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
-  const userAuth = useAuth()
+  const userAuth = useUserAuth()
 
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
     const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.currentUser.getIdToken(),
+      userAuth.getIdToken(),
       import('cross-fetch'),
     ])
     try {
@@ -61,7 +62,7 @@ export default function DomainVerify({
       })
     }
     setProcessing(false)
-  }, [userAuth.currentUser, webKey])
+  }, [userAuth, webKey])
   return (
     <Container fluid>
       <Row>
@@ -78,15 +79,15 @@ export default function DomainVerify({
       </Row>
       <Row className='align-items-center'>
         <Col lg='8'>
-          <pre className='d-block mx-auto my-0 p-2 w-75 text-dark bg-light shadow-sm'>
+          <pre className='d-block mx-auto my-0 p-3 w-75 text-dark bg-light shadow-sm'>
             {webNameservers.join('\n')}
           </pre>
         </Col>
         <Col lg='4'>
           <Button
-            variant='secondary'
+            variant='alt'
             disabled={isProcessing}
-            className='w-100 btn-alt'
+            className='w-100'
             onClick={verifySubmit}
           >
             {isProcessing ? (
@@ -100,7 +101,7 @@ export default function DomainVerify({
       <Row>
         <Col>
           {alertData.text ? (
-            <Alert variant={alertData.type} className='my-2 mini text-center'>
+            <Alert variant={alertData.type} className='my-1 mini text-center'>
               {alertData.text}
             </Alert>
           ) : (

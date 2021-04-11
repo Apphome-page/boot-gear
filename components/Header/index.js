@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import {
   Button,
   Navbar,
@@ -7,36 +6,36 @@ import {
   NavLink,
   NavDropdown,
 } from 'react-bootstrap'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useAuth } from 'reactfire'
 
 import classNames from 'classnames'
 
-import { GearFill as IconGear } from '@emotion-icons/bootstrap/GearFill'
-import { PersonCircle as IconDash } from '@emotion-icons/bootstrap/PersonCircle'
-import { BoxArrowRight as IconOut } from '@emotion-icons/bootstrap/BoxArrowRight'
-import { Newspaper as IconPlan } from '@emotion-icons/bootstrap/Newspaper'
-import { CardHeading as IconWebsite } from '@emotion-icons/bootstrap/CardHeading'
+import IconGear from '@svg-icons/bootstrap/gear-fill.svg'
+import IconDash from '@svg-icons/bootstrap/person-circle.svg'
+import IconOut from '@svg-icons/bootstrap/box-arrow-right.svg'
+import IconPlan from '@svg-icons/bootstrap/newspaper.svg'
+import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
 
-import { StoreContext } from '../../utils/storeProvider'
+import Link from '../LinkTag'
+
+import { useLogin, useFirebaseApp, useUserAuth } from '../LoginPop'
 
 import productLinks from '../../pageData/links/headerProducts.json'
 import headerLinks from '../../pageData/links/headerLinks.json'
 
 export default function Header() {
   const router = useRouter()
-  const userAuth = useAuth()
-  const [, modStore] = useContext(StoreContext)
 
-  const { currentUser } = userAuth
+  const { signPop } = useLogin()
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
 
   return (
     <Navbar
       bg='light'
       expand='lg'
       sticky='top'
-      className='shadow px-lg-5 py-lg-2'
+      className='shadow px-lg-5 py-lg-1'
     >
       <Link href='/'>
         <div className='navbar-brand cursor-pointer'>AppLanding</div>
@@ -59,7 +58,7 @@ export default function Header() {
               </NavDropdown.Item>
             ))}
           </NavDropdown>
-          {currentUser
+          {userAuth
             ? ''
             : headerLinks.map(({ name, path }, index) => (
                 <NavItem key={index}>
@@ -75,16 +74,19 @@ export default function Header() {
                   </Link>
                 </NavItem>
               ))}
-          {currentUser ? (
-            <NavDropdown alignRight title={<IconGear size='20' />}>
+          {userAuth ? (
+            <NavDropdown
+              alignRight
+              title={<IconGear sizeheight='20' width='20' />}
+            >
               <NavDropdown.Item
                 as='div'
                 className='px-3 text-muted cursor-pointer'
               >
                 <Link href='/dashboard'>
                   <div>
-                    <IconDash size='18' className='mr-2' />
-                    {currentUser.displayName}
+                    <IconDash height='18' width='18' className='mr-1' />
+                    {userAuth.displayName}
                   </div>
                 </Link>
               </NavDropdown.Item>
@@ -95,7 +97,7 @@ export default function Header() {
               >
                 <Link href='/dashboard/subscriptions'>
                   <div>
-                    <IconPlan size='18' className='mr-2' />
+                    <IconPlan height='18' width='18' className='mr-1' />
                     My Subscriptions
                   </div>
                 </Link>
@@ -106,7 +108,7 @@ export default function Header() {
               >
                 <Link href='/dashboard/websites'>
                   <div>
-                    <IconWebsite size='18' className='mr-2' />
+                    <IconWebsite height='18' width='18' className='mr-1' />
                     My Websites
                   </div>
                 </Link>
@@ -116,20 +118,17 @@ export default function Header() {
                 as='div'
                 className='px-3 text-danger cursor-pointer'
                 onClick={() => {
-                  userAuth.signOut()
-                  router.push('/')
+                  if (firebaseApp && userAuth) {
+                    firebaseApp.auth().signOut()
+                  }
                 }}
               >
-                <IconOut size='18' className='mr-2' />
+                <IconOut height='18' width='18' className='mr-1' />
                 Sign Out
               </NavDropdown.Item>
             </NavDropdown>
           ) : (
-            <Button
-              className='btn-alt mx-3'
-              variant='light'
-              onClick={() => modStore({ signPop: true })}
-            >
+            <Button className='mx-3' variant='alt' onClick={signPop}>
               Sign In
             </Button>
           )}

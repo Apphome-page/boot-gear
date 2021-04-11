@@ -17,7 +17,7 @@ export function FAQList({ faqList = [] }) {
             dangerouslySetInnerHTML={{ __html: title }}
           />
           <p
-            className='ml-5 mb-1 py-2'
+            className='ml-5 mb-1 py-3'
             dangerouslySetInnerHTML={{ __html: desc }}
           />
         </details>
@@ -30,7 +30,7 @@ export default function FAQ({ fluid, faqList = [] }) {
   return (
     <Container fluid={fluid}>
       {faqList.length ? (
-        <div className='h1 my-4 text-center'>Frequently Asked Questions</div>
+        <div className='h1 my-3 text-center'>Frequently Asked Questions</div>
       ) : (
         ''
       )}

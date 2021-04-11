@@ -1,42 +1,58 @@
 import { useContext, useEffect } from 'react'
+import { ProgressBar } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
 
-import { StoreContext as BuilderStoreContext } from '../helpers/store'
-import useUserData from '../../../utils/useUserData'
+import IconNext from '@svg-icons/bootstrap/arrow-right-circle-fill.svg'
+import IconCheck from '@svg-icons/bootstrap/check-circle-fill.svg'
+import IconPlay from '@svg-icons/bootstrap/play-circle-fill.svg'
 
-import {
-  ProgressRail,
-  ProgressButton,
-  ProgressStart,
-  ProgressEnd,
-} from '../style'
+import { useUserData } from '../../../components/LoginPop'
+
+import { StoreContext as BuilderStoreContext } from '../helpers/store'
 
 function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
   const stageButtons = []
   for (let i = 1; i < maxSlide; i += 1) {
     const isActive = i < activeIndex + 1
     stageButtons.push(
-      <ProgressButton
-        key={i}
-        size={32}
-        className={classNames(
-          'position-absolute',
-          'rounded-circle',
-          'border',
-          'border-light',
-          'bg-light',
-          isActive ? 'text-success' : 'text-light',
-          {
-            'cursor-pointer': isActive && !isLast,
+      <div className='progress-next position-absolute' key={i}>
+        <IconNext
+          height='32'
+          width='32'
+          className={classNames(
+            'rounded-circle',
+            'border',
+            'border-light',
+            'bg-light',
+            isActive ? 'text-success' : 'text-light',
+            {
+              'cursor-pointer': isActive && !isLast,
+            }
+          )}
+          onClick={() => (isActive && !isLast ? actionCallback(i) : null)}
+        >
+          Step {i}
+        </IconNext>
+        <style jsx>{`
+          .progress-next {
+            left: ${((100 * i) / maxSlide).toFixed(3)}%;
+            transition: all 0.1s linear ${(2 / maxSlide).toFixed(2)}s;
           }
-        )}
-        currentIndex={i}
-        maxIndex={maxSlide}
-        onClick={() => (isActive && !isLast ? actionCallback(i) : null)}
-      >
-        Step {i}
-      </ProgressButton>
+        `}</style>
+        <style jsx>
+          {`
+            .progress-next {
+              top: 50%;
+              transform: translate(-50%, -50%);
+              opacity: 1;
+            }
+            .progress-next:disabled {
+              opacity: 1;
+            }
+          `}
+        </style>
+      </div>
     )
   }
   return <>{stageButtons}</>
@@ -72,38 +88,59 @@ export default function ProgressStatus({ activeIndex }) {
   }, [modContext, userSiteData.timestamp])
 
   return (
-    <div className='position-relative my-3 mx-5'>
-      <ProgressRail
+    <div className='progress-wrap position-relative my-3 mx-5'>
+      <ProgressBar
         now={activeIndex}
         min={0}
         max={maxSlide}
         srOnly
         variant='success'
-        className='rounded-0'
+        className='progress-rail rounded-0'
+        style={{ height: '4px' }}
       />
-      <ProgressStart
-        key={0}
-        size={32}
-        className='position-absolute rounded-circle border border-light bg-light text-success'
-      />
+      <div className='progress-start position-absolute '>
+        <IconPlay
+          key={0}
+          height='32'
+          width='32'
+          className='rounded-circle border border-light bg-light text-success'
+        />
+      </div>
       <ProgressPoints
         activeIndex={activeIndex}
         isLast={isLast}
         maxSlide={maxSlide}
         actionCallback={setActiveSlide}
       />
-      <ProgressEnd
-        key={maxSlide}
-        size={isLast ? 42 : 32}
-        className={classNames(
-          'position-absolute',
-          'rounded-circle',
-          'border',
-          'border-light',
-          'bg-light',
-          isLast ? 'text-success' : 'text-light'
-        )}
-      />
+      <div className='progress-end position-absolute'>
+        <IconCheck
+          key={maxSlide}
+          height={isLast ? 42 : 32}
+          width={isLast ? 42 : 32}
+          className={classNames(
+            'rounded-circle',
+            'border',
+            'border-light',
+            'bg-light',
+            isLast ? 'text-success' : 'text-light'
+          )}
+        />
+      </div>
+      <style jsx>{`
+        .progress-wrap .progress-start {
+          top: 50%;
+          left: 0;
+          transform: translate(-50%, -50%);
+          transition: all 0.1s linear 0.3s;
+        }
+
+        .progress-wrap .progress-end {
+          top: 50%;
+          right: 0;
+          transform: translate(50%, -50%);
+          transition: all 0.1s linear 0.3s;
+        }
+      `}</style>
     </div>
   )
 }

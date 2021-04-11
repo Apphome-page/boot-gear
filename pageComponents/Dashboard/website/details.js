@@ -1,5 +1,5 @@
 import { Media, Image } from 'react-bootstrap'
-import { Link45deg as IconLink } from '@emotion-icons/bootstrap/Link45deg'
+import IconLink from '@svg-icons/bootstrap/link-45deg.svg'
 
 const FIRESTORE_BASE = process.env.NEXT_PUBLIC_FIRESTORE_URL
 
@@ -13,7 +13,7 @@ export default function WebsiteDetails({
       <Image
         width={64}
         height={64}
-        className='mt-2 mr-3 rounded'
+        className='mt-1 mr-3 rounded'
         src={`${FIRESTORE_BASE}${encodeURIComponent(appIcon)}?alt=media`}
         alt=''
       />
@@ -21,7 +21,7 @@ export default function WebsiteDetails({
         <p className='m-0 lead'>
           {appName}
           <a className='mx-1' href={webLink} target='_blank' rel='noreferrer'>
-            <IconLink size='24' />
+            <IconLink height='24' width='24' />
           </a>
         </p>
         <p className='mini text-truncate'>{appDescription}</p>

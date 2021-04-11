@@ -2,15 +2,12 @@
 import 'nprogress/nprogress.css'
 import '../styles/globals.scss'
 
-import dynamic from 'next/dynamic'
 import Router from 'next/router'
+import dynamic from 'next/dynamic'
 import { useAmp } from 'next/amp'
-import NProgress from 'nprogress'
 
-import { FirebaseAppProvider } from 'reactfire'
-import 'firebase/auth'
-import 'firebase/database'
-import 'firebase/storage'
+import NProgress from 'nprogress'
+import noop from 'lodash/noop'
 
 import { Modal, ModalBody, Alert } from 'react-bootstrap'
 import {
@@ -18,22 +15,17 @@ import {
   ErrorBoundary as SentryErrorBoundary,
 } from '@sentry/react'
 
-import firebaseConfig from '../firebase.json'
+import AlertProvider from '../components/AlertPop'
+import BootProvider from '../components/BootStore'
+import LoadingProvider from '../components/LoadingPop'
+import LoginProvider from '../components/LoginPop'
 
-import StoreProvider from '../utils/storeProvider'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 
-const Login = dynamic(() => import('../components/Login'), {
-  ssr: false,
-})
-const Loading = dynamic(() => import('../components/LoadingDialog'), {
-  ssr: false,
-})
-const AlertDialog = dynamic(() => import('../components/AlertDialog'), {
-  ssr: false,
-})
+const AmpGlobalStyles = dynamic(() => import('../components/AmpGlobalStyles'))
+const AmpHeader = dynamic(() => import('../components/AmpHeader'))
 
 // initialize Sentry
 // TODO: Replace with actual Sentry dsn
@@ -48,7 +40,7 @@ Router.events.on('routeChangeError', () => NProgress.done())
 
 function ErrorFallback() {
   return (
-    <Modal backdrop size='lg' contentClassName='shadow-lg' onHide={() => {}}>
+    <Modal backdrop size='lg' contentClassName='shadow-lg' onHide={noop}>
       <ModalBody dismissible as={Alert} variant='danger' className='m-0'>
         Something went Wrong.
       </ModalBody>
@@ -59,20 +51,27 @@ function ErrorFallback() {
 function Bootgear({ Component, pageProps }) {
   const isAmp = useAmp()
   return isAmp ? (
-    <Component {...pageProps} />
+    <>
+      <SEO />
+      <AmpHeader />
+      <Component {...pageProps} />
+      <Footer />
+      <AmpGlobalStyles />
+    </>
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
-      <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={false}>
-        <SEO />
-        <StoreProvider>
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-          <AlertDialog />
-          <Loading />
-          <Login />
-        </StoreProvider>
-      </FirebaseAppProvider>
+      <BootProvider>
+        <LoadingProvider>
+          <AlertProvider>
+            <LoginProvider>
+              <SEO />
+              <Header />
+              <Component {...pageProps} />
+              <Footer />
+            </LoginProvider>
+          </AlertProvider>
+        </LoadingProvider>
+      </BootProvider>
     </SentryErrorBoundary>
   )
 }

@@ -1,21 +1,20 @@
 import { useCallback, useContext } from 'react'
-import { Tabs, Tab } from 'react-bootstrap'
-import { Code as CodeLoader } from 'react-content-loader'
+import { Tabs, Tab, Container, Button } from 'react-bootstrap'
 
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
+
+import Image from '../../../../components/ImageTag'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
 import scrBg from '../../../../config/scrBg.json'
 
-import imageLoader from '../../../../utils/imageLoader'
-
-import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
-
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
-  loading: CodeLoader,
+  loading: function LoadingItem() {
+    return <div>Please wait till Color-Picker Loads...</div>
+  },
 })
 
 export default function Design() {
@@ -55,14 +54,14 @@ export default function Design() {
   return (
     <Tabs defaultActiveKey='image' className='justify-content-center mt-1 mb-3'>
       <Tab eventKey='image' title='Image'>
-        <PreviewContainer>
+        <Container className='preview-container'>
           {scrBg.map(({ path }, index) => {
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
-              <PreviewButton
+              <Button
                 key={index}
                 variant='outline-light'
-                className={classNames('m-1', {
+                className={classNames('m-1', 'preview-button', {
                   'border-dark':
                     currentMockStore.backgroundImage === bgPreviewLink,
                   border: currentMockStore.backgroundImage === bgPreviewLink,
@@ -70,16 +69,16 @@ export default function Design() {
                 data-value={bgPreviewLink}
                 onClick={eventBgImage}
               >
-                <PreviewImage
+                <Image
                   src={bgPreviewLink}
                   height='90'
                   width='60'
-                  loader={imageLoader}
+                  className='preview-image'
                 />
-              </PreviewButton>
+              </Button>
             )
           })}
-        </PreviewContainer>
+        </Container>
       </Tab>
       <Tab eventKey='color' title='Color'>
         <ColorPicker

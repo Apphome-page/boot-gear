@@ -1,4 +1,4 @@
-import { useContext, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import {
   Container,
   Button,
@@ -8,11 +8,12 @@ import {
   ModalFooter,
   InputGroup,
 } from 'react-bootstrap'
-import { useUser, useDatabase } from 'reactfire'
+import noop from 'lodash/noop'
 
-import { ArrowRightCircle as IconArrowRight } from '@emotion-icons/bootstrap/ArrowRightCircle'
+import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
 
-import { StoreContext } from '../../utils/storeProvider'
+import { useAlerts } from '../AlertPop'
+import { useFirebaseApp, useUserAuth } from '../LoginPop'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -30,20 +31,21 @@ export const SubscriptionBox = function SubscriptionBox({
   className,
 }) {
   const emailRef = useRef(null)
-  const [, modStoreContext] = useContext(StoreContext)
-  const userDatabase = useDatabase()
+  const { addAlert } = useAlerts()
+  const firebaseApp = useFirebaseApp()
+  const userDatabase = firebaseApp && firebaseApp.database()
 
   const actionSub = useCallback(async () => {
+    if (!userDatabase) {
+      addAlert('Please wait while we load-up.', { variant: 'warning' })
+      return
+    }
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
       await addSubscriber(userDatabase, validEmail)
-      modStoreContext({
-        alertTimeout: 10,
-        alertText: 'Thank you for subscribing!',
-        alertVariant: 'success',
-      })
+      addAlert('Thank you for subscribing!', { variant: 'success' })
     }
-  }, [modStoreContext, userDatabase])
+  }, [addAlert, userDatabase])
 
   return (
     <Container fluid className={className}>
@@ -57,7 +59,7 @@ export const SubscriptionBox = function SubscriptionBox({
           />
           <InputGroup.Append>
             <Button onClick={actionSub} variant='light' className='border'>
-              <IconArrowRight size='20' />
+              <IconArrowRight height='20' width='20' />
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -79,47 +81,45 @@ export const SubscriptionBox = function SubscriptionBox({
   )
 }
 
-export default function Subscription({ show, onComplete }) {
+export default function Subscription({ show, onComplete = noop }) {
   const emailRef = useRef(null)
-  const [, modStoreContext] = useContext(StoreContext)
+  const { addAlert } = useAlerts()
 
-  const userDatabase = useDatabase()
-  const { data: userData, hasEmitted: firstLaunch } = useUser()
-
-  const userId = useMemo(() => userData || {}, [userData])
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
+  const userDatabase = firebaseApp && firebaseApp.database()
+  const userId = userAuth && userAuth.uid
 
   const actionSub = useCallback(async () => {
+    if (!userDatabase) {
+      addAlert('Please wait while we load-up.', { variant: 'warning' })
+      return
+    }
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
       await addSubscriber(userDatabase, validEmail)
-      modStoreContext({
-        alertTimeout: 10,
-        alertText: 'Thank you for subscribing!',
-        alertVariant: 'success',
-      })
-      if (onComplete && typeof onComplete === 'function') {
-        onComplete()
-      }
+      addAlert('Thank you for subscribing!', { variant: 'success' })
+      onComplete()
     } else {
       emailRef.current.reportValidity()
     }
-  }, [modStoreContext, onComplete, userDatabase])
+  }, [addAlert, onComplete, userDatabase])
 
   useEffect(() => {
-    if (show && firstLaunch && userId) {
+    if (show && firebaseApp && userId) {
       onComplete()
     }
-  }, [show, onComplete, firstLaunch, userId])
+  }, [show, onComplete, userId, firebaseApp])
 
-  if (firstLaunch && userId) {
+  if (firebaseApp && userId) {
     return ''
   }
 
   return (
     <Modal show={show} backdrop='static'>
       <ModalBody>
-        <div className='my-2'>
+        <div className='my-1'>
           Please provide your email address, before resuming your download.
         </div>
         <InputGroup>

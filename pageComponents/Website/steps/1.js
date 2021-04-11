@@ -4,24 +4,27 @@ import {
   Row,
   Col,
   Button,
-  Form,
   FormControl,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 
-import Image from 'next/image'
 import classNames from 'classnames'
 
-import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
-import imageLoader from '../../../utils/imageLoader'
-import { StoreContext as HeadContext } from '../../../utils/storeProvider'
+import { useAlerts } from '../../../components/AlertPop'
+import { useLoading } from '../../../components/LoadingPop'
+import {
+  useLogin,
+  useFirebaseApp,
+  useUserAuth,
+} from '../../../components/LoginPop'
+
+import Image from '../../../components/ImageTag'
+
 import { StoreContext } from '../helpers/store'
-
-import { ThemeImage } from '../style'
 
 const THEMES = [
   {
@@ -41,7 +44,7 @@ const THEMES = [
 export default function Step() {
   const formRef = useRef(null)
 
-  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
+  const { signPop } = useLogin()
   const [
     { nextAction, prevAction, appTheme, appName },
     updateStore,
@@ -49,12 +52,16 @@ export default function Step() {
 
   const [selectedTheme, setSelectedTheme] = useState(appTheme || THEMES[0].key)
 
-  const firebase = useFirebaseApp()
-  const { uid: userId } = firebase.auth().currentUser || {}
+  const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
+
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
   const nextBtnAction = useCallback(async () => {
     if (!userId) {
-      modStore({ signPop: true })
+      signPop()
       return
     }
     const formCurrent = formRef.current
@@ -73,14 +80,13 @@ export default function Step() {
       status: keyValidated = false,
       text: keyText = '',
       data: keyData = {},
-    } = await keyValidate(firebase, appKey, { userId })
+    } = await keyValidate(firebaseApp, appKey, { userId })
 
     unqueueLoading()
     if (!keyValidated) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: 10,
-        alertText: keyText,
+      addAlert(keyText, {
+        variant: 'danger',
+        autoDismiss: false,
       })
       return
     }
@@ -92,11 +98,12 @@ export default function Step() {
     })
     nextAction()
   }, [
-    firebase,
-    modStore,
+    addAlert,
+    firebaseApp,
     nextAction,
     queueLoading,
     selectedTheme,
+    signPop,
     unqueueLoading,
     updateStore,
     userId,
@@ -116,7 +123,7 @@ export default function Step() {
   )
 
   return (
-    <Form ref={formRef}>
+    <form ref={formRef} className='form-wrap-step-1'>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -130,7 +137,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -167,7 +175,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -176,9 +185,10 @@ export default function Step() {
         <Row className='ml-3'>
           <Col onClick={themeBtnAction}>
             {THEMES.map(({ key, src }) => (
-              <ThemeImage
+              <div
                 key={key}
                 className={classNames(
+                  'icon-theme',
                   'd-inline-flex',
                   'm-1',
                   'p-0',
@@ -193,14 +203,13 @@ export default function Step() {
                 )}
               >
                 <Image
-                  loader={imageLoader}
                   src={src}
                   width='200'
                   height='105'
                   className='m-0 p-0'
                   data-theme={key}
                 />
-              </ThemeImage>
+              </div>
             ))}
           </Col>
         </Row>
@@ -225,6 +234,13 @@ export default function Step() {
           </Col>
         </Row>
       </Container>
-    </Form>
+      <style jsx>
+        {`
+          .form-wrap-step-1 .icon-theme {
+            border-width: 4px !important;
+          }
+        `}
+      </style>
+    </form>
   )
 }

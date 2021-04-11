@@ -9,7 +9,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
-import { InfoCircle as IconInfo } from '@emotion-icons/bootstrap/InfoCircle'
+import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { StoreContext } from '../helpers/store'
 
@@ -84,7 +84,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -111,7 +112,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -138,7 +140,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -165,7 +168,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -192,7 +196,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -215,7 +220,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -242,7 +248,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -269,7 +276,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -296,7 +304,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -323,7 +332,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>
@@ -350,7 +360,8 @@ export default function Step() {
               }
             >
               <IconInfo
-                size='16'
+                height='16'
+                width='16'
                 className='ml-1 text-white-50 cursor-pointer'
               />
             </OverlayTrigger>

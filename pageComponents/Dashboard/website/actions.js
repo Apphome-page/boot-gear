@@ -1,11 +1,14 @@
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
-import Link from 'next/link'
+import noop from 'lodash/noop'
 
-import { StoreContext } from '../../../utils/storeProvider'
+import Link from '../../../components/LinkTag'
+import { useLoading } from '../../../components/LoadingPop'
+import { useAlerts } from '../../../components/AlertPop'
+import { useFirebaseApp } from '../../../components/LoginPop'
 
+// TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'
 
 const ExceptionTags = {
@@ -15,11 +18,12 @@ const ExceptionTags = {
 
 export default function WebsiteActions({
   webKey,
-  webAction = () => {},
+  webAction = noop,
   webActionText = 'Add Custom Domain',
 } = {}) {
-  const [{ queueLoading, unqueueLoading }, modStore] = useContext(StoreContext)
-  const firebase = useFirebaseApp()
+  const firebaseApp = useFirebaseApp()
+  const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
 
   const actionDelete = useCallback(
     async (appKey) => {
@@ -28,7 +32,7 @@ export default function WebsiteActions({
         queueLoading()
         try {
           await removeWebsite({
-            firebase,
+            firebaseApp,
             webKey: appKey,
             removeDomain: true,
             removeStorage: true,
@@ -38,16 +42,15 @@ export default function WebsiteActions({
             scope.setTags(ExceptionTags)
             return scope
           })
-          modStore({
-            alertVariant: 'danger',
-            alertTimeout: -1,
-            alertText: 'Something went wrong',
+          addAlert('Something went wrong', {
+            variant: 'danger',
+            autoDismiss: false,
           })
         }
         unqueueLoading()
       }
     },
-    [firebase, modStore, queueLoading, unqueueLoading]
+    [addAlert, firebaseApp, queueLoading, unqueueLoading]
   )
   return (
     <>

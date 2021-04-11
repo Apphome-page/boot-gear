@@ -57,7 +57,7 @@ export default function PrivacyPolicy() {
           PRIVACY POLICY MAY USE THE HEADING TO INTERPRET THE PROVISIONS
           CONTAINED WITHIN IT IN ANY MANNER.
         </p>
-        <h2 className='mt-5 mb-2'>DEFINITIONS</h2>
+        <h2 className='mt-5 mb-1'>DEFINITIONS</h2>
         <ol className='ml-5 text-left'>
           <li>
             &quot;We&quot;, &quot;Our&quot;, and &quot;Us&quot; shall mean and
@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
             etc. For removal of any doubts, please refer to Clause 2.
           </li>
         </ol>
-        <h2 className='mt-5 mb-2'>INFORMATION WE COLLECT</h2>
+        <h2 className='mt-5 mb-1'>INFORMATION WE COLLECT</h2>
         <p>
           We are committed to respecting Your online privacy. We further
           recognize Your need for appropriate protection and management of any
@@ -174,7 +174,7 @@ export default function PrivacyPolicy() {
           and informing our customer care team about any suspicious activity or
           where your account has/may have been compromised.
         </p>
-        <h3 className='mt-5 mb-2'>OUR USE OF YOUR INFORMATION</h3>
+        <h3 className='mt-5 mb-1'>OUR USE OF YOUR INFORMATION</h3>
         <p>
           The information provided by you shall be used to provide and improve
           the service for you and all users.
@@ -207,7 +207,7 @@ export default function PrivacyPolicy() {
           engage with our Platform so that we can improve it and cater
           personalized content/ads according to their preferences.
         </p>
-        <h3 className='mt-5 mb-2'>HOW INFORMATION IS COLLECTED</h3>
+        <h3 className='mt-5 mb-1'>HOW INFORMATION IS COLLECTED</h3>
         <p>
           Before or at the time of collecting personal information, we will
           identify the purposes for which information is being collected. If the
@@ -230,7 +230,7 @@ export default function PrivacyPolicy() {
           used, and, to the extent necessary for those purposes, should be
           accurate, complete, and up-to-date.
         </p>
-        <h3 className='mt-5 mb-2'>EXTERNAL LINKS ON THE PLATFORM</h3>
+        <h3 className='mt-5 mb-1'>EXTERNAL LINKS ON THE PLATFORM</h3>
         <p>
           The Platform may include advertisements, hyperlinks to other websites,
           applications, content or resources. We have no control over any
@@ -250,7 +250,7 @@ export default function PrivacyPolicy() {
           recommend that you enter the external Website and review their privacy
           policy.
         </p>
-        <h3 className='mt-5 mb-2'>COOKIES</h3>
+        <h3 className='mt-5 mb-1'>COOKIES</h3>
         <p>
           We use data collection devices such as &quot;cookies&quot; on certain
           pages of our Websites. &quot;Cookies&quot; are small files sited on
@@ -297,7 +297,7 @@ export default function PrivacyPolicy() {
             and suggest most suited products and services.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>YOUR RIGHTS</h3>
+        <h3 className='mt-5 mb-1'>YOUR RIGHTS</h3>
         <p>
           Unless subject to an exemption, you have the following rights with
           respect to your personal data:
@@ -327,7 +327,7 @@ export default function PrivacyPolicy() {
           are also entitled to request that we restrict how we use your data in
           your account when you log in.
         </p>
-        <h3 className='mt-5 mb-2'>CONFIDENTIALITY</h3>
+        <h3 className='mt-5 mb-1'>CONFIDENTIALITY</h3>
         <p>
           You further acknowledge that the Platform may contain information
           which is designated confidential by us and that you shall not disclose
@@ -341,7 +341,7 @@ export default function PrivacyPolicy() {
           to seek for discontinuation of such communications at any point of
           time.
         </p>
-        <h3 className='mt-5 mb-2'>OTHER INFORMATION COLLECTORS</h3>
+        <h3 className='mt-5 mb-1'>OTHER INFORMATION COLLECTORS</h3>
         <p>
           Except as otherwise expressly included in this Privacy Policy, this
           document only addresses the use and disclosure of information we
@@ -354,7 +354,7 @@ export default function PrivacyPolicy() {
           parties, you are subject to ask questions before you disclose your
           personal information to others.
         </p>
-        <h3 className='mt-5 mb-2'>OUR DISCLOSURE OF YOUR INFORMATION</h3>
+        <h3 className='mt-5 mb-1'>OUR DISCLOSURE OF YOUR INFORMATION</h3>
         <p>
           We may host surveys for survey creators for our platform who are the
           owners and users of your survey responses. We do not own or sell your
@@ -410,7 +410,7 @@ export default function PrivacyPolicy() {
             is illegal or may expose us or you to legal liability.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>
+        <h3 className='mt-5 mb-1'>
           ACCESSING, REVIEWING AND CHANGING YOUR PROFILE
         </h3>
         <p>
@@ -428,7 +428,7 @@ export default function PrivacyPolicy() {
           remove your profile so that others cannot view it, the User needs to
           remediate, and promptly correct any such incorrect information.
         </p>
-        <h3 className='mt-5 mb-2'>CONTROL OF YOUR PASSWORD</h3>
+        <h3 className='mt-5 mb-1'>CONTROL OF YOUR PASSWORD</h3>
         <p>
           You are entirely responsible for maintaining the confidentiality of
           your password. It is important that you protect it against
@@ -448,7 +448,7 @@ export default function PrivacyPolicy() {
           to notify us immediately if you suspect any consistent unauthorized
           use of your account or access to your password even after changing it.
         </p>
-        <h3 className='mt-5 mb-2'>SECURITY</h3>
+        <h3 className='mt-5 mb-1'>SECURITY</h3>
         <p>
           We treat data as an asset that must be protected against loss and
           unauthorized access. We employ many different security techniques to
@@ -463,7 +463,7 @@ export default function PrivacyPolicy() {
           database, nor can we guarantee that information you provide won&quot;t
           be intercepted while being transmitted to the Firm over the Internet.
         </p>
-        <h3 className='mt-5 mb-2'>SEVERABILITY</h3>
+        <h3 className='mt-5 mb-1'>SEVERABILITY</h3>
         <p>
           Each paragraph of this Privacy Policy shall be and remain separate
           from and independent of and severable from all and any other
@@ -472,19 +472,19 @@ export default function PrivacyPolicy() {
           that one or more of the paragraphs are null and void shall have no
           effect on the remaining paragraphs of this privacy policy.
         </p>
-        <h3 className='mt-5 mb-2'>AMENDMENT</h3>
+        <h3 className='mt-5 mb-1'>AMENDMENT</h3>
         <p>
           Our Privacy Policy may change from time to time. The most current
           version of the policy will govern our use of your information and will
           always be at the Platform. Any amendments to this Policy shall be
           deemed as accepted by the User on their continued use of the Platform.
         </p>
-        <h3 className='mt-5 mb-2'>AUTOMATED DECISION MAKING</h3>
+        <h3 className='mt-5 mb-1'>AUTOMATED DECISION MAKING</h3>
         <p>
           As a responsible firm, we do not use automatic decision-making or
           profiling.
         </p>
-        <h3 className='mt-5 mb-2'>
+        <h3 className='mt-5 mb-1'>
           CONSENT WITHDRAWAL, DATA DOWNLOAD & DATA REMOVAL REQUESTS
         </h3>
         <p>
@@ -492,7 +492,7 @@ export default function PrivacyPolicy() {
           data with us for any or all our products & services at any time,
           please email to care@applanding.page.
         </p>
-        <h3 className='mt-5 mb-2'>CONTACT US</h3>
+        <h3 className='mt-5 mb-1'>CONTACT US</h3>
         <p>
           If you have any questions or concerns regarding this privacy policy,
           you should contact us by sending an e-mail to please email to

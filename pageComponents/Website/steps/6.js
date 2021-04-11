@@ -1,9 +1,15 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
-import { useFirebaseApp, useAuth } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { StoreContext as HeadContext } from '../../../utils/storeProvider'
+import { useAlerts } from '../../../components/AlertPop'
+import { useLoading } from '../../../components/LoadingPop'
+import {
+  useFirebaseApp,
+  useLogin,
+  useUserAuth,
+} from '../../../components/LoginPop'
+
 import { StoreContext } from '../helpers/store'
 
 const ExceptionTags = {
@@ -12,13 +18,15 @@ const ExceptionTags = {
 }
 
 export default function Step() {
-  const [{ queueLoading, unqueueLoading }, modStore] = useContext(HeadContext)
-  const [templateProps, updateStore] = useContext(StoreContext)
+  const [templateProps] = useContext(StoreContext)
 
-  const firebase = useFirebaseApp()
-  const firebaseAuth = useAuth()
+  const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
+  const { signPop } = useLogin()
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
-  const { uid: userId } = firebaseAuth.currentUser || {}
   const {
     appIcon,
     appName,
@@ -40,14 +48,14 @@ export default function Step() {
 
   const actionUpload = useCallback(async () => {
     if (!userId) {
-      modStore({ signPop: true })
+      signPop()
       return
     }
     queueLoading()
     let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
-      await uploadWebsite(firebase, templateProps.appKey, {
+      await uploadWebsite(firebaseApp, templateProps.appKey, {
         templateProps,
         userId,
       })
@@ -63,20 +71,19 @@ export default function Step() {
     if (uploadSuccess) {
       nextAction()
     } else {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong, while updating your website.',
+      addAlert('Something went wrong while updating your website.', {
+        variant: 'danger',
+        autoDismiss: false,
       })
     }
   }, [
-    firebase,
-    modStore,
+    addAlert,
+    firebaseApp,
     nextAction,
     queueLoading,
+    signPop,
     templateProps,
     unqueueLoading,
-    updateStore,
     userId,
   ])
 

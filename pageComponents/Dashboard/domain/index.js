@@ -1,10 +1,9 @@
-import { useState, useMemo, useCallback, useContext } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
-import { useFirebaseApp } from 'reactfire'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { StoreContext } from '../../../utils/storeProvider'
-import useUserData from '../../../utils/useUserData'
+import { useAlerts } from '../../../components/AlertPop'
+import { useUserData, useFirebaseApp } from '../../../components/LoginPop'
 
 import removeWebsite from '../helpers/removeWebsite'
 
@@ -25,9 +24,10 @@ const ExceptionTags = {
 
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
   const [isLoading, setLoading] = useState(false)
-  const [, modStore] = useContext(StoreContext)
 
-  const firebase = useFirebaseApp()
+  const { addAlert } = useAlerts()
+
+  const firebaseApp = useFirebaseApp()
 
   const userPlan = useUserData('/plan_id')
   const userProduct = useUserData('/product_id')
@@ -43,29 +43,26 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
     setLoading(true)
     try {
       await removeWebsite({
-        firebase,
+        firebaseApp,
         webKey,
         removeDomain: true,
         removeStorage: true,
       })
-      modStore({
-        alertVariant: 'success',
-        alertTimeout: -1,
-        alertText: 'Removed custom Domain successfully',
+      addAlert('Removed custom Domain successfully', {
+        variant: 'success',
       })
     } catch (err) {
       captureExceptionSentry(err, (scope) => {
         scope.setTags(ExceptionTags)
         return scope
       })
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong',
+      addAlert('Something went wrong', {
+        variant: 'danger',
+        autoDismiss: false,
       })
     }
     setLoading(false)
-  }, [firebase, modStore, webKey])
+  }, [addAlert, firebaseApp, webKey])
 
   // Changes Modal Body based on conditions
   const DomainForm = useMemo(() => {
@@ -101,14 +98,14 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
           alt={webKey}
           height='48'
           width='48'
-          className='mr-2 rounded'
+          className='mr-1 rounded'
         />
         <div className='lead text-white'>{appName}</div>
       </Modal.Footer>
       <ModalBody>
         <DomainForm webKey={webKey} webData={webData} />
       </ModalBody>
-      <Modal.Header className='border-top py-2'>
+      <Modal.Header className='border-top py-3'>
         <Button
           size='sm'
           variant='light'

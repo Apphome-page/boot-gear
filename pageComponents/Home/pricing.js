@@ -6,20 +6,19 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'react-bootstrap'
-import Link from 'next/link'
+
+import Link from '../../components/LinkTag'
+import Image from '../../components/ImageTag'
 
 import plans from '../../config/plans.json'
-
-import { CardIcon } from './style'
 
 export default function HomePricing() {
   return (
     <section className='py-5 bg-light text-center text-dark'>
       <Container>
-        <CardIcon
-          data-src='/img/logo.png'
-          className='my-3 mx-auto border-bottom'
-        />
+        <div className='tight-wrap my-3 p-3 border-bottom rounded-circle'>
+          <Image src='/img/logo.png' height='32' width='32' />
+        </div>
         <p className='h2 font-weight-bold'>Plans & Pricing</p>
         <p className='mt-3 mb-5'>
           No credit card required. No risk. Free trial !
@@ -28,9 +27,9 @@ export default function HomePricing() {
           {Object.keys(plans).map((planKey) => {
             const { title, cost, details } = plans[planKey]
             return (
-              <Card className='rounded-0 border-0 p-4' key={planKey}>
+              <Card className='rounded-0 border-0 p-3' key={planKey}>
                 <Card.Body>
-                  <Card.Title className='my-4'>{title}</Card.Title>
+                  <Card.Title className='my-3'>{title}</Card.Title>
                   <Card.Text>
                     <span className='h1 font-weight-bold'>{cost}</span>/year
                   </Card.Text>
@@ -41,7 +40,7 @@ export default function HomePricing() {
                   ))}
                 </ListGroup>
                 <Link href={`/payments/pre?plan=${planKey}`}>
-                  <Button variant='light' className='btn-alt m-5'>
+                  <Button variant='alt' className='m-5'>
                     Get Started
                   </Button>
                 </Link>

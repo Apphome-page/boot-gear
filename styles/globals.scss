@@ -58,25 +58,35 @@ small {
   background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
   background-color: #7b10ff;
   color: #fff;
-  &:hover {
-    background: #f2f5fa;
-    color: #1e283c;
-  }
+}
+.btn-alt:hover,
+.btn-alt:focus {
+  background: #f2f5fa;
+  color: #1e283c;
 }
 .btn-alt2 {
   padding: 12px 32px;
   border: 0;
   border-radius: 0;
-  background-image: none;
   background: #f2f5fa;
   color: #1e283c;
-  &:hover {
-    background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
-    background-color: #7b10ff;
-    color: #fff;
-  }
+}
+.btn-alt2:hover,
+.btn-alt2:focus {
+  background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
+  background-color: #7b10ff;
+  color: #fff;
 }
 
+.tight-wrap {
+  display: inline-block;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  font-size: 0;
+  line-height: 0;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -85,7 +95,40 @@ small {
   line-height: 1.4;
   letter-spacing: 1px;
 }
-.fsize-32 {
-  height: 32px;
-  width: 32px;
+
+.hero {
+  position: relative;
+  background: url(/img/hero/hero-bg.png) no-repeat left center/cover;
+  background-color: #7b10ff;
+  color: #fff;
+}
+
+// Styled-Firebaseui Overwrrites
+#firebaseui_container {
+  .firebaseui-container {
+    max-width: none;
+  }
+  .firebaseui-title:after {
+    content: '/ Sign up';
+    margin: 0px 4px;
+  }
+  .mdl-button--primary.mdl-button--primary,
+  .mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+    color: #7b10ff;
+  }
+  .mdl-button--raised.mdl-button--colored,
+  .mdl-button--raised.mdl-button--colored:active,
+  .mdl-button--raised.mdl-button--colored:focus:not(:active),
+  .mdl-button--raised.mdl-button--colored:hover,
+  .mdl-button--primary.mdl-button--primary.mdl-button--fab,
+  .mdl-button--primary.mdl-button--primary.mdl-button--raised,
+  .mdl-progress > .progressbar,
+  .mdl-progress.mdl-progress--indeterminate > .bar1,
+  .mdl-progress.mdl-progress__indeterminate > .bar1,
+  .mdl-progress.mdl-progress--indeterminate > .bar3,
+  .mdl-progress.mdl-progress__indeterminate > .bar3,
+  .mdl-textfield__label:after,
+  .firebaseui-textfield.mdl-textfield .firebaseui-label:after {
+    background-color: #7b10ff;
+  }
 }

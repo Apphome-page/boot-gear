@@ -1,6 +1,5 @@
 import { useCallback, useContext, useEffect, useRef } from 'react'
 import { InputGroup, Form, FormControl, Tabs, Tab } from 'react-bootstrap'
-import { Code as CodeLoader } from 'react-content-loader'
 
 import dynamic from 'next/dynamic'
 import debounce from 'lodash/debounce'
@@ -9,7 +8,9 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
-  loading: CodeLoader,
+  loading: function LoadingItem() {
+    return <div>Please wait till Color-Picker Loads...</div>
+  },
 })
 
 export default function Caption() {

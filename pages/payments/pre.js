@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router'
-import { useContext, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 
 import AuthWrapper from '../../components/AuthWrapper'
-
-import { StoreContext } from '../../utils/storeProvider'
+import { useAlerts } from '../../components/AlertPop'
+import { useFirebaseApp, useUserAuth } from '../../components/LoginPop'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
@@ -13,15 +12,16 @@ const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_GOLD
 
 export default function Payment() {
   const router = useRouter()
-  const [, modStore] = useContext(StoreContext)
 
-  const userAuth = useAuth()
+  const { addAlert } = useAlerts()
+
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
+  const userId = userAuth && userAuth.uid
 
   const {
     query: { plan },
   } = router
-
-  const { uid } = userAuth.currentUser || {}
 
   const syncUser = useCallback(async () => {
     let checkoutLink = ''
@@ -39,11 +39,11 @@ export default function Payment() {
       router.push('/pricing')
       return
     }
-    if (!uid) {
+    if (!userId) {
       return
     }
     const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.currentUser.getIdToken(),
+      userAuth.getIdToken(),
       import('cross-fetch'),
     ])
     try {
@@ -60,14 +60,13 @@ export default function Payment() {
       }
       window.location = `${checkoutLink}/?customer_id=${syncData.customerId}`
     } catch (e) {
-      modStore({
-        alertVariant: 'danger',
-        alertTimeout: -1,
-        alertText: 'Something went wrong. Please Sign in again to continue.',
+      addAlert('Something went wrong. Please Sign in again to continue.', {
+        variant: 'danger',
+        autoDismiss: false,
       })
-      userAuth.signOut()
+      firebaseApp.auth().signOut()
     }
-  }, [modStore, plan, router, uid, userAuth])
+  }, [addAlert, firebaseApp, plan, router, userAuth, userId])
 
   useEffect(() => {
     syncUser()

@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useRef, forwardRef } from 'react'
+import { Image } from 'react-bootstrap'
 import classNames from 'classnames'
-
-import { InputWrap, InputPreview, InputDrop } from './style'
+import noop from 'lodash/noop'
 
 const FileInput = forwardRef(
   (
@@ -10,7 +10,7 @@ const FileInput = forwardRef(
       name = '',
       label = 'Select or Drop Here',
       accept = '*/*',
-      onChange = () => {},
+      onChange = noop,
       className = '',
       inputClassName = '',
       size = 128,
@@ -46,9 +46,8 @@ const FileInput = forwardRef(
       inputClassName
     )
     return (
-      <InputWrap
+      <div
         label={fileURI ? 'Change' : label}
-        size={size}
         className={classNames(
           'position-relative',
           'd-inline-flex',
@@ -57,15 +56,19 @@ const FileInput = forwardRef(
           'rounded',
           'bg-light',
           'cursor-pointer',
+          'file-input-wrap',
           className
         )}
       >
         {fileURI ? (
-          <InputPreview src={fileURI} className={viewClassName} />
+          <Image
+            src={fileURI}
+            className={classNames('file-input-img', viewClassName)}
+          />
         ) : (
           ''
         )}
-        <InputDrop
+        <input
           id={id}
           name={name}
           type='file'
@@ -74,10 +77,55 @@ const FileInput = forwardRef(
           aria-label={label}
           required={required}
           disabled={disabled}
-          className={viewClassName}
+          className={classNames('file-input-drop', viewClassName)}
           onChange={onChangeCb}
         />
-      </InputWrap>
+        <style jsx>
+          {`
+            .file-input-wrap {
+              height: ${size}px;
+              width: ${size}px;
+            }
+            .file-input-wrap:after {
+              content: '${label}';
+              font-size: ${size / 8}px;
+            }
+          `}
+        </style>
+        <style jsx>
+          {`
+            .file-input-wrap:before {
+              content: '';
+              position: absolute;
+              top: 12px;
+              bottom: 12px;
+              left: 12px;
+              right: 12px;
+              border: 1px dashed #999999;
+              z-index: 1;
+            }
+            .file-input-wrap:after {
+              margin: 12px;
+              padding: 4px;
+              border-radius: 4px;
+              font-family: monospace;
+              line-height: 1;
+              color: #666666;
+              background-color: rgba(238, 238, 238, 0.6);
+              z-index: 3;
+            }
+            .file-input-wrap .file-input-img {
+              padding: 12px;
+              object-fit: cover;
+              z-index: 2;
+            }
+            .file-input-wrap .file-input-drop {
+              opacity: 0;
+              z-index: 4;
+            }
+          `}
+        </style>
+      </div>
     )
   }
 )

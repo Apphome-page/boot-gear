@@ -1,9 +1,7 @@
 import { useState, useCallback } from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Button, ProgressBar } from 'react-bootstrap'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
-
-import { IconSource, IconGen, Progress, Source, Options } from './style'
 
 const Subscription = dynamic(() => import('../../components/Subscription'), {
   ssr: false,
@@ -172,67 +170,174 @@ export default function AppIcon({ preset = [] }) {
           eventGenerate()
         }}
       />
-      <Container className='my-4 py-4'>
+      <Container className='my-3 py-3'>
         <Row>
           <Col lg={6}>
-            <Source
+            <div
               data-filename={source.name}
               style={{
                 backgroundImage: source.url ? `url('${source.url}')` : '',
               }}
+              className='icon-source-wrap'
             >
-              <IconSource
+              <input
                 type='file'
                 accept='image/*'
                 aria-label='Image'
                 onChange={eventSource}
+                className='icon-source'
               />
-            </Source>
+            </div>
           </Col>
-          <Col lg={6}>
-            <Options onClick={eventPlatforms}>
-              <small>
-                Drag or select an app icon image (1024x1024) to generate
-                different app icon sizes for all platforms
-              </small>
-              <hr />
-              <div className='d-flex flex-column'>
-                {Object.keys(defaultPlatforms).map((platform, key) => {
-                  const isChecked = preset.length
-                    ? preset.includes(platform.toLowerCase())
-                    : true
+          <Col lg={6} className='icon-options' onClick={eventPlatforms}>
+            <small>
+              Drag or select an app icon image (1024x1024) to generate different
+              app icon sizes for all platforms
+            </small>
+            <hr />
+            <div className='d-flex flex-column'>
+              {Object.keys(defaultPlatforms).map((platform, key) => {
+                const isChecked = preset.length
+                  ? preset.includes(platform.toLowerCase())
+                  : true
 
-                  return (
-                    <div
-                      key={key}
-                      className={classNames({
-                        'order-first': isChecked,
-                      })}
-                    >
-                      <input
-                        data-platform={platform}
-                        type='checkbox'
-                        defaultChecked={isChecked}
-                      />
-                      <em>{defaultPlatforms[platform].name}</em>
-                      <small> - {defaultPlatforms[platform].subtitle}</small>
-                    </div>
-                  )
-                })}
-              </div>
-              <IconGen
-                disabled={!source.url}
-                onClick={() => {
-                  setSubShow(true)
-                }}
-              >
-                ⬇ Generate
-              </IconGen>
-              <Progress value={progress} max='100' />
-            </Options>
+                return (
+                  <div
+                    key={key}
+                    className={classNames({
+                      'order-first': isChecked,
+                    })}
+                  >
+                    <input
+                      data-platform={platform}
+                      type='checkbox'
+                      defaultChecked={isChecked}
+                    />
+                    <em>{defaultPlatforms[platform].name}</em>
+                    <small> - {defaultPlatforms[platform].subtitle}</small>
+                  </div>
+                )
+              })}
+            </div>
+            <Button
+              variant={source.url ? 'primary' : 'secondary'}
+              disabled={!source.url}
+              onClick={() => {
+                setSubShow(true)
+              }}
+              className='icon-gen w-100 my-3 p-3 cursor-pointer'
+            >
+              ⬇ Generate
+            </Button>
+            <ProgressBar value={progress} max='100' className='icon-progress' />
           </Col>
         </Row>
       </Container>
+      <style jsx>
+        {`
+          .icon-source-wrap {
+            background-image: ${source.url ? `url('${source.url}')` : ''};
+          }
+        `}
+      </style>
+      <style jsx>
+        {`
+          .icon-source-wrap {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            width: 400px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            background-color: #eee;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+          }
+          .icon-source-wrap:not([data-filename]):before {
+            content: 'Click or drag image file ( 1024 x 1024 )';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            white-space: nowrap;
+          }
+
+          @media (max-width: 768px) {
+            .icon-source-wrap {
+              width: 100%;
+              height: 264px;
+            }
+          }
+
+          .icon-source-wrap .icon-progress {
+            width: 100%;
+            background: #eee;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2) inset;
+            border-radius: 3px;
+            appearance: none;
+          }
+          .icon-source-wrap .icon-progress[value] {
+            appearance: none;
+          }
+          .icon-source-wrap .icon-progress:not([value]) {
+            appearance: none;
+          }
+          .icon-source-wrap .icon-progress[value='0'] {
+            display: none;
+          }
+          .icon-source-wrap .icon-progress::-webkit-progress-bar {
+            background: #eee;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2) inset;
+            border-radius: 3px;
+          }
+          .icon-source-wrap .icon-progress::-webkit-progress-value {
+            background-color: #6495ed;
+            border-radius: 3px;
+            transition: width 0.1s ease;
+          }
+          .icon-source-wrap .icon-progress::-moz-progress-bar {
+            background-color: #6495ed;
+            border-radius: 3px;
+          }
+
+          .icon-source-wrap .icon-gen {
+            margin: 24px 0px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #eee;
+            color: #999;
+          }
+          .icon-source-wrap .icon-gen:not([disabled]) {
+            border: none;
+            background-color: #6495ed;
+            color: #fff;
+          }
+          .icon-source-wrap .icon-source {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+          }
+
+          .icon-source-wrap .icon-options {
+            padding: 20px;
+          }
+          .icon-source-wrap .icon-options label {
+            display: block;
+            margin: 8px 28px;
+          }
+          .icon-source-wrap .icon-options input[data-platform] {
+            margin-right: 8px;
+            height: 18px;
+            width: 18px;
+            vertical-align: middle;
+          }
+        `}
+      </style>
     </>
   )
 }

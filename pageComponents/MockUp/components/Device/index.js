@@ -1,16 +1,14 @@
 import { useCallback, useContext } from 'react'
-import { Tabs, Tab } from 'react-bootstrap'
+import { Tabs, Tab, Container, Button } from 'react-bootstrap'
+
 import classNames from 'classnames'
 
-import { MockupContext } from '../../helpers/MockProvider'
+import Image from '../../../../components/ImageTag'
 
 import scrMeta from '../../../../config/scrMeta.json'
 
-import imageLoader from '../../../../utils/imageLoader'
-
+import { MockupContext } from '../../helpers/MockProvider'
 import { getFrameProps } from '../../helpers/defaults'
-
-import { PreviewContainer, PreviewButton, PreviewImage } from '../../style'
 
 export default function Device() {
   const {
@@ -44,9 +42,9 @@ export default function Device() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='device-style-ios' title='iOS'>
-        <PreviewContainer>
+        <Container className='preview-container'>
           {scrMeta.ios.map(({ id, name, sizes }, key) => (
-            <PreviewButton
+            <Button
               className={classNames(
                 'm-1',
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
@@ -58,23 +56,24 @@ export default function Device() {
               data-name={name}
               onClick={eventFrame}
             >
-              <PreviewImage
+              <Image
+                className='preview-image'
                 src={`/scrPreview/ios/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'
                 alt='iOS Device Style Preview'
-                loader={imageLoader}
               />
-            </PreviewButton>
+            </Button>
           ))}
-        </PreviewContainer>
+        </Container>
       </Tab>
       <Tab eventKey='device-style-android' title='Android'>
-        <PreviewContainer>
+        <Container className='preview-container'>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
-            <PreviewButton
+            <Button
               className={classNames(
                 'm-1',
+                'preview-button',
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
               )}
               variant='outline-light'
@@ -84,16 +83,16 @@ export default function Device() {
               data-name={name}
               onClick={eventFrame}
             >
-              <PreviewImage
+              <Image
+                className='preview-image'
                 src={`/scrPreview/android/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'
                 alt='Android Device Style Preview'
-                loader={imageLoader}
               />
-            </PreviewButton>
+            </Button>
           ))}
-        </PreviewContainer>
+        </Container>
       </Tab>
     </Tabs>
   )

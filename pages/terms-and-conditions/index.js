@@ -103,7 +103,7 @@ export default function TermsConditions() {
             the changed terms.
           </li>
         </ol>
-        <h2 className='mt-5 mb-2'>REGISTRATION</h2>
+        <h2 className='mt-5 mb-1'>REGISTRATION</h2>
         <ol className='ml-5 text-left'>
           <li>
             Registration is currently not mandatory for Users in order to use
@@ -136,7 +136,7 @@ export default function TermsConditions() {
             your account.
           </li>
         </ol>
-        <h2 className='mt-5 mb-2'>PLATFORM OVERVIEW</h2>
+        <h2 className='mt-5 mb-1'>PLATFORM OVERVIEW</h2>
         <p>
           Applanding.page is a platform owned and operated by Applandingpage LLP
           which is a limited liability partnership registered under the
@@ -148,7 +148,7 @@ export default function TermsConditions() {
           Platform is User-friendly and is accessible on all software and all
           devices such as Mac/Windows/Linux/Android/iOS.
         </p>
-        <h2 className='mt-5 mb-2'>ELIGIBILITY</h2>
+        <h2 className='mt-5 mb-1'>ELIGIBILITY</h2>
         <p>
           The Users further represents that they will comply with this Agreement
           and all applicable local, state, national and international laws,
@@ -159,7 +159,7 @@ export default function TermsConditions() {
           contract or are disqualified from doing so by any other applicable
           law, rule or regulation currently in force.
         </p>
-        <h3 className='mt-5 mb-2'>CONTENT</h3>
+        <h3 className='mt-5 mb-1'>CONTENT</h3>
         <p>
           All text, graphics, User interfaces, visual interfaces, photographs,
           trademarks, logos, brand names, descriptions, sounds, music and
@@ -194,7 +194,7 @@ export default function TermsConditions() {
           not copy, adapt, and modify any content without written permission of
           the Firm.
         </p>
-        <h4 className='mt-5 mb-2'>TERM</h4>
+        <h4 className='mt-5 mb-1'>TERM</h4>
         <ol className='ml-5 text-left'>
           <li>
             These Terms shall continue to form a valid and binding contract
@@ -219,7 +219,7 @@ export default function TermsConditions() {
             Services and Platforms without any prior notice.
           </li>
         </ol>
-        <h4 className='mt-5 mb-2'>AMENDMENT AND TERMINATION</h4>
+        <h4 className='mt-5 mb-1'>AMENDMENT AND TERMINATION</h4>
         <ol className='ml-5 text-left'>
           <li>
             The Firm reserves the right, in its sole discretion, to unilaterally
@@ -246,7 +246,7 @@ export default function TermsConditions() {
             right to terminate these Terms till the expiry of the same.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>COMMUNICATION</h3>
+        <h3 className='mt-5 mb-1'>COMMUNICATION</h3>
         <p>
           By using this Platform and providing his/her identity and contact
           information to the Firm through the Platform, the Users hereby agree
@@ -269,7 +269,7 @@ export default function TermsConditions() {
           Parties that any information shared by the User with the Firm shall be
           governed by the Privacy Policy.
         </p>
-        <h3 className='mt-5 mb-2'>
+        <h3 className='mt-5 mb-1'>
           USER OBLIGATIONS AND FORMAL UNDERTAKINGS AS TO CONDUCT
         </h3>
         <p>
@@ -514,7 +514,7 @@ export default function TermsConditions() {
             </ol>
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>SUSPENSION OF USER ACCESS AND ACTIVITY</h3>
+        <h3 className='mt-5 mb-1'>SUSPENSION OF USER ACCESS AND ACTIVITY</h3>
         <p>
           Notwithstanding other legal remedies that may be available, the Firm
           may in its sole discretion, limit the User&apos;s access and/or
@@ -535,7 +535,7 @@ export default function TermsConditions() {
             other Users or to the Firm, at the sole discretion of the Firm.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>INDEMNITY</h3>
+        <h3 className='mt-5 mb-1'>INDEMNITY</h3>
         <p>
           The Users of this Platform agree to indemnify, defend and hold
           harmless the Firm/Platform, and their respective directors, officers,
@@ -576,7 +576,7 @@ export default function TermsConditions() {
           User&apos;s use of or access to the Platform and/or the Services or
           materials contained therein.
         </p>
-        <h3 className='mt-5 mb-2'>LIMITATION OF LIABILITY</h3>
+        <h3 className='mt-5 mb-1'>LIMITATION OF LIABILITY</h3>
         <ol className='ml-5 text-left'>
           <li>
             The Founders/ Promoters/ Partners/ Associated people of the
@@ -638,7 +638,7 @@ export default function TermsConditions() {
             to terminate your use of the Platform.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>INTELLECTUAL PROPERTY RIGHTS</h3>
+        <h3 className='mt-5 mb-1'>INTELLECTUAL PROPERTY RIGHTS</h3>
         <p>
           Unless expressly agreed to in writing, nothing contained herein shall
           give the User a right to use any of the Platform&apos;s, trademarks,
@@ -660,7 +660,7 @@ export default function TermsConditions() {
           disparages or discredits the Firm/Platform, to be determined in the
           sole discretion of the Firm.
         </p>
-        <h3 className='mt-5 mb-2'>DISCLAIMER OF WARRANTIES AND LIABILITIES</h3>
+        <h3 className='mt-5 mb-1'>DISCLAIMER OF WARRANTIES AND LIABILITIES</h3>
         <ol className='ml-5 text-left'>
           <li>
             The User agrees and undertakes that they are accessing the Platform
@@ -687,7 +687,7 @@ export default function TermsConditions() {
             Terms and/or Policy.
           </li>
         </ol>
-        <h3 className='mt-5 mb-2'>FORCE MAJEURE</h3>
+        <h3 className='mt-5 mb-1'>FORCE MAJEURE</h3>
         <p>
           Neither the Firm nor the Platform shall be liable for damages for any
           delay or failure to perform its obligations hereunder if such delay or
@@ -698,7 +698,7 @@ export default function TermsConditions() {
           failure, breakage of sea cable, hacking, piracy, cheating, illegal or
           unauthorized.
         </p>
-        <h3 className='mt-5 mb-2'>DISPUTE RESOLUTION AND JURISDICTION</h3>
+        <h3 className='mt-5 mb-1'>DISPUTE RESOLUTION AND JURISDICTION</h3>
         <p>
           It is expressly agreed to by the Parties hereto that the formation,
           interpretation and performance of these Terms and any disputes arising
@@ -734,13 +734,13 @@ export default function TermsConditions() {
           any other agreements entered into between the Parties are governed by
           the laws, rules and regulations of India
         </p>
-        <h3 className='mt-5 mb-2'>NOTICES</h3>
+        <h3 className='mt-5 mb-1'>NOTICES</h3>
         <p>
           Any and all communication relating to any dispute or grievance
           experienced by the User may be communicated to the Firm by the User by
           emailing to <em>care@applanding.page</em>.
         </p>
-        <h3 className='mt-5 mb-2'>MISCELLANEOUS PROVISIONS</h3>
+        <h3 className='mt-5 mb-1'>MISCELLANEOUS PROVISIONS</h3>
         <ol className='ml-5 text-left'>
           <li>
             <b>Entire Agreement</b>: These Terms, read with the Policy, form the

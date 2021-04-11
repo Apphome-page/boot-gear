@@ -7,9 +7,10 @@ import {
   InputGroup,
   Spinner,
 } from 'react-bootstrap'
-import { useAuth } from 'reactfire'
 
 import { captureException as captureExceptionSentry } from '@sentry/react'
+
+import { useUserAuth } from '../../../components/LoginPop'
 
 const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
 
@@ -22,7 +23,7 @@ export default function DomainSetup({ webKey }) {
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
-  const userAuth = useAuth()
+  const userAuth = useUserAuth()
 
   const formSubmit = useCallback(
     async (formEvent) => {
@@ -42,7 +43,7 @@ export default function DomainSetup({ webKey }) {
       setAlertData({})
 
       const [idToken, { default: fetch }] = await Promise.all([
-        userAuth.currentUser.getIdToken(),
+        userAuth.getIdToken(),
         import('cross-fetch'),
       ])
 
@@ -78,14 +79,14 @@ export default function DomainSetup({ webKey }) {
       }
       setProcessing(false)
     },
-    [userAuth.currentUser]
+    [userAuth]
   )
   return (
-    <Form className='py-2' onSubmit={formSubmit}>
+    <Form className='py-3' onSubmit={formSubmit}>
       <div className='font-weight-bold text-center lead'>
         Connect your domain
       </div>
-      <div className='my-2 text-center'>
+      <div className='my-1 text-center'>
         Enter the domain to use for your app website.
       </div>
       <FormControl name='key' defaultValue={webKey} className='d-none' />
@@ -112,7 +113,7 @@ export default function DomainSetup({ webKey }) {
         </InputGroup.Append>
       </InputGroup>
       {alertData.text ? (
-        <Alert variant={alertData.type} className='my-2 mini text-center'>
+        <Alert variant={alertData.type} className='my-1 mini text-center'>
           {alertData.text}
         </Alert>
       ) : (
