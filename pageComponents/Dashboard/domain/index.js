@@ -3,7 +3,9 @@ import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
-import { useUserData, useFirebaseApp } from '../../../components/LoginPop'
+
+import useFirebaseApp from '../../../components/LoginPop/useFirebaseApp'
+import useUserData from '../../../components/LoginPop/useUserData'
 
 import removeWebsite from '../helpers/removeWebsite'
 
@@ -22,6 +24,9 @@ const ExceptionTags = {
   subSection: 'Domain',
 }
 
+// Do not handle non-login cases
+// Expect user to be logged in
+// Break on any auth-issue
 export default function DashboardDomain({ show, handleClose, webKey } = {}) {
   const [isLoading, setLoading] = useState(false)
 
@@ -29,9 +34,9 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
 
   const firebaseApp = useFirebaseApp()
 
-  const userPlan = useUserData('/plan_id')
-  const userProduct = useUserData('/product_id')
-  const webData = useUserData(`/sites/${webKey}`)
+  const { data: userPlan } = useUserData('/plan_id')
+  const { data: userProduct } = useUserData('/product_id')
+  const { data: webData } = useUserData(`/sites/${webKey}`)
 
   const { appIcon, appName, webDomain, webHost } = webData || {}
 

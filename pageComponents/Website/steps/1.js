@@ -16,7 +16,10 @@ import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useLogin, useFirebaseApp } from '../../../components/LoginPop'
+
+import useFirebaseApp from '../../../components/LoginPop/useFirebaseApp'
+import useLogin from '../../../components/LoginPop/useLogin'
+import useUser from '../../../components/LoginPop/useUser'
 
 import Image from '../../../components/ImageTag'
 
@@ -52,16 +55,16 @@ export default function Step() {
   const { queueLoading, unqueueLoading } = useLoading()
 
   const firebaseApp = useFirebaseApp()
-  const userId =
-    firebaseApp &&
-    firebaseApp.auth().currentUser &&
-    firebaseApp.auth().currentUser.uid
+  const { data: userAuth } = useUser()
 
   const nextBtnAction = useCallback(async () => {
+    const userId = userAuth && userAuth.uid
+
     if (!userId) {
       signPop()
       return
     }
+
     const formCurrent = formRef.current
     if (!formCurrent || !formCurrent.reportValidity()) {
       return
@@ -104,7 +107,7 @@ export default function Step() {
     signPop,
     unqueueLoading,
     updateStore,
-    userId,
+    userAuth,
   ])
 
   const themeBtnAction = useCallback(

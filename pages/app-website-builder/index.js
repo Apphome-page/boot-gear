@@ -1,22 +1,50 @@
+import { useState, useCallback, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
-import { useUserData } from '../../components/LoginPop'
 import FAQ from '../../components/FAQ'
-
-import WebsiteBuilder from '../../pageComponents/Website'
+import { useLoading } from '../../components/LoadingPop'
+import useUserData from '../../components/LoginPop/useUserData'
 
 import faqList from '../../pageData/app-website-builder/faq.json'
+
+const WebsiteBuilder = dynamic(() => import('../../pageComponents/Website'), {
+  ssr: false,
+})
 
 export default function Website() {
   const { query: { webEdit = '' } = {} } = useRouter()
 
-  const userData = useUserData()
-  const userSites = Object.keys((userData && userData.sites) || {})
+  const [webEditData, setWebEditData] = useState(null)
 
-  const initTemplateProps =
-    (webEdit && userData && userData.sites && userData.sites[webEdit]) || {}
+  const { queueLoading, unqueueLoading, clearLoading } = useLoading()
+  // TODO: Optional Call on basis of webEdit
+  const { firstPromise: userFirstDataPromise, data: userData } = useUserData()
+
+  const preloadSiteData = useCallback(
+    async (editKey) => {
+      if (!editKey) {
+        return setWebEditData({})
+      }
+      queueLoading()
+      await userFirstDataPromise
+      unqueueLoading()
+      return setWebEditData(
+        (userData && userData.sites && userData.sites[editKey]) || {}
+      )
+    },
+    [queueLoading, unqueueLoading, userData, userFirstDataPromise]
+  )
+
+  useEffect(() => {
+    preloadSiteData(webEdit)
+    return () => {
+      clearLoading()
+      setWebEditData(null)
+    }
+  }, [preloadSiteData, clearLoading, webEdit])
 
   return (
     <>
@@ -41,7 +69,7 @@ export default function Website() {
       <section className='hero min-vh-100 pt-3 pb-5'>
         <Container>
           <h1 className='display-4 py-3'>App website builder</h1>
-          {webEdit && userSites.includes(webEdit) ? (
+          {webEditData ? (
             <div className='lead border-bottom lead my-1'>
               Editing{' '}
               <a
@@ -52,17 +80,21 @@ export default function Website() {
               </a>
             </div>
           ) : (
-            ''
+            <></>
           )}
         </Container>
-        <WebsiteBuilder className='ml-auto' initProps={initTemplateProps} />
+        {webEditData ? (
+          <WebsiteBuilder className='ml-auto' initProps={webEditData} />
+        ) : (
+          <></>
+        )}
       </section>
       {faqList.length ? (
         <Container fluid className='py-5'>
           <FAQ faqList={faqList} />
         </Container>
       ) : (
-        ''
+        <></>
       )}
     </>
   )

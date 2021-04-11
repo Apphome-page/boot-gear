@@ -4,7 +4,10 @@ import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
 import { useLoading } from '../../../components/LoadingPop'
-import { useFirebaseApp, useLogin } from '../../../components/LoginPop'
+
+import useFirebaseApp from '../../../components/LoginPop/useFirebaseApp'
+import useLogin from '../../../components/LoginPop/useLogin'
+import useUser from '../../../components/LoginPop/useUser'
 
 import { StoreContext } from '../helpers/store'
 
@@ -19,11 +22,9 @@ export default function Step() {
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
   const { signPop } = useLogin()
+
   const firebaseApp = useFirebaseApp()
-  const userId =
-    firebaseApp &&
-    firebaseApp.auth().currentUser &&
-    firebaseApp.auth().currentUser.uid
+  const { data: userAuth } = useUser()
 
   const {
     appIcon,
@@ -45,6 +46,7 @@ export default function Step() {
   }, [appIcon])
 
   const actionUpload = useCallback(async () => {
+    const userId = userAuth && userAuth.uid
     if (!userId) {
       signPop()
       return
@@ -75,14 +77,14 @@ export default function Step() {
       })
     }
   }, [
-    addAlert,
-    firebaseApp,
-    nextAction,
-    queueLoading,
-    signPop,
     templateProps,
+    nextAction,
+    addAlert,
+    signPop,
+    firebaseApp,
+    userAuth,
+    queueLoading,
     unqueueLoading,
-    userId,
   ])
 
   return (

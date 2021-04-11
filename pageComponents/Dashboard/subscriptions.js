@@ -1,24 +1,16 @@
-import { useEffect } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap'
 
-import { useLoading } from '../../components/LoadingPop'
-import { useUserData } from '../../components/LoginPop'
+import useUserData from '../../components/LoginPop/useUserData'
 
+// Do not handle non-login cases
+// Expect user to be logged in
+// Break on any auth-issue
 export default function Subscription() {
-  const { queueLoading, unqueueLoading } = useLoading()
-  const { firstLaunch, plan: { title: planTitle } = {} } = useUserData()
+  const { data: userData } = useUserData()
 
-  useEffect(() => {
-    const isPopped = !!firstLaunch
-    if (isPopped) {
-      queueLoading()
-    }
-    return () => {
-      if (isPopped) {
-        unqueueLoading()
-      }
-    }
-  }, [firstLaunch, queueLoading, unqueueLoading])
+  const {
+    plan: { title: planTitle },
+  } = userData || {}
 
   return (
     <>

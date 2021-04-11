@@ -3,21 +3,27 @@ import { Form, InputGroup, FormControl, Button } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../components/AlertPop'
-import { useFirebaseApp } from '../../components/LoginPop'
+import useUser from '../../components/LoginPop/useUser'
+import useFireService from '../../components/LoginPop/useFireService'
 
 const ExceptionTags = {
   section: 'Dashboard',
   subSection: 'Profile',
 }
 
+// Do not handle non-login cases
+// Expect user to be logged in
+// Break on any auth-issue
 export default function Profile() {
   const formRef = useRef(null)
 
   const { addAlert } = useAlerts()
-  const firebaseApp = useFirebaseApp()
-  const userAuth = firebaseApp && firebaseApp.auth()
+  const { data: userAuth } = useUser()
+  const { firstPromise: firstFireAuthPromise, data: fireAuth } = useFireService(
+    'auth'
+  )
 
-  const { displayName, email } = userAuth ? userAuth.currentUser : {}
+  const { displayName, email } = userAuth || {}
 
   const actionUpdate = useCallback(async () => {
     const {
@@ -29,11 +35,12 @@ export default function Profile() {
         await userAuth.updateEmail(newEmail)
       } catch (err) {
         if (err.code === 'auth/requires-recent-login') {
-          userAuth.signOut()
           addAlert('Please Sign in again to continue.', {
             variant: 'info',
             autoDismiss: false,
           })
+          await firstFireAuthPromise
+          fireAuth.signOut()
           return
         }
         captureExceptionSentry(err, (scope) => {
@@ -50,7 +57,7 @@ export default function Profile() {
     addAlert('Profile Updated Successfully!', {
       variant: 'success',
     })
-  }, [addAlert, email, userAuth])
+  }, [addAlert, email, firstFireAuthPromise, userAuth])
   return (
     <>
       <div className='pb-1 mb-1 border-bottom lead text-dark'>Your Details</div>

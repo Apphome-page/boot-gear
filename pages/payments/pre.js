@@ -4,7 +4,9 @@ import { Container, Spinner } from 'react-bootstrap'
 
 import AuthWrapper from '../../components/AuthWrapper'
 import { useAlerts } from '../../components/AlertPop'
-import { useFirebaseApp } from '../../components/LoginPop'
+
+import useUser from '../../components/LoginPop/useUser'
+import useFireService from '../../components/LoginPop/useFireService'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
@@ -14,14 +16,17 @@ export default function Payment() {
   const router = useRouter()
 
   const { addAlert } = useAlerts()
-  const firebaseApp = useFirebaseApp()
-  const userAuth = firebaseApp && firebaseApp.auth()
-  const userId = userAuth && userAuth.currentUser.uid
+  const { firstPromise: firstAuthPromise, data: userAuth } = useUser()
+  const {
+    firstPromise: firstFireServicePromise,
+    data: fireAuth,
+  } = useFireService('auth')
 
   const {
     query: { plan },
   } = router
 
+  // TODO: run till login.
   const syncUser = useCallback(async () => {
     let checkoutLink = ''
     switch (plan) {
@@ -38,11 +43,13 @@ export default function Payment() {
       router.push('/pricing')
       return
     }
+    await firstAuthPromise
+    const userId = userAuth && userAuth.uid
     if (!userId) {
       return
     }
     const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.currentUser.getIdToken(),
+      userAuth.getIdToken(),
       import('cross-fetch'),
     ])
     try {
@@ -63,9 +70,19 @@ export default function Payment() {
         variant: 'danger',
         autoDismiss: false,
       })
-      userAuth.signOut()
+
+      await firstFireServicePromise
+      fireAuth.signOut()
     }
-  }, [addAlert, plan, router, userAuth, userId])
+  }, [
+    addAlert,
+    fireAuth,
+    firstAuthPromise,
+    firstFireServicePromise,
+    plan,
+    router,
+    userAuth,
+  ])
 
   useEffect(() => {
     syncUser()

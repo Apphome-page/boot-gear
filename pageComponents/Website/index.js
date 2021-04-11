@@ -7,20 +7,22 @@ import {
   Col,
   Image,
 } from 'react-bootstrap'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
 import WebStore from './helpers/store'
 import Progress from './steps/progress'
-import Step1 from './steps/1'
-import Step2 from './steps/2'
-import Step3 from './steps/3'
-import Step4 from './steps/4'
-import Step5 from './steps/5'
-import Step6 from './steps/6'
-import Step7 from './steps/7'
 
 // TODO: Use formik for multi-staging
-const STEPS = [Step1, Step2, Step3, Step4, Step5, Step6, Step7]
+const STEPS = [
+  dynamic(() => import('./steps/1')),
+  dynamic(() => import('./steps/2')),
+  dynamic(() => import('./steps/3')),
+  dynamic(() => import('./steps/4')),
+  dynamic(() => import('./steps/5')),
+  dynamic(() => import('./steps/6')),
+  dynamic(() => import('./steps/7')),
+]
 
 export default function HomeWebsite({ initProps = {} }) {
   const router = useRouter()

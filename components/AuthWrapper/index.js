@@ -1,30 +1,44 @@
-import { useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { useLogin, useFirebaseApp } from '../LoginPop'
+import { useLoading } from '../LoadingPop'
+
+import useLogin from '../LoginPop/useLogin'
+import useUser from '../LoginPop/useUser'
 
 export default function AuthWrapper({ children, placeholder }) {
+  const { queueLoading, unqueueLoading } = useLoading()
+
   const { signForced, signClear } = useLogin()
-
-  const firebaseApp = useFirebaseApp()
-
-  const userId = useMemo(
-    () =>
-      firebaseApp &&
-      firebaseApp.auth().currentUser &&
-      firebaseApp.auth().currentUser.uid,
-    [firebaseApp]
-  )
+  const { firstLaunch, firstPromise, data: userAuth } = useUser()
 
   useEffect(() => {
-    if (!firebaseApp || !userId) {
-      signForced()
-    }
+    Promise.all([
+      // Show Loader
+      queueLoading(),
+      // Wait for UserData
+      firstPromise,
+    ]).then(() => {
+      // Hide Loader
+      unqueueLoading()
+      // If user is not logged in, force sign-in
+      if (!userAuth || !userAuth.uid) {
+        signForced()
+      }
+    })
     return () => {
+      // Close up
       signClear()
     }
-  }, [userId, signClear, signForced, firebaseApp])
+  }, [
+    firstPromise,
+    userAuth,
+    queueLoading,
+    unqueueLoading,
+    signForced,
+    signClear,
+  ])
 
-  if (firebaseApp && userId) {
+  if (firstLaunch && userAuth && userAuth.uid) {
     return children
   }
   return placeholder || <></>

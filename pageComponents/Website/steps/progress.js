@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useCallback, useEffect } from 'react'
 import { ProgressBar } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
@@ -7,7 +7,7 @@ import IconNext from '@svg-icons/bootstrap/arrow-right-circle-fill.svg'
 import IconCheck from '@svg-icons/bootstrap/check-circle-fill.svg'
 import IconPlay from '@svg-icons/bootstrap/play-circle-fill.svg'
 
-import { useUserData } from '../../../components/LoginPop'
+import useUserData from '../../../components/LoginPop/useUserData'
 
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
 
@@ -65,27 +65,29 @@ export default function ProgressStatus({ activeIndex }) {
     BuilderStoreContext
   )
 
-  const userSiteData = useUserData(`sites/${router.query.webEdit}`)
+  const {
+    firstPromise: userFirstDataPromise,
+    data: userSiteData,
+  } = useUserData(`sites/${router.query.webEdit}`)
 
   const isLast = activeIndex === maxSlide
 
+  const preloadSiteData = useCallback(async () => {
+    await userFirstDataPromise
+    modContext(userSiteData)
+  }, [modContext, userFirstDataPromise, userSiteData])
+
+  useEffect(() => {
+    preloadSiteData()
+  }, [preloadSiteData])
+
   useEffect(() => {
     if (!appKey) {
-      // TODO: Validate with formik and push to appropriate place
       setActiveSlide(0)
     } else if (router.query.webStep) {
-      // TODO: Validate Stage
       setActiveSlide(parseInt(router.query.webStep, 10))
     }
   }, [appKey, setActiveSlide, router.query.webStep])
-
-  // Update All Values individually else looping occurs
-  useEffect(() => {
-    if (!userSiteData.firstLaunch) {
-      modContext(userSiteData)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modContext, userSiteData.timestamp])
 
   return (
     <div className='progress-wrap position-relative my-3 mx-5'>

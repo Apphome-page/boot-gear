@@ -13,7 +13,9 @@ import noop from 'lodash/noop'
 import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
 
 import { useAlerts } from '../AlertPop'
-import { useFirebaseApp } from '../LoginPop'
+
+import useFireService from '../LoginPop/useFireService'
+import useUser from '../LoginPop/useUser'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -32,20 +34,18 @@ export const SubscriptionBox = function SubscriptionBox({
 }) {
   const emailRef = useRef(null)
   const { addAlert } = useAlerts()
-  const firebaseApp = useFirebaseApp()
-  const userDatabase = firebaseApp && firebaseApp.database()
+  const { firstPromise: firePromise, data: fireDatabase } = useFireService(
+    'database'
+  )
 
   const actionSub = useCallback(async () => {
-    if (!userDatabase) {
-      addAlert('Please wait while we load-up.', { variant: 'warning' })
-      return
-    }
+    await firePromise
     if (emailRef.current.reportValidity()) {
       const validEmail = emailRef.current.value
-      await addSubscriber(userDatabase, validEmail)
+      await addSubscriber(fireDatabase, validEmail)
       addAlert('Thank you for subscribing!', { variant: 'success' })
     }
-  }, [addAlert, userDatabase])
+  }, [addAlert, fireDatabase, firePromise])
 
   return (
     <Container fluid className={className}>
@@ -84,37 +84,34 @@ export const SubscriptionBox = function SubscriptionBox({
 export default function Subscription({ show, onComplete = noop }) {
   const emailRef = useRef(null)
   const { addAlert } = useAlerts()
+  const { firstValue: userFirstValue, data: userAuth } = useUser()
+  const {
+    firstPromise: fireDatabasePromise,
+    data: fireDatabase,
+  } = useFireService('database')
 
-  const firebaseApp = useFirebaseApp()
-  const userDatabase = firebaseApp && firebaseApp.database()
-  const userId =
-    firebaseApp &&
-    firebaseApp.auth().currentUser &&
-    firebaseApp.auth().currentUser.uid
+  const userId = userAuth && userAuth.uid
 
   const actionSub = useCallback(async () => {
-    if (!userDatabase) {
-      addAlert('Please wait while we load-up.', { variant: 'warning' })
-      return
-    }
+    await fireDatabasePromise
     const validEmail =
       emailRef.current.checkValidity() && emailRef.current.value
     if (validEmail) {
-      await addSubscriber(userDatabase, validEmail)
+      await addSubscriber(fireDatabase, validEmail)
       addAlert('Thank you for subscribing!', { variant: 'success' })
       onComplete()
     } else {
       emailRef.current.reportValidity()
     }
-  }, [addAlert, onComplete, userDatabase])
+  }, [fireDatabasePromise, fireDatabase, addAlert, onComplete])
 
   useEffect(() => {
-    if (show && firebaseApp && userId) {
+    if (show && userFirstValue && userId) {
       onComplete()
     }
-  }, [show, onComplete, userId, firebaseApp])
+  }, [show, onComplete, userFirstValue, userId])
 
-  if (firebaseApp && userId) {
+  if (userFirstValue && userId) {
     return ''
   }
 

@@ -6,7 +6,7 @@ import noop from 'lodash/noop'
 import Link from '../../../components/LinkTag'
 import { useLoading } from '../../../components/LoadingPop'
 import { useAlerts } from '../../../components/AlertPop'
-import { useFirebaseApp } from '../../../components/LoginPop'
+import useFirebaseApp from '../../../components/LoginPop/useFirebaseApp'
 
 // TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'

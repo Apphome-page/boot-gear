@@ -10,7 +10,7 @@ import {
 
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useFirebaseApp } from '../../../components/LoginPop'
+import useUser from '../../../components/LoginPop/useUser'
 
 const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
 
@@ -19,12 +19,14 @@ const ExceptionTags = {
   subSection: 'Domain',
 }
 
+// Do not handle non-login cases
+// Expect user to be logged in
+// Break on any auth-issue
 export default function DomainSetup({ webKey }) {
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
-  const firebaseApp = useFirebaseApp()
-  const userDetails = firebaseApp && firebaseApp.auth().currentUser
+  const { data: userAuth } = useUser()
 
   const formSubmit = useCallback(
     async (formEvent) => {
@@ -33,6 +35,7 @@ export default function DomainSetup({ webKey }) {
         key: { value: formKey },
         domain: { value: formDomain },
       } = formEvent.target.elements
+
       if (!formKey || !formDomain) {
         setAlertData({
           text: 'Please provide a valid domain.',
@@ -40,11 +43,12 @@ export default function DomainSetup({ webKey }) {
         })
         return
       }
+
       setProcessing(true)
       setAlertData({})
 
       const [idToken, { default: fetch }] = await Promise.all([
-        userDetails.getIdToken(),
+        userAuth.getIdToken(),
         import('cross-fetch'),
       ])
 
@@ -60,10 +64,12 @@ export default function DomainSetup({ webKey }) {
             webDomain: formDomain,
           }),
         })
+
         const setupData = await setupResp.json()
         if (setupResp.status >= 400) {
           throw new Error(`Something went wrong. ${JSON.stringify(setupData)}`)
         }
+
         setAlertData({
           text: 'Custom Domain successfully added.',
           type: 'info',
@@ -80,7 +86,7 @@ export default function DomainSetup({ webKey }) {
       }
       setProcessing(false)
     },
-    [userDetails]
+    [userAuth]
   )
   return (
     <Form className='py-3' onSubmit={formSubmit}>

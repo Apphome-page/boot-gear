@@ -1,7 +1,8 @@
 import { Container, Button } from 'react-bootstrap'
 
-import { useLogin } from '../../components/LoginPop'
 import Link from '../../components/LinkTag'
+
+import useLogin from '../../components/LoginPop/useLogin'
 
 export default function HomeCTA() {
   const { signPop } = useLogin()
