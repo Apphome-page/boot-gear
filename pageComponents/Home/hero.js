@@ -19,9 +19,11 @@ export default function HomeHero() {
               <br />
               Creating stunning screenshots for app store listings.
             </p>
-            <Button variant='alt' className='mr-1 mr-sm-3' onClick={signPop}>
-              Sign Up
-            </Button>
+            <Link href='/dashboard/websites' onClick={signPop}>
+              <Button variant='alt' className='mr-1 mr-sm-3'>
+                Sign Up
+              </Button>
+            </Link>
             <Link href='/pricing'>
               <Button variant='alt2' className='mt-3 mt-sm-0'>
                 View Pricing

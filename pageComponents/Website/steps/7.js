@@ -1,6 +1,8 @@
 import { useContext } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 
+import Link from '../../../components/LinkTag'
+
 import { StoreContext } from '../helpers/store'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
@@ -21,14 +23,18 @@ export default function Step() {
       </Row>
       <Row className='my-3'>
         <Col>
-          <Button variant='outline-light' className='shadow rounded-0 w-100'>
-            Add New Website
-          </Button>
+          <Link href='/app-website-builder'>
+            <Button variant='outline-light' className='shadow rounded-0 w-100'>
+              Add New Website
+            </Button>
+          </Link>
         </Col>
         <Col>
-          <Button variant='light' className='shadow w-100 rounded-0'>
-            View All Wesbites
-          </Button>
+          <Link href='/dashboard/websites'>
+            <Button variant='light' className='shadow w-100 rounded-0'>
+              View All Wesbites
+            </Button>
+          </Link>
         </Col>
       </Row>
     </Container>

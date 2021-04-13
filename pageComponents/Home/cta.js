@@ -11,7 +11,7 @@ export default function HomeCTA() {
         <div className='h1 mb-5'>
           Fallen in Love with our features? Get a free trial!
         </div>
-        <Link href='/dashboard'>
+        <Link href='/dashboard/subscriptions'>
           <Button
             variant='light'
             className='rounded-0 mr-1 mr-sm-3 mb-3 mb-sm-0 px-3 py-3'
@@ -19,13 +19,11 @@ export default function HomeCTA() {
             Start Free Trial
           </Button>
         </Link>
-        <Button
-          variant='outline-light'
-          className='rounded-0 px-3 py-3'
-          onClick={signPop}
-        >
-          Sign Up
-        </Button>
+        <Link href='/dashboard/subscriptions' onClick={signPop}>
+          <Button variant='outline-light' className='rounded-0 px-3 py-3'>
+            Sign Up
+          </Button>
+        </Link>
       </Container>
     </section>
   )

@@ -25,7 +25,7 @@ export default function Payment() {
         }),
       })
       setPayState(true)
-      router.push('/dashboard')
+      router.push('/dashboard/subscriptions')
     } catch (e) {
       setPayState(false)
     }
