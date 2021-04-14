@@ -2,12 +2,8 @@ import { useState, useCallback } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import DashboardWebsite from '../../pageComponents/Dashboard/website'
 import DashboardDomain from '../../pageComponents/Dashboard/domain'
-import DashboardProducts from '../../pageComponents/Dashboard/products'
 
 import AuthWrapper from '../../components/AuthWrapper'
-import { FAQList } from '../../components/FAQ'
-
-import faqList from '../../pageData/dashboard/faq.json'
 
 export default function Websites() {
   const [showDomainModal, setDomainModal] = useState(false)
@@ -33,16 +29,7 @@ export default function Websites() {
           <Col lg={8} className=''>
             <DashboardWebsite domainAction={domainAction} />
           </Col>
-          <Col lg={4}>
-            <DashboardProducts />
-            <Container fluid>
-              <Row className='my-3 p-3 border shadow-sm'>
-                <Col>
-                  <FAQList faqList={faqList} />
-                </Col>
-              </Row>
-            </Container>
-          </Col>
+          <Col lg={4} />
         </Row>
       </Container>
     </AuthWrapper>

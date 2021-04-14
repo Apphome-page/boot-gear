@@ -12,7 +12,7 @@ import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useUserAuth } from '../../../components/LoginPop'
 
-const FIRECLOUD_DOMAIN_SETUP = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_SETUP
+const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -48,7 +48,7 @@ export default function DomainSetup({ webKey }) {
       ])
 
       try {
-        const setupResp = await fetch(FIRECLOUD_DOMAIN_SETUP, {
+        const setupResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${idToken}`,

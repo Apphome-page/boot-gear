@@ -12,8 +12,11 @@ export default async function removeWebsite({
   removeDomain = true,
   removeStorage = true,
 }) {
-  const { uid: userId } = firebase.auth().currentUser || {}
+  if (!firebase) {
+    return
+  }
 
+  const userId = (firebase.auth().currentUser || {}).uid
   if (!userId || !webKey) {
     return
   }

@@ -9,7 +9,8 @@ import removeWebsite from '../helpers/removeWebsite'
 
 import DomainSetup from './setup'
 import DomainVerify from './verify'
-import DomainNameserver from './nameserver'
+// import DomainNameserver from './nameserver'
+import DomainValidate from './validate'
 import RemoveLoading from './removeLoading'
 import PayInfo from './pay'
 
@@ -43,10 +44,10 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
     setLoading(true)
     try {
       await removeWebsite({
-        firebaseApp,
+        firebase: firebaseApp,
         webKey,
         removeDomain: true,
-        removeStorage: true,
+        removeStorage: false,
       })
       addAlert('Removed custom Domain successfully', {
         variant: 'success',
@@ -77,7 +78,7 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
         return DomainVerify
       }
       if (webDomain && webHost) {
-        return DomainNameserver
+        return DomainValidate
       }
       return DomainSetup
     }
