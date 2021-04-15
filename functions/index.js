@@ -493,6 +493,51 @@ exports.domainValidate = functions.https.onRequest((request, response) => {
   })
 })
 
+exports.domainConnect = functions.https.onRequest((request, response) => {
+  cleanRequest(request, response, async () => {
+    validateFirebaseIdToken(request, response, async (error) => {
+      try {
+        if (error instanceof Error) {
+          throw error
+        }
+        // Get User from authentication
+        const { uid } = request.user
+
+        // Get websiteKey from request
+        const { webKey } = request.body
+        if (!uid || !webKey) {
+          throw new Error('Invalid Request.')
+        }
+
+        const userDataRef = admin.database().ref(`users/${uid}/`)
+        const siteDataRef = userDataRef.child(`sites/${webKey}`)
+        const [siteDataSnapshot, siteDataDomain] = await Promise.all([
+          await siteDataRef.once('value'),
+          await checkDomain(webZone),
+        ])
+
+        const { webBucket } = siteDataSnapshot.val() || {}
+        const { active: domainActive } = siteDataDomain || {}
+        // Reupload S3
+        if (domainActive && webBucket) {
+          // Fetch All assets from firebase bucket at websiteKey
+          const storageFilesMap = await storageFiles(
+            `public/${webKey}/index.html`
+          )
+          // Push All assets at S3 Bucket
+          await putHostedBucket(bucketName, storageFilesMap)
+        }
+
+        // Return Checked Data
+        return response.json(checkData)
+      } catch (e) {
+        errorConsole(e)
+        response.status(500).json(e.toString())
+      }
+    })
+  })
+})
+
 // Custom Domain Removal
 // Does not remove firebase-storage files
 exports.domainRemove = functions.https.onRequest((request, response) => {

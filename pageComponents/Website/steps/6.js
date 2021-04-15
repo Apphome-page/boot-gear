@@ -1,5 +1,6 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
+import { useRouter } from 'next/router'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
@@ -8,9 +9,13 @@ import {
   useFirebaseApp,
   useLogin,
   useUserAuth,
+  useUserData,
 } from '../../../components/LoginPop'
 
 import { StoreContext } from '../helpers/store'
+
+const FIRECLOUD_DOMAIN_CONNECT =
+  process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_CONNECT
 
 const ExceptionTags = {
   section: 'Website-Builder',
@@ -18,12 +23,16 @@ const ExceptionTags = {
 }
 
 export default function Step() {
+  const {
+    query: { webKey },
+  } = useRouter()
   const [templateProps] = useContext(StoreContext)
 
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
   const { signPop } = useLogin()
   const firebaseApp = useFirebaseApp()
+  const { webZone, webHost } = useUserData(`sites/${webKey}`)
   const userAuth = useUserAuth()
   const userId = userAuth && userAuth.uid
 
@@ -59,6 +68,30 @@ export default function Step() {
         templateProps,
         userId,
       })
+      if (webKey && webZone && webHost) {
+        // Update s3
+        const [idToken, { default: fetch }] = await Promise.all([
+          userAuth.getIdToken(),
+          import('cross-fetch'),
+        ])
+        const connectResp = await fetch(FIRECLOUD_DOMAIN_CONNECT, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            webKey,
+          }),
+        })
+        const setupData = await connectResp.json()
+        if (connectResp.status >= 400) {
+          throw new Error(`Something went wrong. ${JSON.stringify(setupData)}`)
+        }
+        addAlert('Updated your website at Cusom Domain.', {
+          variant: 'success',
+        })
+      }
       uploadSuccess = true
     } catch (err) {
       captureExceptionSentry(err, (scope) => {
@@ -85,6 +118,9 @@ export default function Step() {
     templateProps,
     unqueueLoading,
     userId,
+    webHost,
+    webKey,
+    webZone,
   ])
 
   return (

@@ -172,6 +172,7 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
       setUserData({
         firstLaunch: true, // to indicate the userData has not been fetched
       })
+      return () => {}
     }
     const userDataRef = firebaseApp
       .database()
