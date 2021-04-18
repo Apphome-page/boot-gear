@@ -26,7 +26,11 @@ export default function AmpHeader() {
       >
         App Website Builder
       </Link>
-      <Link href='/dashboard' rel='nofollow' className='header-button mx-1'>
+      <Link
+        href='/dashboard/websites'
+        rel='nofollow'
+        className='header-button mx-1'
+      >
         <Button variant='alt'>Sign Up</Button>
       </Link>
       <style jsx>

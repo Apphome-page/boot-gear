@@ -9,16 +9,31 @@ const setDomain = (cf, accountId) => async (domainName) => {
   if (!success) {
     throw new Error('Failed Request')
   }
+  // domainResult.id
+  await cf.zoneSettings.edit(domainResult.id, 'automatic_https_rewrites', {
+    value: 'on',
+  })
   return domainResult
 }
 
 const checkDomain = (cf) => async (zoneId) => {
   const {
-    result: { status: preListStatus, paused: preListPaused },
+    result: {
+      id: preListId,
+      status: preListStatus,
+      paused: preListPaused,
+      name: preListHost,
+      name_servers: preListNameServers,
+    },
   } = await cf.zones.read(zoneId)
+  if (!preListId) {
+    return null
+  }
   const checkResult = {
     active: preListStatus === 'active',
     paused: preListPaused,
+    host: preListHost,
+    ns: preListNameServers,
   }
   if (checkResult.active) {
     return checkResult
@@ -85,9 +100,21 @@ const deleteDomain = (cf) => async (zoneId) => {
   return domainResult
 }
 
+const deleteDomainName = (cf) => async (domainName) => {
+  const { result } = await cf.zones.browse({ name: domainName })
+  return (result.find(({ name }) => name === domainName) || {}).id
+}
+
+const purgeDomain = (cf) => async (zoneId) => {
+  const purgeResult = await cf.zones.purgeCache(zoneId)
+  return purgeResult
+}
+
 module.exports = (cf, accountId) => ({
   setDomain: setDomain(cf, accountId),
   checkDomain: checkDomain(cf),
   dnsDomain: dnsDomain(cf),
   deleteDomain: deleteDomain(cf),
+  deleteDomainName: deleteDomainName(cf),
+  purgeDomain: purgeDomain(cf),
 })

@@ -8,8 +8,17 @@ import IconCheck from '@svg-icons/bootstrap/check-circle-fill.svg'
 import IconPlay from '@svg-icons/bootstrap/play-circle-fill.svg'
 
 import { useUserData } from '../../../components/LoginPop'
+import remoteToFile from '../../../utils/urlToFile'
 
 import { StoreContext as BuilderStoreContext } from '../helpers/store'
+
+const progressPointDesc = [
+  'App Information',
+  'App Store Details',
+  'App Description',
+  'App Links',
+  'App Summary',
+]
 
 function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
   const stageButtons = []
@@ -31,9 +40,10 @@ function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
             }
           )}
           onClick={() => (isActive && !isLast ? actionCallback(i) : null)}
-        >
-          Step {i}
-        </IconNext>
+        />
+        <div className='py-1 progress-next-desc'>
+          {progressPointDesc[i - 1] || ''}
+        </div>
         <style jsx>{`
           .progress-next {
             left: ${((100 * i) / maxSlide).toFixed(3)}%;
@@ -43,12 +53,26 @@ function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
         <style jsx>
           {`
             .progress-next {
+              height: 32px;
+              width: 32px;
               top: 50%;
               transform: translate(-50%, -50%);
               opacity: 1;
             }
             .progress-next:disabled {
               opacity: 1;
+            }
+            .progress-next > .progress-next-desc {
+              width: 64px;
+              font-size: 12px;
+              line-height: 14px;
+              text-align: center;
+              transform: translateX(-16px);
+            }
+            @media (max-width: 778px) {
+              .progress-next > .progress-next-desc {
+                display: none;
+              }
             }
           `}
         </style>
@@ -61,9 +85,8 @@ function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
 export default function ProgressStatus({ activeIndex }) {
   const router = useRouter()
 
-  const [{ appKey, maxSlide, setActiveSlide }, modContext] = useContext(
-    BuilderStoreContext
-  )
+  const [builderStore, modContext] = useContext(BuilderStoreContext)
+  const { appKey, maxSlide, setActiveSlide } = builderStore || {}
 
   const userSiteData = useUserData(`sites/${router.query.webEdit}`)
 
@@ -79,13 +102,26 @@ export default function ProgressStatus({ activeIndex }) {
     }
   }, [appKey, setActiveSlide, router.query.webStep])
 
-  // Update All Values individually else looping occurs
+  // Update All Values forcefully without looking else looping occurs
   useEffect(() => {
     if (!userSiteData.firstLaunch) {
-      modContext(userSiteData)
+      const { appIcon, appScreenshot } = userSiteData
+      Promise.all([
+        appIcon && typeof appIcon === 'string' ? remoteToFile(appIcon) : null,
+        appScreenshot && typeof appScreenshot === 'string'
+          ? remoteToFile(appScreenshot)
+          : null,
+      ]).then(([remoteAppIcon, remoteAppScreenshot]) => {
+        modContext({
+          ...userSiteData,
+          appIcon: remoteAppIcon,
+          appScreenshot: remoteAppScreenshot,
+          webEdit: router.query.webEdit,
+        })
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modContext, userSiteData.timestamp])
+  }, [modContext, userSiteData.timestamp, userSiteData.appKey])
 
   return (
     <div className='progress-wrap position-relative my-3 mx-5'>

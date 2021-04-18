@@ -79,7 +79,6 @@ export default function Step() {
     const {
       status: keyValidated = false,
       text: keyText = '',
-      data: keyData = {},
     } = await keyValidate(firebaseApp, appKey, { userId })
 
     unqueueLoading()
@@ -91,7 +90,6 @@ export default function Step() {
       return
     }
     updateStore({
-      ...keyData,
       appKey,
       appName: formName,
       appTheme: selectedTheme,

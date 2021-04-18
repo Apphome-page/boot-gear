@@ -1,24 +1,26 @@
 import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
+import { Code as CodeLoader } from 'react-content-loader'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useUserAuth } from '../../../components/LoginPop'
+import { useUserAuth, useUserData } from '../../../components/LoginPop'
 
-const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
+const FIRECLOUD_DOMAIN_VALIDATE =
+  process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VALIDATE
 
 const ExceptionTags = {
   section: 'Dashboard',
   subSection: 'Domain',
 }
 
-export default function DomainNameServer({
-  webKey,
-  webData: { webDomain = '', webNameservers = [] },
-}) {
+export default function DomainNameServer({ webKey }) {
   const [isProcessing, setProcessing] = useState(false)
   const [alertData, setAlertData] = useState({})
 
   const userAuth = useUserAuth()
+  const { firstLaunch, webDomain, webZone, webNameservers } = useUserData(
+    `sites/${webKey}`
+  )
 
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
@@ -28,7 +30,7 @@ export default function DomainNameServer({
       import('cross-fetch'),
     ])
     try {
-      const verifyResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {
+      const verifyResp = await fetch(FIRECLOUD_DOMAIN_VALIDATE, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${idToken}`,
@@ -36,6 +38,8 @@ export default function DomainNameServer({
         },
         body: JSON.stringify({
           webKey,
+          webDomain,
+          webZone,
         }),
       })
       const verifyData = await verifyResp.json()
@@ -43,11 +47,21 @@ export default function DomainNameServer({
         throw new Error(`Something went wrong. ${JSON.stringify(verifyData)}`)
       }
 
+      let postAlertText = ''
+      if (verifyData.active) {
+        if (verifyData.paused) {
+          postAlertText =
+            'Your webpage has been flagged. Please remove the domain and try again.'
+        } else {
+          postAlertText = 'You Custom Domain is Validated!'
+        }
+      } else {
+        postAlertText =
+          'Verify Nameservers at you registrar and wait a while before Validating again.'
+      }
+
       setAlertData({
-        text:
-          verifyData.active && !verifyData.paused
-            ? 'Custom Domain Validated!'
-            : 'Something went wrong. Remove the domain & try again.',
+        text: postAlertText,
         type: 'info',
       })
     } catch (err) {
@@ -61,8 +75,10 @@ export default function DomainNameServer({
       })
     }
     setProcessing(false)
-  }, [userAuth, webKey])
-  return (
+  }, [userAuth, webDomain, webKey, webZone])
+  return firstLaunch ? (
+    <CodeLoader />
+  ) : (
     <Container fluid>
       <Row>
         <Col className='lead text-center'>

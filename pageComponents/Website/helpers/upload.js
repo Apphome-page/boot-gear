@@ -1,6 +1,10 @@
+import UUID from 'lodash/uniqueId'
+
 import keyValidate from './keyValidate'
 import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
+
+import APP_KEYS from '../../../config/websiteAppKeys.json'
 
 export default async function upload(
   firebase,
@@ -27,13 +31,15 @@ export default async function upload(
   // Pre-fill if existing data exists
   const appDataSet = { ...(keyValidated.data || {}), ...(templateProps || {}) }
 
-  const appIconName = appDataSet.appIcon.name
+  const appIconName = `${UUID('icon-')}-${appDataSet.appIcon.name
     .replace(/[^a-zA-Z0-9.]/gi, '-')
-    .toLowerCase()
+    .toLowerCase()}`
   const appIconPath = `public/${appKey}/bin/${appIconName}`
-  const appScreenshotName = appDataSet.appScreenshot.name
+  const appScreenshotName = `${UUID(
+    'icon-'
+  )}-${appDataSet.appScreenshot.name
     .replace(/[^a-zA-Z0-9.]/gi, '-')
-    .toLowerCase()
+    .toLowerCase()}`
   const appScreenshotPath = `public/${appKey}/bin/${appScreenshotName}`
   const customMeta = {
     // cacheControl: 'public,max-age=300',
@@ -92,24 +98,25 @@ export default async function upload(
       firebase.storage().ref(appScreenshotPath).put(file, customMeta)
     )
 
-  const DBPromise = databaseRef.set(
-    // remove functional properties from appDataSet
-    Object.keys(appDataSet).reduce(
-      (appDataObj, appDataKey) => {
-        // Preserve Initial Value
-        const appDataValue =
-          appDataObj[appDataKey] || appDataSet[appDataKey] || ''
-        return typeof appDataValue === 'function' ||
-          appDataKey.indexOf('app') !== 0
-          ? appDataObj
-          : Object.assign(appDataObj, { [appDataKey]: appDataValue })
+  const DBPromise = Promise.all(
+    APP_KEYS.reduce(
+      (dbAcc, dbKey) => {
+        let dbValue
+        switch (dbKey) {
+          case 'appIcon':
+            dbValue = appIconPath
+            break
+          case 'appScreenshot':
+            dbValue = appScreenshotPath
+            break
+          default:
+            dbValue = appDataSet[dbKey]
+            break
+        }
+        dbAcc.push(databaseRef.child(dbKey).set(dbValue))
+        return dbAcc
       },
-      // Override `File` Values with Strings
-      {
-        appIcon: appIconPath,
-        appScreenshot: appScreenshotPath,
-        timestamp: new Date().getTime(),
-      }
+      [databaseRef.child('timestamp').set(new Date().getTime())]
     )
   )
 

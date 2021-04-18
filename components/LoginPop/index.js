@@ -157,8 +157,8 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
 
   const snapValue = useCallback(
     (snapshot) => {
-      const snapVal = snapshot.val()
-      if (snapVal && !refKey) {
+      const snapVal = snapshot.val() || {}
+      if (!refKey) {
         // Add plan details into root request
         snapVal.plan = getPlanDetails(snapVal.plan_id)
       }
@@ -172,7 +172,7 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
       setUserData({
         firstLaunch: true, // to indicate the userData has not been fetched
       })
-      return
+      return () => {}
     }
     const userDataRef = firebaseApp
       .database()

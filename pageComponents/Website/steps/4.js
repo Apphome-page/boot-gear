@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useRef } from 'react'
+import { useState, useContext, useCallback, useEffect, useRef } from 'react'
 import {
   Container,
   Row,
@@ -16,13 +16,16 @@ import { StoreContext } from '../helpers/store'
 export default function Step() {
   const formRef = useRef(null)
   const [tesimonialCount, setTestimonialCount] = useState(1)
+
+  const [
+    { nextAction, prevAction, appAbout, appAddress, appTestim },
+    updateStore,
+  ] = useContext(StoreContext)
+
   const incTestimonialCount = useCallback(() => {
     setTestimonialCount((prevTestim) => prevTestim + 1)
   }, [setTestimonialCount])
-  const [
-    { nextAction, prevAction, appAbout, appAddress },
-    updateStore,
-  ] = useContext(StoreContext)
+
   const nextBtnAction = useCallback(
     (event) => {
       event.preventDefault()
@@ -54,6 +57,13 @@ export default function Step() {
     },
     [nextAction, tesimonialCount, updateStore]
   )
+
+  useEffect(() => {
+    if (appTestim && appTestim.length) {
+      setTestimonialCount(appTestim.length)
+    }
+  }, [appTestim])
+
   return (
     <Form ref={formRef}>
       <Container fluid>
@@ -144,6 +154,8 @@ export default function Step() {
         {(() => {
           const testimList = []
           for (let idxTestim = 0; idxTestim < tesimonialCount; idxTestim += 1) {
+            const { text: testimText = '', source: testimSource = '' } =
+              (appTestim && appTestim[idxTestim]) || {}
             testimList.push(
               <Form.Row key={idxTestim} className='my-1'>
                 <Col className='d-flex align-items-end'>
@@ -154,14 +166,16 @@ export default function Step() {
                     as='textarea'
                     rows={2}
                     placeholder='Text'
+                    defaultValue={testimText}
                   />
                 </Col>
                 <Col>
                   <FormControl
                     id={`testim-${idxTestim}-source`}
-                    placeholder='Source'
                     as='textarea'
                     rows={2}
+                    placeholder='Source'
+                    defaultValue={testimSource}
                   />
                 </Col>
               </Form.Row>

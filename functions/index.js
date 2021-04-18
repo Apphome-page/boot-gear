@@ -4,6 +4,9 @@ const base64 = require('base-64')
 const Cloudflare = require('cloudflare')
 const { S3Client } = require('@aws-sdk/client-s3')
 
+const errorConsole = console.error
+// const errorConsole = () => {}
+
 // Secrets
 const {
   pabbly: {
@@ -32,7 +35,7 @@ const s3 = new S3Client({
 const cf = Cloudflare({ token: CF_TOKEN })
 
 // Include Helpers
-const { UUID } = require('./helpers')
+const { UUID, toDatabaseRef } = require('./helpers')
 const {
   PABBLY_API_CREATE_CUSTOMER,
   PABBLY_API_GET_CUSTOMER_PLANS,
@@ -61,6 +64,8 @@ const {
   checkDomain,
   dnsDomain,
   deleteDomain,
+  deleteDomainName,
+  // purgeDomain,
 } = require('./helpers/cloudflare')(cf, CF_ID)
 
 /*
@@ -79,7 +84,7 @@ const {
 //         Object.assign({}, customClaims || {}, { customer_id })
 //       )
 //     } catch (e) {
-//       console.error(e)
+//       errorConsole(e)
 //     }
 //     return
 //   })
@@ -124,6 +129,7 @@ exports.pabblyEvent = functions.https.onRequest((request, response) => {
       }
       response.json({ status: 'success' })
     } catch (e) {
+      errorConsole(e)
       response.status(500).send(e.toString())
     }
   })
@@ -175,6 +181,7 @@ exports.userSync = functions.https.onRequest((request, response) => {
         ])
         response.json({ uid, customerId })
       } catch (e) {
+        errorConsole(e)
         response.status(500).json(e.toString())
       }
     })
@@ -209,8 +216,9 @@ exports.payValidate = functions.https.onRequest((request, response) => {
         uid,
       })
 
-      response.json({ uid: user.uid, customerId: customer_id })
+      response.json({ uid: user.uid, customerId })
     } catch (e) {
+      errorConsole(e)
       response.status(500).json(e.toString())
     }
   })
@@ -284,6 +292,7 @@ exports.domainSetup = functions.https.onRequest((request, response) => {
           zoneNameServers,
         })
       } catch (e) {
+        errorConsole(e)
         response.status(500).json(e.toString())
       }
     })
@@ -300,7 +309,7 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         }
 
         const { uid } = request.user
-        const { webKey } = request.body
+        const { webKey, webDomain: requestWebDomain } = request.body
         if (!uid || !webKey) {
           throw new Error('Invalid Request')
         }
@@ -309,10 +318,12 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         const userDataRef = admin.database().ref(`users/${uid}/`)
         const siteDataRef = userDataRef.child(`sites/${webKey}`)
         const siteDataSnapshot = await siteDataRef.once('value')
-        const { webZone, webDomain, webNameservers, webBucket } =
+
+        let { webZone, webDomain, webNameservers, webBucket } =
           siteDataSnapshot.val() || {}
-        if (!webZone || !webDomain || !webNameservers) {
-          throw new Error('Invalid webKey')
+
+        if (!requestWebDomain && !webDomain) {
+          throw new Error('Invalid Domain Request')
         }
 
         // Get Customer Active Plans from Pabbly
@@ -337,36 +348,36 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         // TODO: Sync Plans
         // syncUser()
 
-        // Verify domain nameservers on Cloudflare
-        const domainResult = await checkDomain(webZone)
-        const { active: webActive, paused: webPaused } = domainResult
-        if (webPaused || !webActive) {
-          response.json({
-            active: webActive,
-            paused: webPaused,
-          })
-          return
-        }
+        // Clean Up Everything without care!!!
+        const [requestWebDomainId, webDomainId] = await Promise.all([
+          deleteDomainName(requestWebDomain),
+          deleteDomainName(webDomain),
+        ])
+        await Promise.all([
+          webZone ? deleteDomain(webZone).catch(errorConsole) : null,
+          requestWebDomainId
+            ? deleteDomain(requestWebDomainId).catch(errorConsole)
+            : null,
+          webDomainId ? deleteDomain(webDomainId).catch(errorConsole) : null,
+          webBucket ? deleteHostedBucket(webBucket).catch(errorConsole) : null,
+          webDomain ? deleteHostedBucket(webDomain).catch(errorConsole) : null,
+          requestWebDomain
+            ? deleteHostedBucket(requestWebDomain).catch(errorConsole)
+            : null,
+        ])
 
-        // Remove Existing S3 Bucket
-        await Promise.all([
-          deleteHostedBucket(webDomain).catch((e) => {}),
-          deleteHostedBucket(webBucket).catch((e) => {}),
-        ])
-        await Promise.all([
-          siteDataRef.child('webBucket').remove(),
-          siteDataRef.child('webHost').remove(),
-        ])
+        // Set New Domain
+        const zoneDetails = await setDomain(requestWebDomain)
+        webZone = zoneDetails.id
+        webDomain = zoneDetails.name
+        webNameservers = zoneDetails.name_servers
+        webBucket = null
 
         // Create new Bucket
         // https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#VirtualHostingCustomURLs
         const bucketName = webDomain
         const bucketHost = `${bucketName}.s3-website.${AWS_REGION}.amazonaws.com`
         await createHostedBucket(bucketName)
-
-        // Update Firebase Realtime Database
-        await siteDataRef.child('webBucket').set(bucketName)
-        await siteDataRef.child('webHost').set(bucketHost)
 
         // Fetch All assets from firebase bucket at websiteKey
         const storagePrefixKey = `public/${webKey}/index.html`
@@ -375,58 +386,163 @@ exports.domainVerify = functions.https.onRequest((request, response) => {
         await putHostedBucket(bucketName, storageFilesMap)
 
         // Connect DNS
-        const dnsResult = await dnsDomain(webZone, {
-          type: 'CNAME',
-          name: '@',
-          content: bucketHost,
+        // Immediate Addition allowed?
+        const [dnsResult, connectedResultSnapshot] = await Promise.all([
+          await dnsDomain(webZone, {
+            type: 'CNAME',
+            name: '@',
+            content: bucketHost,
+          }),
+          await siteDataRef.once('value'),
+        ])
+
+        // Update details in firebase realtime-database
+        await toDatabaseRef(siteDataRef, {
+          webDomain,
+          webZone,
+          webNameservers,
+          webBucket: bucketName,
+          webHost: bucketHost,
         })
 
         await setWebTimestamp(uid, webKey)
 
-        const connectedWebDataSnapshot = await siteDataRef.once('value')
-        const connectedWebData = connectedWebDataSnapshot.val()
-
         response.json({
-          ...connectedWebData,
-          active: webActive,
-          paused: webPaused,
-          domain: domainResult,
-          dns: dnsResult,
+          ...connectedResultSnapshot.val(),
           plans: customerPlans,
+          zoneId: webZone,
+          zoneNameServers: webNameservers,
+          bucket: bucketName,
+          host: bucketHost,
+          dns: dnsResult,
         })
       } catch (e) {
-        let errorString = e.toString()
-        try {
-          const { uid } = request.user
-          const { webKey } = request.body
-          const siteWebDetailRef = admin
-            .database()
-            .ref(`users/${uid}/sites/${webKey}`)
-          const siteWebDetailSnapshot = await siteWebDetailRef.once('value')
-          const siteWebDetail = siteWebDetailSnapshot.val()
+        errorConsole(e)
+        const { uid } = request.user
+        const { webKey, webDomain: requestWebDomain } = request.body
 
-          if (siteWebDetail.webBucket) {
-            // Cleanup S3 Storage
-            await deleteHostedBucket(siteWebDetail.webBucket)
-            // TODO: Disconnect DNS
-          }
+        const siteWebDetailRef = admin
+          .database()
+          .ref(`users/${uid}/sites/${webKey}`)
+        const siteWebDetailSnapshot = await siteWebDetailRef.once('value')
+        const { webZone, webBucket, webDomain } = siteWebDetailSnapshot.val()
 
-          // Clean up Realtime Database
-          await Promise.all(
-            ['webHost', 'webBucket'].map((siteWebDetailKey) =>
-              siteWebDetailRef.child(siteWebDetailKey).remove()
-            )
+        // Clean Up Everything without care!!!
+        const [requestWebDomainId, webDomainId] = await Promise.all([
+          deleteDomainName(requestWebDomain),
+          deleteDomainName(webDomain),
+        ])
+        await Promise.all([
+          webZone ? deleteDomain(webZone).catch(errorConsole) : null,
+          requestWebDomainId
+            ? deleteDomain(requestWebDomainId).catch(errorConsole)
+            : null,
+          webDomainId ? deleteDomain(webDomainId).catch(errorConsole) : null,
+          webBucket ? deleteHostedBucket(webBucket).catch(errorConsole) : null,
+          webDomain ? deleteHostedBucket(webDomain).catch(errorConsole) : null,
+          requestWebDomain
+            ? deleteHostedBucket(requestWebDomain).catch(errorConsole)
+            : null,
+        ])
+
+        // Clean up Realtime Database
+        await Promise.all(
+          [
+            'webZone',
+            'webHost',
+            'webBucket',
+            'webDomain',
+          ].map((siteWebDetailKey) =>
+            siteWebDetailRef.child(siteWebDetailKey).remove()
           )
-        } catch (e2) {
-          errorString = `${errorString} || ${e2.toString()}`
+        )
+
+        response.status(500).json(e.toString())
+      }
+    })
+  })
+})
+
+// Custom Domain Validate
+exports.domainValidate = functions.https.onRequest((request, response) => {
+  cleanRequest(request, response, async () => {
+    validateFirebaseIdToken(request, response, async (error) => {
+      try {
+        if (error instanceof Error) {
+          throw error
         }
-        response.status(500).json(errorString)
+        // Get User from authentication
+        const { uid } = request.user
+
+        // Get websiteKey from request
+        const { webKey, webDomain, webZone } = request.body
+        if (!uid || !webKey || !webDomain || !webZone) {
+          throw new Error('Invalid Request.')
+        }
+
+        // Validate Cloudflare
+        const checkData = await checkDomain(webZone)
+
+        // Return Checked Data
+        return response.json(checkData)
+      } catch (e) {
+        errorConsole(e)
+        response.status(500).json(e.toString())
+      }
+    })
+  })
+})
+
+exports.domainConnect = functions.https.onRequest((request, response) => {
+  cleanRequest(request, response, async () => {
+    validateFirebaseIdToken(request, response, async (error) => {
+      try {
+        if (error instanceof Error) {
+          throw error
+        }
+        // Get User from authentication
+        const { uid } = request.user
+
+        // Get websiteKey from request
+        const { webKey } = request.body
+        if (!uid || !webKey) {
+          throw new Error('Invalid Request.')
+        }
+
+        const userDataRef = admin.database().ref(`users/${uid}/`)
+        const siteDataRef = userDataRef.child(`sites/${webKey}`)
+
+        const siteDataSnapshot = await siteDataRef.once('value')
+        const { webZone, webBucket } = siteDataSnapshot.val() || {}
+
+        const { active: domainActive } = (await checkDomain(webZone)) || {}
+
+        if (domainActive && webBucket) {
+          // TODO: Purge Cloudflare - Current SDK is broken
+          // await purgeDomain(webZone)
+          // Fetch All assets from firebase bucket at websiteKey
+          const storageFilesMap = await storageFiles(
+            `public/${webKey}/index.html`
+          )
+          // Push All assets at S3 Bucket
+          await putHostedBucket(webBucket, storageFilesMap)
+        }
+
+        // Return Checked Data
+        return response.json({
+          status: 'success',
+          success: true,
+        })
+      } catch (e) {
+        errorConsole(e)
+        response.status(500).json(e.toString())
       }
     })
   })
 })
 
 // Custom Domain Removal
+// Does not remove firebase-storage files
 exports.domainRemove = functions.https.onRequest((request, response) => {
   cleanRequest(request, response, async () => {
     validateFirebaseIdToken(request, response, async (error) => {
@@ -473,6 +589,7 @@ exports.domainRemove = functions.https.onRequest((request, response) => {
           success: true,
         })
       } catch (e) {
+        errorConsole(e)
         response.status(500).json(e.toString())
       }
     })

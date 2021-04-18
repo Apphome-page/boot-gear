@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap'
 
+import Link from '../../components/LinkTag'
 import { useLoading } from '../../components/LoadingPop'
 import { useUserData } from '../../components/LoginPop'
 
@@ -32,9 +33,11 @@ export default function Subscription() {
           </InputGroup.Prepend>
           <FormControl name='plan' defaultValue={planTitle} disabled />
         </InputGroup>
-        <div className='text-center'>
-          <Button variant='alt'>View All Plans</Button>
-        </div>
+        <Link href='/pricing'>
+          <div className='text-center'>
+            <Button variant='alt'>View All Plans</Button>
+          </div>
+        </Link>
       </div>
     </>
   )

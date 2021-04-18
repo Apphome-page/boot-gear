@@ -16,6 +16,7 @@ const FileInput = forwardRef(
       size = 128,
       required = false,
       disabled = false,
+      defaultValue,
     },
     parentInputRef
   ) => {
@@ -23,6 +24,15 @@ const FileInput = forwardRef(
 
     const freshRef = useRef(null)
     const inputRef = useMemo(() => parentInputRef || freshRef, [parentInputRef])
+
+    const defaultValueURL = useMemo(
+      () =>
+        (typeof window !== 'undefined' &&
+          defaultValue instanceof File &&
+          window.URL.createObjectURL(defaultValue)) ||
+        null,
+      [defaultValue]
+    )
 
     const onChangeCb = useCallback(
       (event) => {
@@ -60,9 +70,9 @@ const FileInput = forwardRef(
           className
         )}
       >
-        {fileURI ? (
+        {fileURI || defaultValueURL ? (
           <Image
-            src={fileURI}
+            src={fileURI || defaultValueURL}
             className={classNames('file-input-img', viewClassName)}
           />
         ) : (
@@ -79,6 +89,7 @@ const FileInput = forwardRef(
           disabled={disabled}
           className={classNames('file-input-drop', viewClassName)}
           onChange={onChangeCb}
+          defaultValue={defaultValue}
         />
         <style jsx>
           {`

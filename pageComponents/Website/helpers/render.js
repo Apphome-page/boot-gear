@@ -4,7 +4,8 @@ import templateGum from './templateGum.html'
 import templateGrass from './templateGrass.html'
 import templateWave from './templateWave.html'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
 // TODO: Set default getter
 const template = {

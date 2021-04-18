@@ -12,6 +12,9 @@ import {
 
 import { StoreContext } from '../helpers/store'
 
+const FIRECLOUD_DOMAIN_CONNECT =
+  process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_CONNECT
+
 const ExceptionTags = {
   section: 'Website-Builder',
   subSection: 'Step-6',
@@ -34,6 +37,9 @@ export default function Step() {
     appDescription,
     prevAction,
     nextAction,
+    webEdit,
+    webZone,
+    webHost,
   } = templateProps
 
   const appIconURI = useMemo(() => {
@@ -55,16 +61,42 @@ export default function Step() {
     let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
+      const syncCustomDomain = webEdit && webZone && webHost
       await uploadWebsite(firebaseApp, templateProps.appKey, {
         templateProps,
         userId,
       })
+      if (syncCustomDomain) {
+        // Update s3
+        const [idToken, { default: fetch }] = await Promise.all([
+          userAuth.getIdToken(),
+          import('cross-fetch'),
+        ])
+        const connectResp = await fetch(FIRECLOUD_DOMAIN_CONNECT, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            webKey: webEdit,
+          }),
+        })
+        const setupData = await connectResp.json()
+        if (connectResp.status >= 400) {
+          throw new Error(`Something went wrong. ${JSON.stringify(setupData)}`)
+        }
+        addAlert('Updated your website at Cusom Domain.', {
+          variant: 'success',
+        })
+      }
       uploadSuccess = true
     } catch (err) {
       captureExceptionSentry(err, (scope) => {
         scope.setTags(ExceptionTags)
         return scope
       })
+      console.error(err)
       uploadSuccess = false
     }
     unqueueLoading()
@@ -84,7 +116,11 @@ export default function Step() {
     signPop,
     templateProps,
     unqueueLoading,
+    userAuth,
     userId,
+    webHost,
+    webEdit,
+    webZone,
   ])
 
   return (
