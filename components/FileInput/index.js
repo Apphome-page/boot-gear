@@ -70,9 +70,15 @@ const FileInput = forwardRef(
           className
         )}
       >
+<<<<<<< HEAD
         {fileURI || defaultValueURL ? (
           <Image
             src={fileURI || defaultValueURL}
+=======
+        {fileURI ? (
+          <Image
+            src={fileURI}
+>>>>>>> f5ed3c92e4d8fedb71ecfc74f365e04056777e66
             className={classNames('file-input-img', viewClassName)}
           />
         ) : (

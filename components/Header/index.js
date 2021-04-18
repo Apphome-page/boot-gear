@@ -120,7 +120,10 @@ export default function Header() {
                 onClick={() => {
                   if (firebaseApp && userAuth) {
                     firebaseApp.auth().signOut()
+<<<<<<< HEAD
                     router.push('/')
+=======
+>>>>>>> f5ed3c92e4d8fedb71ecfc74f365e04056777e66
                   }
                 }}
               >

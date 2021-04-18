@@ -7,9 +7,7 @@ import { useUserData } from '../../components/LoginPop'
 
 export default function Subscription() {
   const { queueLoading, unqueueLoading } = useLoading()
-  const fullUserData = useUserData()
-
-  const { firstLaunch, plan: { title: planTitle } = {} } = fullUserData
+  const { firstLaunch, plan: { title: planTitle } = {} } = useUserData()
 
   useEffect(() => {
     const isPopped = !!firstLaunch
