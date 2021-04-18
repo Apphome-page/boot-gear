@@ -96,7 +96,6 @@ export default function Step() {
         scope.setTags(ExceptionTags)
         return scope
       })
-      console.error(err)
       uploadSuccess = false
     }
     unqueueLoading()
