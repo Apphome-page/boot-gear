@@ -10,11 +10,9 @@ const setDomain = (cf, accountId) => async (domainName) => {
     throw new Error('Failed Request')
   }
   // domainResult.id
-  await cf.zoneSettings
-    .edit(domainResult.id, 'automatic_https_rewrites', {
-      value: 'on',
-    })
-    .catch(console.log)
+  await cf.zoneSettings.edit(domainResult.id, 'automatic_https_rewrites', {
+    value: 'on',
+  })
   return domainResult
 }
 

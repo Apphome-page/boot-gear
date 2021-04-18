@@ -32,7 +32,7 @@ export default function WebsiteActions({
         queueLoading()
         try {
           await removeWebsite({
-            firebaseApp,
+            firebase: firebaseApp,
             webKey: appKey,
             removeDomain: true,
             removeStorage: true,

@@ -157,8 +157,8 @@ export const useUserData = (refKey = '', { once = false } = {}) => {
 
   const snapValue = useCallback(
     (snapshot) => {
-      const snapVal = snapshot.val()
-      if (snapVal && !refKey) {
+      const snapVal = snapshot.val() || {}
+      if (!refKey) {
         // Add plan details into root request
         snapVal.plan = getPlanDetails(snapVal.plan_id)
       }

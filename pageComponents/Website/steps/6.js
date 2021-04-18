@@ -1,6 +1,6 @@
 import { useContext, useCallback, useMemo } from 'react'
 import { Container, Row, Col, Button, Image } from 'react-bootstrap'
-import { useRouter } from 'next/router'
+
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
 import { useAlerts } from '../../../components/AlertPop'
@@ -9,7 +9,6 @@ import {
   useFirebaseApp,
   useLogin,
   useUserAuth,
-  useUserData,
 } from '../../../components/LoginPop'
 
 import { StoreContext } from '../helpers/store'
@@ -23,16 +22,12 @@ const ExceptionTags = {
 }
 
 export default function Step() {
-  const {
-    query: { webKey },
-  } = useRouter()
   const [templateProps] = useContext(StoreContext)
 
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
   const { signPop } = useLogin()
   const firebaseApp = useFirebaseApp()
-  const { webZone, webHost } = useUserData(`sites/${webKey}`)
   const userAuth = useUserAuth()
   const userId = userAuth && userAuth.uid
 
@@ -43,6 +38,9 @@ export default function Step() {
     appDescription,
     prevAction,
     nextAction,
+    webEdit,
+    webZone,
+    webHost,
   } = templateProps
 
   const appIconURI = useMemo(() => {
@@ -64,11 +62,12 @@ export default function Step() {
     let uploadSuccess = false
     try {
       const { default: uploadWebsite } = await import('../helpers/upload')
+      const syncCustomDomain = webEdit && webZone && webHost
       await uploadWebsite(firebaseApp, templateProps.appKey, {
         templateProps,
         userId,
       })
-      if (webKey && webZone && webHost) {
+      if (syncCustomDomain) {
         // Update s3
         const [idToken, { default: fetch }] = await Promise.all([
           userAuth.getIdToken(),
@@ -81,7 +80,7 @@ export default function Step() {
             'content-type': 'application/json',
           },
           body: JSON.stringify({
-            webKey,
+            webKey: webEdit,
           }),
         })
         const setupData = await connectResp.json()
@@ -98,6 +97,7 @@ export default function Step() {
         scope.setTags(ExceptionTags)
         return scope
       })
+      console.error(err)
       uploadSuccess = false
     }
     unqueueLoading()
@@ -117,9 +117,10 @@ export default function Step() {
     signPop,
     templateProps,
     unqueueLoading,
+    userAuth,
     userId,
     webHost,
-    webKey,
+    webEdit,
     webZone,
   ])
 

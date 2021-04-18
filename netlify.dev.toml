@@ -2,6 +2,11 @@
   publish = "out"
   command = "cp netlify.dev.toml netlify.toml && cp .env.development .env.local && firebase.dev.json firebase.json && npm run export"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
 [[redirects]]
   from = "/blog/*"
   to = "https://cms.applanding.page/blog/:splat"

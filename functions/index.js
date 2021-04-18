@@ -4,9 +4,8 @@ const base64 = require('base-64')
 const Cloudflare = require('cloudflare')
 const { S3Client } = require('@aws-sdk/client-s3')
 
-const errorConsole = () => {
-  // Should be logged somewhere
-}
+const errorConsole = console.error
+// const errorConsole = () => {}
 
 // Secrets
 const {
@@ -193,6 +192,7 @@ exports.payValidate = functions.https.onRequest((request, response) => {
   cleanRequest(request, response, async () => {
     try {
       const { uid, hostedpage } = request.body
+      console.log('### ', { uid, hostedpage })
       if (!hostedpage) {
         throw new Error('Invalid Request.')
       }
@@ -511,13 +511,12 @@ exports.domainConnect = functions.https.onRequest((request, response) => {
 
         const userDataRef = admin.database().ref(`users/${uid}/`)
         const siteDataRef = userDataRef.child(`sites/${webKey}`)
-        const [siteDataSnapshot, siteDataDomain] = await Promise.all([
-          await siteDataRef.once('value'),
-          await checkDomain(webZone),
-        ])
 
-        const { webBucket } = siteDataSnapshot.val() || {}
-        const { active: domainActive } = siteDataDomain || {}
+        const siteDataSnapshot = await siteDataRef.once('value')
+        const { webZone, webBucket } = siteDataSnapshot.val() || {}
+
+        const { active: domainActive } = (await checkDomain(webZone)) || {}
+
         // Reupload S3
         if (domainActive && webBucket) {
           // Fetch All assets from firebase bucket at websiteKey
@@ -525,11 +524,14 @@ exports.domainConnect = functions.https.onRequest((request, response) => {
             `public/${webKey}/index.html`
           )
           // Push All assets at S3 Bucket
-          await putHostedBucket(bucketName, storageFilesMap)
+          await putHostedBucket(webBucket, storageFilesMap)
         }
 
         // Return Checked Data
-        return response.json(checkData)
+        return response.json({
+          status: 'success',
+          success: true,
+        })
       } catch (e) {
         errorConsole(e)
         response.status(500).json(e.toString())

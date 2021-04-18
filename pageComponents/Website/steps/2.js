@@ -1,4 +1,4 @@
-import { useContext, useCallback, useRef } from 'react'
+import { useState, useContext, useCallback, useRef } from 'react'
 import {
   Container,
   Row,
@@ -11,6 +11,8 @@ import {
 } from 'react-bootstrap'
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
+import { useAlerts } from '../../../components/AlertPop'
+import { useLoading } from '../../../components/LoadingPop'
 import FileInput from '../../../components/FileInput'
 
 import { StoreContext } from '../helpers/store'
@@ -18,13 +20,27 @@ import { StoreContext } from '../helpers/store'
 export default function Step() {
   const appFormRef = useRef(null)
   const [
-    { nextAction, prevAction, appTitle, appDescription },
+    {
+      nextAction,
+      prevAction,
+      appTitle,
+      appDescription,
+      appIcon,
+      appScreenshot,
+    },
     updateStore,
   ] = useContext(StoreContext)
+  const [remoteIconFile, setRemoteIconFile] = useState(null)
+  const [remoteScreenshotFile, setRemoteScreenshotFile] = useState(null)
+
+  const { addAlert } = useAlerts()
+  const { queueLoading, unqueueLoading } = useLoading()
+
   const nextBtnAction = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault()
       event.stopPropagation()
+      queueLoading()
       const appForm = appFormRef.current
       if (appForm && appForm.reportValidity() === true) {
         const formElements = appForm.elements
@@ -32,16 +48,56 @@ export default function Step() {
         const formDescription = formElements.namedItem('appDescription').value
         const formIcon = formElements.namedItem('appIcon')
         const formScreenshot = formElements.namedItem('appScreenshot')
-        updateStore({
-          appTitle: formTitle,
-          appDescription: formDescription,
-          appIcon: formIcon.files[0],
-          appScreenshot: formScreenshot.files[0],
-        })
-        nextAction()
+        const { default: remoteToFile } = await import(
+          '../../../utils/urlToFile'
+        )
+
+        let remoteAppIcon
+        let remoteAppScreenshot
+        if (appIcon && typeof appIcon === 'string') {
+          remoteAppIcon = await remoteToFile(appIcon)
+          setRemoteIconFile(remoteAppIcon)
+        }
+        if (appScreenshot && typeof appScreenshot === 'string') {
+          remoteAppScreenshot = await remoteToFile(appScreenshot)
+          setRemoteScreenshotFile(remoteAppScreenshot)
+        }
+
+        if (!appIcon && !remoteIconFile && !formIcon.files[0]) {
+          addAlert('Please Providc an App Icon', {
+            variant: 'danger',
+          })
+        } else if (
+          !appScreenshot &&
+          !remoteScreenshotFile &&
+          !formScreenshot.files[0]
+        ) {
+          addAlert('Please Providc an App Screenshot', {
+            variant: 'danger',
+          })
+        } else {
+          updateStore({
+            appTitle: formTitle,
+            appDescription: formDescription,
+            appIcon: formIcon.files[0] || remoteAppIcon,
+            appScreenshot: formScreenshot.files[0] || remoteAppScreenshot,
+          })
+          nextAction()
+        }
       }
+      unqueueLoading()
     },
-    [nextAction, updateStore]
+    [
+      addAlert,
+      queueLoading,
+      unqueueLoading,
+      appIcon,
+      appScreenshot,
+      remoteIconFile,
+      remoteScreenshotFile,
+      updateStore,
+      nextAction,
+    ]
   )
   return (
     <Form ref={appFormRef}>
@@ -116,8 +172,8 @@ export default function Step() {
               name='appIcon'
               label='Attach App Icon'
               accept='image/*'
-              required
               className='w-100'
+              defaultValue={remoteIconFile}
             />
           </Col>
           <Col lg={6}>
@@ -128,8 +184,8 @@ export default function Step() {
               name='appScreenshot'
               label='Attach App Screenshot'
               accept='image/*'
-              required
               className='w-100'
+              defaultValue={remoteScreenshotFile}
             />
           </Col>
         </Row>

@@ -18,6 +18,7 @@ export default function Payment() {
     }
     try {
       const { default: fetch } = await import('cross-fetch')
+      console.log('### ', { hostedpage })
       await fetch(FIRECLOUD_PAY_VALIDATE, {
         method: 'POST',
         body: JSON.stringify({

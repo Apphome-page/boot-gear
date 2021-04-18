@@ -12,13 +12,13 @@ import Image from '../../components/ImageTag'
 
 import plans from '../../config/plans.json'
 
-export function OrderedPricing({ className, planOrder = -1 }) {
+export function OrderedPricing({ className, planOrder = 0 }) {
   return (
     <CardDeck className={className}>
       {Object.keys(plans).map((planKey) => {
         const { title, cost, details, order } = plans[planKey]
         return parseInt(order, 10) <= parseInt(planOrder, 10) ? (
-          <></>
+          ''
         ) : (
           <Card className='rounded-0 border-0 p-3' key={planKey}>
             <Card.Body>

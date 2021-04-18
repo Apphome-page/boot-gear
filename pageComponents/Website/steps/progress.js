@@ -61,9 +61,8 @@ function ProgressPoints({ activeIndex, isLast, maxSlide, actionCallback }) {
 export default function ProgressStatus({ activeIndex }) {
   const router = useRouter()
 
-  const [{ appKey, maxSlide, setActiveSlide }, modContext] = useContext(
-    BuilderStoreContext
-  )
+  const [builderStore, modContext] = useContext(BuilderStoreContext)
+  const { appKey, maxSlide, setActiveSlide } = builderStore || {}
 
   const userSiteData = useUserData(`sites/${router.query.webEdit}`)
 
@@ -79,10 +78,10 @@ export default function ProgressStatus({ activeIndex }) {
     }
   }, [appKey, setActiveSlide, router.query.webStep])
 
-  // Update All Values individually else looping occurs
+  // Update All Values forcefully without looking else looping occurs
   useEffect(() => {
     if (!userSiteData.firstLaunch) {
-      modContext(userSiteData)
+      modContext({ ...userSiteData, webEdit: router.query.webEdit })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modContext, userSiteData.timestamp])

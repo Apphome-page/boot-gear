@@ -4,7 +4,8 @@ import Link from '../../../components/LinkTag'
 
 import { StoreContext } from '../helpers/store'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
 export default function Step() {
   const [{ appKey }] = useContext(StoreContext)
@@ -22,11 +23,11 @@ export default function Step() {
       </Row>
       <Row className='my-3'>
         <Col>
-          <Link href='/app-website-builder'>
+          <a href='/app-website-builder'>
             <Button variant='outline-light' className='shadow rounded-0 w-100'>
               Add New Website
             </Button>
-          </Link>
+          </a>
         </Col>
         <Col>
           <Link href='/dashboard/websites'>

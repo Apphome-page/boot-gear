@@ -8,7 +8,7 @@ import { useUserData } from '../../components/LoginPop'
 
 export default function Subscriptions() {
   const userData = useUserData()
-  const planOrder = (userData && userData.plan && userData.plan.order) || -1
+  const planOrder = (userData && userData.plan && userData.plan.order) || 0
   return (
     <AuthWrapper placeholder={<Container className='min-vh-100' />}>
       <Container fluid className='min-vh-100 pt-5 pb-3'>
