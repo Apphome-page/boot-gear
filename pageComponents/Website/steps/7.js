@@ -23,7 +23,7 @@ export default function Step() {
       </Row>
       <Row className='my-3'>
         <Col>
-          <a href='/app-website-builder'>
+          <a href='/app-website-builder' target='_self'>
             <Button variant='outline-light' className='shadow rounded-0 w-100'>
               Add New Website
             </Button>

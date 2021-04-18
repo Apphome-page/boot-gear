@@ -13,19 +13,19 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.8.1",
-    "aws-sdk": "^2.863.0",
+    "@aws-sdk/client-s3": "^3.13.0",
+    "aws-sdk": "^2.888.0",
     "base-64": "^1.0.0",
     "body-parser": "^1.19.0",
-    "cloudflare": "^2.7.0",
+    "cloudflare": "^2.8.0",
     "cors": "^2.8.5",
-    "cross-fetch": "^3.1.0",
-    "firebase-admin": "^9.5.0",
+    "cross-fetch": "^3.1.4",
+    "firebase-admin": "^9.6.0",
     "firebase-functions": "^3.13.2",
-    "mime-types": "^2.1.29"
+    "mime-types": "^2.1.30"
   },
   "devDependencies": {
-    "eslint": "^7.22.0",
+    "eslint": "^7.24.0",
     "eslint-plugin-promise": "^4.3.1",
     "firebase-functions-test": "^0.2.0"
   },

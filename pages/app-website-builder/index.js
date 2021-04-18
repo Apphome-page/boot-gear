@@ -15,9 +15,6 @@ export default function Website() {
   const userData = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
 
-  const initTemplateProps =
-    (webEdit && userData && userData.sites && userData.sites[webEdit]) || {}
-
   return (
     <>
       <Head>
@@ -55,7 +52,7 @@ export default function Website() {
             ''
           )}
         </Container>
-        <WebsiteBuilder className='ml-auto' initProps={initTemplateProps} />
+        <WebsiteBuilder className='ml-auto' />
       </section>
       {faqList.length ? (
         <Container fluid className='py-5'>

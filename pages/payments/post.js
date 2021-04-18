@@ -18,13 +18,18 @@ export default function Payment() {
     }
     try {
       const { default: fetch } = await import('cross-fetch')
-      console.log('### ', { hostedpage })
-      await fetch(FIRECLOUD_PAY_VALIDATE, {
+      const fetchResult = await fetch(FIRECLOUD_PAY_VALIDATE, {
         method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
         body: JSON.stringify({
           hostedpage,
         }),
       })
+      if (fetchResult.status >= 500) {
+        throw new Error('Something went Wrong')
+      }
       setPayState(true)
       router.push('/dashboard/websites')
     } catch (e) {

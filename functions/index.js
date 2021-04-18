@@ -65,6 +65,7 @@ const {
   dnsDomain,
   deleteDomain,
   deleteDomainName,
+  // purgeDomain,
 } = require('./helpers/cloudflare')(cf, CF_ID)
 
 /*
@@ -192,7 +193,6 @@ exports.payValidate = functions.https.onRequest((request, response) => {
   cleanRequest(request, response, async () => {
     try {
       const { uid, hostedpage } = request.body
-      console.log('### ', { uid, hostedpage })
       if (!hostedpage) {
         throw new Error('Invalid Request.')
       }
@@ -216,7 +216,7 @@ exports.payValidate = functions.https.onRequest((request, response) => {
         uid,
       })
 
-      response.json({ uid: user.uid, customerId: customer_id })
+      response.json({ uid: user.uid, customerId })
     } catch (e) {
       errorConsole(e)
       response.status(500).json(e.toString())
@@ -517,8 +517,9 @@ exports.domainConnect = functions.https.onRequest((request, response) => {
 
         const { active: domainActive } = (await checkDomain(webZone)) || {}
 
-        // Reupload S3
         if (domainActive && webBucket) {
+          // TODO: Purge Cloudflare - Current SDK is broken
+          // await purgeDomain(webZone)
           // Fetch All assets from firebase bucket at websiteKey
           const storageFilesMap = await storageFiles(
             `public/${webKey}/index.html`

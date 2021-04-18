@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useRef } from 'react'
+import { useContext, useCallback, useRef } from 'react'
 import {
   Container,
   Row,
@@ -30,8 +30,6 @@ export default function Step() {
     },
     updateStore,
   ] = useContext(StoreContext)
-  const [remoteIconFile, setRemoteIconFile] = useState(null)
-  const [remoteScreenshotFile, setRemoteScreenshotFile] = useState(null)
 
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
@@ -48,30 +46,12 @@ export default function Step() {
         const formDescription = formElements.namedItem('appDescription').value
         const formIcon = formElements.namedItem('appIcon')
         const formScreenshot = formElements.namedItem('appScreenshot')
-        const { default: remoteToFile } = await import(
-          '../../../utils/urlToFile'
-        )
 
-        let remoteAppIcon
-        let remoteAppScreenshot
-        if (appIcon && typeof appIcon === 'string') {
-          remoteAppIcon = await remoteToFile(appIcon)
-          setRemoteIconFile(remoteAppIcon)
-        }
-        if (appScreenshot && typeof appScreenshot === 'string') {
-          remoteAppScreenshot = await remoteToFile(appScreenshot)
-          setRemoteScreenshotFile(remoteAppScreenshot)
-        }
-
-        if (!appIcon && !remoteIconFile && !formIcon.files[0]) {
+        if (!appIcon && !formIcon.files[0]) {
           addAlert('Please Providc an App Icon', {
             variant: 'danger',
           })
-        } else if (
-          !appScreenshot &&
-          !remoteScreenshotFile &&
-          !formScreenshot.files[0]
-        ) {
+        } else if (!appScreenshot && !formScreenshot.files[0]) {
           addAlert('Please Providc an App Screenshot', {
             variant: 'danger',
           })
@@ -79,8 +59,8 @@ export default function Step() {
           updateStore({
             appTitle: formTitle,
             appDescription: formDescription,
-            appIcon: formIcon.files[0] || remoteAppIcon,
-            appScreenshot: formScreenshot.files[0] || remoteAppScreenshot,
+            appIcon: formIcon.files[0] || appIcon,
+            appScreenshot: formScreenshot.files[0] || appScreenshot,
           })
           nextAction()
         }
@@ -93,12 +73,11 @@ export default function Step() {
       unqueueLoading,
       appIcon,
       appScreenshot,
-      remoteIconFile,
-      remoteScreenshotFile,
       updateStore,
       nextAction,
     ]
   )
+
   return (
     <Form ref={appFormRef}>
       <Container fluid>
@@ -173,7 +152,7 @@ export default function Step() {
               label='Attach App Icon'
               accept='image/*'
               className='w-100'
-              defaultValue={remoteIconFile}
+              defaultValue={appIcon}
             />
           </Col>
           <Col lg={6}>
@@ -185,7 +164,7 @@ export default function Step() {
               label='Attach App Screenshot'
               accept='image/*'
               className='w-100'
-              defaultValue={remoteScreenshotFile}
+              defaultValue={appScreenshot}
             />
           </Col>
         </Row>

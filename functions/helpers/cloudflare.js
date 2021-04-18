@@ -105,10 +105,16 @@ const deleteDomainName = (cf) => async (domainName) => {
   return (result.find(({ name }) => name === domainName) || {}).id
 }
 
+const purgeDomain = (cf) => async (zoneId) => {
+  const purgeResult = await cf.zones.purgeCache(zoneId)
+  return purgeResult
+}
+
 module.exports = (cf, accountId) => ({
   setDomain: setDomain(cf, accountId),
   checkDomain: checkDomain(cf),
   dnsDomain: dnsDomain(cf),
   deleteDomain: deleteDomain(cf),
   deleteDomainName: deleteDomainName(cf),
+  purgeDomain: purgeDomain(cf),
 })

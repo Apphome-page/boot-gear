@@ -22,7 +22,7 @@ import Step7 from './steps/7'
 // TODO: Use formik for multi-staging
 const STEPS = [Step1, Step2, Step3, Step4, Step5, Step6, Step7]
 
-export default function HomeWebsite({ initProps = {} }) {
+export default function HomeWebsite() {
   const router = useRouter()
   const [activeSlide, setActiveSlide] = useState(() =>
     parseInt(router.query.webStep || 0, 10)
@@ -33,10 +33,15 @@ export default function HomeWebsite({ initProps = {} }) {
     setActiveSlide((prevSlide) => {
       const newSlide = prevSlide < STEPS.length - 1 ? prevSlide + 1 : prevSlide
       if (newSlide !== prevSlide) {
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, webStep: newSlide },
-        })
+        // Query comes empty. Find out why?
+        // router.push({
+        //   pathname: router.pathname,
+        //   query: { ...router.query, webStep: newSlide },
+        // })
+        // Fallback to URLSearchParams
+        const nextQueryString = new URLSearchParams(window.location.search)
+        nextQueryString.set('webStep', newSlide)
+        router.push(`${window.location.pathname}?${nextQueryString.toString()}`)
       }
       return newSlide
     })
@@ -59,7 +64,6 @@ export default function HomeWebsite({ initProps = {} }) {
   return (
     <WebStore
       store={{
-        ...initProps,
         maxSlide: STEPS.length - 1,
         nextAction,
         prevAction,
@@ -67,7 +71,7 @@ export default function HomeWebsite({ initProps = {} }) {
       }}
     >
       <Container>
-        <Row className='my-3'>
+        <Row className='my-3 mb-lg-5 pb-lg-3'>
           <Col>
             <Progress activeIndex={activeSlide} />
           </Col>
