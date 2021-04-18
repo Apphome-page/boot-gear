@@ -4,8 +4,8 @@ const base64 = require('base-64')
 const Cloudflare = require('cloudflare')
 const { S3Client } = require('@aws-sdk/client-s3')
 
-const errorConsole = console.error
-// const errorConsole = () => {}
+// const errorConsole = console.error
+const errorConsole = () => {}
 
 // Secrets
 const {

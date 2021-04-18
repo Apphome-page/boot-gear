@@ -58,6 +58,7 @@ _Deployment is undetaken by Github Action & can also be done via CLI through `np
       ".write": true
     },
     "users": {
+      ".indexOn": ["customer_id"],
       "$user_id": {
         ".indexOn": ["customer_id"],
         ".read": "$user_id === auth.uid",
