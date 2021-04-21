@@ -52,10 +52,14 @@ export default function HomeWebsite() {
     setActiveSlide((prevSlide) => {
       const newSlide = prevSlide > 0 ? prevSlide - 1 : prevSlide
       if (newSlide !== prevSlide) {
-        router.replace({
-          pathname: router.pathname,
-          query: { ...router.query, webStep: newSlide },
-        })
+        // router.replace({
+        //   pathname: router.pathname,
+        //   query: { ...router.query, webStep: newSlide },
+        // })
+        // Fallback to URLSearchParams
+        const nextQueryString = new URLSearchParams(window.location.search)
+        nextQueryString.set('webStep', newSlide)
+        router.push(`${window.location.pathname}?${nextQueryString.toString()}`)
       }
       return newSlide
     })

@@ -9,6 +9,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import noop from 'lodash/noop'
+
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { useAlerts } from '../../../components/AlertPop'
@@ -79,7 +81,7 @@ export default function Step() {
   )
 
   return (
-    <Form ref={appFormRef}>
+    <Form ref={appFormRef} onSubmit={noop}>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>

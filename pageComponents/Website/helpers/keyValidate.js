@@ -46,7 +46,7 @@ export default async function keyValidate(
   if (!(freeWebsitePath || userWebsite.timestamp)) {
     return {
       status: false,
-      text: `${appKey} is already taken`,
+      text: `The name ${appKey} is already taken. Please choose another name for your app`,
     }
   }
 

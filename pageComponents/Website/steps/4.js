@@ -9,6 +9,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import noop from 'lodash/noop'
+
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { StoreContext } from '../helpers/store'
@@ -25,6 +27,33 @@ export default function Step() {
   const incTestimonialCount = useCallback(() => {
     setTestimonialCount((prevTestim) => prevTestim + 1)
   }, [setTestimonialCount])
+
+  const cancelTestimAction = useCallback(
+    (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      const formIdxTestim = parseInt(event.target.dataset.idxTestim, 10)
+      const formTestim = []
+      for (let idxTestim = 0; idxTestim < tesimonialCount; idxTestim += 1) {
+        try {
+          if (idxTestim !== formIdxTestim) {
+            formTestim.push({
+              text: document.getElementById(`testim-${idxTestim}-text`).value,
+              source: document.getElementById(`testim-${idxTestim}-source`)
+                .value,
+            })
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
+      updateStore({
+        appTestim: formTestim,
+      })
+      setTestimonialCount(tesimonialCount - 1)
+    },
+    [tesimonialCount, updateStore]
+  )
 
   const nextBtnAction = useCallback(
     (event) => {
@@ -65,7 +94,7 @@ export default function Step() {
   }, [appTestim])
 
   return (
-    <Form ref={formRef}>
+    <Form ref={formRef} onSubmit={noop}>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -169,7 +198,7 @@ export default function Step() {
                     defaultValue={testimText}
                   />
                 </Col>
-                <Col>
+                <Col className='d-flex align-items-start'>
                   <FormControl
                     id={`testim-${idxTestim}-source`}
                     as='textarea'
@@ -177,6 +206,15 @@ export default function Step() {
                     placeholder='Source'
                     defaultValue={testimSource}
                   />
+                  <Button
+                    size='sm'
+                    variant='danger'
+                    className='ml-1 flex-shrink-0'
+                    data-idx-testim={idxTestim}
+                    onClick={cancelTestimAction}
+                  >
+                    X
+                  </Button>
                 </Col>
               </Form.Row>
             )

@@ -1,8 +1,8 @@
-import UUID from 'lodash/uniqueId'
-
 import keyValidate from './keyValidate'
 import renderTemplate from './render'
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
+
+import uuid from '../../../utils/uuid'
 
 import APP_KEYS from '../../../config/websiteAppKeys.json'
 
@@ -31,12 +31,12 @@ export default async function upload(
   // Pre-fill if existing data exists
   const appDataSet = { ...(keyValidated.data || {}), ...(templateProps || {}) }
 
-  const appIconName = `${UUID('icon-')}-${appDataSet.appIcon.name
+  const appIconName = `${uuid('icon')}-${appDataSet.appIcon.name
     .replace(/[^a-zA-Z0-9.]/gi, '-')
     .toLowerCase()}`
   const appIconPath = `public/${appKey}/bin/${appIconName}`
-  const appScreenshotName = `${UUID(
-    'icon-'
+  const appScreenshotName = `${uuid(
+    'scr'
   )}-${appDataSet.appScreenshot.name
     .replace(/[^a-zA-Z0-9.]/gi, '-')
     .toLowerCase()}`
@@ -98,7 +98,7 @@ export default async function upload(
       firebase.storage().ref(appScreenshotPath).put(file, customMeta)
     )
 
-  const DBPromise = Promise.all(
+  const DBPromise = databaseRef.set(
     APP_KEYS.reduce(
       (dbAcc, dbKey) => {
         let dbValue
@@ -113,10 +113,11 @@ export default async function upload(
             dbValue = appDataSet[dbKey]
             break
         }
-        dbAcc.push(databaseRef.child(dbKey).set(dbValue))
-        return dbAcc
+        return { ...dbAcc, [dbKey]: dbValue }
       },
-      [databaseRef.child('timestamp').set(new Date().getTime())]
+      {
+        timestamp: new Date().getTime(),
+      }
     )
   )
 

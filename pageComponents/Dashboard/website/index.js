@@ -56,7 +56,7 @@ export default function Website({ domainAction = noop }) {
               webActionText = 'Verify Domain'
             } else if (webDomain && webHost) {
               webActionText = 'View Nameservers'
-              webLink = webDomain
+              webLink = webDomain.replace(/^(?:(?:f|ht)tps?:\/\/)?/, 'https://')
             }
 
             return (

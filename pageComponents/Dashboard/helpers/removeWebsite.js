@@ -14,6 +14,7 @@ export default async function removeWebsite({
   webKey,
   removeDomain = true,
   removeStorage = true,
+  removeMeta = false,
 }) {
   if (!firebase) {
     return
@@ -68,17 +69,16 @@ export default async function removeWebsite({
   if (removeStorage) {
     const storagePrefixRef = firebase.storage().ref(storageAssetsPrefix)
     await removePrefix(storagePrefixRef)
-    await Promise.all(
+    await databaseRef.set(
       APP_KEYS.reduce((remAcc, remKey) => {
         delete siteData[remKey]
-        remAcc.push(databaseRef.child(remKey).remove())
-        return remAcc
-      }, [])
+        return { ...remAcc, [remKey]: null }
+      }, {})
     )
   }
 
   // Only timestamp remains
-  if (Object.keys(siteData).length <= 1) {
+  if (removeMeta || Object.keys(siteData).length <= 1) {
     await databaseRef.remove()
   }
 }

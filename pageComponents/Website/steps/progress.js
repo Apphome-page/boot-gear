@@ -7,6 +7,7 @@ import IconNext from '@svg-icons/bootstrap/arrow-right-circle-fill.svg'
 import IconCheck from '@svg-icons/bootstrap/check-circle-fill.svg'
 import IconPlay from '@svg-icons/bootstrap/play-circle-fill.svg'
 
+import { useLoading } from '../../../components/LoadingPop'
 import { useUserData } from '../../../components/LoginPop'
 import remoteToFile from '../../../utils/urlToFile'
 
@@ -88,6 +89,7 @@ export default function ProgressStatus({ activeIndex }) {
   const [builderStore, modContext] = useContext(BuilderStoreContext)
   const { appKey, maxSlide, setActiveSlide } = builderStore || {}
 
+  const { queueLoading, clearLoading } = useLoading()
   const userSiteData = useUserData(`sites/${router.query.webEdit}`)
 
   const isLast = activeIndex === maxSlide
@@ -104,7 +106,13 @@ export default function ProgressStatus({ activeIndex }) {
 
   // Update All Values forcefully without looking else looping occurs
   useEffect(() => {
-    if (!userSiteData.firstLaunch) {
+    if (!router.query.webEdit) {
+      return
+    }
+
+    if (!userSiteData || userSiteData.firstLaunch) {
+      queueLoading()
+    } else {
       const { appIcon, appScreenshot } = userSiteData
       Promise.all([
         appIcon && typeof appIcon === 'string' ? remoteToFile(appIcon) : null,
@@ -112,16 +120,42 @@ export default function ProgressStatus({ activeIndex }) {
           ? remoteToFile(appScreenshot)
           : null,
       ]).then(([remoteAppIcon, remoteAppScreenshot]) => {
-        modContext({
-          ...userSiteData,
-          appIcon: remoteAppIcon,
-          appScreenshot: remoteAppScreenshot,
-          webEdit: router.query.webEdit,
+        console.log('>>> ', {
+          appIcon,
+          appScreenshot,
+          remoteAppIcon,
+          remoteAppScreenshot,
+          webKit: router.query.webEdit,
+          firstLaunch: userSiteData.firstLaunch,
+          appKey: userSiteData.appKey,
+          timestamp: userSiteData.timestamp,
         })
+        const newContext = {
+          ...userSiteData,
+        }
+        if (router.query.webEdit) {
+          newContext.webEdit = router.query.webEdit
+        }
+        if (remoteAppIcon) {
+          newContext.appIcon = remoteAppIcon
+        }
+        if (remoteAppScreenshot) {
+          newContext.appScreenshot = remoteAppScreenshot
+        }
+        modContext(newContext)
+        clearLoading()
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modContext, userSiteData.timestamp, userSiteData.appKey])
+  }, [
+    modContext,
+    router.query.webEdit,
+    userSiteData.firstLaunch,
+    userSiteData.appKey,
+    userSiteData.timestamp,
+    queueLoading,
+    clearLoading,
+  ])
 
   return (
     <div className='progress-wrap position-relative my-3 mx-5'>
