@@ -9,6 +9,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import noop from 'lodash/noop'
+
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { StoreContext } from '../helpers/store'
@@ -70,7 +72,7 @@ export default function Step() {
     [nextAction, updateStore]
   )
   return (
-    <Form ref={formRef}>
+    <Form ref={formRef} onSubmit={noop}>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -97,6 +99,7 @@ export default function Step() {
               id='appDiscord'
               name='appDiscord'
               defaultValue={appDiscord}
+              type='url'
             />
           </Col>
         </Row>
@@ -125,6 +128,7 @@ export default function Step() {
               id='appFacebook'
               name='appFacebook'
               defaultValue={appFacebook}
+              type='url'
             />
           </Col>
         </Row>
@@ -153,6 +157,7 @@ export default function Step() {
               id='appInstagram'
               name='appInstagram'
               defaultValue={appInstagram}
+              type='url'
             />
           </Col>
         </Row>
@@ -181,6 +186,7 @@ export default function Step() {
               id='appLinkedin'
               name='appLinkedin'
               defaultValue={appLinkedin}
+              type='url'
             />
           </Col>
         </Row>
@@ -205,7 +211,12 @@ export default function Step() {
         </Row>
         <Row className='mt-1 mb-3 ml-3 mr-0'>
           <Col>
-            <FormControl id='appMail' name='appMail' defaultValue={appMail} />
+            <FormControl
+              id='appMail'
+              name='appMail'
+              defaultValue={appMail}
+              type='url'
+            />
           </Col>
         </Row>
         <Row>
@@ -233,6 +244,7 @@ export default function Step() {
               id='appPhone'
               name='appPhone'
               defaultValue={appPhone}
+              type='url'
             />
           </Col>
         </Row>
@@ -261,6 +273,7 @@ export default function Step() {
               id='appTelegram'
               name='appTelegram'
               defaultValue={appTelegram}
+              type='url'
             />
           </Col>
         </Row>
@@ -289,6 +302,7 @@ export default function Step() {
               id='appTwitch'
               name='appTwitch'
               defaultValue={appTwitch}
+              type='url'
             />
           </Col>
         </Row>
@@ -317,6 +331,7 @@ export default function Step() {
               id='appTwitter'
               name='appTwitter'
               defaultValue={appTwitter}
+              type='url'
             />
           </Col>
         </Row>
@@ -345,6 +360,7 @@ export default function Step() {
               id='appWhatsapp'
               name='appWhatsapp'
               defaultValue={appWhatsapp}
+              type='url'
             />
           </Col>
         </Row>
@@ -373,6 +389,7 @@ export default function Step() {
               id='appYoutube'
               name='appYoutube'
               defaultValue={appYoutube}
+              type='url'
             />
           </Col>
         </Row>

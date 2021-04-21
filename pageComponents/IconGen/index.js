@@ -229,7 +229,12 @@ export default function AppIcon({ preset = [] }) {
             >
               ⬇ Generate
             </Button>
-            <ProgressBar value={progress} max='100' className='icon-progress' />
+            <ProgressBar
+              animated
+              now={progress}
+              max='100'
+              className='icon-progress'
+            />
           </Col>
         </Row>
       </Container>

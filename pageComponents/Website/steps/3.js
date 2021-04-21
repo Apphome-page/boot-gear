@@ -9,6 +9,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import noop from 'lodash/noop'
+
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
 import { StoreContext } from '../helpers/store'
@@ -52,7 +54,7 @@ export default function Step() {
     [nextAction, updateStore]
   )
   return (
-    <Form ref={formRef}>
+    <Form ref={formRef} onSubmit={noop}>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
@@ -79,6 +81,7 @@ export default function Step() {
               id='appAndroid'
               name='appAndroid'
               defaultValue={appAndroid}
+              type='url'
             />
           </Col>
         </Row>
@@ -103,7 +106,12 @@ export default function Step() {
         </Row>
         <Row className='mt-1 mb-3 ml-3 mr-0'>
           <Col>
-            <FormControl id='appIos' name='appIos' defaultValue={appIos} />
+            <FormControl
+              id='appIos'
+              name='appIos'
+              defaultValue={appIos}
+              type='url'
+            />
           </Col>
         </Row>
         <Row>

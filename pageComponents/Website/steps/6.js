@@ -52,75 +52,82 @@ export default function Step() {
     return returnObj
   }, [appIcon])
 
-  const actionUpload = useCallback(async () => {
-    if (!userId) {
-      signPop()
-      return
-    }
-    queueLoading()
-    let uploadSuccess = false
-    try {
-      const { default: uploadWebsite } = await import('../helpers/upload')
-      const syncCustomDomain = webEdit && webZone && webHost
-      await uploadWebsite(firebaseApp, templateProps.appKey, {
-        templateProps,
-        userId,
-      })
-      if (syncCustomDomain) {
-        // Update s3
-        const [idToken, { default: fetch }] = await Promise.all([
-          userAuth.getIdToken(),
-          import('cross-fetch'),
-        ])
-        const connectResp = await fetch(FIRECLOUD_DOMAIN_CONNECT, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            webKey: webEdit,
-          }),
+  const actionUpload = useCallback(
+    async (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (!userId) {
+        signPop()
+        return
+      }
+      queueLoading()
+      let uploadSuccess = false
+      try {
+        const { default: uploadWebsite } = await import('../helpers/upload')
+        const syncCustomDomain = webEdit && webZone && webHost
+        await uploadWebsite(firebaseApp, templateProps.appKey, {
+          templateProps,
+          userId,
         })
-        const setupData = await connectResp.json()
-        if (connectResp.status >= 400) {
-          throw new Error(`Something went wrong. ${JSON.stringify(setupData)}`)
+        if (syncCustomDomain) {
+          // Update s3
+          const [idToken, { default: fetch }] = await Promise.all([
+            userAuth.getIdToken(),
+            import('cross-fetch'),
+          ])
+          const connectResp = await fetch(FIRECLOUD_DOMAIN_CONNECT, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              webKey: webEdit,
+            }),
+          })
+          const setupData = await connectResp.json()
+          if (connectResp.status >= 400) {
+            throw new Error(
+              `Something went wrong. ${JSON.stringify(setupData)}`
+            )
+          }
+          addAlert('Updated your website at Cusom Domain.', {
+            variant: 'success',
+          })
         }
-        addAlert('Updated your website at Cusom Domain.', {
-          variant: 'success',
+        uploadSuccess = true
+      } catch (err) {
+        captureExceptionSentry(err, (scope) => {
+          scope.setTags(ExceptionTags)
+          return scope
+        })
+        uploadSuccess = false
+      }
+      unqueueLoading()
+      if (uploadSuccess) {
+        nextAction()
+      } else {
+        addAlert('Something went wrong while updating your website.', {
+          variant: 'danger',
+          autoDismiss: false,
         })
       }
-      uploadSuccess = true
-    } catch (err) {
-      captureExceptionSentry(err, (scope) => {
-        scope.setTags(ExceptionTags)
-        return scope
-      })
-      uploadSuccess = false
-    }
-    unqueueLoading()
-    if (uploadSuccess) {
-      nextAction()
-    } else {
-      addAlert('Something went wrong while updating your website.', {
-        variant: 'danger',
-        autoDismiss: false,
-      })
-    }
-  }, [
-    addAlert,
-    firebaseApp,
-    nextAction,
-    queueLoading,
-    signPop,
-    templateProps,
-    unqueueLoading,
-    userAuth,
-    userId,
-    webHost,
-    webEdit,
-    webZone,
-  ])
+    },
+    [
+      addAlert,
+      firebaseApp,
+      nextAction,
+      queueLoading,
+      signPop,
+      templateProps,
+      unqueueLoading,
+      userAuth,
+      userId,
+      webHost,
+      webEdit,
+      webZone,
+    ]
+  )
 
   return (
     <Container fluid>

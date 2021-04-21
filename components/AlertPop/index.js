@@ -1,9 +1,10 @@
 import { createContext, useState, useContext, useCallback } from 'react'
-import uniqueId from 'lodash/uniqueId'
 import noop from 'lodash/noop'
 
 import AlertContainer from './AlertContainer'
 import AlertElement from './AlertElement'
+
+import uuid from '../../utils/uuid'
 
 const AlertContext = createContext()
 
@@ -18,7 +19,7 @@ export default function AlertProvider({
 
   const add = useCallback((content, options = {}) => {
     setAlerts((prevAlerts) => {
-      const newAlert = { id: uniqueId('alert-'), content, ...options }
+      const newAlert = { id: uuid('alert'), content, ...options }
       return [...prevAlerts, newAlert]
     })
   }, [])

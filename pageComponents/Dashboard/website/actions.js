@@ -36,6 +36,7 @@ export default function WebsiteActions({
             webKey: appKey,
             removeDomain: true,
             removeStorage: true,
+            removeMeta: true,
           })
         } catch (err) {
           captureExceptionSentry(err, (scope) => {

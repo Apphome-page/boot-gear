@@ -12,7 +12,7 @@ import Image from '../../components/ImageTag'
 
 import plans from '../../config/plans.json'
 
-export function OrderedPricing({ className, planOrder = 0 }) {
+export function OrderedPricing({ className, planOrder = -1 }) {
   return (
     <CardDeck className={className}>
       {Object.keys(plans).map((planKey) => {
@@ -34,7 +34,7 @@ export function OrderedPricing({ className, planOrder = 0 }) {
             </ListGroup>
             <Link href={`/payments/pre?plan=${planKey}`}>
               <Button variant='alt' className='m-5'>
-                Get Started
+                {planOrder < 0 ? 'Get Started' : 'Upgrade'}
               </Button>
             </Link>
           </Card>

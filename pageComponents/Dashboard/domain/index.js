@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
@@ -17,6 +17,8 @@ import PayInfo from './pay'
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_PLAN_SILVER
 const PLAN_GOLD = process.env.NEXT_PUBLIC_PABBLY_PLAN_GOLD
 const FIRESTORE_BASE = process.env.NEXT_PUBLIC_FIRESTORE_URL
+
+const PAID_PLANS = [PLAN_GOLD, PLAN_SILVER]
 
 const ExceptionTags = {
   section: 'Dashboard',
@@ -65,25 +67,21 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
     setLoading(false)
   }, [addAlert, firebaseApp, webKey])
 
+  const validPlan =
+    PAID_PLANS.includes(userPlan) || PAID_PLANS.includes(userProduct)
   // Changes Modal Body based on conditions
-  const DomainForm = useMemo(() => {
-    const paidPlans = [PLAN_GOLD, PLAN_SILVER]
-    const validPlan =
-      paidPlans.includes(userPlan) || paidPlans.includes(userProduct)
-    if (isLoading) {
-      return RemoveLoading
+  let DomainForm = PayInfo
+  let canRemoveDomain = false
+  if (isLoading) {
+    DomainForm = RemoveLoading
+  } else if (validPlan) {
+    if (webDomain) {
+      canRemoveDomain = true
+      DomainForm = webHost ? DomainValidate : DomainVerify
+    } else {
+      DomainForm = DomainSetup
     }
-    if (validPlan) {
-      if (webDomain && !webHost) {
-        return DomainVerify
-      }
-      if (webDomain && webHost) {
-        return DomainValidate
-      }
-      return DomainSetup
-    }
-    return PayInfo
-  }, [isLoading, userPlan, userProduct, webDomain, webHost])
+  }
 
   return (
     <Modal
@@ -107,14 +105,18 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
         <DomainForm webKey={webKey} webData={webData} />
       </ModalBody>
       <Modal.Header className='border-top py-3'>
-        <Button
-          size='sm'
-          variant='light'
-          className='border-0 text-primary rounded-0 bg-white'
-          onClick={removeDomain}
-        >
-          Remove custom domain
-        </Button>
+        {canRemoveDomain ? (
+          <Button
+            size='sm'
+            variant='light'
+            className='border-0 text-primary rounded-0 bg-white'
+            onClick={removeDomain}
+          >
+            Remove custom domain
+          </Button>
+        ) : (
+          <div />
+        )}
         <Button
           size='sm'
           variant='light'

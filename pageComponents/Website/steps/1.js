@@ -9,6 +9,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap'
+import noop from 'lodash/noop'
 
 import classNames from 'classnames'
 
@@ -59,60 +60,64 @@ export default function Step() {
   const userAuth = useUserAuth()
   const userId = userAuth && userAuth.uid
 
-  const nextBtnAction = useCallback(async () => {
-    if (!userId) {
-      signPop()
-      return
-    }
-    const formCurrent = formRef.current
-    if (!formCurrent || !formCurrent.reportValidity()) {
-      return
-    }
+  const nextBtnAction = useCallback(
+    async (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (!userId) {
+        signPop()
+        return
+      }
+      const formCurrent = formRef.current
+      if (!formCurrent || !formCurrent.reportValidity()) {
+        return
+      }
 
-    queueLoading()
+      queueLoading()
 
-    const formElements = formRef.current.elements
-    const formName = formElements.namedItem('appName').value
-    const appKey = formName.replace(/\W/gi, '-').toLowerCase()
+      const formElements = formRef.current.elements
+      const formName = formElements.namedItem('appName').value
+      const appKey = formName.replace(/\W/gi, '-').toLowerCase()
 
-    const { default: keyValidate } = await import('../helpers/keyValidate')
-    const {
-      status: keyValidated = false,
-      text: keyText = '',
-    } = await keyValidate(firebaseApp, appKey, { userId })
+      const { default: keyValidate } = await import('../helpers/keyValidate')
+      const {
+        status: keyValidated = false,
+        text: keyText = '',
+      } = await keyValidate(firebaseApp, appKey, { userId })
 
-    unqueueLoading()
-    if (!keyValidated) {
-      addAlert(keyText, {
-        variant: 'danger',
-        autoDismiss: false,
+      unqueueLoading()
+      if (!keyValidated) {
+        addAlert(keyText, {
+          variant: 'danger',
+          autoDismiss: false,
+        })
+        return
+      }
+      updateStore({
+        appKey,
+        appName: formName,
+        appTheme: selectedTheme,
       })
-      return
-    }
-    updateStore({
-      appKey,
-      appName: formName,
-      appTheme: selectedTheme,
-    })
-    nextAction()
-  }, [
-    addAlert,
-    firebaseApp,
-    nextAction,
-    queueLoading,
-    selectedTheme,
-    signPop,
-    unqueueLoading,
-    updateStore,
-    userId,
-  ])
+      nextAction()
+    },
+    [
+      addAlert,
+      firebaseApp,
+      nextAction,
+      queueLoading,
+      selectedTheme,
+      signPop,
+      unqueueLoading,
+      updateStore,
+      userId,
+    ]
+  )
 
   const themeBtnAction = useCallback(
-    ({
-      target: {
-        dataset: { theme: dataTheme },
-      },
-    }) => {
+    (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      const dataTheme = event.target.dataset.theme
       if (dataTheme) {
         setSelectedTheme(dataTheme)
       }
@@ -121,7 +126,7 @@ export default function Step() {
   )
 
   return (
-    <form ref={formRef} className='form-wrap-step-1'>
+    <form ref={formRef} className='form-wrap-step-1' onSubmit={noop}>
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
