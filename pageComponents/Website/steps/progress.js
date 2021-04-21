@@ -120,16 +120,6 @@ export default function ProgressStatus({ activeIndex }) {
           ? remoteToFile(appScreenshot)
           : null,
       ]).then(([remoteAppIcon, remoteAppScreenshot]) => {
-        console.log('>>> ', {
-          appIcon,
-          appScreenshot,
-          remoteAppIcon,
-          remoteAppScreenshot,
-          webKit: router.query.webEdit,
-          firstLaunch: userSiteData.firstLaunch,
-          appKey: userSiteData.appKey,
-          timestamp: userSiteData.timestamp,
-        })
         const newContext = {
           ...userSiteData,
         }
@@ -146,6 +136,7 @@ export default function ProgressStatus({ activeIndex }) {
         clearLoading()
       })
     }
+    // Potential to get stuck in loop, as we are updating context based on prev values
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     modContext,
