@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalFooter,
   InputGroup,
+  Form,
 } from 'react-bootstrap'
 import noop from 'lodash/noop'
 
@@ -35,48 +36,55 @@ export const SubscriptionBox = function SubscriptionBox({
   const firebaseApp = useFirebaseApp()
   const userDatabase = firebaseApp && firebaseApp.database()
 
-  const actionSub = useCallback(async () => {
-    if (!userDatabase) {
-      addAlert('Please wait while we load-up.', { variant: 'warning' })
-      return
-    }
-    if (emailRef.current.reportValidity()) {
-      const validEmail = emailRef.current.value
-      await addSubscriber(userDatabase, validEmail)
-      addAlert('Thank you for subscribing!', { variant: 'success' })
-    }
-  }, [addAlert, userDatabase])
+  const actionSub = useCallback(
+    async (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (!userDatabase) {
+        addAlert('Please wait while we load-up.', { variant: 'warning' })
+        return
+      }
+      if (emailRef.current.reportValidity()) {
+        const validEmail = emailRef.current.value
+        await addSubscriber(userDatabase, validEmail)
+        addAlert('Thank you for subscribing!', { variant: 'success' })
+      }
+    },
+    [addAlert, userDatabase]
+  )
 
   return (
     <Container fluid className={className}>
-      {append ? (
-        <InputGroup>
-          <FormControl
-            type='email'
-            placeholder='email@example.com'
-            required
-            ref={emailRef}
-          />
-          <InputGroup.Append>
-            <Button onClick={actionSub} variant='light' className='border'>
-              <IconArrowRight height='20' width='20' />
+      <Form onSubmit={actionSub}>
+        {append ? (
+          <InputGroup>
+            <FormControl
+              type='email'
+              placeholder='email@example.com'
+              required
+              ref={emailRef}
+            />
+            <InputGroup.Append>
+              <Button type='submit' variant='light' className='border'>
+                <IconArrowRight height='20' width='20' />
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        ) : (
+          <>
+            <FormControl
+              type='email'
+              placeholder='email@example.com'
+              required
+              ref={emailRef}
+              className='m-1'
+            />
+            <Button type='submit' variant='success' className='m-1'>
+              Subscribe
             </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      ) : (
-        <>
-          <FormControl
-            type='email'
-            placeholder='email@example.com'
-            required
-            ref={emailRef}
-            className='m-1'
-          />
-          <Button onClick={actionSub} variant='success' className='m-1'>
-            Subscribe
-          </Button>
-        </>
-      )}
+          </>
+        )}
+      </Form>
     </Container>
   )
 }
