@@ -9,7 +9,6 @@ const setDomain = (cf, accountId) => async (domainName) => {
   if (!success) {
     throw new Error('Failed Request')
   }
-  // domainResult.id
   await cf.zoneSettings.edit(domainResult.id, 'automatic_https_rewrites', {
     value: 'on',
   })
@@ -39,9 +38,14 @@ const checkDomain = (cf) => async (zoneId) => {
     return checkResult
   }
 
-  const { success: activationSuccess } = await cf.zones
-    .activationCheck(zoneId)
-    .catch(() => ({ success: false }))
+  const [{ success: activationSuccess }] = await Promise.all([
+    cf.zones.activationCheck(zoneId).catch(() => ({ success: false })),
+    cf.zoneSettings
+      .edit(zoneId, 'automatic_https_rewrites', {
+        value: 'on',
+      })
+      .catch(() => {}),
+  ])
 
   if (activationSuccess) {
     const {
@@ -72,13 +76,21 @@ const dnsDomain = (cf) => async (
     await cf.dnsRecords.del(zoneId, existingDNSId)
   }
   // Add new Entry
-  const { success, result: dnsResult } = await cf.dnsRecords.add(zoneId, {
-    type,
-    name,
-    content,
-    ttl,
-    proxied,
-  })
+  const [{ success, result: dnsResult }] = await Promise.all([
+    cf.dnsRecords.add(zoneId, {
+      type,
+      name,
+      content,
+      ttl,
+      proxied,
+    }),
+    cf.zoneSettings
+      .edit(zoneId, 'automatic_https_rewrites', {
+        value: 'on',
+      })
+      .catch(() => {}),
+  ])
+
   if (!success) {
     throw new Error('Failed Request')
   }

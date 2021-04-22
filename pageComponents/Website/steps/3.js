@@ -208,6 +208,7 @@ export default function Step() {
               id='appVideo'
               name='appVideo'
               defaultValue={appVideo}
+              type='url'
             />
           </Col>
         </Row>
