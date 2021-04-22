@@ -98,6 +98,7 @@ export default async function upload(
       firebase.storage().ref(appScreenshotPath).put(file, customMeta)
     )
 
+  const dbSnapshot = await databaseRef.once('value').then((sR) => sR.val())
   const DBPromise = databaseRef.set(
     APP_KEYS.reduce(
       (dbAcc, dbKey) => {
@@ -113,9 +114,10 @@ export default async function upload(
             dbValue = appDataSet[dbKey]
             break
         }
-        return { ...dbAcc, [dbKey]: dbValue }
+        return dbValue ? { ...dbAcc, [dbKey]: dbValue } : dbAcc
       },
       {
+        ...dbSnapshot,
         timestamp: new Date().getTime(),
       }
     )

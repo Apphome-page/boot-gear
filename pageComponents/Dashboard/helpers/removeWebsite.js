@@ -57,23 +57,31 @@ export default async function removeWebsite({
     if (domainResp.status >= 400) {
       throw new Error(`Something went wrong. ${JSON.stringify(verifyData)}`)
     }
-    await Promise.all(
-      WEB_KEYS.reduce((remAcc, remKey) => {
-        delete siteData[remKey]
-        remAcc.push(databaseRef.child(remKey).remove())
-        return remAcc
-      }, [])
+
+    const dbSnap = await databaseRef.once('value').then((dR) => dR.val())
+    await databaseRef.set(
+      WEB_KEYS.reduce(
+        (remAcc, remKey) => {
+          delete siteData[remKey]
+          return { ...remAcc, [remKey]: null }
+        },
+        { ...dbSnap }
+      )
     )
   }
 
   if (removeStorage) {
     const storagePrefixRef = firebase.storage().ref(storageAssetsPrefix)
     await removePrefix(storagePrefixRef)
+    const dbSnap = await databaseRef.once('value').then((dR) => dR.val())
     await databaseRef.set(
-      APP_KEYS.reduce((remAcc, remKey) => {
-        delete siteData[remKey]
-        return { ...remAcc, [remKey]: null }
-      }, {})
+      APP_KEYS.reduce(
+        (remAcc, remKey) => {
+          delete siteData[remKey]
+          return { ...remAcc, [remKey]: null }
+        },
+        { ...dbSnap }
+      )
     )
   }
 

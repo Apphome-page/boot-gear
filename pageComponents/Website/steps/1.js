@@ -130,11 +130,11 @@ export default function Step() {
       <Container fluid>
         <Row>
           <Col className='d-inline-flex align-items-center'>
-            <span className='lead'>AppName</span>
+            <span className='lead'>App Name</span>
             <OverlayTrigger
               placement='right'
               overlay={
-                <Tooltip id='Tip for AppName'>
+                <Tooltip id='Tip for App Name'>
                   Unique identifier for your app
                 </Tooltip>
               }

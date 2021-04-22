@@ -27,7 +27,20 @@ export default async function keyValidate(
   if (Object.keys(userSites).length >= webLimit) {
     return {
       status: false,
-      text: `You already have ${webLimit} websites hosted.`,
+      text: (
+        <span className='mini'>
+          You have exhausted limit for hosting sites as per your plan.
+          <br />
+          Please click
+          <a
+            href='/dashboard/subscriptions'
+            className='mx-1 text-white-50 font-italic font-weight-bold'
+          >
+            here
+          </a>
+          to upgrade.
+        </span>
+      ),
     }
   }
 

@@ -97,6 +97,7 @@ export default function Step() {
         }
         uploadSuccess = true
       } catch (err) {
+        console.error(err)
         captureExceptionSentry(err, (scope) => {
           scope.setTags(ExceptionTags)
           return scope

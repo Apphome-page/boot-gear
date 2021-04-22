@@ -103,6 +103,13 @@ small {
   color: #fff;
 }
 
+.card-deck {
+  justify-content: center;
+}
+.card {
+  max-width: 300px;
+}
+
 // Styled-Firebaseui Overwrrites
 #firebaseui_container {
   .firebaseui-container {
