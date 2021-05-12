@@ -2,17 +2,15 @@ import { Container } from 'react-bootstrap'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import { useUserData } from '../../components/LoginPop'
+import { useUserData } from '../../components/Context/Login'
 import FAQ from '../../components/FAQ'
-
-import WebsiteBuilder from '../../pageComponents/Website'
 
 import faqList from '../../pageData/app-website-builder/faq.json'
 
 export default function Website() {
   const { query: { webEdit = '' } = {} } = useRouter()
 
-  const userData = useUserData()
+  const [userData] = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
 
   return (
@@ -52,7 +50,6 @@ export default function Website() {
             ''
           )}
         </Container>
-        <WebsiteBuilder className='ml-auto' />
       </section>
       {faqList.length ? (
         <Container fluid className='py-5'>

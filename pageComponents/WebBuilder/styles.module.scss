@@ -1,0 +1,23 @@
+$aside-width: 200px;
+
+.wrap {
+  display: flex;
+}
+
+.aside {
+  position: relative;
+  flex: 0 0 $aside-width;
+  width: $aside-width;
+}
+.asideSticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: $aside-width;
+}
+
+.preview {
+  flex: 1 0 calc(100% - $aside-width);
+  width: calc(100% - $aside-width);
+}

@@ -3,23 +3,23 @@ import { Button, Container, Row, Col } from 'react-bootstrap'
 import { Code as LoaderCode } from 'react-content-loader'
 import noop from 'lodash/noop'
 
-import Link from '../../../components/LinkTag'
-import { useUserData } from '../../../components/LoginPop'
+import Link from '../../../components/Tag/Link'
+import { useUserData } from '../../../components/Context/Login'
 
 import WebsiteDetails from './details'
 import WebsiteActions from './actions'
 
 export default function Website({ domainAction = noop }) {
   const [isLoading, setIsLoading] = useState(true)
-  const userData = useUserData()
+  const [userData, firstLaunch] = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
 
   useEffect(() => {
-    setIsLoading(userData.firstLaunch)
+    setIsLoading(firstLaunch)
     return () => {
       setIsLoading(false)
     }
-  }, [userData.firstLaunch])
+  }, [firstLaunch])
 
   return (
     <>

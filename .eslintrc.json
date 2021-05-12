@@ -6,6 +6,7 @@
     "node": true
   },
   "parser": "babel-eslint",
+  "ignorePatterns": ["node_modules/*", ".next/*", "out/*", "functions/*"],
   "extends": [
     "eslint:recommended",
     "airbnb",

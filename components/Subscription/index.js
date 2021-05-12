@@ -13,8 +13,8 @@ import noop from 'lodash/noop'
 
 import IconArrowRight from '@svg-icons/bootstrap/arrow-right-circle.svg'
 
-import { useAlerts } from '../AlertPop'
-import { useFirebaseApp, useUserAuth } from '../LoginPop'
+import { useAlerts } from '../Context/Alert'
+import { useFirebase, useUserAuth } from '../Context/Login'
 
 const addSubscriber = async (fireDatabase, email) => {
   if (!fireDatabase || !email) {
@@ -33,7 +33,8 @@ export const SubscriptionBox = function SubscriptionBox({
 }) {
   const emailRef = useRef(null)
   const { addAlert } = useAlerts()
-  const firebaseApp = useFirebaseApp()
+  const { firebaseApp } = useFirebase()
+
   const userDatabase = firebaseApp && firebaseApp.database()
 
   const actionSub = useCallback(
@@ -93,8 +94,9 @@ export default function Subscription({ show, onComplete = noop }) {
   const emailRef = useRef(null)
   const { addAlert } = useAlerts()
 
-  const firebaseApp = useFirebaseApp()
+  const { firebaseApp } = useFirebase()
   const userAuth = useUserAuth()
+
   const userDatabase = firebaseApp && firebaseApp.database()
   const userId = userAuth && userAuth.uid
 

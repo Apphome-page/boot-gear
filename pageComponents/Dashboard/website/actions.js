@@ -3,10 +3,10 @@ import { ButtonGroup, Button } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 import noop from 'lodash/noop'
 
-import Link from '../../../components/LinkTag'
-import { useLoading } from '../../../components/LoadingPop'
-import { useAlerts } from '../../../components/AlertPop'
-import { useFirebaseApp } from '../../../components/LoginPop'
+import Link from '../../../components/Tag/Link'
+import { useLoading } from '../../../components/Context/Loading'
+import { useAlerts } from '../../../components/Context/Alert'
+import { useFirebase } from '../../../components/Context/Login'
 
 // TODO: Defer
 import removeWebsite from '../helpers/removeWebsite'
@@ -21,7 +21,7 @@ export default function WebsiteActions({
   webAction = noop,
   webActionText = 'Add Custom Domain',
 } = {}) {
-  const firebaseApp = useFirebaseApp()
+  const { firebaseApp } = useFirebase()
   const { addAlert } = useAlerts()
   const { queueLoading, unqueueLoading } = useLoading()
 

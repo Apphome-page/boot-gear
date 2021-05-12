@@ -10,7 +10,7 @@ import {
 
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useUserAuth } from '../../../components/LoginPop'
+import { useUserAuth } from '../../../components/Context/Login'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 

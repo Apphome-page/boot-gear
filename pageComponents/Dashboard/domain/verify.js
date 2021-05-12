@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useUserAuth } from '../../../components/LoginPop'
+import { useUserAuth } from '../../../components/Context/Login'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 

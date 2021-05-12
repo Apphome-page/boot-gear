@@ -1,7 +1,7 @@
 import { Container, CardDeck, Card } from 'react-bootstrap'
 
-import Link from '../../components/LinkTag'
-import Image from '../../components/ImageTag'
+import Link from '../../components/Tag/Link'
+import Image from '../../components/Tag/Image'
 
 export default function HomeCards() {
   return (

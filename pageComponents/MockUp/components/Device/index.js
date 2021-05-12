@@ -3,7 +3,7 @@ import { Tabs, Tab, Container, Button } from 'react-bootstrap'
 
 import classNames from 'classnames'
 
-import Image from '../../../../components/ImageTag'
+import Image from '../../../../components/Tag/Image'
 
 import scrMeta from '../../../../config/scrMeta.json'
 

@@ -1,10 +1,8 @@
 import { Container, Button } from 'react-bootstrap'
 
-import { useLogin } from '../../components/LoginPop'
-import Link from '../../components/LinkTag'
+import Link from '../../components/Tag/Link'
 
 export default function HomeCTA() {
-  const { signPop } = useLogin()
   return (
     <section className='py-5 bg-alt text-center text-white'>
       <Container className='my-5'>
@@ -19,13 +17,11 @@ export default function HomeCTA() {
             Start Free Trial
           </Button>
         </Link>
-        <Button
-          variant='outline-light'
-          className='rounded-0 px-3 py-3'
-          onClick={signPop}
-        >
-          Sign Up
-        </Button>
+        <Link href='/dashboard'>
+          <Button variant='outline-light' className='rounded-0 px-3 py-3'>
+            Sign Up
+          </Button>
+        </Link>
       </Container>
     </section>
   )

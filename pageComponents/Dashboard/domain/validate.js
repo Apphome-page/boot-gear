@@ -3,7 +3,7 @@ import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { Code as CodeLoader } from 'react-content-loader'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useUserAuth, useUserData } from '../../../components/LoginPop'
+import { useUserAuth, useUserData } from '../../../components/Context/Login'
 
 const FIRECLOUD_DOMAIN_VALIDATE =
   process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VALIDATE
@@ -18,7 +18,7 @@ export default function DomainNameServer({ webKey }) {
   const [alertData, setAlertData] = useState({})
 
   const userAuth = useUserAuth()
-  const { firstLaunch, webDomain, webZone, webNameservers } = useUserData(
+  const [{ webDomain, webZone, webNameservers }, firstLaunch] = useUserData(
     `sites/${webKey}`
   )
 

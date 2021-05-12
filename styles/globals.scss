@@ -20,7 +20,7 @@
   padding: 0px;
   font-family: 'Montserrat', sans-serif;
   outline: none !important;
-  text-decoration: none;
+  // text-decoration: none;
 }
 body {
   color: #50668f;
@@ -51,7 +51,7 @@ small {
   background-color: #f2f5fa;
 }
 
-.btn-alt {
+.btn.btn-alt {
   padding: 12px 32px;
   border: 0;
   border-radius: 0;
@@ -59,20 +59,20 @@ small {
   background-color: #7b10ff;
   color: #fff;
 }
-.btn-alt:hover,
-.btn-alt:focus {
+.btn.btn-alt:hover,
+.btn.btn-alt:focus {
   background: #f2f5fa;
   color: #1e283c;
 }
-.btn-alt2 {
+.btn.btn-alt2 {
   padding: 12px 32px;
   border: 0;
   border-radius: 0;
   background: #f2f5fa;
   color: #1e283c;
 }
-.btn-alt2:hover,
-.btn-alt2:focus {
+.btn.btn-alt2:hover,
+.btn.btn-alt2:focus {
   background-image: linear-gradient(110deg, #7b10ff 0, #974fff 100%);
   background-color: #7b10ff;
   color: #fff;

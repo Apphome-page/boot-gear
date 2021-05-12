@@ -3,8 +3,8 @@ import { useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
 
 import AuthWrapper from '../../components/AuthWrapper'
-import { useAlerts } from '../../components/AlertPop'
-import { useFirebaseApp, useUserAuth } from '../../components/LoginPop'
+import { useAlerts } from '../../components/Context/Alert'
+import { useFirebase, useUserAuth } from '../../components/Context/Login'
 
 const FIRECLOUD_USER_SYNC = process.env.NEXT_PUBLIC_FIRECLOUD_USER_SYNC
 const PLAN_SILVER = process.env.NEXT_PUBLIC_PABBLY_CHECKOUT_SILVER
@@ -15,7 +15,7 @@ export default function Payment() {
 
   const { addAlert } = useAlerts()
 
-  const firebaseApp = useFirebaseApp()
+  const { firebaseApp } = useFirebase()
   const userAuth = useUserAuth()
   const userId = userAuth && userAuth.uid
 
