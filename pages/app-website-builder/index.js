@@ -1,18 +1,52 @@
-import { Container } from 'react-bootstrap'
+import { useCallback } from 'react'
+import {
+  Container,
+  Form,
+  FormControl,
+  InputGroup,
+  Button,
+} from 'react-bootstrap'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import { useUserData } from '../../components/Context/Login'
 import FAQ from '../../components/FAQ'
+import { useFirebase } from '../../components/Context/Login'
+
+import keyValidate from '../../pageComponents/WebBuilder/helpers/keyValidate'
 
 import faqList from '../../pageData/app-website-builder/faq.json'
 
 export default function Website() {
-  const { query: { webEdit = '' } = {} } = useRouter()
-
-  const [userData] = useUserData()
-  const userSites = Object.keys((userData && userData.sites) || {})
-
+  const router = useRouter()
+  const { firebaseLaunch, firebaseApp } = useFirebase()
+  const keyValidateAction = useCallback(
+    (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      const { value } = event.target.elements.appKey
+      if (!firebaseLaunch) {
+        window.alert('Please wait...')
+        return
+      }
+      const fireUser = firebaseApp.auth().currentUser
+      if (!fireUser) {
+        window.alert('Please Login to continue...')
+        return
+      }
+      if (!value) {
+        window.alert('NO VALUE')
+        return
+      }
+      const keyValue = value.replace(/\W/gi, '-').toLowerCase()
+      const keyCheck = keyValidate(firebaseApp, keyValue)
+      if (!keyCheck) {
+        window.alert('Website already exists')
+        return
+      }
+      router.push(`/dashboard/website-builder?appKey=${keyValue}`)
+    },
+    [firebaseApp, firebaseLaunch, router]
+  )
   return (
     <>
       <Head>
@@ -36,19 +70,21 @@ export default function Website() {
       <section className='hero min-vh-100 pt-3 pb-5'>
         <Container>
           <h1 className='display-4 py-3'>App website builder</h1>
-          {webEdit && userSites.includes(webEdit) ? (
-            <div className='lead border-bottom lead my-1'>
-              Editing{' '}
-              <a
-                href={`/${webEdit}`}
-                className='text-decoration-none text-white-50'
-              >
-                {webEdit}
-              </a>
-            </div>
-          ) : (
-            ''
-          )}
+          <Form onSubmit={keyValidateAction}>
+            <Form.Group controlId='appKey'>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>App Name</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl />
+                <InputGroup.Append>
+                  <Button variant='success' type='submit'>
+                    Submit
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+            </Form.Group>
+          </Form>
         </Container>
       </section>
       {faqList.length ? (

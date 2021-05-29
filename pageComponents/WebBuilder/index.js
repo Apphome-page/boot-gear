@@ -9,23 +9,15 @@ import getThemeComponent from './helpers/getThemeComponent'
 
 import styles from './styles.module.scss'
 
-export default function Builder({ theme, isPreview }) {
+export default function Builder({ appKey, appTheme, isPreview }) {
   const { HeadComponent, BodyComponent } = useMemo(
-    () => getThemeComponent(theme),
-    [theme]
-  )
-
-  const storeContextValue = useMemo(
-    () => ({
-      theme,
-      isPreview,
-    }),
-    [theme, isPreview]
+    () => getThemeComponent(appTheme),
+    [appTheme]
   )
 
   return (
-    <StoreContext value={storeContextValue}>
-      <WebBuilderContext value={{ appTheme: theme }}>
+    <StoreContext value={{ isPreview }}>
+      <WebBuilderContext value={{ appKey, appTheme }}>
         <div className={styles.wrap}>
           <div className={styles.aside}>
             <div className={styles.asideSticky}>

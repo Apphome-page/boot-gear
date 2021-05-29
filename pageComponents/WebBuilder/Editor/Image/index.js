@@ -110,7 +110,6 @@ function ImageEditor({
           styles.fileInputDrop
         )}
         onChange={onChange}
-        defaultValue={appKeyValue}
       />
       <div
         className={classNames(

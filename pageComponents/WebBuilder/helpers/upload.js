@@ -1,7 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-unreachable */
-
 import { renderToStaticMarkup } from 'react-dom/server'
 import Compress from 'compress.js'
 
@@ -12,7 +8,7 @@ import uuid from '../../../utils/uuid'
 
 import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 
-// import keyValidate from './keyValidate'
+import keyValidate from './keyValidate'
 import getThemeComponent from './getThemeComponent'
 
 const compress = new Compress()
@@ -26,70 +22,76 @@ const defaultFile =
   typeof window !== 'undefined' ? new File([], 'default.dat') : {}
 
 export default async function upload(firebase, renderProps = {}) {
-  // const appKeyData = await keyValidate(firebase, appKey)
-  // if (!appKeyData) {
-  //   return null
-  // }
+  const {
+    appGA,
+    appTheme,
+    appKey,
+    appName,
+    appTitle,
+    appBanner,
+    'appScreenshot-1': appScreenshot1,
+    'appScreenshot-2': appScreenshot2,
+  } = renderProps
 
-  // const userId = firebase.auth().currentUser.uid
-  const { appTheme, appKey } = renderProps
+  const appKeyData = await keyValidate(firebase, appKey)
+  if (!appKeyData) {
+    return null
+  }
+
+  const userId = firebase.auth().currentUser.uid
+
   const appIcon = renderProps.appIcon || defaultFile
-  const appScreenshot = renderProps.appScreenshot || defaultFile
-
   const appIconPath = `/${appKey}/bin/${uuid('icon')}-${toSafeName(
     appIcon.name
   )}`
-  const appScreenshotPath = `/${appKey}/bin/${uuid('scr')}-${toSafeName(
-    appScreenshot.name
-  )}`
 
-  // const customMeta = {
-  //   // cacheControl: 'public,max-age=300',
-  //   // Update ownership
-  //   customMetadata: {
-  //     owner: userId,
-  //   },
-  // }
+  const appBannerPath = appBanner
+    ? `/${appKey}/bin/${uuid('banner')}-${toSafeName(appBanner.name)}`
+    : null
+  const appScreenshot1Path = appScreenshot1
+    ? `/${appKey}/bin/${uuid('scr')}-${toSafeName(appScreenshot1.name)}`
+    : null
+  const appScreenshot2Path = appScreenshot2
+    ? `/${appKey}/bin/${uuid('banner')}-${toSafeName(appScreenshot2.name)}`
+    : null
+
+  const customMeta = {
+    // cacheControl: 'public,max-age=300',
+    // Update ownership
+    customMetadata: {
+      owner: userId,
+    },
+  }
 
   // Render Template
 
   // TODO: Clean Props
   const renderContextProps = {
     ...renderProps,
-    // Replace Editors with Content
-    isPreview: false,
     // Use Actual Image Path instead of File-URI
     appIcon: appIconPath,
-    appScreenshot: appScreenshotPath,
+    appBanner: appBannerPath,
+    'appScreenshot-1': appScreenshot1Path,
+    'appScreenshot-2': appScreenshot2Path,
   }
-  renderContextProps.appTestim = (renderContextProps.appTestim || []).reduce(
-    (tAccumulator, testimonial) => {
-      if (!testimonial || !testimonial.text) {
-        return tAccumulator
-      }
-      return tAccumulator.concat(testimonial)
-    },
-    []
-  )
+
   const { HeadComponent, BodyComponent } = getThemeComponent(appTheme)
   const renderHTMLHead = renderToStaticMarkup(
-    <StoreContext value={{ isPreview: false, theme: appTheme }}>
-      <WebBuilderContext value={renderProps}>
+    <StoreContext value={{ isPreview: false }}>
+      <WebBuilderContext value={renderContextProps}>
         <HeadComponent />
       </WebBuilderContext>
     </StoreContext>
   )
   const renderHTMLBody = renderToStaticMarkup(
-    <StoreContext value={{ isPreview: false, theme: appTheme }}>
-      <WebBuilderContext value={renderProps}>
+    <StoreContext value={{ isPreview: false }}>
+      <WebBuilderContext value={renderContextProps}>
         <BodyComponent />
       </WebBuilderContext>
     </StoreContext>
   )
 
   const renderHTMLData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLBody}</body></html>`
-
-  return renderHTMLData
 
   const renderIconData = compress
     .compress([appIcon], {
@@ -101,15 +103,22 @@ export default async function upload(firebase, renderProps = {}) {
     })
     .then(compressToBase64)
 
-  const renderScreenshotData = compress
-    .compress([appScreenshot], {
-      size: 2,
-      quality: 0.75,
-      maxWidth: 720,
-      maxHeight: 720,
-      resize: true,
+  const renderImageData = Promise.all(
+    [appBanner, appScreenshot1, appScreenshot2].map((appFile) => {
+      if (!appFile) {
+        return null
+      }
+      return compress
+        .compress([appFile], {
+          size: 2,
+          quality: 0.75,
+          maxHeight: 720,
+          maxWidth: 720,
+          resize: true,
+        })
+        .then(compressToBase64)
     })
-    .then(compressToBase64)
+  )
 
   // Remove Older Data
   await removeWebsite({
@@ -120,12 +129,16 @@ export default async function upload(firebase, renderProps = {}) {
   })
 
   // Update Firebase DB with current Action
+  // TODO: Cleanup while re-uploading
   const DBPromise = firebase
     .database()
     .ref(`users/${userId}/sites/${appKey}`)
     .set({
       ...appKeyData,
-      appKey,
+      appName,
+      appTitle,
+      appIconPath,
+      appGA,
       timestamp: new Date().getTime(),
     })
 
@@ -139,8 +152,8 @@ export default async function upload(firebase, renderProps = {}) {
     })
   const JSONPromise = firebase
     .storage()
-    .ref(`public/${appKey}/index.json`)
-    .putString(renderProps, 'raw', {
+    .ref(`public/${appKey}/bin/index.json`)
+    .putString(JSON.stringify(renderContextProps), 'raw', {
       ...customMeta,
       contentType: 'application/json; charset=utf-8',
     })
@@ -150,9 +163,36 @@ export default async function upload(firebase, renderProps = {}) {
     firebase.storage().ref(`public/${appIconPath}`).put(file, customMeta)
   )
 
-  // Compress & Upload Screenshot
-  const ScreenshotPromise = renderScreenshotData.then((file) =>
-    firebase.storage().ref(`public/${appScreenshotPath}`).put(file, customMeta)
+  // Compress & Upload Image Files
+  const ImagePromise = renderImageData.then(
+    ([appBannerData, appScreenshot1Data, appScreenshot2Data]) => {
+      const imagePromiseArray = []
+      if (appBannerData) {
+        imagePromiseArray.push(
+          firebase
+            .storage()
+            .ref(`public/${appBannerPath}`)
+            .put(appBannerData, customMeta)
+        )
+      }
+      if (appScreenshot1Data) {
+        imagePromiseArray.push(
+          firebase
+            .storage()
+            .ref(`public/${appScreenshot1Path}`)
+            .put(appScreenshot1Data, customMeta)
+        )
+      }
+      if (appScreenshot2Data) {
+        imagePromiseArray.push(
+          firebase
+            .storage()
+            .ref(`public/${appScreenshot2Path}`)
+            .put(appScreenshot2Data, customMeta)
+        )
+      }
+      return Promise.all(imagePromiseArray)
+    }
   )
 
   // Wait till everything uploads
@@ -161,7 +201,7 @@ export default async function upload(firebase, renderProps = {}) {
     HTMLPromise,
     JSONPromise,
     IconPromise,
-    ScreenshotPromise,
+    ImagePromise,
   ])
 
   return {
