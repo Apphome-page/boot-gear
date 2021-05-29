@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { useWebBuilderContext } from '../../../components/Context/WebBuilder'
 
 export default function Nav({ keyName, keyTitle, keyDesc }) {
@@ -18,7 +19,10 @@ export default function Nav({ keyName, keyTitle, keyDesc }) {
       tabIndex='-1'
       role='button'
       title={keyDesc}
-      className={appKeyValue ? 'text-success' : 'text-warning'}
+      className={classNames('my-1', 'ml-3', 'text-nowrap', 'text-truncate', {
+        'text-success': appKeyValue,
+        'text-warning': !appKeyValue,
+      })}
       onClick={getInView}
       onKeyDown={getInView}
     >

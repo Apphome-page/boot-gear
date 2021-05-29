@@ -40,19 +40,12 @@ export function VideoScript() {
 
 export default function Video() {
   const [{ isPreview }] = useContextStore()
-  const [appVideoValue, setAppVideo] = useWebBuilderContext('appVideo')
+  const [appVideoValue] = useWebBuilderContext('appVideo')
   if (!isPreview && !appVideoValue) {
     return <div id='container-play' />
   }
   return (
-    <LinkEditor
-      id='container-appVideo'
-      initHref={appVideoValue}
-      className='col-lg align-self-center'
-      onChange={(href) => {
-        setAppVideo(href)
-      }}
-    >
+    <LinkEditor keyName='appVideo'>
       <div
         id='container-play'
         className={classNames(

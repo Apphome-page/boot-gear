@@ -7,24 +7,21 @@ import {
 } from 'recoil'
 import memoize from 'lodash/memoize'
 
-import allAtoms from './atoms.json'
+import allAtoms from '../../../config/websiteAppKeys.json'
 
 // Memoized Atom Generator
-const atomWithKey = memoize((atomKey) => {
-  if (!Object.prototype.hasOwnProperty.call(allAtoms, atomKey)) {
-    throw new Error('Invalid Atom Key for AppBuilder')
-  }
-  return atom({
+const atomWithKey = memoize((atomKey) =>
+  atom({
     key: atomKey,
-    default: allAtoms[atomKey],
+    default: null,
   })
-})
+)
 
 // Full Control Selector
 const appBuilderAtoms = selector({
   key: 'appBuilderAtoms',
   get: ({ get }) =>
-    Object.keys(allAtoms).reduce(
+    allAtoms.reduce(
       (atomAcc, atomKey) => ({
         ...atomAcc,
         [atomKey]: get(atomWithKey(atomKey)),

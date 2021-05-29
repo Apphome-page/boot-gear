@@ -1,62 +1,70 @@
-import { useCallback } from 'react'
+import { Fragment, memo } from 'react'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../../../components/Context'
 
 import TextEditor from '../../../Editor/Text'
 
 const textEditorButtons = []
 
+const Testimonial = ({ appTestimonialIndex }) => (
+  <li className='col-lg-6'>
+    <blockquote className='blockquote'>
+      <TextEditor
+        keyName={`appTestimonial-${appTestimonialIndex}-text`}
+        className='mb-0'
+        buttons={textEditorButtons}
+      />
+      <footer className='blockquote-footer'>
+        <cite>
+          <TextEditor
+            keyName={`appTestimonial-${appTestimonialIndex}-source`}
+            buttons={textEditorButtons}
+          />
+        </cite>
+      </footer>
+    </blockquote>
+  </li>
+)
+
+const TestimonialMemo = memo(Testimonial)
+
 export default function Testimonials() {
-  const [appTestimValue, setAppTestim] = useWebBuilderContext('appTestim')
+  const [{ isPreview }] = useContextStore()
+  const [appTestimonial1Text] = useWebBuilderContext(`appTestimonial-1-text`)
+  const [appTestimonial2Text] = useWebBuilderContext(`appTestimonial-2-text`)
+  const [appTestimonial3Text] = useWebBuilderContext(`appTestimonial-3-text`)
+  const [appTestimonial4Text] = useWebBuilderContext(`appTestimonial-4-text`)
 
-  const changeAction = useCallback(
-    (value, { type, index }) => {
-      setAppTestim((prevAppTestimValue) => {
-        const newAppTestimValue = [...prevAppTestimValue]
-        const currentTestimValue = {
-          ...newAppTestimValue[index],
-          [type]: value,
-        }
-        newAppTestimValue[index] = currentTestimValue
-        return newAppTestimValue
-      })
-    },
-    [setAppTestim]
-  )
-
-  if (!appTestimValue || !appTestimValue.length) {
+  if (
+    !isPreview &&
+    !appTestimonial1Text &&
+    !appTestimonial2Text &&
+    !appTestimonial3Text &&
+    !appTestimonial4Text
+  ) {
     return <div id='container-testimonials' />
   }
 
   return (
-    <div id='container-appTestim' className='container py-5'>
+    <div id='container-testimonials' className='container py-5'>
       <h2 className='my-5 text-center'>Testimonials</h2>
       <ul className='row'>
-        {appTestimValue.map(({ text, source }, index) => (
-          <li key={index} className='col-lg-6'>
-            <blockquote className='blockquote'>
-              <TextEditor
-                className='mb-0'
-                initText={text}
-                buttons={textEditorButtons}
-                onChange={(value) => {
-                  changeAction(value, { type: 'text', index })
-                }}
-              />
-              <footer className='blockquote-footer'>
-                <cite title={source}>
-                  <TextEditor
-                    initText={text}
-                    buttons={textEditorButtons}
-                    onChange={(value) => {
-                      changeAction(value, { type: 'source', index })
-                    }}
-                  />
-                </cite>
-              </footer>
-            </blockquote>
-          </li>
-        ))}
+        {[
+          appTestimonial1Text,
+          appTestimonial2Text,
+          appTestimonial3Text,
+          appTestimonial4Text,
+        ].map((appTestinomial, appTestimonialIndex) =>
+          isPreview || appTestinomial ? (
+            <TestimonialMemo
+              key={appTestimonialIndex}
+              appTestimonialIndex={appTestimonialIndex}
+            />
+          ) : (
+            <Fragment key={appTestimonialIndex} />
+          )
+        )}
       </ul>
     </div>
   )

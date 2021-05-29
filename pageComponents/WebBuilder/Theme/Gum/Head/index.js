@@ -44,16 +44,16 @@ function HeadStyles() {
 body {
 margin: 0px;
 padding: 0px;
+--color-uno: #190a32;
+--color-dos: #3d1e82;
+--color-tres: #6541c1;
 /* word-break: break-all; */
 }
 .gum-body * {
 font-family: 'Poppins', sans-serif;
-}
-.gum-body h1,
-.gum-body h2,
-.gum-body h3,
-.gum-body h4 {
-color: #190a32;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+font-smoothing: antialiased;
 }
 .gum-body ul,
 .gum-body ol {
@@ -70,6 +70,15 @@ background-image: url("data:image/svg+xml,%3Csvg width='80' height='60' xmlns='h
 background-attachment: fixed;
 background-size: cover;
 }
+.gum-body .bg-uno {
+  background-color: var(--color-uno);
+}
+.gum-body .bg-dos {
+  background-color: var(--color-dos);
+}
+.gum-body .bg-tres {
+  background-color: var(--color-tres);
+}
 .gum-body .btn {
 border: 0;
 outline: 0;
@@ -80,15 +89,15 @@ padding: 4.5px 21.5px;
 }
 .gum-body .btn-light {
 background: #fff;
-color: #190a32;
+color: var(--color-uno);
 }
 .gum-body .btn-alt {
 position: relative;
 display: inline-block;
 border: 0;
 outline: 0;
-background: #6541c1;
-background: linear-gradient(to right, #6541c1 0, #d43396 98%, #d43396 100%);
+background: var(--color-tres);
+background: linear-gradient(to right, var(--color-tres) 0, #d43396 98%, #d43396 100%);
 color: #fff;
 font-size: 16px;
 font-weight: 600;
@@ -101,9 +110,9 @@ position: relative;
 display: inline-block;
 border: 0;
 outline: 0;
-background: #6541c1;
-background: linear-gradient(to right, #6541c1 0, #d43396 98%, #d43396 100%);
-color: #190a32;
+background: var(--color-tres);
+background: linear-gradient(to right, var(--color-tres) 0, #d43396 98%, #d43396 100%);
+color: var(--color-uno);
 font-size: 16px;
 font-weight: 600;
 transition: all 0.4s ease;

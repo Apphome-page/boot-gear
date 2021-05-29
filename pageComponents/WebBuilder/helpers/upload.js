@@ -32,7 +32,6 @@ export default async function upload(firebase, renderProps = {}) {
   // }
 
   // const userId = firebase.auth().currentUser.uid
-  console.log('<<>> ', renderProps)
   const { appTheme, appKey } = renderProps
   const appIcon = renderProps.appIcon || defaultFile
   const appScreenshot = renderProps.appScreenshot || defaultFile

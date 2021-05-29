@@ -1,9 +1,10 @@
-import { useState, useCallback, useRef } from 'react'
+import { memo, useCallback, useRef, useMemo } from 'react'
 import { Image } from 'react-bootstrap'
 import classNames from 'classnames'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
+import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../components/Context'
 
 import styles from './styles.module.scss'
@@ -14,59 +15,53 @@ const SITE_URL =
 const placeholderImage =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg=='
 
-export default function ImageEditor({
-  id,
-  defaultValue,
-  alt = '',
+function ImageEditor({
+  keyName,
   className,
   height,
   width,
-  onChange,
+  alt = `Image for ${keyName}`,
 }) {
   const inputRef = useRef(null)
 
   const [{ isPreview }] = useContextStore()
+  const [rawAppKeyValue, setRawAppKeyValue] = useWebBuilderContext(keyName)
 
-  const [fileURI, setFileURI] = useState(() => {
+  const appKeyValue = useMemo(() => {
     if (typeof window === 'undefined') {
       return placeholderImage
     }
-    if (defaultValue instanceof File) {
-      return window.URL.createObjectURL(defaultValue)
+    if (rawAppKeyValue instanceof File) {
+      return window.URL.createObjectURL(rawAppKeyValue)
     }
-    if (defaultValue) {
-      return `${SITE_URL}/${defaultValue}`
+    if (rawAppKeyValue) {
+      return isPreview ? rawAppKeyValue : `${SITE_URL}/${rawAppKeyValue}`
     }
     return placeholderImage
-  })
+  }, [isPreview, rawAppKeyValue])
 
-  const onChangeCb = useCallback(
+  const onChange = useCallback(
     (event) => {
       event.preventDefault()
       event.stopPropagation()
       let updatedFile = null
-      let updatedFileURI = null
       try {
         // eslint-disable-next-line prefer-destructuring
         updatedFile = inputRef.current.files[0]
-        updatedFileURI = window.URL.createObjectURL(updatedFile)
       } catch (err) {
         //
       }
-      setFileURI(updatedFileURI)
-      if (onChange) {
-        onChange(updatedFile)
-      }
+      setRawAppKeyValue(updatedFile)
     },
-    [inputRef, onChange]
+    [setRawAppKeyValue]
   )
 
   if (!isPreview) {
-    return fileURI ? (
+    return rawAppKeyValue ? (
       <Image
-        id={id}
+        id={`container-${keyName}`}
         loading='lazy'
-        src={fileURI}
+        src={appKeyValue}
         alt={alt}
         className={className}
         height={height}
@@ -92,7 +87,7 @@ export default function ImageEditor({
       )}
     >
       <Image
-        src={fileURI}
+        src={appKeyValue}
         alt={alt}
         height={height}
         width={width}
@@ -103,7 +98,7 @@ export default function ImageEditor({
         )}
       />
       <input
-        id={id}
+        id={`container-${keyName}`}
         type='file'
         ref={inputRef}
         accept='image/*'
@@ -114,8 +109,8 @@ export default function ImageEditor({
           'cursor-pointer',
           styles.fileInputDrop
         )}
-        onChange={onChangeCb}
-        defaultValue={defaultValue}
+        onChange={onChange}
+        defaultValue={appKeyValue}
       />
       <div
         className={classNames(
@@ -134,3 +129,5 @@ export default function ImageEditor({
     </div>
   )
 }
+
+export default memo(ImageEditor)

@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
@@ -7,13 +5,7 @@ import TextEditor from '../../../Editor/Text'
 
 export default function Stats({ keyName }) {
   const [{ isPreview }] = useContextStore()
-  const [appValue, setAppValue] = useWebBuilderContext(keyName)
-  const updateCallback = useCallback(
-    (text) => {
-      setAppValue(text)
-    },
-    [setAppValue]
-  )
+  const [appValue] = useWebBuilderContext(keyName)
 
   if (!isPreview && !appValue) {
     return <></>
@@ -22,12 +14,7 @@ export default function Stats({ keyName }) {
   return (
     <>
       <div className='count d-inline-block h1 font-weight-lighter'>
-        <TextEditor
-          id={`container-${keyName}`}
-          buttons={[]}
-          initValue={appValue}
-          onChange={updateCallback}
-        />
+        <TextEditor id={`container-${keyName}`} buttons={[]} />
       </div>
       <div className='ml-1 d-inline-block lead'>
         {keyName === 'appDownloads' ? 'Downloads' : 'Rating'}

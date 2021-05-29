@@ -1,4 +1,4 @@
-$head-height: 64px;
+$head-height: 56px;
 $stud-height: 64px;
 
 .asideWrap {
@@ -15,10 +15,9 @@ $stud-height: 64px;
   position: absolute;
   top: 0;
   left: 0;
-  font-size: 18px;
+  display: flex;
   height: $head-height;
   line-height: $head-height;
-  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

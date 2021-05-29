@@ -1,32 +1,35 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import classNames from 'classnames'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
+import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../components/Context'
 
 import styles from './styles.module.scss'
 
-export default function LinkEditor({ id, initHref, children, onChange }) {
+function LinkEditor({ keyName, children }) {
   const [{ isPreview }] = useContextStore()
-  const editAction = useCallback(
+  const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
+
+  const onChange = useCallback(
     (event) => {
       event.preventDefault()
       event.stopPropagation()
       const value = window.prompt('Link: ')
-      onChange(value)
+      setAppKeyValue(value || '')
     },
-    [onChange]
+    [setAppKeyValue]
   )
 
   if (!isPreview) {
-    return initHref ? <>{children}</> : <></>
+    return appKeyValue ? <>{children}</> : <></>
   }
 
   return (
     <div className={styles.editorWrap}>
       <div
-        id={id}
+        id={`container-${keyName}`}
         className={classNames(
           'd-flex',
           'align-items-center',
@@ -39,8 +42,8 @@ export default function LinkEditor({ id, initHref, children, onChange }) {
         )}
         tabIndex='-1'
         role='button'
-        onClick={editAction}
-        onKeyDown={editAction}
+        onClick={onChange}
+        onKeyDown={onChange}
       >
         <IconEdit className='w-100 h-100' />
       </div>
@@ -48,3 +51,5 @@ export default function LinkEditor({ id, initHref, children, onChange }) {
     </div>
   )
 }
+
+export default memo(LinkEditor)

@@ -1,58 +1,43 @@
 import 'medium-editor/dist/css/medium-editor.min.css'
 import 'medium-editor/dist/css/themes/beagle.min.css'
 
-import { useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'lodash/debounce'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
+import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../components/Context'
+
+import getEditorConfig from './getEditorConfig'
 
 import styles from './styles.module.scss'
 
-const editorConfig = ({
-  relativeContainer,
-  buttons = [],
-  placeholderText = '',
-}) => ({
-  toolbar: {
-    buttons,
-    static: true,
-    updateOnEmptySelection: true,
-    relativeContainer,
-  },
-  placeholder: {
-    text: placeholderText,
-    hideOnClick: false,
-  },
-  autoLink: false,
-  imageDragging: false,
-  spellcheck: false,
-})
+const defaultButtons = [
+  'h2',
+  'h3',
+  'bold',
+  'italic',
+  'underline',
+  'subscript',
+  'superscript',
+  'orderedlist',
+  'unorderedlist',
+]
 
-export default function TextEditor({
-  id,
-  initValue,
+function TextEditor({
+  keyName,
   placeholderText,
-  buttons = [
-    'bold',
-    'italic',
-    'underline',
-    'strikethrough',
-    'subscript',
-    'superscript',
-    'orderedlist',
-    'unorderedlist',
-  ],
+  buttons = defaultButtons,
   className,
-  onChange,
 }) {
   const editor = useRef(null)
   const editorRef = useRef(null)
   const editorWrapRef = useRef(null)
 
   const [{ isPreview }] = useContextStore()
+  const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
 
   const editAction = useCallback(() => {
     if (editorRef.current) {
@@ -61,9 +46,10 @@ export default function TextEditor({
   }, [])
 
   const editorInit = useCallback(async () => {
+    // MediumEditor
     if (!editor.current) {
       const { default: MediumEditor } = await import('medium-editor')
-      const mediumEdtiorConfig = editorConfig({
+      const mediumEdtiorConfig = getEditorConfig({
         buttons,
         relativeContainer: editorWrapRef.current,
         placeholderText,
@@ -73,7 +59,7 @@ export default function TextEditor({
       editor.current.destroy()
       editor.current.setup()
     }
-    // TODO: debounce
+    // MediumEditor Subscription
     editor.current.subscribe(
       'editableInput',
       debounce(() => {
@@ -81,12 +67,11 @@ export default function TextEditor({
           editorRef.current.textContent === ''
             ? ''
             : editorRef.current.innerHTML
-        onChange(content)
+        setAppKeyValue(content)
       }),
       300
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [buttons, placeholderText, setAppKeyValue])
 
   useEffect(() => {
     if (!editorRef.current) {
@@ -103,13 +88,15 @@ export default function TextEditor({
   if (!isPreview) {
     return (
       <div
+        id={`container-${keyName}`}
         className={className}
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: initValue }}
+        dangerouslySetInnerHTML={{ __html: appKeyValue }}
       />
     )
   }
 
+  // TODO: Handle initial value
   return (
     <div
       ref={editorWrapRef}
@@ -117,7 +104,7 @@ export default function TextEditor({
     >
       <div ref={editorRef} />
       <div
-        id={id}
+        id={`container-${keyName}`}
         className={classNames(
           'd-flex',
           'align-items-center',
@@ -146,6 +133,9 @@ export default function TextEditor({
           .medium-editor-toolbar-actions {
             display: flex !important;
           }
+          .medium-editor-toolbar-actions li {
+            white-space: nowrap !important;
+          }
           .medium-editor-toolbar-actions button {
             border-radius: 0px !important;
           }
@@ -154,3 +144,5 @@ export default function TextEditor({
     </div>
   )
 }
+
+export default memo(TextEditor)
