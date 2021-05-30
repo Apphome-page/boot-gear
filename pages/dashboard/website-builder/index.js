@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Spinner } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import fetch from 'cross-fetch'
 
 import { useLogin, useFirebase } from '../../../components/Context/Login'
 import { useAlerts } from '../../../components/Context/Alert'
+import { useLoading } from '../../../components/Context/Loading'
+
+import WebBuilderPlaceholder from '../../../pageComponents/WebBuilder/Placeholder'
 
 import keyValidate from '../../../pageComponents/WebBuilder/helpers/keyValidate'
 import urlToFile from '../../../utils/urlToFile'
@@ -20,10 +22,19 @@ const WebBuilderComponent = dynamic(
 export default function WebBuilder() {
   const router = useRouter()
   const { addAlert } = useAlerts()
+  const { queueLoading, clearLoading } = useLoading()
   const { signPop } = useLogin()
   const { firebaseLaunch, firebasePromise, firebaseApp } = useFirebase()
 
   const [validAppData, setValidAppData] = useState(false)
+
+  useEffect(() => {
+    if (validAppData) {
+      clearLoading()
+    } else {
+      queueLoading()
+    }
+  }, [clearLoading, queueLoading, validAppData])
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search)
@@ -95,11 +106,20 @@ export default function WebBuilder() {
         setValidAppData(keyCheck)
       }
     })
-  }, [firebaseApp, firebasePromise, firebaseLaunch, router, addAlert, signPop])
+  }, [
+    firebaseApp,
+    firebasePromise,
+    firebaseLaunch,
+    router,
+    addAlert,
+    signPop,
+    queueLoading,
+    clearLoading,
+  ])
 
   return validAppData ? (
     <WebBuilderComponent appData={validAppData} isPreview />
   ) : (
-    <Spinner />
+    <WebBuilderPlaceholder />
   )
 }

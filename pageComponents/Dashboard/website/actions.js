@@ -59,7 +59,7 @@ export default function WebsiteActions({
         {webActionText}
       </Button>
       <ButtonGroup className='m-1 w-100'>
-        <Link href={`/app-website-builder?webEdit=${webKey}`}>
+        <Link href={`/dashboard/website-builder?appKey=${webKey}`}>
           <Button variant='outline-secondary'>Edit</Button>
         </Link>
         <Button

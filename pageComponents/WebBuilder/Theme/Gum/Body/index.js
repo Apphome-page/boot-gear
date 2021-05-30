@@ -26,12 +26,9 @@ export default function BodyComponent() {
           className='container py-3 navbar navbar-expand-lg navbar-dark'
         >
           <div className='navbar-brand flex-shrink-0'>
-            <ImageEditor
-              keyName='appIcon'
-              width='30'
-              height='30'
-              className='d-inline-block align-top'
-            />
+            <div className='d-inline-block'>
+              <ImageEditor keyName='appIcon' width='30' height='30' />
+            </div>
             <NavName />
           </div>
           <div
@@ -137,7 +134,7 @@ export default function BodyComponent() {
           'align-items-center',
           'justify-content-center',
           'vh-100',
-          'py-5',
+          'p-3',
           'text-white',
           'parallax'
         )}

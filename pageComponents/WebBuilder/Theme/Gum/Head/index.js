@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
+import removeTags from '../../../../../utils/removeTags'
+
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
@@ -20,7 +22,7 @@ function HeadTitle() {
   const [appTitleValue] = useWebBuilderContext('appTitle')
   return (
     <HeadWrapper>
-      <title>{appTitleValue.replace(/(<([^>]+)>)/gi, ' ')}</title>
+      <title>{removeTags(appTitleValue)}</title>
     </HeadWrapper>
   )
 }

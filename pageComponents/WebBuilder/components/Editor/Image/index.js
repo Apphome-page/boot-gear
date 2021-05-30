@@ -58,7 +58,7 @@ function ImageEditor({
         id={`container-${keyName}`}
         src={addLinkProtocol(appKeyValue)}
         alt={alt}
-        className={className}
+        className={classNames(className, styles.fileInputImage)}
         height={height}
         width={width}
       />

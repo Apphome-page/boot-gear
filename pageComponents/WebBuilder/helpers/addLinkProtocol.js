@@ -1,4 +1,5 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
 export default function addLinkProtocol(value) {
   const href = value || ''

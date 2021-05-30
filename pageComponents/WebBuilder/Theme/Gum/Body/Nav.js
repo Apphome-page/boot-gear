@@ -3,7 +3,7 @@ import { useContextStore } from '../../../../../components/Context'
 
 export function NavName() {
   const [appNameValue] = useWebBuilderContext('appName')
-  return <span className='text-dark'>{appNameValue}</span>
+  return <span className='ml-1 align-top text-dark'>{appNameValue}</span>
 }
 
 export function NavFeatures() {
