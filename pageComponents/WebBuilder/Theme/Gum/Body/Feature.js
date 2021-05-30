@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
-import TextEditor from '../../../Editor/Text'
+import TextEditor from '../../../components/Editor/Text'
 
 export default function Feature({ keyName, className, children }) {
   const [{ isPreview }] = useContextStore()

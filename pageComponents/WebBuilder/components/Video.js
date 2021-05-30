@@ -1,9 +1,7 @@
-import classNames from 'classnames'
+import { useWebBuilderContext } from '../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../components/Context'
 
-import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
-import { useContextStore } from '../../../../../components/Context'
-
-import LinkEditor from '../../../Editor/Link'
+import LinkEditor from './Editor/Link'
 
 export function VideoScript() {
   const [{ isPreview }] = useContextStore()
@@ -38,7 +36,7 @@ export function VideoScript() {
   )
 }
 
-export default function Video() {
+export default function Video({ className = '', style = {} }) {
   const [{ isPreview }] = useContextStore()
   const [appVideoValue] = useWebBuilderContext('appVideo')
   if (!isPreview && !appVideoValue) {
@@ -46,23 +44,7 @@ export default function Video() {
   }
   return (
     <LinkEditor keyName='appVideo'>
-      <div
-        id='container-play'
-        className={classNames(
-          'container-fluid',
-          'embed-responsive',
-          'd-flex',
-          'align-items-center',
-          'justify-content-center',
-          'min-vh-100',
-          'py-5',
-          'text-white',
-          'parallax'
-        )}
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640')`,
-        }}
-      >
+      <div id='container-play' className={className} style={style}>
         <svg
           id='icon-play'
           xmlns='http://www.w3.org/2000/svg'

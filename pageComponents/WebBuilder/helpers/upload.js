@@ -16,7 +16,7 @@ const compress = new Compress()
 const compressToBase64 = ([{ data, ext }]) =>
   Compress.convertBase64ToFile(data, ext)
 
-const toSafeName = (name) => name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
+// const toSafeName = (name) => name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
 
 const defaultFile =
   typeof window !== 'undefined' ? new File([], 'default.dat') : {}
@@ -28,6 +28,7 @@ export default async function upload(firebase, renderProps = {}) {
     appKey,
     appName,
     appTitle,
+    appIcon = defaultFile,
     appBanner,
     'appScreenshot-1': appScreenshot1,
     'appScreenshot-2': appScreenshot2,
@@ -40,20 +41,24 @@ export default async function upload(firebase, renderProps = {}) {
 
   const userId = firebase.auth().currentUser.uid
 
-  const appIcon = renderProps.appIcon || defaultFile
-  const appIconPath = `/${appKey}/bin/${uuid('icon')}-${toSafeName(
-    appIcon.name
-  )}`
-
+  const appIconPath = `/${appKey}/bin/${uuid('icon')}.dat`
   const appBannerPath = appBanner
-    ? `/${appKey}/bin/${uuid('banner')}-${toSafeName(appBanner.name)}`
+    ? `/${appKey}/bin/${uuid('banner')}.dat`
     : null
   const appScreenshot1Path = appScreenshot1
-    ? `/${appKey}/bin/${uuid('scr')}-${toSafeName(appScreenshot1.name)}`
+    ? `/${appKey}/bin/${uuid('scr-1')}.dat`
     : null
   const appScreenshot2Path = appScreenshot2
-    ? `/${appKey}/bin/${uuid('banner')}-${toSafeName(appScreenshot2.name)}`
+    ? `/${appKey}/bin/${uuid('scr-2')}.dat`
     : null
+
+  const renderPropsContext = {
+    ...renderProps,
+    appIcon: appIconPath,
+    appBanner: appBannerPath,
+    'appScreenshot-1': appScreenshot1Path,
+    'appScreenshot-2': appScreenshot2Path,
+  }
 
   const customMeta = {
     // cacheControl: 'public,max-age=300',
@@ -63,29 +68,17 @@ export default async function upload(firebase, renderProps = {}) {
     },
   }
 
-  // Render Template
-
-  // TODO: Clean Props
-  const renderContextProps = {
-    ...renderProps,
-    // Use Actual Image Path instead of File-URI
-    appIcon: appIconPath,
-    appBanner: appBannerPath,
-    'appScreenshot-1': appScreenshot1Path,
-    'appScreenshot-2': appScreenshot2Path,
-  }
-
   const { HeadComponent, BodyComponent } = getThemeComponent(appTheme)
   const renderHTMLHead = renderToStaticMarkup(
     <StoreContext value={{ isPreview: false }}>
-      <WebBuilderContext value={renderContextProps}>
+      <WebBuilderContext value={renderPropsContext}>
         <HeadComponent />
       </WebBuilderContext>
     </StoreContext>
   )
   const renderHTMLBody = renderToStaticMarkup(
     <StoreContext value={{ isPreview: false }}>
-      <WebBuilderContext value={renderContextProps}>
+      <WebBuilderContext value={renderPropsContext}>
         <BodyComponent />
       </WebBuilderContext>
     </StoreContext>
@@ -135,10 +128,10 @@ export default async function upload(firebase, renderProps = {}) {
     .ref(`users/${userId}/sites/${appKey}`)
     .set({
       ...appKeyData,
+      appGA,
       appName,
       appTitle,
-      appIconPath,
-      appGA,
+      appIcon: appIconPath,
       timestamp: new Date().getTime(),
     })
 
@@ -153,10 +146,20 @@ export default async function upload(firebase, renderProps = {}) {
   const JSONPromise = firebase
     .storage()
     .ref(`public/${appKey}/bin/index.json`)
-    .putString(JSON.stringify(renderContextProps), 'raw', {
-      ...customMeta,
-      contentType: 'application/json; charset=utf-8',
-    })
+    .putString(
+      JSON.stringify({
+        ...renderProps,
+        appIcon: appIconPath,
+        appBanner: appBannerPath,
+        'appScreenshot-1': appScreenshot1Path,
+        'appScreenshot-2': appScreenshot2Path,
+      }),
+      'raw',
+      {
+        ...customMeta,
+        contentType: 'application/json; charset=utf-8',
+      }
+    )
 
   // Compress & Upload Icon
   const IconPromise = renderIconData.then((file) =>

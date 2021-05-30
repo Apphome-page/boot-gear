@@ -7,13 +7,16 @@ export function NavName() {
 }
 
 export function NavFeatures() {
-  const [appVideoValue] = useWebBuilderContext('appVideo')
-  if (!appVideoValue) {
+  const [{ isPreview }] = useContextStore()
+  const [appFeature1] = useWebBuilderContext('appFeature-1')
+  const [appFeature2] = useWebBuilderContext('appFeature-2')
+  const [appFeature3] = useWebBuilderContext('appFeature-3')
+  if (!isPreview && !appFeature1 && !appFeature2 && !appFeature3) {
     return <></>
   }
   return (
     <li className='nav-item'>
-      <a className='nav-link' href='#container-play' target='_self'>
+      <a className='nav-link' href='#container-feature' target='_self'>
         Features
       </a>
     </li>
@@ -34,7 +37,7 @@ export function NavTestimonials() {
     !appTestimonial3Text &&
     !appTestimonial4Text
   ) {
-    ;<></>
+    return <></>
   }
 
   return (

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
 
-import { useWebBuilderContext } from '../../../components/Context/WebBuilder'
+import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 
 export default function NavSeo({ keyName, keyTitle, keyDesc }) {
   const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)

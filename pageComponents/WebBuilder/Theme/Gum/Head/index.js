@@ -20,7 +20,7 @@ function HeadTitle() {
   const [appTitleValue] = useWebBuilderContext('appTitle')
   return (
     <HeadWrapper>
-      <title>{appTitleValue}</title>
+      <title>{appTitleValue.replace(/(<([^>]+)>)/gi, ' ')}</title>
     </HeadWrapper>
   )
 }

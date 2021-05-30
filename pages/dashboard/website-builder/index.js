@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import fetch from 'cross-fetch'
 
-import { useFirebase } from '../../../components/Context/Login'
+import { useLogin, useFirebase } from '../../../components/Context/Login'
+import { useAlerts } from '../../../components/Context/Alert'
 
 import keyValidate from '../../../pageComponents/WebBuilder/helpers/keyValidate'
+import urlToFile from '../../../utils/urlToFile'
 
 const WebBuilderComponent = dynamic(
   () => import('../../../pageComponents/WebBuilder'),
@@ -16,37 +19,86 @@ const WebBuilderComponent = dynamic(
 
 export default function WebBuilder() {
   const router = useRouter()
+  const { addAlert } = useAlerts()
+  const { signPop } = useLogin()
   const { firebaseLaunch, firebasePromise, firebaseApp } = useFirebase()
 
-  const [validAppKey, setValidAppKey] = useState(false)
+  const [validAppData, setValidAppData] = useState(false)
 
   useEffect(() => {
-    const appKey = new URLSearchParams(window.location.search).get('appKey')
+    const queryParams = new URLSearchParams(window.location.search)
+    const appKey = queryParams.get('appKey')
+    const appName = queryParams.get('appName')
+    const appTheme = queryParams.get('appTheme')
     if (!appKey) {
       window.alert('No AppKey - No Page')
       router.push(`/app-website-builder`)
       return
     }
-    firebasePromise.then(() => {
+    firebasePromise.then(async () => {
       if (firebaseLaunch) {
         const fireUser = firebaseApp.auth().currentUser
         if (!fireUser) {
-          window.alert('Please Login to continue...')
+          addAlert('Please Login to Continue...', {
+            variant: 'warning',
+          })
+          signPop()
           return
         }
-        const keyCheck = keyValidate(firebaseApp, appKey)
+
+        const keyCheck = await keyValidate(firebaseApp, appKey)
         if (!keyCheck) {
-          window.alert('Website already exists')
+          addAlert('Upgrade your plan to create a new Website', {
+            variant: 'danger',
+            autoDismiss: false,
+          })
           return
         }
-        setValidAppKey(appKey)
-        // TODO: Fetch Existing Data if any
+
+        if (keyCheck.appName) {
+          let appDataJson = {}
+          try {
+            const appData = await firebaseApp
+              .storage()
+              .ref(`public/${appKey}/bin/index.json`)
+              .getDownloadURL()
+            const appFetchData = await fetch(appData)
+            appDataJson = await appFetchData.json()
+          } catch (e) {
+            // Ignore
+          }
+          Object.assign(keyCheck, appDataJson)
+        }
+
+        await Promise.all(
+          ['appIcon', 'appBanner', 'appScreenshot-1', 'appScreenshot-2'].map(
+            (appImageKey) => {
+              const appImagePath = keyCheck[appImageKey]
+              if (appImagePath) {
+                return urlToFile(appImagePath).then((appImageFile) => {
+                  if (appImageFile) {
+                    keyCheck[appImageKey] = appImageFile
+                  }
+                })
+              }
+              return null
+            }
+          )
+        )
+
+        Object.assign(keyCheck, {
+          appKey,
+          appName: appName || keyCheck.appName,
+          appTheme: appTheme || keyCheck.appTheme || 'gum',
+        })
+
+        setValidAppData(keyCheck)
       }
     })
-  }, [firebaseApp, firebasePromise, firebaseLaunch, router])
+  }, [firebaseApp, firebasePromise, firebaseLaunch, router, addAlert, signPop])
 
-  return validAppKey ? (
-    <WebBuilderComponent appKey={validAppKey} appTheme='gum' isPreview />
+  return validAppData ? (
+    <WebBuilderComponent appData={validAppData} isPreview />
   ) : (
     <Spinner />
   )

@@ -4,13 +4,12 @@ import classNames from 'classnames'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
-import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
-import { useContextStore } from '../../../../components/Context'
+import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../../../components/Context'
+
+import addLinkProtocol from '../../../helpers/addLinkProtocol'
 
 import styles from './styles.module.scss'
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
 const placeholderImage =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg=='
@@ -28,16 +27,13 @@ function ImageEditor({
   const [rawAppKeyValue, setRawAppKeyValue] = useWebBuilderContext(keyName)
 
   const appKeyValue = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return placeholderImage
-    }
-    if (rawAppKeyValue instanceof File) {
+    if (typeof window !== 'undefined' && rawAppKeyValue instanceof File) {
       return window.URL.createObjectURL(rawAppKeyValue)
     }
-    if (rawAppKeyValue) {
-      return isPreview ? rawAppKeyValue : `${SITE_URL}/${rawAppKeyValue}`
+    if (!isPreview && rawAppKeyValue) {
+      return rawAppKeyValue
     }
-    return placeholderImage
+    return rawAppKeyValue || placeholderImage
   }, [isPreview, rawAppKeyValue])
 
   const onChange = useCallback(
@@ -60,8 +56,7 @@ function ImageEditor({
     return rawAppKeyValue ? (
       <Image
         id={`container-${keyName}`}
-        loading='lazy'
-        src={appKeyValue}
+        src={addLinkProtocol(appKeyValue)}
         alt={alt}
         className={className}
         height={height}

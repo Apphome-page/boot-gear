@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { Container, Spinner } from 'react-bootstrap'
+import fetch from 'cross-fetch'
 
 import AuthWrapper from '../../components/AuthWrapper'
 import { useAlerts } from '../../components/Context/Alert'
@@ -42,10 +43,9 @@ export default function Payment() {
     if (!userId) {
       return
     }
-    const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.getIdToken(),
-      import('cross-fetch'),
-    ])
+
+    const idToken = await userAuth.getIdToken()
+
     try {
       const syncResp = await fetch(FIRECLOUD_USER_SYNC, {
         method: 'POST',

@@ -4,13 +4,14 @@ const ENV_PREFIX =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
 
 export default async function urlToFile(url) {
-  if (!url) {
+  if (!url || typeof url !== 'string') {
     return null
   }
+  console.log('!!! ', url)
   const remoteName =
     (url.match(/^(?:.+\/)(.+?)(?:[?#].*)$/) || [])[1] || 'file.dat'
   const remoteUrl = `${ENV_PREFIX.replace(/\/?$/, '')}/${url.replace(
-    /^(?:\/?public\/)?/,
+    /^\/?/,
     ''
   )}`
   const remoteData = await fetch(remoteUrl)

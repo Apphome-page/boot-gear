@@ -1,18 +1,21 @@
+import classNames from 'classnames'
+
 import IconFeature1 from '@svg-icons/bootstrap/award.svg'
 import IconFeature2 from '@svg-icons/bootstrap/bricks.svg'
 import IconFeature3 from '@svg-icons/bootstrap/broadcast.svg'
 
+import TextEditor from '../../../components/Editor/Text'
+import ImageEditor from '../../../components/Editor/Image'
+
+import Video, { VideoScript } from '../../../components/Video'
+import Testimonials from '../../../components/Testimonials'
+import Contact from '../../../components/Contact'
+
 import { NavName, NavFeatures, NavTestimonials } from './Nav'
 import Discover from './Discover'
 import Stats from './Stats'
-import Video, { VideoScript } from './Video'
-import Testimonials from './Testimonials'
-import Contact from './Contact'
 import Feature from './Feature'
-
-import TextEditor from '../../../Editor/Text'
-import ImageEditor from '../../../Editor/Image'
-import LinkEditor from '../../../Editor/Link'
+import Screenshot from './Screenshot'
 
 export default function BodyComponent() {
   return (
@@ -61,25 +64,27 @@ export default function BodyComponent() {
                   </div>
                 </div>
                 <div id='container-store' className='row my-5 text-center'>
-                  <div className='col-lg align-self-center'>
-                    <LinkEditor keyName='appLinkAndroid'>
-                      <img
-                        src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
-                        alt='Android Play Store'
-                        height='80'
-                      />
-                    </LinkEditor>
-                  </div>
-                  <div className='col-lg align-self-center'>
-                    <LinkEditor keyName='appLinkApple'>
-                      <img
-                        src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
-                        alt='Apple App Store'
-                        height='55'
-                        className='col-lg align-self-center'
-                      />
-                    </LinkEditor>
-                  </div>
+                  <Contact
+                    className='col-lg align-self-center'
+                    keyName='appLinkAndroid'
+                  >
+                    <img
+                      src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
+                      alt='Android Play Store'
+                      height='80'
+                    />
+                  </Contact>
+                  <Contact
+                    className='col-lg align-self-center'
+                    keyName='appLinkApple'
+                  >
+                    <img
+                      src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
+                      alt='Apple App Store'
+                      height='55'
+                      className='col-lg align-self-center'
+                    />
+                  </Contact>
                 </div>
                 <Discover />
               </div>
@@ -101,7 +106,7 @@ export default function BodyComponent() {
         </div>
       </div>
       <div id='container-feature' className='container-fluid'>
-        <div className='row rounded'>
+        <div className='row'>
           <Feature className='bg-tres' keyName='appFeature-1'>
             <IconFeature1 width='40' height='40' />
           </Feature>
@@ -113,34 +118,34 @@ export default function BodyComponent() {
           </Feature>
         </div>
       </div>
-      <div id='container-screenshot' className='container py-5'>
-        <div className='row my-5'>
-          <div className='col-lg-6 p-3'>
-            <ImageEditor
-              keyName='appScreenshot-1'
-              alt=''
-              className='w-100 h-100 shadow-lg'
-            />
-          </div>
-          <div className='col-lg-6 p-3'>
-            <TextEditor keyName='appScreenshot-1-caption' />
-          </div>
-        </div>
-        <div className='row my-5'>
-          <div className='col-lg-6 p-3'>
-            <TextEditor keyName='appScreenshot-2-caption' />
-          </div>
-          <div className='col-lg-6 p-3'>
-            <ImageEditor
-              keyName='appScreenshot-2'
-              alt=''
-              className='w-100 h-100 shadow-lg'
-            />
-          </div>
-        </div>
+      <div id='container-screenshot' className='container'>
+        <Screenshot
+          keyName='appScreenshot-1'
+          keyCaptionName='appScreenshot-1-caption'
+        />
+        <Screenshot
+          keyName='appScreenshot-2'
+          keyCaptionName='appScreenshot-2-caption'
+          isAlternate
+        />
       </div>
-      <Video />
-      <Testimonials />
+      <Video
+        className={classNames(
+          'container-fluid',
+          'embed-responsive',
+          'd-flex',
+          'align-items-center',
+          'justify-content-center',
+          'vh-100',
+          'py-5',
+          'text-white',
+          'parallax'
+        )}
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640')`,
+        }}
+      />
+      <Testimonials className='container py-5' />
       <hr
         className='m-0 bg-light'
         style={{

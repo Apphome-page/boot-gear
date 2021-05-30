@@ -3,8 +3,8 @@ import classNames from 'classnames'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
-import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
-import { useContextStore } from '../../../../components/Context'
+import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../../../components/Context'
 
 import styles from './styles.module.scss'
 

@@ -1,6 +1,6 @@
-import { useWebBuilderContext } from '../../../components/Context/WebBuilder'
+import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 
-import styles from '../styles.module.scss'
+import styles from '../../styles.module.scss'
 
 export default function Header() {
   const [appNameValue] = useWebBuilderContext('appName')

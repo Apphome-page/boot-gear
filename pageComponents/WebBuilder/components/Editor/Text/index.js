@@ -7,8 +7,8 @@ import debounce from 'lodash/debounce'
 
 import IconEdit from '@svg-icons/bootstrap/pencil-fill.svg'
 
-import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
-import { useContextStore } from '../../../../components/Context'
+import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../../../components/Context'
 
 import getEditorConfig from './getEditorConfig'
 
@@ -84,6 +84,12 @@ function TextEditor({
       }
     }
   }, [editorInit])
+
+  useEffect(() => {
+    if (appKeyValue && editorRef.current.textContent === '') {
+      editorRef.current.innerHTML = appKeyValue
+    }
+  }, [appKeyValue])
 
   if (!isPreview) {
     return (
