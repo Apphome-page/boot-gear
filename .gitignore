@@ -65,6 +65,8 @@ node_modules
 # next.js
 /.next/
 /out/
+/public/robots.txt
+/public/sitemap.xml
 
 # production
 /build
