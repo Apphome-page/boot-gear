@@ -5,10 +5,12 @@ import classNames from 'classnames'
 
 import Image from '../../../../components/ImageTag'
 
-import scrMeta from '../../../../config/scrMeta.json'
-
 import { MockupContext } from '../../helpers/MockProvider'
 import { getFrameProps } from '../../helpers/defaults'
+
+import scrMeta from '../../../../config/scrMeta.json'
+
+import styles from '../../styles.module.scss'
 
 export default function Device() {
   const {
@@ -42,7 +44,7 @@ export default function Device() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='device-style-ios' title='iOS'>
-        <Container className='preview-container'>
+        <Container className={styles.previewContainer}>
           {scrMeta.ios.map(({ id, name, sizes }, key) => (
             <Button
               className={classNames(
@@ -57,7 +59,7 @@ export default function Device() {
               onClick={eventFrame}
             >
               <Image
-                className='preview-image'
+                className={styles.previewImage}
                 src={`/scrPreview/ios/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'
@@ -68,12 +70,12 @@ export default function Device() {
         </Container>
       </Tab>
       <Tab eventKey='device-style-android' title='Android'>
-        <Container className='preview-container'>
+        <Container className={styles.previewContainer}>
           {scrMeta.android.map(({ id, name, sizes }, key) => (
             <Button
               className={classNames(
                 'm-1',
-                'preview-button',
+                styles.previewButton,
                 currentMockStore.frameId === id ? 'border-dark' : 'border'
               )}
               variant='outline-light'
@@ -84,7 +86,7 @@ export default function Device() {
               onClick={eventFrame}
             >
               <Image
-                className='preview-image'
+                className={styles.previewImage}
                 src={`/scrPreview/android/${id}/${sizes[0]}.png`}
                 height='90'
                 width='60'

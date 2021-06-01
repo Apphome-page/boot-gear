@@ -10,6 +10,8 @@ import { MockupContext } from '../../helpers/MockProvider'
 
 import scrBg from '../../../../config/scrBg.json'
 
+import styles from '../../styles.module.scss'
+
 const ColorPicker = dynamic(() => import('../ColorPicker'), {
   ssr: false,
   loading: function LoadingItem() {
@@ -54,14 +56,14 @@ export default function Design() {
   return (
     <Tabs defaultActiveKey='image' className='justify-content-center mt-1 mb-3'>
       <Tab eventKey='image' title='Image'>
-        <Container className='preview-container'>
+        <Container className={styles.previewContainer}>
           {scrBg.map(({ path }, index) => {
             const bgPreviewLink = `/scrPreview/bg/${path}`
             return (
               <Button
                 key={index}
                 variant='outline-light'
-                className={classNames('m-1', 'preview-button', {
+                className={classNames('m-1', styles.previewButton, {
                   'border-dark':
                     currentMockStore.backgroundImage === bgPreviewLink,
                   border: currentMockStore.backgroundImage === bgPreviewLink,
@@ -73,7 +75,7 @@ export default function Design() {
                   src={bgPreviewLink}
                   height='90'
                   width='60'
-                  className='preview-image'
+                  className={styles.previewImage}
                 />
               </Button>
             )

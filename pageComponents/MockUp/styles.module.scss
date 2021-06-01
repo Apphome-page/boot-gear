@@ -1,0 +1,39 @@
+.previewContainer {
+  max-height: 369px;
+  text-align: center;
+  overflow-y: scroll;
+}
+.previewButton::after {
+  content: attr(data-name) '';
+  display: block;
+  width: 72px;
+  color: #000000;
+  font-size: 10px;
+  overflow-wrap: break-word;
+}
+.previewImage {
+  margin: 4px;
+  height: 65px;
+  width: 65px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.assemblyWrap {
+  border: 1px solid transparent;
+  &:hover {
+    border: 1px dotted #cccccc;
+  }
+}
+.assemblyDummy {
+  height: 200px;
+  width: 120px;
+  &:hover {
+    filter: blur(1px);
+  }
+  &::before {
+    content: '+';
+    font-size: 96px;
+    font-family: monospace;
+  }
+}

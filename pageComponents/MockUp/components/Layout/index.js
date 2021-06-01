@@ -25,6 +25,8 @@ import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'
 import { MockupContext } from '../../helpers/MockProvider'
 
+import styles from '../../styles.module.scss'
+
 export default function Layout() {
   const {
     data: mockStore,
@@ -106,7 +108,11 @@ export default function Layout() {
       className='justify-content-center mt-1 mb-3'
     >
       <Tab eventKey='template' title='Template'>
-        <Container fluid className='preview-container' onClick={eventTemplate}>
+        <Container
+          fluid
+          className={styles.previewContainer}
+          onClick={eventTemplate}
+        >
           {Object.keys(frameTemplates).map((fTemplate) => (
             <OverlayTrigger
               key={fTemplate}
