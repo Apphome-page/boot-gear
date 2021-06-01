@@ -10,6 +10,8 @@ import { getFrameProps } from '../../helpers/defaults'
 
 import scrMeta from '../../../../config/scrMeta.json'
 
+import styles from '../../styles.module.scss'
+
 export default function Design() {
   const {
     data: mockStore,
@@ -47,7 +49,7 @@ export default function Design() {
           <Button
             className={classNames(
               'm-1',
-              'preview-button',
+              styles.previewButton,
               currentMockStore.frameDevice === model ? 'border-dark' : 'border'
             )}
             variant='outline-light'
@@ -60,7 +62,7 @@ export default function Design() {
             onClick={eventModel}
           >
             <Image
-              className='preview-image'
+              className={styles.previewImage}
               src={`/scrPreview/${currentMockStore.frameType}/${currentMockStore.frameId}/${model}.png`}
               alt='Device Model'
               height='90'

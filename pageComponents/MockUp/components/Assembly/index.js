@@ -12,6 +12,8 @@ import FrameCanvas from '../../../../components/FrameCanvas'
 
 import { MockupContext } from '../../helpers/MockProvider'
 
+import styles from '../../styles.module.scss'
+
 export default function Assembly() {
   const {
     data: mockStore,
@@ -23,16 +25,16 @@ export default function Assembly() {
     eventReset,
   } = useContext(MockupContext)
   return (
-    <div className='assembly-full-wrap p-3 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
+    <div className='p-3 d-flex align-items-center bg-light rounded border text-nowrap overflow-auto'>
       {mockStore.map((mockItem, mockIndex) => (
         <div
           className={classNames(
-            'assembly-wrap',
             'flex-shrink-0',
             'cursor-pointer',
             {
               'border-dark': mockIndex === currentMockUp,
-            }
+            },
+            styles.assemblyWrap
           )}
           key={mockIndex}
         >
@@ -88,30 +90,22 @@ export default function Assembly() {
       <Button
         variant='dark'
         onClick={addMockStore}
-        className='assembly-dummy mt-3 mx-1 border rounded d-flex flex-shrink-0 justify-content-center align-items-center bg-dark text-light text-center cursor-pointer'
+        className={classNames(
+          'mt-3',
+          'mx-1',
+          'border',
+          'rounded',
+          'd-flex',
+          'flex-shrink-0',
+          'justify-content-center',
+          'align-items-center',
+          'bg-dark',
+          'text-light',
+          'text-center',
+          'cursor-pointer',
+          styles.assemblyDummy
+        )}
       />
-      <style jsx>
-        {`
-          .assembly-full-wrap :global(.assembly-wrap) {
-            border: 1px solid transparent;
-          }
-          .assembly-full-wrap :global(.assembly-wrap:hover) {
-            border: 1px dotted #cccccc;
-          }
-          .assembly-full-wrap :global(.assembly-dummy) {
-            height: 200px;
-            width: 120px;
-          }
-          .assembly-full-wrap :global(.assembly-dummy:before) {
-            content: '+';
-            font-size: 96px;
-            font-family: monospace;
-          }
-          .assembly-full-wrap :global(.assembly-dummy:hover) {
-            filter: blur(1px);
-          }
-        `}
-      </style>{' '}
     </div>
   )
 }

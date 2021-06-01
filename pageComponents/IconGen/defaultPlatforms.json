@@ -1,0 +1,22 @@
+{
+  "iphone": {
+    "name": "iPhone",
+    "subtitle": "11 different sizes"
+  },
+  "ipad": {
+    "name": "iPad",
+    "subtitle": "13 different sizes"
+  },
+  "watch": {
+    "name": "Watch",
+    "subtitle": "8 different sizes"
+  },
+  "mac": {
+    "name": "Mac",
+    "subtitle": "11 different sizes"
+  },
+  "android": {
+    "name": "Android",
+    "subtitle": "4 different sizes"
+  }
+}
