@@ -11,6 +11,9 @@ export default function WebsiteDetails({
   webLink = `/${webKey}/`,
   webData: { appName, appIcon, appTitle, timestamp } = {},
 } = {}) {
+  if (!appName) {
+    return <></>
+  }
   return (
     <Media>
       <Image
