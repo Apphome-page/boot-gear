@@ -15,8 +15,8 @@ const Testimonial = ({ appTestimonialIndex }) => (
         className='mb-0'
         buttons={textEditorButtons}
       />
-      <footer className='blockquote-footer'>
-        <cite>
+      <footer className='blockquote-footer d-flex'>
+        <cite className='flex-fill'>
           <TextEditor
             keyName={`appTestimonial-${appTestimonialIndex}-source`}
             buttons={textEditorButtons}
