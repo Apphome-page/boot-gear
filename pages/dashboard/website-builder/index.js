@@ -26,7 +26,10 @@ export default function WebBuilder() {
   const { signPop } = useLogin()
   const { firebaseLaunch, firebasePromise, firebaseApp } = useFirebase()
 
-  const [validAppData, setValidAppData] = useState(false)
+  const [validAppData, setValidAppData] = useState({
+    appKey: 'haha',
+    appTheme: 'purple',
+  })
 
   useEffect(() => {
     if (validAppData) {

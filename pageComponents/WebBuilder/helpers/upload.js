@@ -30,6 +30,8 @@ export default async function upload(firebase, renderProps = {}) {
     appTitle,
     appIcon = defaultFile,
     appBanner,
+    appTnC,
+    appPP,
     'appScreenshot-1': appScreenshot1,
     'appScreenshot-2': appScreenshot2,
   } = renderProps
@@ -41,15 +43,13 @@ export default async function upload(firebase, renderProps = {}) {
 
   const userId = firebase.auth().currentUser.uid
 
-  const appIconPath = `/${appKey}/bin/${uuid('icon')}.dat`
-  const appBannerPath = appBanner
-    ? `/${appKey}/bin/${uuid('banner')}.dat`
-    : null
+  const appIconPath = `/${appKey}/${uuid('icon')}.dat`
+  const appBannerPath = appBanner ? `/${appKey}/${uuid('banner')}.dat` : null
   const appScreenshot1Path = appScreenshot1
-    ? `/${appKey}/bin/${uuid('scr-1')}.dat`
+    ? `/${appKey}/${uuid('scr-1')}.dat`
     : null
   const appScreenshot2Path = appScreenshot2
-    ? `/${appKey}/bin/${uuid('scr-2')}.dat`
+    ? `/${appKey}/${uuid('scr-2')}.dat`
     : null
 
   const renderPropsContext = {
@@ -83,8 +83,36 @@ export default async function upload(firebase, renderProps = {}) {
       </WebBuilderContext>
     </StoreContext>
   )
+  const renderHTMLTnC = renderToStaticMarkup(
+    <StoreContext value={{ isPreview: false }}>
+      <WebBuilderContext value={renderPropsContext}>
+        <BodyComponent>
+          <div className='container p-3'>
+            <h1>Terms & Conditions</h1>
+            <br />
+            {appTnC}
+          </div>
+        </BodyComponent>
+      </WebBuilderContext>
+    </StoreContext>
+  )
+  const renderHTMLPP = renderToStaticMarkup(
+    <StoreContext value={{ isPreview: false }}>
+      <WebBuilderContext value={renderPropsContext}>
+        <BodyComponent>
+          <div className='container p-3'>
+            <h1>Privacy Policy</h1>
+            <br />
+            {appPP}
+          </div>
+        </BodyComponent>
+      </WebBuilderContext>
+    </StoreContext>
+  )
 
   const renderHTMLData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLBody}</body></html>`
+  const renderHTMLTnCData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLTnC}</body></html>`
+  const renderHTMLPPData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLPP}</body></html>`
 
   const renderIconData = compress
     .compress([appIcon], {
@@ -136,16 +164,33 @@ export default async function upload(firebase, renderProps = {}) {
     })
 
   // Update file in storage
-  const HTMLPromise = firebase
-    .storage()
-    .ref(`public/${appKey}/index.html`)
-    .putString(renderHTMLData, 'raw', {
-      ...customMeta,
-      contentType: 'text/html; charset=utf-8',
-    })
+  const HTMLPromise = Promise.all([
+    firebase
+      .storage()
+      .ref(`public/${appKey}/index.html`)
+      .putString(renderHTMLData, 'raw', {
+        ...customMeta,
+        contentType: 'text/html; charset=utf-8',
+      }),
+    firebase
+      .storage()
+      .ref(`public/${appKey}/terms-and-conditions.html`)
+      .putString(renderHTMLTnCData, 'raw', {
+        ...customMeta,
+        contentType: 'text/html; charset=utf-8',
+      }),
+    firebase
+      .storage()
+      .ref(`public/${appKey}/privacy-policy.html`)
+      .putString(renderHTMLPPData, 'raw', {
+        ...customMeta,
+        contentType: 'text/html; charset=utf-8',
+      }),
+  ])
+
   const JSONPromise = firebase
     .storage()
-    .ref(`public/${appKey}/bin/index.json`)
+    .ref(`public/${appKey}/index.json`)
     .putString(
       JSON.stringify({
         ...renderProps,

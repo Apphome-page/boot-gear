@@ -1,21 +1,21 @@
-import { useCallback } from 'react'
 import classNames from 'classnames'
 
 import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
 
+import { useLinkContext } from '../Editor/Link'
+
 export default function NavSeo({ keyName, keyTitle, keyDesc }) {
+  const getLink = useLinkContext()
   const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
 
-  const clickActionCb = useCallback(
-    (prevKeyValue) => {
-      const newKeyValue = window.prompt(keyTitle, prevKeyValue || '')
-      return newKeyValue === null ? prevKeyValue : newKeyValue
-    },
-    [keyTitle]
-  )
-
-  const clickAction = () => {
-    setAppKeyValue(clickActionCb)
+  const clickAction = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    getLink({
+      title: keyTitle,
+      defaultValue: appKeyValue,
+      onChange: setAppKeyValue,
+    })
   }
 
   return (

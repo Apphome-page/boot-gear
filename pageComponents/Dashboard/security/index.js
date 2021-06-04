@@ -46,7 +46,7 @@ export default function Security() {
     addAlert('Password Updated Successfully!', {
       variant: 'success',
     })
-  }, [addAlert, userAuth])
+  }, [addAlert, firebaseApp, userAuth])
   return (
     <>
       <div className='pb-1 my-1 border-bottom lead text-dark'>Security</div>

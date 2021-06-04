@@ -3,12 +3,18 @@ import classNames from 'classnames'
 import Nav from './Nav'
 import NavSection from './NavSection'
 import NavSeo from './NavSeo'
+import NavPage, { NavPageProvider } from './NavPage'
 import Header from './Header'
 import Footer from './Footer'
 
 import styles from './styles.module.scss'
 
 const webBuilderSeoKeys = [['appGA', 'GA Key', 'Google Analytics Tracking Id']]
+
+const webBuilderPageKeys = [
+  ['appTnC', 'Terms & Conditions', 'Content for Terms & Conditions Page'],
+  ['appPP', 'Privacy Policy', 'Content for Privacy Policy Page'],
+]
 
 const webBuilderAtomKeys = [
   // [container-key, Text, Description, onlyNavigate]
@@ -105,6 +111,17 @@ export default function Aside() {
             keyDesc={atomDesc}
           />
         ))}
+        <div className='mt-3 mb-1 border-bottom'>Supporting Content</div>
+        <NavPageProvider>
+          {webBuilderPageKeys.map(([atomKey, atomTitle, atomDesc]) => (
+            <NavPage
+              key={atomKey}
+              keyName={atomKey}
+              keyTitle={atomTitle}
+              keyDesc={atomDesc}
+            />
+          ))}
+        </NavPageProvider>
         <div className='mt-3 mb-1 border-bottom'>Page Elements</div>
         {webBuilderAtomKeys.map(
           ([atomKey, atomTitle, atomDesc, atomSections]) => {

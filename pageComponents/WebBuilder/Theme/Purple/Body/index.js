@@ -19,7 +19,7 @@ import Feature from './Feature'
 
 import styles from './styles.module.scss'
 
-export default function Body() {
+function BodyWrap({ children }) {
   return (
     <div className={classNames('position-relative', styles.body)}>
       <Navbar
@@ -47,6 +47,17 @@ export default function Body() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      {children}
+    </div>
+  )
+}
+
+export default function Body({ children }) {
+  if (children) {
+    return <BodyWrap>{children}</BodyWrap>
+  }
+  return (
+    <BodyWrap>
       <div className={classNames('position-relative py-5', styles.intro)}>
         <Container>
           <Row className='align-items-center'>
@@ -343,6 +354,6 @@ export default function Body() {
         </div>
       </div>
       <VideoScript />
-    </div>
+    </BodyWrap>
   )
 }

@@ -19,81 +19,91 @@ import Screenshot from './Screenshot'
 
 import styles from './styles.module.scss'
 
-export default function BodyComponent() {
+function BodyWrap({ children }) {
   return (
     <div className='gum-body'>
-      <div id='main'>
-        <nav
-          id='nav'
-          className='container py-3 navbar navbar-expand-lg navbar-dark'
+      <nav
+        id='nav'
+        className='container py-3 navbar navbar-expand-lg navbar-dark'
+      >
+        <div className='navbar-brand flex-shrink-0'>
+          <div className='d-inline-block'>
+            <ImageEditor keyName='appIcon' width='30' height='30' />
+          </div>
+          <NavName />
+        </div>
+        <div
+          className='justify-content-end collapse navbar-collapse mx-3'
+          id='navbarNav'
         >
-          <div className='navbar-brand flex-shrink-0'>
-            <div className='d-inline-block'>
-              <ImageEditor keyName='appIcon' width='30' height='30' />
-            </div>
-            <NavName />
-          </div>
-          <div
-            className='justify-content-end collapse navbar-collapse mx-3'
-            id='navbarNav'
-          >
-            <ul className='navbar-nav'>
-              <NavFeatures />
-              <NavTestimonials />
-            </ul>
-          </div>
-          <div className='ml-auto mt-1'>
-            <button type='button' className='btn btn-light flex-shrink-0'>
-              Download
-            </button>
-          </div>
-        </nav>
-        <main className='container my-3 py-5'>
-          <div className='row align-items-center'>
-            <div className='col-lg-6'>
-              <div className='container py-5'>
-                <div className='row my-5'>
-                  <div className='col'>
-                    <h1>
-                      <TextEditor keyName='appTitle' />
-                    </h1>
-                    <div className='p-1 rounded bg-white lead font-weight-normal text-justify text-muted text-break'>
-                      <TextEditor keyName='appDescription' />
-                    </div>
+          <ul className='navbar-nav'>
+            <NavFeatures />
+            <NavTestimonials />
+          </ul>
+        </div>
+        <div className='ml-auto mt-1'>
+          <button type='button' className='btn btn-light flex-shrink-0'>
+            Download
+          </button>
+        </div>
+      </nav>
+      {children}
+    </div>
+  )
+}
+
+export default function BodyComponent({ children }) {
+  if (children) {
+    return <BodyWrap>{children}</BodyWrap>
+  }
+  return (
+    <BodyWrap>
+      <main id='main' className='container my-3 py-5'>
+        <div className='row align-items-center'>
+          <div className='col-lg-6'>
+            <div className='container py-5'>
+              <div className='row my-5'>
+                <div className='col'>
+                  <h1>
+                    <TextEditor keyName='appTitle' />
+                  </h1>
+                  <div className='p-1 rounded bg-white lead font-weight-normal text-justify text-muted text-break'>
+                    <TextEditor keyName='appDescription' />
                   </div>
                 </div>
-                <div id='container-store' className='row my-5 text-center'>
-                  <Contact
-                    className='col-lg align-self-center'
-                    keyName='appLinkAndroid'
-                  >
-                    <img
-                      src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
-                      alt='Android Play Store'
-                      height='80'
-                    />
-                  </Contact>
-                  <Contact
-                    className='col-lg align-self-center'
-                    keyName='appLinkApple'
-                  >
-                    <img
-                      src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
-                      alt='Apple App Store'
-                      height='55'
-                      className='col-lg align-self-center'
-                    />
-                  </Contact>
-                </div>
-                <Discover />
               </div>
-            </div>
-            <div className='col-lg-6'>
-              <ImageEditor keyName='appBanner' alt='' className='w-100' />
+              <div id='container-store' className='row my-5 text-center'>
+                <Contact
+                  className='col-lg align-self-center'
+                  keyName='appLinkAndroid'
+                >
+                  <img
+                    src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
+                    alt='Android Play Store'
+                    height='80'
+                  />
+                </Contact>
+                <Contact
+                  className='col-lg align-self-center'
+                  keyName='appLinkApple'
+                >
+                  <img
+                    src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
+                    alt='Apple App Store'
+                    height='55'
+                    className='col-lg align-self-center'
+                  />
+                </Contact>
+              </div>
+              <Discover />
             </div>
           </div>
-        </main>
-      </div>
+          <div className='col-lg-6'>
+            <ImageEditor keyName='appBanner' alt='' className='w-100' />
+          </div>
+        </div>
+      </main>
+
       <div id='container-metric' className='container py-5 text-center'>
         <div className='row'>
           <div className='col-lg-6 p-3'>
@@ -329,6 +339,6 @@ export default function BodyComponent() {
         </div>
       </div>
       <VideoScript />
-    </div>
+    </BodyWrap>
   )
 }

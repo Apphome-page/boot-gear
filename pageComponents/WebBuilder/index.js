@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import WebBuilderContext from '../../components/Context/WebBuilder'
 import StoreContext from '../../components/Context'
+import { LinkProvider } from './components/Editor/Link'
 
 import AsideComponent from './components/Aside'
 
@@ -18,19 +19,21 @@ export default function Builder({ appData, isPreview }) {
 
   return (
     <StoreContext value={{ isPreview }}>
-      <WebBuilderContext value={appData}>
-        <div className={styles.wrap}>
-          <div className={styles.aside}>
-            <div className={styles.asideSticky}>
-              <AsideComponent />
+      <LinkProvider>
+        <WebBuilderContext value={appData}>
+          <div className={styles.wrap}>
+            <div className={styles.aside}>
+              <div className={styles.asideSticky}>
+                <AsideComponent />
+              </div>
+            </div>
+            <div className={styles.preview}>
+              <HeadComponent />
+              <BodyComponent />
             </div>
           </div>
-          <div className={styles.preview}>
-            <HeadComponent />
-            <BodyComponent />
-          </div>
-        </div>
-      </WebBuilderContext>
+        </WebBuilderContext>
+      </LinkProvider>
     </StoreContext>
   )
 }
