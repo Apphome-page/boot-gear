@@ -1,0 +1,13 @@
+.plainLabel {
+  border: 3px solid transparent;
+  &:before {
+    display: none !important;
+  }
+  &:after {
+    display: none !important;
+  }
+}
+
+:global(.custom-control-input):checked ~ .plainLabel {
+  border-color: green;
+}

@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 
-import WebBuilderContext from '../../components/Context/WebBuilder'
+import WebBuilderContext, {
+  useWebBuilderContext,
+} from '../../components/Context/WebBuilder'
 import StoreContext from '../../components/Context'
 import { LinkProvider } from './components/Editor/Link'
 
@@ -10,13 +12,21 @@ import getThemeComponent from './helpers/getThemeComponent'
 
 import styles from './styles.module.scss'
 
-export default function Builder({ appData, isPreview }) {
-  const { appTheme } = appData || {}
+function PreviewComponent() {
+  const [appTheme] = useWebBuilderContext('appTheme')
   const { HeadComponent, BodyComponent } = useMemo(
     () => getThemeComponent(appTheme),
     [appTheme]
   )
+  return (
+    <>
+      <HeadComponent />
+      <BodyComponent />
+    </>
+  )
+}
 
+export default function Builder({ appData, isPreview }) {
   return (
     <StoreContext value={{ isPreview }}>
       <LinkProvider>
@@ -28,8 +38,7 @@ export default function Builder({ appData, isPreview }) {
               </div>
             </div>
             <div className={styles.preview}>
-              <HeadComponent />
-              <BodyComponent />
+              <PreviewComponent />
             </div>
           </div>
         </WebBuilderContext>

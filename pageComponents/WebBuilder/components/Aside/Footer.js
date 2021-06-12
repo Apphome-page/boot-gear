@@ -1,5 +1,10 @@
 import { useCallback } from 'react'
+import { Button } from 'react-bootstrap'
 import { useRouter } from 'next/router'
+
+import IconLeave from '@svg-icons/bootstrap/box-arrow-in-left.svg'
+
+import Link from '../../../../components/Tag/Link'
 
 import { useWebBuilderCallback } from '../../../../components/Context/WebBuilder'
 import { useFirebase } from '../../../../components/Context/Login'
@@ -57,8 +62,15 @@ export default function Footer() {
   ])
 
   return (
-    <button type='button' className='btn btn-alt' onClick={publishAction}>
-      Publish
-    </button>
+    <div className='w-100 d-flex justify-content-around'>
+      <Link href='/dashboard/websites'>
+        <Button variant='dark' size='sm' className='rounded-0'>
+          <IconLeave height='14' width='14' />
+        </Button>
+      </Link>
+      <Button variant='alt' size='sm' onClick={publishAction}>
+        Publish
+      </Button>
+    </div>
   )
 }

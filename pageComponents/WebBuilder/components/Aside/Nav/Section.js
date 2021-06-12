@@ -1,4 +1,6 @@
-export default function NavSection({
+import { memo } from 'react'
+
+function RawNavSection({
   keyName,
   keyTitle,
   keyDesc,
@@ -27,3 +29,7 @@ export default function NavSection({
     </div>
   )
 }
+
+const NavSection = memo(RawNavSection)
+
+export default NavSection

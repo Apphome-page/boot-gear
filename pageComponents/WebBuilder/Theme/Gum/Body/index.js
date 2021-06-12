@@ -1,3 +1,4 @@
+import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
 
 import IconFeature1 from '@svg-icons/bootstrap/award.svg'
@@ -21,32 +22,23 @@ import styles from './styles.module.scss'
 
 function BodyWrap({ children }) {
   return (
-    <div className='gum-body'>
-      <nav
-        id='nav'
-        className='container py-3 navbar navbar-expand-lg navbar-dark'
-      >
-        <div className='navbar-brand flex-shrink-0'>
-          <div className='d-inline-block'>
+    <div className={styles.gumBody}>
+      <Navbar className='shadow' variant='light' bg='white' expand='lg'>
+        <Container>
+          <Navbar.Brand className='d-flex'>
             <ImageEditor keyName='appIcon' width='30' height='30' />
-          </div>
-          <NavName />
-        </div>
-        <div
-          className='justify-content-end collapse navbar-collapse mx-3'
-          id='navbarNav'
-        >
-          <ul className='navbar-nav'>
-            <NavFeatures />
-            <NavTestimonials />
-          </ul>
-        </div>
-        <div className='ml-auto mt-1'>
-          <button type='button' className='btn btn-light flex-shrink-0'>
-            Download
-          </button>
-        </div>
-      </nav>
+            <NavName />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='mr-auto' />
+            <Nav>
+              <NavFeatures />
+              <NavTestimonials />
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
       {children}
     </div>
   )
@@ -58,76 +50,79 @@ export default function BodyComponent({ children }) {
   }
   return (
     <BodyWrap>
-      <main id='main' className='container my-3 py-5'>
-        <div className='row align-items-center'>
-          <div className='col-lg-6'>
-            <div className='container py-5'>
-              <div className='row my-5'>
-                <div className='col'>
-                  <h1>
-                    <TextEditor keyName='appTitle' />
-                  </h1>
-                  <div className='p-1 rounded bg-white lead font-weight-normal text-justify text-muted text-break'>
-                    <TextEditor keyName='appDescription' />
-                  </div>
-                </div>
-              </div>
-              <div id='container-store' className='row my-5 text-center'>
-                <Contact
-                  className='col-lg align-self-center'
-                  keyName='appLinkAndroid'
-                >
-                  <img
-                    src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
-                    alt='Android Play Store'
-                    height='80'
-                  />
-                </Contact>
-                <Contact
-                  className='col-lg align-self-center'
-                  keyName='appLinkApple'
-                >
-                  <img
-                    src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
-                    alt='Apple App Store'
-                    height='55'
-                    className='col-lg align-self-center'
-                  />
-                </Contact>
-              </div>
-              <Discover />
-            </div>
-          </div>
-          <div className='col-lg-6'>
-            <ImageEditor keyName='appBanner' alt='' className='w-100' />
-          </div>
-        </div>
-      </main>
+      <Container fluid className={classNames('p-5', styles.main)}>
+        <Container>
+          <Row className='align-items-center'>
+            <Col lg={6}>
+              <Container className='container py-5'>
+                <Row className='row my-5'>
+                  <Col className='col'>
+                    <h1>
+                      <TextEditor keyName='appTitle' />
+                    </h1>
+                    <div className='p-1 rounded bg-white lead font-weight-normal text-justify text-muted text-break'>
+                      <TextEditor keyName='appDescription' />
+                    </div>
+                  </Col>
+                </Row>
+                <Row id='container-store' className='row my-5 text-center'>
+                  <Col className='d-flex justify-content-center'>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkAndroid'
+                    >
+                      <img
+                        src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
+                        alt='Android Play Store'
+                        height='80'
+                      />
+                    </Contact>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkApple'
+                    >
+                      <img
+                        src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
+                        alt='Apple App Store'
+                        height='55'
+                      />
+                    </Contact>
+                  </Col>
+                </Row>
+                <Discover />
+              </Container>
+            </Col>
+            <Col lg={6}>
+              <ImageEditor keyName='appBanner' alt='' className='w-100' />
+            </Col>
+          </Row>
+        </Container>
+      </Container>
 
-      <div id='container-metric' className='container py-5 text-center'>
-        <div className='row'>
-          <div className='col-lg-6 p-3'>
+      <Container id='container-metric' className='py-5 text-center'>
+        <Row className='row'>
+          <Col lg={6} className='p-3'>
             <Stats keyName='appMetricDownloads' />
-          </div>
-          <div className='col-lg-6 p-3'>
+          </Col>
+          <Col lg={6} className='p-3'>
             <Stats keyName='appMetricRatings' />
-          </div>
-        </div>
-      </div>
-      <div id='container-feature' className='container-fluid'>
-        <div className='row'>
-          <Feature className='bg-tres' keyName='appFeature-1'>
+          </Col>
+        </Row>
+      </Container>
+      <Container fluid id='container-feature'>
+        <Row className='row'>
+          <Feature className={styles.bgSecondary} keyName='appFeature-1'>
             <IconFeature1 width='40' height='40' />
           </Feature>
-          <Feature className='bg-dos' keyName='appFeature-2'>
+          <Feature className={styles.bgPrimary} keyName='appFeature-2'>
             <IconFeature2 width='40' height='40' />
           </Feature>
-          <Feature className='bg-uno' keyName='appFeature-3'>
+          <Feature className={styles.bgTerniary} keyName='appFeature-3'>
             <IconFeature3 width='40' height='40' />
           </Feature>
-        </div>
-      </div>
-      <div id='container-screenshot' className='container'>
+        </Row>
+      </Container>
+      <Container id='container-screenshot'>
         <Screenshot
           keyName='appScreenshot-1'
           keyCaptionName='appScreenshot-1-caption'
@@ -137,7 +132,7 @@ export default function BodyComponent({ children }) {
           keyCaptionName='appScreenshot-2-caption'
           isAlternate
         />
-      </div>
+      </Container>
       <Video
         className={classNames(
           'container-fluid',
@@ -148,11 +143,9 @@ export default function BodyComponent({ children }) {
           'vh-100',
           'p-3',
           'text-white',
-          'parallax'
+          styles.parallax,
+          styles.video
         )}
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640')`,
-        }}
       />
       <Testimonials className='container py-5' />
       <hr

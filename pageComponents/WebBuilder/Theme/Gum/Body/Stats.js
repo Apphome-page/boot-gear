@@ -1,7 +1,11 @@
+import classNames from 'classnames'
+
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
 import TextEditor from '../../../components/Editor/Text'
+
+import styles from './styles.module.scss'
 
 export default function Stats({ keyName }) {
   const [{ isPreview }] = useContextStore()
@@ -13,7 +17,12 @@ export default function Stats({ keyName }) {
 
   return (
     <>
-      <div className='count d-inline-block h1 font-weight-lighter'>
+      <div
+        className={classNames(
+          'd-inline-block h1 font-weight-lighter',
+          styles.count
+        )}
+      >
         <TextEditor keyName={keyName} buttons={[]} />
       </div>
       <div className='ml-1 d-inline-block lead'>

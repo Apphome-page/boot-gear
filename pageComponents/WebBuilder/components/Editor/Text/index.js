@@ -26,9 +26,11 @@ const defaultButtons = [
   'unorderedlist',
 ]
 
+const defaultPlaceholder = 'Lorem Ipsum  '
+
 function TextEditor({
   keyName,
-  placeholderText,
+  placeholderText = defaultPlaceholder,
   buttons = defaultButtons,
   className,
 }) {
@@ -144,6 +146,13 @@ function TextEditor({
           }
           .medium-editor-toolbar-actions button {
             border-radius: 0px !important;
+          }
+          .medium-editor-placeholder:after {
+            position: relative;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
           }
         `}
       </style>

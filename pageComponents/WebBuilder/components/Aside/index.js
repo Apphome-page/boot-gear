@@ -1,84 +1,13 @@
 import classNames from 'classnames'
 
 import Nav from './Nav'
-import NavSection from './NavSection'
-import NavSeo from './NavSeo'
-import NavPage, { NavPageProvider } from './NavPage'
+import NavSeo from './Nav/Seo'
+import NavPage from './Nav/Page'
+import NavTheme from './Nav/Theme'
 import Header from './Header'
 import Footer from './Footer'
 
 import styles from './styles.module.scss'
-
-const webBuilderSeoKeys = [['appGA', 'GA Key', 'Google Analytics Tracking Id']]
-
-const webBuilderPageKeys = [
-  ['appTnC', 'Terms & Conditions', 'Content for Terms & Conditions Page'],
-  ['appPP', 'Privacy Policy', 'Content for Privacy Policy Page'],
-]
-
-const webBuilderAtomKeys = [
-  // [container-key, Text, Description, onlyNavigate]
-  ['appIcon', 'Icon', 'Icon of your App'],
-  ['appTitle', 'Title', 'Title of your App'],
-  ['appDescription', 'Description', 'Description of your App'],
-  ['appBanner', 'Banner Image', 'Iconic Image in First-Fold'],
-  [
-    'store',
-    'Store Links',
-    'Store Links of your App',
-    ['appLinkAndroid', 'appLinkApple'],
-  ],
-  [
-    'metric',
-    'Metrics',
-    'Store Metrics of your App',
-    ['appMetricRatings', 'appMetricDownloads'],
-  ],
-  [
-    'feature',
-    'Features',
-    'Features of your App',
-    ['appFeature-1', 'appFeature-2', 'appFeature-3', 'appFeature-4'],
-  ],
-  [
-    'screenshot',
-    'Screenshots',
-    'Screenshots of your App',
-    ['appScreenshot-1', 'appScreenshot-2'],
-  ],
-  ['appVideo', 'App Video', 'Supporting Youtube Video for your App'],
-  [
-    'testimonials',
-    'Testimonials',
-    'Testimonial for your App',
-    [
-      'appTestimonial-1-text',
-      'appTestimonial-2-text',
-      'appTestimonial-3-text',
-      'appTestimonial-4-text',
-    ],
-  ],
-  ['appAbout', 'About', 'About the Developer'],
-  ['appAddress', 'Address', 'Developer Address'],
-  [
-    'contact',
-    'Contact Info',
-    'Developer Contact Information',
-    [
-      'appLinkPhone',
-      'appLinkMail',
-      'appLinkFacebook',
-      'appLinkInstagram',
-      'appLinkLinkedin',
-      'appLinkDiscord',
-      'appLinkTwitch',
-      'appLinkTwitter',
-      'appLinkWhatsapp',
-      'appLinkTelegram',
-      'appLinkYoutube',
-    ],
-  ],
-]
 
 export default function Aside() {
   return (
@@ -102,41 +31,32 @@ export default function Aside() {
         <Header />
       </div>
       <div className={classNames('p-1', styles.asideKnobs)}>
-        <div className='mt-3 mb-1 border-bottom'>SEO Elements</div>
-        {webBuilderSeoKeys.map(([atomKey, atomTitle, atomDesc]) => (
-          <NavSeo
-            key={atomKey}
-            keyName={atomKey}
-            keyTitle={atomTitle}
-            keyDesc={atomDesc}
-          />
-        ))}
-        <div className='mt-3 mb-1 border-bottom'>Supporting Content</div>
-        <NavPageProvider>
-          {webBuilderPageKeys.map(([atomKey, atomTitle, atomDesc]) => (
-            <NavPage
-              key={atomKey}
-              keyName={atomKey}
-              keyTitle={atomTitle}
-              keyDesc={atomDesc}
-            />
-          ))}
-        </NavPageProvider>
-        <div className='mt-3 mb-1 border-bottom'>Page Elements</div>
-        {webBuilderAtomKeys.map(
-          ([atomKey, atomTitle, atomDesc, atomSections]) => {
-            const AtomContainer = atomSections ? NavSection : Nav
-            return (
-              <AtomContainer
-                key={atomKey}
-                keyName={atomKey}
-                keyTitle={atomTitle}
-                keyDesc={atomDesc}
-                keySections={atomSections}
-              />
-            )
-          }
-        )}
+        <details open className='my-3'>
+          <summary className='py-1 m-1 border-bottom'>Theme</summary>
+          <section>
+            <NavTheme />
+          </section>
+        </details>
+        <details open className='my-3'>
+          <summary className='py-1 m-1 border-bottom'>SEO Elements</summary>
+          <section>
+            <NavSeo />
+          </section>
+        </details>
+        <details open className='my-3'>
+          <summary className='py-1 m-1 border-bottom'>
+            Supporting Content
+          </summary>
+          <section>
+            <NavPage />
+          </section>
+        </details>
+        <details open className='my-3'>
+          <summary className='py-1 m-1 border-bottom'>Page Elements</summary>
+          <section>
+            <Nav />
+          </section>
+        </details>
       </div>
       <div className={styles.asideStuds}>
         <Footer />

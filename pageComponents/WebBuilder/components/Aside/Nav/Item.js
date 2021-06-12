@@ -1,7 +1,8 @@
 import classNames from 'classnames'
-import { useWebBuilderContext } from '../../../../components/Context/WebBuilder'
+import { memo } from 'react'
+import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 
-export default function Nav({ keyName, keyTitle, keyDesc }) {
+function RawNavItem({ keyName, keyTitle, keyDesc }) {
   const [appKeyValue] = useWebBuilderContext(keyName)
   const getInView = () => {
     const viewContainer = document.getElementById(`container-${keyName}`)
@@ -30,3 +31,7 @@ export default function Nav({ keyName, keyTitle, keyDesc }) {
     </div>
   )
 }
+
+const NavItem = memo(RawNavItem)
+
+export default NavItem

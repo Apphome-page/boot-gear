@@ -13,7 +13,6 @@ import {
 } from 'react-bootstrap'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import classNames from 'classnames'
 
 import IconInfo from '@svg-icons/bootstrap/info-circle.svg'
 
@@ -26,21 +25,9 @@ import FAQ from '../../components/FAQ'
 import keyValidate from '../../pageComponents/WebBuilder/helpers/keyValidate'
 
 import faqList from '../../pageData/app-website-builder/faq.json'
+import RadioImageButtons from '../../components/RadioImageButtons'
 
-const THEMES = [
-  {
-    key: 'gum',
-    src: '/img/template/gum.jpg',
-  },
-  {
-    key: 'wave',
-    src: '/img/template/wave.jpg',
-  },
-  {
-    key: 'grass',
-    src: '/img/template/grass.jpg',
-  },
-]
+import THEMES from '../../config/websiteThemes.json'
 
 export default function Website() {
   const router = useRouter()
@@ -54,8 +41,12 @@ export default function Website() {
     (event) => {
       event.preventDefault()
       event.stopPropagation()
-      const { value } = event.target.elements.appKey
-      if (!value) {
+      const {
+        appName: { value: appName },
+        appTheme: { value: appTheme },
+      } = event.target.elements
+      const appKey = appName.replace(/\W/gi, '-').toLowerCase()
+      if (!appName) {
         addAlert('Please provide appropriate appName', {
           variant: 'info',
         })
@@ -76,9 +67,9 @@ export default function Website() {
           })
           return
         }
-        const keyValue = value.replace(/\W/gi, '-').toLowerCase()
+
         queueLoading()
-        const keyCheck = await keyValidate(firebaseApp, keyValue)
+        const keyCheck = await keyValidate(firebaseApp, appKey)
         unqueueLoading()
         if (!keyCheck) {
           addAlert(
@@ -91,7 +82,7 @@ export default function Website() {
           return
         }
         router.push(
-          `/dashboard/website-builder?appKey=${keyValue}&appName=${value}`
+          `/dashboard/website-builder?appKey=${appKey}&appName=${appName}&appTheme=${appTheme}`
         )
       })
     },
@@ -138,87 +129,61 @@ export default function Website() {
           <Row>
             <Col lg={6}>
               <Form onSubmit={keyValidateAction}>
-                <Form.Group controlId='appKey'>
-                  <Form.Row>
-                    <Col className='d-inline-flex align-items-center'>
-                      <span className='lead'>App Name</span>
-                      <OverlayTrigger
-                        placement='right'
-                        overlay={
-                          <Tooltip id='Tip for App Name'>
-                            Unique identifier for your app
-                          </Tooltip>
-                        }
-                      >
-                        <IconInfo
-                          height='16'
-                          width='16'
-                          className='ml-1 text-white-50 cursor-pointer'
-                        />
-                      </OverlayTrigger>
-                    </Col>
-                  </Form.Row>
-                  <Form.Row className='ml-3'>
-                    <Col>
-                      <InputGroup>
-                        <FormControl />
-                      </InputGroup>
-                    </Col>
-                  </Form.Row>
-                </Form.Group>
+                <Form.Row>
+                  <Col className='d-inline-flex align-items-center'>
+                    <span className='lead'>App Name</span>
+                    <OverlayTrigger
+                      placement='right'
+                      overlay={
+                        <Tooltip id='Tip for App Name'>
+                          Unique identifier for your app
+                        </Tooltip>
+                      }
+                    >
+                      <IconInfo
+                        height='16'
+                        width='16'
+                        className='ml-1 text-white-50 cursor-pointer'
+                      />
+                    </OverlayTrigger>
+                  </Col>
+                </Form.Row>
+                <Form.Row className='ml-3'>
+                  <Col>
+                    <InputGroup>
+                      <FormControl name='appName' />
+                    </InputGroup>
+                  </Col>
+                </Form.Row>
                 <Form.Row>
                   <Col>
                     <hr />
                   </Col>
                 </Form.Row>
-                <Form.Group controlId='appTheme'>
-                  <Form.Row>
-                    <Col className='d-inline-flex align-items-center'>
-                      <span className='lead'>Theme</span>
-                      <OverlayTrigger
-                        placement='right'
-                        overlay={
-                          <Tooltip id='Tip for AppTheme'>
-                            Theme for your App Website
-                          </Tooltip>
-                        }
-                      >
-                        <IconInfo
-                          height='16'
-                          width='16'
-                          className='ml-1 text-white-50 cursor-pointer'
-                        />
-                      </OverlayTrigger>
-                    </Col>
-                  </Form.Row>
-                  <Form.Row className='ml-3'>
-                    <Col>
-                      {THEMES.map(({ key, src }) => (
-                        <div
-                          key={key}
-                          className={classNames(
-                            'icon-theme',
-                            'd-inline-flex',
-                            'm-1',
-                            'p-0',
-                            'border',
-                            'rounded',
-                            'cursor-pointer',
-                            'bg-light'
-                          )}
-                        >
-                          <Image
-                            src={src}
-                            width='200'
-                            height='105'
-                            className='m-0 p-0'
-                            data-theme={key}
-                          />
-                        </div>
-                      ))}
-                    </Col>
-                  </Form.Row>
-                </Form.Group>
+                <Form.Row>
+                  <Col className='d-inline-flex align-items-center'>
+                    <span className='lead'>Theme</span>
+                    <OverlayTrigger
+                      placement='right'
+                      overlay={
+                        <Tooltip id='Tip for AppTheme'>
+                          Theme for your App Website
+                        </Tooltip>
+                      }
+                    >
+                      <IconInfo
+                        height='16'
+                        width='16'
+                        className='ml-1 text-white-50 cursor-pointer'
+                      />
+                    </OverlayTrigger>
+                  </Col>
+                </Form.Row>
+                <Form.Row className='ml-3'>
+                  <Col className='text-center'>
+                    <RadioImageButtons name='appTheme' options={THEMES} />
+                  </Col>
+                </Form.Row>
                 <Form.Row className='py-5'>
                   <Col />
                   <Col>

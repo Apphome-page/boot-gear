@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Container, Row, Col, Navbar, Nav, Button } from 'react-bootstrap'
+import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap'
 
 import IconFeature1 from '@svg-icons/bootstrap/award.svg'
 import IconFeature2 from '@svg-icons/bootstrap/bricks.svg'
@@ -40,9 +40,6 @@ function BodyWrap({ children }) {
             <Nav>
               <NavFeatures />
               <NavTestimonials />
-              <Button variant='light' size='sm' className='rounded-pill'>
-                Download
-              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -58,7 +55,15 @@ export default function Body({ children }) {
   }
   return (
     <BodyWrap>
-      <div className={classNames('position-relative py-5', styles.intro)}>
+      <div
+        className={classNames(
+          'position-relative',
+          'py-5',
+          'd-flex',
+          'align-items-center',
+          styles.intro
+        )}
+      >
         <Container>
           <Row className='align-items-center'>
             <Col lg={6}>
@@ -144,35 +149,37 @@ export default function Body({ children }) {
         <Container>
           <Row className='align-items-center'>
             <Col lg={6} className='my-3'>
-              <Container className='text-center'>
+              <Container id='container-downloads' className='text-center'>
                 <Row>
                   <Col>
-                    <div className='mb-5 pb-3 border-bottom border-white display-4 text-white '>
+                    <div className='mb-3 pb-3 border-bottom border-white display-4 text-white '>
                       Download Now!
                     </div>
                   </Col>
                 </Row>
                 <Row>
-                  <Contact
-                    className='col-lg align-self-center'
-                    keyName='appLinkAndroid'
-                  >
-                    <img
-                      src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
-                      alt='Android Play Store'
-                      height='80'
-                    />
-                  </Contact>
-                  <Contact
-                    className='col-lg align-self-center'
-                    keyName='appLinkApple'
-                  >
-                    <img
-                      src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
-                      alt='Apple App Store'
-                      height='55'
-                    />
-                  </Contact>
+                  <Col className='d-flex justify-content-center'>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkAndroid'
+                    >
+                      <img
+                        src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
+                        alt='Android Play Store'
+                        height='80'
+                      />
+                    </Contact>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkApple'
+                    >
+                      <img
+                        src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
+                        alt='Apple App Store'
+                        height='55'
+                      />
+                    </Contact>
+                  </Col>
                 </Row>
               </Container>
             </Col>

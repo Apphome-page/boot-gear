@@ -26,10 +26,7 @@ export default function WebBuilder() {
   const { signPop } = useLogin()
   const { firebaseLaunch, firebasePromise, firebaseApp } = useFirebase()
 
-  const [validAppData, setValidAppData] = useState({
-    appKey: 'haha',
-    appTheme: 'purple',
-  })
+  const [validAppData, setValidAppData] = useState()
 
   useEffect(() => {
     if (validAppData) {
@@ -107,7 +104,7 @@ export default function WebBuilder() {
         Object.assign(keyCheck, {
           appKey,
           appName: appName || keyCheck.appName,
-          appTheme: appTheme || keyCheck.appTheme || 'purple',
+          appTheme: appTheme || keyCheck.appTheme,
         })
 
         setValidAppData(keyCheck)
