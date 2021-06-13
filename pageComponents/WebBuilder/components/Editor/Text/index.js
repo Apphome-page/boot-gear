@@ -153,6 +153,7 @@ function TextEditor({
             right: 0;
             bottom: 0;
             left: 0;
+            white-space: pre-wrap;
           }
         `}
       </style>

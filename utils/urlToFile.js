@@ -7,7 +7,6 @@ export default async function urlToFile(url) {
   if (!url || typeof url !== 'string') {
     return null
   }
-  console.log('!!! ', url)
   const remoteName =
     (url.match(/^(?:.+\/)(.+?)(?:[?#].*)$/) || [])[1] || 'file.dat'
   const remoteUrl = `${ENV_PREFIX.replace(/\/?$/, '')}/${url.replace(

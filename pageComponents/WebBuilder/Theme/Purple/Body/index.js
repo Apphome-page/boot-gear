@@ -11,10 +11,10 @@ import ImageEditor from '../../../components/Editor/Image'
 import Video, { VideoScript } from '../../../components/Video'
 import Testimonials from '../../../components/Testimonials'
 import Contact from '../../../components/Contact'
+import Screenshot from '../../../components/Screenshot'
 
 import { NavName, NavFeatures, NavTestimonials } from './Nav'
 import Stats from './Stats'
-import Screenshot from './Screenshot'
 import Feature from './Feature'
 
 import styles from './styles.module.scss'
@@ -68,10 +68,16 @@ export default function Body({ children }) {
           <Row className='align-items-center'>
             <Col lg={6}>
               <h1 className='text-white'>
-                <TextEditor keyName='appTitle' />
+                <TextEditor
+                  keyName='appTitle'
+                  placeholderText='This is your App Title'
+                />
               </h1>
               <div className='mt-3 mb-5 p-3 lead font-weight-normal text-justify text-dark'>
-                <TextEditor keyName='appDescription' />
+                <TextEditor
+                  keyName='appDescription'
+                  placeholderText='Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed consequuntur magni dolores ratione voluptatem sequi nesciunt.'
+                />
               </div>
               <div
                 className={classNames(
@@ -111,7 +117,7 @@ export default function Body({ children }) {
         id='container-feature'
         className={classNames('position-relative', 'bg-white')}
       >
-        <div className='row'>
+        <Row>
           <Feature className={styles.featureOne} keyName='appFeature-1'>
             <IconFeature1 width='40' height='40' />
           </Feature>
@@ -121,10 +127,9 @@ export default function Body({ children }) {
           <Feature className={styles.featureThree} keyName='appFeature-3'>
             <IconFeature3 width='40' height='40' />
           </Feature>
-        </div>
+        </Row>
       </Container>
       <Container
-        fluid
         id='container-screenshot'
         className='position-relative bg-white overflow-hidden'
       >
@@ -222,11 +227,17 @@ export default function Body({ children }) {
           <div className='row pb-5'>
             <div className='col-lg-6 my-1 py-1'>
               <h3>About Us</h3>
-              <TextEditor keyName='appAbout' />
+              <TextEditor
+                keyName='appAbout'
+                placeholderText='Hendrerit placerat! Dapibus rhoncus eveniet, elit quasi. Sagittis diamlorem sed, mauris fuga officiis lacus maece- '
+              />
             </div>
             <div className='col-lg-3 my-1 py-1'>
               <h3>Address</h3>
-              <TextEditor keyName='appAddress' />
+              <TextEditor
+                keyName='appAddress'
+                placeholderText='Hendrerit placerat! Dapibus rhoncus eveniet, elit quasi. Sagittis diamlorem sed, mauris fuga officiis lacus maece- '
+              />
             </div>
             <div id='container-contact' className='col-lg-3 my-1 py-1'>
               <h3>Contact Us</h3>

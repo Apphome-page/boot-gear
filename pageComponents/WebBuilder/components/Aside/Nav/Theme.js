@@ -13,9 +13,13 @@ export default function NavTheme() {
   return (
     <>
       <div className='ml-3 mr-1 d-flex'>
-        <select onChange={selectAction} className='flex-fill text-capitalize'>
+        <select
+          defaultValue={appKeyValue}
+          onChange={selectAction}
+          className='flex-fill text-capitalize'
+        >
           {webBuilderThemes.map(({ key }) => (
-            <option key={key} value={key} selected={key === appKeyValue}>
+            <option key={key} value={key}>
               {key}
             </option>
           ))}

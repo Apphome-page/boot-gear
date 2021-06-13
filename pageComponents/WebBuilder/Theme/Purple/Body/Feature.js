@@ -1,3 +1,4 @@
+import { Col } from 'react-bootstrap'
 import classNames from 'classnames'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
@@ -14,9 +15,9 @@ export default function Feature({ keyName, className, children }) {
   }
 
   return (
-    <div
+    <Col
+      lg={4}
       className={classNames(
-        'col-lg',
         'p-5',
         'lead',
         'text-white',
@@ -25,7 +26,10 @@ export default function Feature({ keyName, className, children }) {
       )}
     >
       <div className='d-inline-block mb-1 text-white'>{children}</div>
-      <TextEditor keyName={keyName} />
-    </div>
+      <TextEditor
+        keyName={keyName}
+        placeholderText='Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+      />
+    </Col>
   )
 }

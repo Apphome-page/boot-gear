@@ -14,12 +14,14 @@ const Testimonial = ({ appTestimonialIndex }) => (
         keyName={`appTestimonial-${appTestimonialIndex}-text`}
         className='mb-0'
         buttons={textEditorButtons}
+        placeholderText='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
       />
       <footer className='blockquote-footer d-flex'>
         <cite className='flex-fill'>
           <TextEditor
             keyName={`appTestimonial-${appTestimonialIndex}-source`}
             buttons={textEditorButtons}
+            placeholderText='De finibus'
           />
         </cite>
       </footer>
@@ -49,7 +51,7 @@ export default function Testimonials({ className = '', style = {} }) {
   return (
     <div id='container-testimonials' className={className} style={style}>
       <h2 className='my-5 text-center'>Testimonials</h2>
-      <ul className='row'>
+      <ul className='row list-unstyled'>
         {[
           appTestimonial1Text,
           appTestimonial2Text,

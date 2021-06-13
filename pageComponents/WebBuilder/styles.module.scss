@@ -10,13 +10,12 @@ $aside-width: 200px;
 }
 
 .wrap {
-  display: flex;
+  display: grid;
+  grid-template-columns: 200px 1fr;
 }
 
 .aside {
   position: relative;
-  flex: 0 0 $aside-width;
-  width: $aside-width;
   z-index: 1;
 }
 
@@ -32,9 +31,4 @@ $aside-width: 200px;
   left: 0;
   height: 100vh;
   width: $aside-width;
-}
-
-.preview {
-  flex: 1 0 calc(100% - $aside-width);
-  width: calc(100% - $aside-width);
 }

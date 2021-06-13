@@ -11,12 +11,12 @@ import ImageEditor from '../../../components/Editor/Image'
 import Video, { VideoScript } from '../../../components/Video'
 import Testimonials from '../../../components/Testimonials'
 import Contact from '../../../components/Contact'
+import Screenshot from '../../../components/Screenshot'
 
 import { NavName, NavFeatures, NavTestimonials } from './Nav'
 import Discover from './Discover'
 import Stats from './Stats'
 import Feature from './Feature'
-import Screenshot from './Screenshot'
 
 import styles from './styles.module.scss'
 

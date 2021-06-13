@@ -26,7 +26,7 @@ export default function Stats({ keyName }) {
           styles.statColor
         )}
       >
-        <TextEditor keyName={keyName} buttons={[]} />
+        <TextEditor keyName={keyName} buttons={[]} placeholderText='00' />
       </div>
       <div className='ml-1 d-inline-block lead'>
         {keyName === 'appMetricDownloads' ? 'Downloads' : 'Rating'}
