@@ -75,7 +75,7 @@ export default function WebBuilder() {
           try {
             const appData = await firebaseApp
               .storage()
-              .ref(`public/${appKey}/bin/index.json`)
+              .ref(`public/${appKey}/index.json`)
               .getDownloadURL()
             const appFetchData = await fetch(appData)
             appDataJson = await appFetchData.json()
