@@ -1,6 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap'
 
-import Link from '../../components/LinkTag'
+import Link from '../../components/Tag/Link'
 
 export default function Products() {
   return (

@@ -1,6 +1,6 @@
 import { Alert, Button } from 'react-bootstrap'
 
-import Link from '../../../components/LinkTag'
+import Link from '../../../components/Tag/Link'
 
 export default function PayAlert() {
   return (

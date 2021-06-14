@@ -4,7 +4,7 @@ import { Tabs, Tab, Container, Button } from 'react-bootstrap'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
 
-import Image from '../../../../components/ImageTag'
+import Image from '../../../../components/Tag/Image'
 
 import { MockupContext } from '../../helpers/MockProvider'
 

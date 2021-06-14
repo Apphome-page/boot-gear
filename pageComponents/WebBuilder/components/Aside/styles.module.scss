@@ -1,0 +1,42 @@
+$head-height: 56px;
+$stud-height: 64px;
+
+.asideWrap {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding-top: $head-height;
+  padding-bottom: $stud-height;
+  white-space: break-spaces;
+  word-break: break-all;
+}
+
+.asideHead {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: $head-height;
+  line-height: $head-height;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.asideKnobs {
+  height: 100%;
+  overflow: auto;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+.asideStuds {
+  position: absolute;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $stud-height;
+  width: 100%;
+  overflow: hidden;
+}

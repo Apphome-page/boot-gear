@@ -7,10 +7,11 @@ import {
   InputGroup,
   Spinner,
 } from 'react-bootstrap'
+import fetch from 'cross-fetch'
 
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useUserAuth } from '../../../components/LoginPop'
+import { useUserAuth } from '../../../components/Context/Login'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
@@ -42,10 +43,7 @@ export default function DomainSetup({ webKey }) {
       setProcessing(true)
       setAlertData({})
 
-      const [idToken, { default: fetch }] = await Promise.all([
-        userAuth.getIdToken(),
-        import('cross-fetch'),
-      ])
+      const idToken = await userAuth.getIdToken()
 
       try {
         const setupResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {

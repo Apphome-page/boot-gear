@@ -2,8 +2,8 @@ import { useState, useCallback } from 'react'
 import { Button, Image, Modal, ModalBody } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
 
-import { useAlerts } from '../../../components/AlertPop'
-import { useUserData, useFirebaseApp } from '../../../components/LoginPop'
+import { useAlerts } from '../../../components/Context/Alert'
+import { useUserData, useFirebase } from '../../../components/Context/Login'
 
 import removeWebsite from '../helpers/removeWebsite'
 
@@ -30,11 +30,11 @@ export default function DashboardDomain({ show, handleClose, webKey } = {}) {
 
   const { addAlert } = useAlerts()
 
-  const firebaseApp = useFirebaseApp()
+  const { firebaseApp } = useFirebase()
 
-  const userPlan = useUserData('/plan_id')
-  const userProduct = useUserData('/product_id')
-  const webData = useUserData(`/sites/${webKey}`)
+  const [userPlan] = useUserData('/plan_id')
+  const [userProduct] = useUserData('/product_id')
+  const [webData] = useUserData(`/sites/${webKey}`)
 
   const { appIcon, appName, webDomain, webHost } = webData || {}
 
