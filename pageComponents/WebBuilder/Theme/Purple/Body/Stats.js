@@ -4,8 +4,6 @@ import { useContextStore } from '../../../../../components/Context'
 
 import TextEditor from '../../../components/Editor/Text'
 
-import styles from './styles.module.scss'
-
 export default function Stats({ keyName }) {
   const [{ isPreview }] = useContextStore()
   const [appValue] = useWebBuilderContext(keyName)
@@ -23,7 +21,7 @@ export default function Stats({ keyName }) {
           'm-0',
           'p-0',
           'font-weight-lighter',
-          styles.statColor
+          'statColor'
         )}
       >
         <TextEditor keyName={keyName} buttons={[]} placeholderText='00' />

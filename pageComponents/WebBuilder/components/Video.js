@@ -21,7 +21,7 @@ export function VideoScript() {
       document
       .getElementById("icon-play")
       .addEventListener("click", function () {
-        var containerElem = document.getElementById("container-play");
+        var containerElem = document.getElementById("container-appVideo");
         var iframeElem = Object.assign(document.createElement("iframe"), {
           src: "${appVideoValue}",
           frameBorder: "0",
@@ -44,11 +44,11 @@ export default function Video({ className = '', style = {} }) {
   const [{ isPreview }] = useContextStore()
   const [appVideoValue] = useWebBuilderContext('appVideo')
   if (!isPreview && !appVideoValue) {
-    return <div id='container-play' />
+    return <div id='container-appVideo' />
   }
   return (
     <LinkEditor keyName='appVideo'>
-      <div id='container-play' className={className} style={style}>
+      <div id='container-appVideo' className={className} style={style}>
         <svg
           id='icon-play'
           xmlns='http://www.w3.org/2000/svg'

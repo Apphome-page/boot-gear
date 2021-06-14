@@ -1,10 +1,9 @@
-import { Fragment } from 'react'
-import Head from 'next/head'
-
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
 import removeTags from '../../../../../utils/removeTags'
+
+import styleHTML from './style.html'
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
@@ -15,11 +14,7 @@ function HeadTitle() {
   if (isPreview) {
     return <></>
   }
-  return (
-    <Head>
-      <title>{removeTags(appTitleValue)}</title>
-    </Head>
-  )
+  return <title>{removeTags(appTitleValue)}</title>
 }
 
 function HeadDescription() {
@@ -28,11 +23,7 @@ function HeadDescription() {
   if (isPreview) {
     return <></>
   }
-  return (
-    <Head>
-      <meta name='description' content={appDescriptionValue} />
-    </Head>
-  )
+  return <meta name='description' content={appDescriptionValue} />
 }
 
 function HeadGA() {
@@ -42,7 +33,7 @@ function HeadGA() {
     return <></>
   }
   return (
-    <Head>
+    <>
       <script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${appGAValue}`}
@@ -58,15 +49,13 @@ function HeadGA() {
           `,
         }}
       />
-    </Head>
+    </>
   )
 }
 
 function HeadStyle() {
-  const [{ isPreview }] = useContextStore()
-  const HeadWrap = isPreview ? Fragment : Head
   return (
-    <HeadWrap>
+    <>
       <link
         rel='stylesheet'
         href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'
@@ -79,11 +68,9 @@ function HeadStyle() {
       />
       <style
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{
-          __html: `body{margin:0px;padding:0px;font-family:'Poppins',sans-serif;}`,
-        }}
+        dangerouslySetInnerHTML={{ __html: styleHTML }}
       />
-    </HeadWrap>
+    </>
   )
 }
 
@@ -94,14 +81,13 @@ function HeadStatic() {
     return <></>
   }
   return (
-    <Head>
+    <>
       <meta charSet='utf-8' />
       <meta httpEquiv='x-ua-compatible' content='ie=edge' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-      <base target='_blank' />
       <link rel='preconnect' href={SITE_URL} />
       <link rel='preconnect' href='https://fonts.gstatic.com' />
-    </Head>
+    </>
   )
 }
 

@@ -63,10 +63,6 @@ export default function SEO() {
               name='viewport'
               content='width=device-width, initial-scale=1'
             />
-            <base
-              href={BASE_URI.endsWith('/') || `${BASE_URI}/`}
-              target='_blank'
-            />
             <script
               async
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}

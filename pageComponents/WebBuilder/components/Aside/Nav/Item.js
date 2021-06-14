@@ -9,8 +9,8 @@ function RawNavItem({ keyName, keyTitle, keyDesc }) {
     if (viewContainer) {
       viewContainer.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
+        // block: 'center',
+        // inline: 'center',
       })
       viewContainer.click()
     }

@@ -5,8 +5,6 @@ import { useContextStore } from '../../../../../components/Context'
 
 import TextEditor from '../../../components/Editor/Text'
 
-import styles from './styles.module.scss'
-
 export default function Stats({ keyName }) {
   const [{ isPreview }] = useContextStore()
   const [appValue] = useWebBuilderContext(keyName)
@@ -19,8 +17,10 @@ export default function Stats({ keyName }) {
     <>
       <div
         className={classNames(
-          'd-inline-block h1 font-weight-lighter',
-          styles.count
+          'd-inline-block',
+          'h1',
+          'font-weight-lighter',
+          'count'
         )}
       >
         <TextEditor keyName={keyName} buttons={[]} />

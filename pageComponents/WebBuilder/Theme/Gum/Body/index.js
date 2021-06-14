@@ -18,11 +18,9 @@ import Discover from './Discover'
 import Stats from './Stats'
 import Feature from './Feature'
 
-import styles from './styles.module.scss'
-
 function BodyWrap({ children }) {
   return (
-    <div className={styles.gumBody}>
+    <div className='gumBody'>
       <Navbar className='shadow' variant='light' bg='white' expand='lg'>
         <Container>
           <Navbar.Brand className='d-flex'>
@@ -50,7 +48,7 @@ export default function BodyComponent({ children }) {
   }
   return (
     <BodyWrap>
-      <Container fluid className={classNames('p-5', styles.main)}>
+      <Container fluid className={classNames('p-5', 'main')}>
         <Container>
           <Row className='align-items-center'>
             <Col lg={6}>
@@ -111,13 +109,13 @@ export default function BodyComponent({ children }) {
       </Container>
       <Container fluid id='container-feature'>
         <Row className='row'>
-          <Feature className={styles.bgSecondary} keyName='appFeature-1'>
+          <Feature className='bgSecondary' keyName='appFeature-1'>
             <IconFeature1 width='40' height='40' />
           </Feature>
-          <Feature className={styles.bgPrimary} keyName='appFeature-2'>
+          <Feature className='bgPrimary' keyName='appFeature-2'>
             <IconFeature2 width='40' height='40' />
           </Feature>
-          <Feature className={styles.bgTerniary} keyName='appFeature-3'>
+          <Feature className='bgTerniary' keyName='appFeature-3'>
             <IconFeature3 width='40' height='40' />
           </Feature>
         </Row>
@@ -143,8 +141,8 @@ export default function BodyComponent({ children }) {
           'vh-100',
           'p-3',
           'text-white',
-          styles.parallax,
-          styles.video
+          'parallax',
+          'video'
         )}
       />
       <Testimonials className='container py-5' />
@@ -169,7 +167,7 @@ export default function BodyComponent({ children }) {
             <div id='container-contact' className='col-lg-3 my-1 py-1'>
               <h3>Contact Us</h3>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkLinkedin'
               >
                 <svg
@@ -182,7 +180,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkFacebook'
               >
                 <svg
@@ -195,7 +193,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkDiscord'
               >
                 <svg
@@ -209,7 +207,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkTwitter'
               >
                 <svg
@@ -222,7 +220,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkTwitch'
               >
                 <svg
@@ -236,7 +234,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkWhatsapp'
               >
                 <svg
@@ -249,7 +247,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkYoutube'
               >
                 <svg
@@ -262,7 +260,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkInstagram'
               >
                 <svg
@@ -276,7 +274,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkTelegram'
               >
                 <svg
@@ -289,7 +287,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkPhone'
               >
                 <svg
@@ -305,7 +303,7 @@ export default function BodyComponent({ children }) {
                 </svg>
               </Contact>
               <Contact
-                className={classNames('m-1', styles.icon)}
+                className={classNames('m-1', 'icon')}
                 keyName='appLinkMail'
               >
                 <svg
