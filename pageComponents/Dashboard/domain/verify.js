@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { captureException as captureExceptionSentry } from '@sentry/react'
+import fetch from 'cross-fetch'
 
-import { useUserAuth } from '../../../components/LoginPop'
+import { useUserAuth } from '../../../components/Context/Login'
 
 const FIRECLOUD_DOMAIN_VERIFY = process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VERIFY
 
@@ -23,10 +24,9 @@ export default function DomainVerify({
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
-    const [idToken, { default: fetch }] = await Promise.all([
-      userAuth.getIdToken(),
-      import('cross-fetch'),
-    ])
+
+    const idToken = await userAuth.getIdToken()
+
     try {
       const verifyResp = await fetch(FIRECLOUD_DOMAIN_VERIFY, {
         method: 'POST',

@@ -1,6 +1,6 @@
 import { useState, useCallback, createContext } from 'react'
 
-import { useLoading } from '../../../components/LoadingPop'
+import { useLoading } from '../../../components/Context/Loading'
 
 import renderCanvas from '../../../utils/renderCanvas'
 
@@ -200,7 +200,7 @@ export default function MockProvider({ preset, children }) {
       setProgress(0)
       unqueueLoading()
     },
-    [mockStore]
+    [mockStore, queueLoading, unqueueLoading]
   )
 
   return (

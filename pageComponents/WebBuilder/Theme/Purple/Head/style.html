@@ -1,0 +1,83 @@
+
+body{
+  margin: 0px;
+  padding: 0px;
+}
+.main-body {
+  font-family: 'Poppins', sans-serif;
+}
+.main-body p:last-of-type {
+  margin-bottom: 0px;
+}
+.main-body ul, .main-body ol {
+  list-style-position: inside;
+}
+.main-body .lead {
+  font-weight: 400;
+}
+.main-body .stickyPlace {
+  position: sticky;
+  top: 58px;
+  left: 0;
+}
+.main-body .intro {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.main-body .intro:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 80vh;
+  background-image: linear-gradient(145deg, #4776e6 0%, #8e54e9 100%);
+  transform-origin: bottom left;
+  transform: rotate(-17deg);
+  z-index: -1;
+}
+.main-body .statColor {
+  color: #6501c3;
+}
+.main-body .featureOne {
+  background-color: #7100db;
+}
+.main-body .featureTwo {
+  background-color: #6501c3;
+}
+.main-body .featureThree {
+  background-color: #5801aa;
+}
+.main-body .videoWrap {
+  background-image: linear-gradient(360deg, #021aa9 0%, #9700ff 100%);
+}
+.main-body .videoPlayWrap {
+  min-height: 50vh;
+  background-image: url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640');
+}
+.main-body .videoPlayWrap:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(61, 30, 130, 0.67);
+}
+.main-body .footerBreak {
+  min-height: 128px;
+  position: relative;
+  bottom: -2px;
+  border-radius: 100% 0px 0px 0px;
+}
+.main-body .icon {
+  display: inline-block;
+  margin: 4px;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+.main-body .icon .bi {
+  color: #ddd dd;
+}

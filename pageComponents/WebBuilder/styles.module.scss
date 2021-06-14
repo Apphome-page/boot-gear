@@ -1,0 +1,34 @@
+$aside-width: 200px;
+
+@keyframes slide-text {
+  from {
+    transform: translateX($aside-width);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.aside {
+  position: relative;
+  z-index: 1;
+}
+
+.asideTitle {
+  flex-grow: 1;
+  white-space: nowrap;
+  animation: slide-text 10s linear 0s infinite;
+}
+
+.asideSticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: $aside-width;
+}
