@@ -15,16 +15,17 @@ import {
   ErrorBoundary as SentryErrorBoundary,
 } from '@sentry/react'
 
-import AlertProvider from '../components/Context/Alert'
-import LoadingProvider from '../components/Context/Loading'
-import LoginProvider from '../components/Context/Login'
+import AlertProvider from '../components/AlertPop'
+import BootProvider from '../components/BootStore'
+import LoadingProvider from '../components/LoadingPop'
+import LoginProvider from '../components/LoginPop'
 
-import Layout from '../components/Layout'
+import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 
-const AmpGlobalStyles = dynamic(() => import('../components/Amp/GlobalStyles'))
-const AmpHeader = dynamic(() => import('../components/Amp/Header'))
+const AmpGlobalStyles = dynamic(() => import('../components/AmpGlobalStyles'))
+const AmpHeader = dynamic(() => import('../components/AmpHeader'))
 
 // initialize Sentry
 // TODO: Replace with actual Sentry dsn
@@ -49,7 +50,6 @@ function ErrorFallback() {
 
 function Bootgear({ Component, pageProps }) {
   const isAmp = useAmp()
-
   return isAmp ? (
     <>
       <SEO />
@@ -60,16 +60,18 @@ function Bootgear({ Component, pageProps }) {
     </>
   ) : (
     <SentryErrorBoundary fallback={<ErrorFallback />}>
-      <LoadingProvider>
-        <AlertProvider>
-          <LoginProvider>
-            <SEO />
-            <Layout>
+      <BootProvider>
+        <LoadingProvider>
+          <AlertProvider>
+            <LoginProvider>
+              <SEO />
+              <Header />
               <Component {...pageProps} />
-            </Layout>
-          </LoginProvider>
-        </AlertProvider>
-      </LoadingProvider>
+              <Footer />
+            </LoginProvider>
+          </AlertProvider>
+        </LoadingProvider>
+      </BootProvider>
     </SentryErrorBoundary>
   )
 }

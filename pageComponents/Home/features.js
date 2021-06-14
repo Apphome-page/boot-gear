@@ -1,6 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap'
 
-import Image from '../../components/Tag/Image'
+import Image from '../../components/ImageTag'
 
 export default function HomeFeatures() {
   return (

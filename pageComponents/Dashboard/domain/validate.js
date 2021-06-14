@@ -2,9 +2,8 @@ import { useState, useCallback } from 'react'
 import { Alert, Button, Spinner, Container, Row, Col } from 'react-bootstrap'
 import { Code as CodeLoader } from 'react-content-loader'
 import { captureException as captureExceptionSentry } from '@sentry/react'
-import fetch from 'cross-fetch'
 
-import { useUserAuth, useUserData } from '../../../components/Context/Login'
+import { useUserAuth, useUserData } from '../../../components/LoginPop'
 
 const FIRECLOUD_DOMAIN_VALIDATE =
   process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_VALIDATE
@@ -19,16 +18,17 @@ export default function DomainNameServer({ webKey }) {
   const [alertData, setAlertData] = useState({})
 
   const userAuth = useUserAuth()
-  const [{ webDomain, webZone, webNameservers }, firstLaunch] = useUserData(
+  const { firstLaunch, webDomain, webZone, webNameservers } = useUserData(
     `sites/${webKey}`
   )
 
   const verifySubmit = useCallback(async () => {
     setProcessing(true)
     setAlertData({})
-
-    const idToken = await userAuth.getIdToken()
-
+    const [idToken, { default: fetch }] = await Promise.all([
+      userAuth.getIdToken(),
+      import('cross-fetch'),
+    ])
     try {
       const verifyResp = await fetch(FIRECLOUD_DOMAIN_VALIDATE, {
         method: 'POST',

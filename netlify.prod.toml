@@ -32,8 +32,8 @@
   to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F:slug%2Findex.html?alt=media"
   status = 200
 [[redirects]]
-  from = "/:slug/:file"
-  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F:slug%2F:file?alt=media"
+  from = "/:slug/bin/:file"
+  to = "https://firebasestorage.googleapis.com/v0/b/apphome-page.appspot.com/o/public%2F:slug%2Fbin%2F:file?alt=media"
   status = 200
 
 [[redirects]]
