@@ -19,7 +19,7 @@ import IconArrowDown from '@svg-icons/bootstrap/arrow-down-short.svg'
 import IconRotateRight from '@svg-icons/bootstrap/arrow-clockwise.svg'
 import IconRotateLeft from '@svg-icons/bootstrap/arrow-counterclockwise.svg'
 
-import Image from '../../../../components/Tag/Image'
+import Image from '../../../../components/ImageTag'
 
 import frameTemplates from '../../templates'
 import { getFrameProps } from '../../helpers/defaults'

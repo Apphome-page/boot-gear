@@ -1,38 +1,25 @@
+import { useState, useEffect } from 'react'
 import { Button, Container, Row, Col } from 'react-bootstrap'
 import { Code as LoaderCode } from 'react-content-loader'
 import noop from 'lodash/noop'
 
-import Link from '../../../components/Tag/Link'
-import { useUserData } from '../../../components/Context/Login'
+import Link from '../../../components/LinkTag'
+import { useUserData } from '../../../components/LoginPop'
 
 import WebsiteDetails from './details'
 import WebsiteActions from './actions'
 
-function WebsitePlaceholder() {
-  return (
-    <>
-      <Row className='py-3'>
-        <Col>
-          <LoaderCode />
-        </Col>
-      </Row>
-      <Row className='py-3'>
-        <Col>
-          <LoaderCode />
-        </Col>
-      </Row>
-      <Row className='py-3'>
-        <Col>
-          <LoaderCode />
-        </Col>
-      </Row>
-    </>
-  )
-}
-
 export default function Website({ domainAction = noop }) {
-  const [userData, firstLaunch] = useUserData()
+  const [isLoading, setIsLoading] = useState(true)
+  const userData = useUserData()
   const userSites = Object.keys((userData && userData.sites) || {})
+
+  useEffect(() => {
+    setIsLoading(userData.firstLaunch)
+    return () => {
+      setIsLoading(false)
+    }
+  }, [userData.firstLaunch])
 
   return (
     <>
@@ -40,7 +27,25 @@ export default function Website({ domainAction = noop }) {
         Your Websites
       </div>
       <Container className='mb-5'>
-        {firstLaunch ? (
+        {isLoading ? (
+          <>
+            <Row className='py-3'>
+              <Col>
+                <LoaderCode />
+              </Col>
+            </Row>
+            <Row className='py-3'>
+              <Col>
+                <LoaderCode />
+              </Col>
+            </Row>
+            <Row className='py-3'>
+              <Col>
+                <LoaderCode />
+              </Col>
+            </Row>
+          </>
+        ) : (
           userSites.map((webKey, webIndex) => {
             const webData = userData.sites[webKey]
             const { webDomain, webHost } = webData
@@ -73,8 +78,6 @@ export default function Website({ domainAction = noop }) {
               </Row>
             )
           })
-        ) : (
-          <WebsitePlaceholder />
         )}
         <Row className='my-1'>
           <Col className='text-center'>

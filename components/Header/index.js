@@ -1,13 +1,35 @@
-import { Navbar, Nav } from 'react-bootstrap'
+import {
+  Button,
+  Navbar,
+  Nav,
+  NavItem,
+  NavLink,
+  NavDropdown,
+} from 'react-bootstrap'
+import { useRouter } from 'next/router'
 
-import Link from '../Tag/Link'
+import classNames from 'classnames'
 
-import NavProductLinks from './NavProductLinks'
-import NavHeaderLinks from './NavHeaderLinks'
-import NavUserLinks from './NavUserLinks'
+import IconGear from '@svg-icons/bootstrap/gear-fill.svg'
+import IconDash from '@svg-icons/bootstrap/person-circle.svg'
+import IconOut from '@svg-icons/bootstrap/box-arrow-right.svg'
+import IconPlan from '@svg-icons/bootstrap/newspaper.svg'
+import IconWebsite from '@svg-icons/bootstrap/card-heading.svg'
 
-// TODO: break into smaller chunks to prevent causing heavy re-renders.
+import Link from '../LinkTag'
+
+import { useLogin, useFirebaseApp, useUserAuth } from '../LoginPop'
+
+import productLinks from '../../pageData/links/headerProducts.json'
+import headerLinks from '../../pageData/links/headerLinks.json'
+
 export default function Header() {
+  const router = useRouter()
+
+  const { signPop } = useLogin()
+  const firebaseApp = useFirebaseApp()
+  const userAuth = useUserAuth()
+
   return (
     <Navbar
       bg='light'
@@ -20,9 +42,97 @@ export default function Header() {
       </Link>
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='ml-auto'>
-          <NavProductLinks />
-          <NavHeaderLinks />
-          <NavUserLinks />
+          <NavDropdown alignRight title='Products'>
+            {productLinks.map(({ name, path }, index) => (
+              <NavDropdown.Item key={index} as='div'>
+                <Link href={path} passHref>
+                  <Nav.Link
+                    href={path}
+                    className={classNames({
+                      active: router.pathname === path,
+                    })}
+                  >
+                    {name}
+                  </Nav.Link>
+                </Link>
+              </NavDropdown.Item>
+            ))}
+          </NavDropdown>
+          {userAuth
+            ? ''
+            : headerLinks.map(({ name, path }, index) => (
+                <NavItem key={index}>
+                  <Link href={path} passHref>
+                    <NavLink
+                      href={path}
+                      className={classNames({
+                        active: router.pathname === path,
+                      })}
+                    >
+                      {name}
+                    </NavLink>
+                  </Link>
+                </NavItem>
+              ))}
+          {userAuth ? (
+            <NavDropdown
+              alignRight
+              title={<IconGear sizeheight='20' width='20' />}
+            >
+              <NavDropdown.Item
+                as='div'
+                className='px-3 text-muted cursor-pointer'
+              >
+                <Link href='/dashboard'>
+                  <div>
+                    <IconDash height='18' width='18' className='mr-1' />
+                    {userAuth.displayName}
+                  </div>
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                as='div'
+                className='px-3 text-muted cursor-pointer'
+              >
+                <Link href='/dashboard/subscriptions'>
+                  <div>
+                    <IconPlan height='18' width='18' className='mr-1' />
+                    My Subscriptions
+                  </div>
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as='div'
+                className='px-3 text-muted cursor-pointer'
+              >
+                <Link href='/dashboard/websites'>
+                  <div>
+                    <IconWebsite height='18' width='18' className='mr-1' />
+                    My Websites
+                  </div>
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                as='div'
+                className='px-3 text-danger cursor-pointer'
+                onClick={() => {
+                  if (firebaseApp && userAuth) {
+                    firebaseApp.auth().signOut()
+                    router.push('/')
+                  }
+                }}
+              >
+                <IconOut height='18' width='18' className='mr-1' />
+                Sign Out
+              </NavDropdown.Item>
+            </NavDropdown>
+          ) : (
+            <Button className='mx-3' variant='alt' onClick={signPop}>
+              Sign In
+            </Button>
+          )}
         </Nav>
       </Navbar.Collapse>
       <Navbar.Toggle

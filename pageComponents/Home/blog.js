@@ -1,7 +1,7 @@
 import { Container, Button } from 'react-bootstrap'
 
-import Link from '../../components/Tag/Link'
-import Image from '../../components/Tag/Image'
+import Link from '../../components/LinkTag'
+import Image from '../../components/ImageTag'
 
 export default function HomeBlog() {
   return (

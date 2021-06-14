@@ -1,26 +1,20 @@
 import { Media, Image } from 'react-bootstrap'
 import IconLink from '@svg-icons/bootstrap/link-45deg.svg'
 
-import removeTags from '../../../utils/removeTags'
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
+const FIRESTORE_BASE = process.env.NEXT_PUBLIC_FIRESTORE_URL
 
 export default function WebsiteDetails({
   webKey,
   webLink = `/${webKey}/`,
-  webData: { appName, appIcon, appTitle, timestamp } = {},
+  webData: { appName, appIcon, appDescription, timestamp } = {},
 } = {}) {
-  if (!appName) {
-    return <></>
-  }
   return (
     <Media>
       <Image
         width={64}
         height={64}
         className='mt-1 mr-3 rounded'
-        src={`${SITE_URL}/${appIcon.replace(/^\/?/, '')}`}
+        src={`${FIRESTORE_BASE}${encodeURIComponent(appIcon)}?alt=media`}
         alt=''
       />
       <Media.Body className='w-75'>
@@ -30,7 +24,7 @@ export default function WebsiteDetails({
             <IconLink height='24' width='24' />
           </a>
         </p>
-        <p className='mini text-truncate'>{removeTags(appTitle)}</p>
+        <p className='mini text-truncate'>{appDescription}</p>
         <p className='mini text-muted'>
           <span className='font-weight-bold'>Last Update: </span>
           {new Date(timestamp).toDateString()}

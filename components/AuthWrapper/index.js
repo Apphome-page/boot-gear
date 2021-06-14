@@ -1,13 +1,19 @@
 import { useEffect } from 'react'
 
-import { useLoading } from '../Context/Loading'
-import { useLogin, useFirebase, useUserAuth } from '../Context/Login'
+import { useLoading } from '../LoadingPop'
+import {
+  useLogin,
+  useFirebaseApp,
+  useFirebaseStatus,
+  useUserAuth,
+} from '../LoginPop'
 
 export default function AuthWrapper({ children, placeholder }) {
+  const { signForced, signClear } = useLogin()
   const { queueLoading, unqueueLoading, clearLoading } = useLoading()
 
-  const { signForced, signClear } = useLogin()
-  const { firebaseApp, firebaseLaunch } = useFirebase()
+  const firebaseApp = useFirebaseApp()
+  const { firebaseLaunch } = useFirebaseStatus()
   const userAuth = useUserAuth()
 
   const userId = userAuth && userAuth.uid

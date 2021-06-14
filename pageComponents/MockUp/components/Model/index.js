@@ -3,7 +3,7 @@ import { Container, Button } from 'react-bootstrap'
 
 import classNames from 'classnames'
 
-import Image from '../../../../components/Tag/Image'
+import Image from '../../../../components/ImageTag'
 
 import { MockupContext } from '../../helpers/MockProvider'
 import { getFrameProps } from '../../helpers/defaults'
