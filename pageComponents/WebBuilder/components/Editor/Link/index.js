@@ -64,7 +64,7 @@ export function useLinkContext() {
   return getLink
 }
 
-function LinkEditor({ keyName, children }) {
+function LinkEditor({ keyName, keyTitle, children }) {
   const getLink = useContext(LinkContext)
   const [{ isPreview }] = useContextStore()
   const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
@@ -73,7 +73,7 @@ function LinkEditor({ keyName, children }) {
     event.preventDefault()
     event.stopPropagation()
     getLink({
-      title: 'Link: ',
+      title: keyTitle || 'Link: ',
       defaultValue: appKeyValue,
       onChange: setAppKeyValue,
     })

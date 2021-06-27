@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import Compress from 'compress.js'
+import fetch from 'cross-fetch'
 
 import WebBuilderContext from '../../../components/Context/WebBuilder'
 import StoreContext from '../../../components/Context'
@@ -10,6 +11,9 @@ import removeWebsite from '../../Dashboard/helpers/removeWebsite'
 
 import keyValidate from './keyValidate'
 import getThemeComponent from './getThemeComponent'
+
+const FIRECLOUD_DOMAIN_CONNECT =
+  process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_CONNECT
 
 const compress = new Compress()
 
@@ -251,6 +255,31 @@ export default async function upload(firebase, renderProps = {}) {
     IconPromise,
     ImagePromise,
   ])
+
+  // Check if S3 update is required
+  const userWebDataListener = await firebase
+    .database()
+    .ref(`users/${userId}/sites/${appKey}`)
+    .once('value')
+  const { webZone, webBucket } = (await userWebDataListener.val()) || {}
+  // Update S3
+  if (webZone && webBucket) {
+    const idToken = await firebase.auth().currentUser.getIdToken()
+    const connectResp = await fetch(FIRECLOUD_DOMAIN_CONNECT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        webKey: appKey,
+      }),
+    })
+    const setupData = await connectResp.json()
+    if (connectResp.status >= 400) {
+      throw new Error(`Something went wrong. ${JSON.stringify(setupData)}`)
+    }
+  }
 
   return {
     status: true,

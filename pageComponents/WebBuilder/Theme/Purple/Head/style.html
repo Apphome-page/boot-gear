@@ -1,10 +1,26 @@
+@keyframes blimp {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.3);
+  }
+}
 
 body{
   margin: 0px;
   padding: 0px;
 }
 .main-body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Quicksand', sans-serif;
+}
+.main-body a, .main-body .a-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.main-body a:hover, .main-body .a-link:hover {
+  text-shadow: 2px 2px #0000000f;
 }
 .main-body p:last-of-type {
   margin-bottom: 0px;
@@ -30,15 +46,35 @@ body{
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 80vh;
+  width: 150vmax;
+  height: 90vh;
   background-image: linear-gradient(145deg, #4776e6 0%, #8e54e9 100%);
   transform-origin: bottom left;
   transform: rotate(-17deg);
   z-index: -1;
 }
+.main-body #intro-banner {
+  position: relative;
+  transform: rotate(-17deg) scale(0.8);
+  transition: all 0.4s;
+  z-index: -1;
+}
 .main-body .statColor {
   color: #6501c3;
+}
+.main-body .featureOne h2,
+.main-body .featureTwo h2,
+.main-body .featureThree h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 2.4;
+}
+.main-body .featureOne h3,
+.main-body .featureTwo h3,
+.main-body .featureThree h3{
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 2;
 }
 .main-body .featureOne {
   background-color: #7100db;
@@ -49,8 +85,29 @@ body{
 .main-body .featureThree {
   background-color: #5801aa;
 }
+.main-body .screenshot-caption h2:after{
+  content: '';
+  display: block;
+  width: 102px;
+  height: 2px;
+  margin: 8px 0px 12px 0px;
+  background-image: linear-gradient(
+    90deg,
+    #4776e6 0%,
+    #8e54e9 48%,
+    transparent 49%,
+    transparent 51%,
+    #8e54e9 52%,
+    #4776e6 100%
+  );
+}
+.main-body .screenshot-caption p{
+  color: #747474;
+}
 .main-body .videoWrap {
   background-image: linear-gradient(360deg, #021aa9 0%, #9700ff 100%);
+  background-size: 60% 100%;
+  background-repeat: no-repeat;
 }
 .main-body .videoPlayWrap {
   min-height: 50vh;
@@ -66,7 +123,7 @@ body{
   background: rgba(61, 30, 130, 0.67);
 }
 .main-body .footerBreak {
-  min-height: 128px;
+  min-height: 64px;
   position: relative;
   bottom: -2px;
   border-radius: 100% 0px 0px 0px;
@@ -78,6 +135,23 @@ body{
   width: 24px;
   cursor: pointer;
 }
+.main-body .icon-play {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  color: #d9378b;
+  background-color: white;
+  animation: blimp 0.6s ease-in-out 0s infinite alternate;
+  box-shadow: 0px 0px 8px 16px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  z-index: 2;
+}
 .main-body .icon .bi {
   color: #ddd dd;
+}
+
+@media(max-width: 768px) {
+  .main-body .videoWrap {
+    background-size: auto;
+  }
 }

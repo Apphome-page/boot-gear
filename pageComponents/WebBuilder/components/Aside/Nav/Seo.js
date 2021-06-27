@@ -4,9 +4,7 @@ import { useWebBuilderContext } from '../../../../../components/Context/WebBuild
 
 import { useLinkContext } from '../../Editor/Link'
 
-import webBuilderSeoKeys from './config/seoKeys.json'
-
-function NavSeo({ keyName, keyTitle, keyDesc }) {
+export default function NavSeo({ keyName, keyTitle, keyDesc }) {
   const getLink = useLinkContext()
   const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
 
@@ -34,20 +32,5 @@ function NavSeo({ keyName, keyTitle, keyDesc }) {
     >
       {keyTitle}
     </div>
-  )
-}
-
-export default function NavSeoWrap() {
-  return (
-    <>
-      {webBuilderSeoKeys.map(([atomKey, atomTitle, atomDesc]) => (
-        <NavSeo
-          key={atomKey}
-          keyName={atomKey}
-          keyTitle={atomTitle}
-          keyDesc={atomDesc}
-        />
-      ))}
-    </>
   )
 }

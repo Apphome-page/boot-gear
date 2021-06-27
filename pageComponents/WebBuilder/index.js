@@ -14,15 +14,22 @@ import styles from './styles.module.scss'
 
 function PreviewComponent() {
   const [appTheme] = useWebBuilderContext('appTheme')
-  const { HeadComponent, BodyComponent } = useMemo(
+  const { HeadComponent, BodyComponent, asideRenderProps } = useMemo(
     () => getThemeComponent(appTheme),
     [appTheme]
   )
   return (
-    <>
-      <HeadComponent />
-      <BodyComponent />
-    </>
+    <div className={styles.wrap}>
+      <div className={styles.aside}>
+        <div className={styles.asideSticky}>
+          <AsideComponent renderProps={asideRenderProps} />
+        </div>
+      </div>
+      <div className={styles.preview}>
+        <HeadComponent />
+        <BodyComponent />
+      </div>
+    </div>
   )
 }
 
@@ -31,16 +38,7 @@ export default function Builder({ appData, isPreview }) {
     <StoreContext value={{ isPreview }}>
       <LinkProvider>
         <WebBuilderContext value={appData}>
-          <div className={styles.wrap}>
-            <div className={styles.aside}>
-              <div className={styles.asideSticky}>
-                <AsideComponent />
-              </div>
-            </div>
-            <div className={styles.preview}>
-              <PreviewComponent />
-            </div>
-          </div>
+          <PreviewComponent />
         </WebBuilderContext>
       </LinkProvider>
     </StoreContext>

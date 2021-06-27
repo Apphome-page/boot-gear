@@ -15,7 +15,12 @@ function RawKeySection({ keyName, keyAction }) {
 
 const KeySection = memo(RawKeySection)
 
-function RawNavSection({ keyName, keyTitle, keyDesc, keySections = [] }) {
+export default function NavSection({
+  keyName,
+  keyTitle,
+  keyDesc,
+  keySections = [],
+}) {
   const [keySectionsStatus, setKeySectionsStatus] = useReducer(
     (prevKeySectionStatus, currentKeySection) => ({
       ...prevKeySectionStatus,
@@ -41,7 +46,7 @@ function RawNavSection({ keyName, keyTitle, keyDesc, keySections = [] }) {
     }
   }
 
-  const allKeysStatus = Object.keys(keySectionsStatus).every(
+  const allKeysStatus = Object.keys(keySectionsStatus).some(
     (keyValue) => keySectionsStatus[keyValue]
   )
 
@@ -68,7 +73,3 @@ function RawNavSection({ keyName, keyTitle, keyDesc, keySections = [] }) {
     </div>
   )
 }
-
-const NavSection = memo(RawNavSection)
-
-export default NavSection
