@@ -102,8 +102,10 @@ function RawHeadScript() {
   const [{ isPreview }] = useContextStore()
   useEffect(() => {
     try {
-      // eslint-disable-next-line no-eval
-      eval(scriptHTML)
+      if (isPreview) {
+        // eslint-disable-next-line no-eval
+        eval(scriptHTML)
+      }
     } catch (error) {
       //
     }

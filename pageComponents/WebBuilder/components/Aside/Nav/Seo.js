@@ -2,19 +2,19 @@ import classNames from 'classnames'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 
-import { useLinkContext } from '../../Editor/Link'
+import { usePopContext, POPUP_TYPES } from '../../Context/Pop'
 
 export default function NavSeo({ keyName, keyTitle, keyDesc }) {
-  const getLink = useLinkContext()
-  const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
+  const getPop = usePopContext()
+  const [appKeyValue] = useWebBuilderContext(keyName)
 
   const clickAction = (event) => {
     event.preventDefault()
     event.stopPropagation()
-    getLink({
+    getPop({
       title: keyTitle,
-      defaultValue: appKeyValue,
-      onChange: setAppKeyValue,
+      type: POPUP_TYPES.DEFAULT,
+      keyName,
     })
   }
 

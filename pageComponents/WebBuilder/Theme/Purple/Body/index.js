@@ -1,10 +1,14 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames'
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap'
 
 import IconFeature1 from '@svg-icons/bootstrap/award.svg'
 import IconFeature2 from '@svg-icons/bootstrap/bricks.svg'
 import IconFeature3 from '@svg-icons/bootstrap/broadcast.svg'
+import IconList from '@svg-icons/bootstrap/list.svg'
+import IconClose from '@svg-icons/bootstrap/x.svg'
 
+import TextAreaEditor from '../../../components/Editor/TextArea'
 import TextEditor from '../../../components/Editor/Text'
 import ImageEditor from '../../../components/Editor/Image'
 
@@ -27,18 +31,35 @@ function BodyWrap({ children }) {
         sticky='top'
       >
         <Container>
-          <Navbar.Brand className='d-flex'>
+          <Navbar.Brand className='d-flex align-self-start'>
             <ImageEditor keyName='appIcon' width='30' height='30' />
             <NavName />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='mr-auto' />
-            <Nav>
+          <Nav className='mr-auto' />
+          <Nav>
+            <input
+              id='menu-toggle'
+              className='d-none'
+              type='checkbox'
+              aria-label='Menu Toggle'
+            />
+            <label
+              id='menu-toggle-icon'
+              className='d-block d-md-none text-right'
+              htmlFor='menu-toggle'
+            >
+              <div id='menu-toggle-open' className='p-1 border rounded'>
+                <IconList height='24' width='24' />
+              </div>
+              <div id='menu-toggle-close' className='p-1 border rounded'>
+                <IconClose height='24' width='24' />
+              </div>
+            </label>
+            <div id='menu-list'>
               <NavFeatures />
               <NavTestimonials />
-            </Nav>
-          </Navbar.Collapse>
+            </div>
+          </Nav>
         </Container>
       </Navbar>
       {children}
@@ -227,11 +248,15 @@ export default function Body({ children }) {
             </div>
             <div className='col-lg-3 my-1 py-1'>
               <h3 className='font-weight-bold'>Important Links</h3>
-              <NavItem keyName='appTnC' href='/terms-and-conditions.html'>
-                Terms & Conditions
+              <NavItem keyName='appTnC' href='terms-and-conditions.html'>
+                <TextAreaEditor keyName='appTnC' keyTitle='Terms & Conditions'>
+                  Terms & Conditions
+                </TextAreaEditor>
               </NavItem>
-              <NavItem keyName='appPP' href='/privacy-policy.html'>
-                Privacy Policy
+              <NavItem keyName='appPP' href='privacy-policy.html'>
+                <TextAreaEditor keyName='appPP' keyTitle='Privacy Policy'>
+                  Privacy Policy
+                </TextAreaEditor>
               </NavItem>
             </div>
             <div className='col-lg-3 my-1 py-1'>

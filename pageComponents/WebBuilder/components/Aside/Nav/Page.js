@@ -2,12 +2,16 @@ import classNames from 'classnames'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 
-export default function NavPage({ keyName, keyTitle, keyDesc, keyAction }) {
+import { usePopContext, POPUP_TYPES } from '../../Context/Pop'
+
+export default function NavPage({ keyName, keyTitle, keyDesc }) {
+  const getPop = usePopContext()
   const [appKeyValue] = useWebBuilderContext(keyName)
 
   const clickAction = () => {
-    keyAction({
+    getPop({
       title: keyTitle,
+      type: POPUP_TYPES.TEXT_AREA,
       keyName,
     })
   }

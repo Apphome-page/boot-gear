@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import { renderToStaticMarkup } from 'react-dom/server'
 import Compress from 'compress.js'
 import fetch from 'cross-fetch'
@@ -94,7 +95,7 @@ export default async function upload(firebase, renderProps = {}) {
           <div className='container p-3'>
             <h1>Terms & Conditions</h1>
             <br />
-            {appTnC}
+            <div dangerouslySetInnerHTML={{ __html: appTnC }} />
           </div>
         </BodyComponent>
       </WebBuilderContext>
@@ -107,7 +108,7 @@ export default async function upload(firebase, renderProps = {}) {
           <div className='container p-3'>
             <h1>Privacy Policy</h1>
             <br />
-            {appPP}
+            <div dangerouslySetInnerHTML={{ __html: appPP }} />
           </div>
         </BodyComponent>
       </WebBuilderContext>

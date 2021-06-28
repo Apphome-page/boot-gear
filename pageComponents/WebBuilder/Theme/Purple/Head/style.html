@@ -55,7 +55,6 @@ body{
 }
 .main-body #intro-banner {
   position: relative;
-  transform: rotate(-17deg) scale(0.8);
   transition: all 0.4s;
   z-index: -1;
 }
@@ -150,8 +149,40 @@ body{
   color: #ddd dd;
 }
 
+.main-body #menu-list {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out 0s;
+}
+.main-body #menu-list > * {
+  display: block;
+  margin: 0px 2px;
+}
+
 @media(max-width: 768px) {
   .main-body .videoWrap {
     background-size: auto;
+  }
+  .main-body #menu-list {
+    flex-direction: column;
+  }
+  .main-body #menu-toggle:not(:checked) ~ #menu-list {
+    max-height: 0px;
+  }
+  .main-body #menu-toggle:not(:checked) ~ #menu-toggle-icon > #menu-toggle-open {
+    display: inline-block;
+  }
+  .main-body #menu-toggle:not(:checked) ~ #menu-toggle-icon > #menu-toggle-close {
+    display: none;
+  }
+  .main-body #menu-toggle:checked ~ #menu-list {
+    max-height: 100vh;
+  }
+  .main-body #menu-toggle:checked ~ #menu-toggle-icon > #menu-toggle-open {
+    display: none;
+  }
+  .main-body #menu-toggle:checked ~ #menu-toggle-icon > #menu-toggle-close {
+    display: inline-block;
   }
 }

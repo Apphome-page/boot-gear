@@ -1,8 +1,4 @@
-import { useState, useCallback } from 'react'
-import { Modal } from 'react-bootstrap'
 import classNames from 'classnames'
-
-import TextEditor from '../Editor/Text'
 
 import NavItem from './Nav/Item'
 import NavSection from './Nav/Section'
@@ -32,43 +28,15 @@ function AsideNavBuilder({ renderProps = [] }) {
 }
 
 function AsideNavPage({ renderProps = [] }) {
-  const [{ keyName, placeholderText, title, show }, setPopProps] = useState({
-    show: false,
-  })
-
-  const showAction = useCallback((popData) => {
-    setPopProps({ ...popData, show: true })
-  }, [])
-
-  const hideAction = useCallback(() => {
-    setPopProps({
-      show: false,
-    })
-  }, [])
-
-  return (
-    <>
-      {renderProps.map(
-        ([asideKey, asideTitle, asideDescription], asideIndex) => (
-          <NavPage
-            key={asideIndex}
-            keyName={asideKey}
-            keyTitle={asideTitle}
-            keyDesc={asideDescription}
-            keyAction={showAction}
-          />
-        )
-      )}
-      <Modal show={show} onHide={hideAction} backdrop size='lg'>
-        <Modal.Header closeButton>{title}</Modal.Header>
-        <Modal.Body className='m-3 p-3 border'>
-          <TextEditor keyName={keyName} placeholderText={placeholderText} />
-        </Modal.Body>
-        <Modal.Footer className='justify-content-start mini text-warning'>
-          * Content is saved as you edit
-        </Modal.Footer>
-      </Modal>
-    </>
+  return renderProps.map(
+    ([asideKey, asideTitle, asideDescription], asideIndex) => (
+      <NavPage
+        key={asideIndex}
+        keyName={asideKey}
+        keyTitle={asideTitle}
+        keyDesc={asideDescription}
+      />
+    )
   )
 }
 

@@ -4,7 +4,7 @@ import WebBuilderContext, {
   useWebBuilderContext,
 } from '../../components/Context/WebBuilder'
 import StoreContext from '../../components/Context'
-import { LinkProvider } from './components/Editor/Link'
+import PopContext from './components/Context/Pop'
 
 import AsideComponent from './components/Aside'
 
@@ -36,11 +36,11 @@ function PreviewComponent() {
 export default function Builder({ appData, isPreview }) {
   return (
     <StoreContext value={{ isPreview }}>
-      <LinkProvider>
-        <WebBuilderContext value={appData}>
+      <WebBuilderContext value={appData}>
+        <PopContext>
           <PreviewComponent />
-        </WebBuilderContext>
-      </LinkProvider>
+        </PopContext>
+      </WebBuilderContext>
     </StoreContext>
   )
 }
