@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { memo, useEffect } from 'react'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
@@ -6,6 +6,7 @@ import { useContextStore } from '../../../../../components/Context'
 import removeTags from '../../../../../utils/removeTags'
 
 import styleHTML from './style.html'
+import scriptHTML from './script.html'
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
@@ -65,7 +66,7 @@ function HeadStyle() {
         crossOrigin='anonymous'
       />
       <link
-        href='https://fonts.googleapis.com/css2?family=Poppins&display=swap'
+        href='https://fonts.googleapis.com/css2?family=Quicksand&display=swap'
         rel='stylesheet'
       />
       <style
@@ -75,6 +76,53 @@ function HeadStyle() {
     </>
   )
 }
+
+function HeadFramework() {
+  const [{ isPreview }] = useContextStore()
+  if (isPreview) {
+    return <></>
+  }
+  return (
+    <>
+      <script
+        src='https://code.jquery.com/jquery-3.5.1.slim.min.js'
+        integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj'
+        crossOrigin='anonymous'
+      />
+      <script
+        src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js'
+        integrity='sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns'
+        crossOrigin='anonymous'
+      />
+    </>
+  )
+}
+
+function RawHeadScript() {
+  const [{ isPreview }] = useContextStore()
+  useEffect(() => {
+    try {
+      if (isPreview) {
+        // eslint-disable-next-line no-eval
+        eval(scriptHTML)
+      }
+    } catch (error) {
+      //
+    }
+  }, [])
+  if (isPreview) {
+    return <></>
+  }
+  return (
+    <script
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: scriptHTML,
+      }}
+    />
+  )
+}
+const HeadScript = memo(RawHeadScript)
 
 // TODO: Fix base
 function HeadStatic() {
@@ -100,6 +148,8 @@ export default function HeadComponent() {
       <HeadDescription />
       <HeadStatic />
       <HeadStyle />
+      <HeadFramework />
+      <HeadScript />
       <HeadGA />
     </>
   )

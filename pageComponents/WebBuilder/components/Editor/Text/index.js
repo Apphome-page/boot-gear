@@ -155,6 +155,9 @@ function TextEditor({
             left: 0;
             white-space: pre-wrap;
           }
+          .medium-editor-placeholder[data-medium-focused='true']:after {
+            opacity: 0;
+          }
         `}
       </style>
     </div>

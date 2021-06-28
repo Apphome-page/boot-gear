@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 
-import Nav from './Nav'
+import NavItem from './Nav/Item'
+import NavSection from './Nav/Section'
 import NavSeo from './Nav/Seo'
 import NavPage from './Nav/Page'
 import NavTheme from './Nav/Theme'
@@ -9,7 +10,93 @@ import Footer from './Footer'
 
 import styles from './styles.module.scss'
 
-export default function Aside() {
+function AsideNavBuilder({ renderProps = [] }) {
+  return renderProps.map(
+    ([asideKey, asideTitle, asideDescription, asideSections], asideIndex) => {
+      const AsideComponent = asideSections ? NavSection : NavItem
+      return (
+        <AsideComponent
+          key={asideIndex}
+          keyName={asideKey}
+          keyTitle={asideTitle}
+          keyDesc={asideDescription}
+          keySections={asideSections}
+        />
+      )
+    }
+  )
+}
+
+function AsideNavPage({ renderProps = [] }) {
+  return renderProps.map(
+    ([asideKey, asideTitle, asideDescription], asideIndex) => (
+      <NavPage
+        key={asideIndex}
+        keyName={asideKey}
+        keyTitle={asideTitle}
+        keyDesc={asideDescription}
+      />
+    )
+  )
+}
+
+function AsideNavSeo({ renderProps = [] }) {
+  return renderProps.map(
+    ([asideKey, asideTitle, asideDescription], asideIndex) => (
+      <NavSeo
+        key={asideIndex}
+        keyName={asideKey}
+        keyTitle={asideTitle}
+        keyDesc={asideDescription}
+      />
+    )
+  )
+}
+
+function AsideNav({ renderProps = [] }) {
+  return renderProps.map(
+    (
+      {
+        title: asideSectionTitle,
+        type: asideSectionType,
+        data: asideSectionData,
+      },
+      asideSectionIndex
+    ) => {
+      let AsideSection = null
+      switch (asideSectionType) {
+        case 'builder':
+          AsideSection = AsideNavBuilder
+          break
+        case 'page':
+          AsideSection = AsideNavPage
+          break
+        case 'seo':
+          AsideSection = AsideNavSeo
+          break
+        default:
+          break
+      }
+
+      if (!AsideSection) {
+        return <></>
+      }
+
+      return (
+        <details key={asideSectionIndex} open className='my-3'>
+          <summary className='py-1 m-1 border-bottom'>
+            {asideSectionTitle}
+          </summary>
+          <section>
+            <AsideSection renderProps={asideSectionData} />
+          </section>
+        </details>
+      )
+    }
+  )
+}
+
+export default function Aside({ renderProps }) {
   return (
     <div
       className={classNames(
@@ -37,26 +124,7 @@ export default function Aside() {
             <NavTheme />
           </section>
         </details>
-        <details open className='my-3'>
-          <summary className='py-1 m-1 border-bottom'>SEO Elements</summary>
-          <section>
-            <NavSeo />
-          </section>
-        </details>
-        <details open className='my-3'>
-          <summary className='py-1 m-1 border-bottom'>
-            Supporting Content
-          </summary>
-          <section>
-            <NavPage />
-          </section>
-        </details>
-        <details open className='my-3'>
-          <summary className='py-1 m-1 border-bottom'>Page Elements</summary>
-          <section>
-            <Nav />
-          </section>
-        </details>
+        <AsideNav renderProps={renderProps} />
       </div>
       <div className={styles.asideStuds}>
         <Footer />

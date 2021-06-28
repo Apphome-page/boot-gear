@@ -46,3 +46,15 @@ export function NavTestimonials() {
     </NavLink>
   )
 }
+
+export function NavItem({ keyName, href, children }) {
+  const [{ isPreview }] = useContextStore()
+  const [appKeyValue] = useWebBuilderContext(keyName)
+  if (isPreview) {
+    return <div className='a-link'>{children}</div>
+  }
+  if (!isPreview && appKeyValue) {
+    return <a href={href}>{children}</a>
+  }
+  return <></>
+}

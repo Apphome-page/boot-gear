@@ -1,0 +1,14 @@
+(function bannerScrollSpy(){
+  function scrollAction() {
+    var introBanner = document.getElementById('intro-banner');
+    if(introBanner) {
+      if(0 < window.scrollY && window.scrollY < window.innerHeight) {
+        introBanner.style.top = '-' + (window.scrollY/4) + 'px';
+      } else {
+        introBanner.style.top = '0px';
+      }
+    }
+  }
+  window.removeEventListener('scroll', scrollAction);
+  window.addEventListener('scroll', scrollAction, {passive: true});
+})()

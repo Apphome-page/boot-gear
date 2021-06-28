@@ -1,9 +1,9 @@
 import { Fragment, memo } from 'react'
 
-import { useWebBuilderContext } from '../../../components/Context/WebBuilder'
-import { useContextStore } from '../../../components/Context'
+import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
+import { useContextStore } from '../../../../../components/Context'
 
-import TextEditor from './Editor/Text'
+import TextEditor from '../../../components/Editor/Text'
 
 const textEditorButtons = []
 
