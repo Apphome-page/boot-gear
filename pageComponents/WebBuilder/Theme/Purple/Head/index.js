@@ -1,3 +1,5 @@
+/* eslint-disable react/no-danger */
+/* eslint-disable no-useless-escape */
 import { memo, useEffect } from 'react'
 
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
@@ -42,7 +44,6 @@ function HeadGA() {
         src={`https://www.googletagmanager.com/gtag/js?id=${appGAValue}`}
       />
       <script
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -69,10 +70,7 @@ function HeadStyle() {
         href='https://fonts.googleapis.com/css2?family=Quicksand&display=swap'
         rel='stylesheet'
       />
-      <style
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: styleHTML }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: styleHTML }} />
     </>
   )
 }
@@ -109,22 +107,40 @@ function RawHeadScript() {
     } catch (error) {
       //
     }
-  }, [])
+  }, [isPreview])
   if (isPreview) {
     return <></>
   }
   return (
-    <script
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{
-        __html: scriptHTML,
-      }}
-    />
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: scriptHTML,
+        }}
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+          (function() {
+            var webBase = window.location.href.replace(/\\/*$/,'/');
+            var webBaseTag = document.getElementById('web-base');
+            if(webBaseTag) {
+              webBase.href = webBase;
+            } else {
+              var webBaseElement = document.createElement('base');
+              webBaseElement.id = 'web-base';
+              webBaseElement.href = webBase;
+              document.head.appendChild(webBaseElement);
+            }
+          })()
+        `,
+        }}
+      />
+    </>
   )
 }
 const HeadScript = memo(RawHeadScript)
 
-// TODO: Fix base
 function HeadStatic() {
   const [{ isPreview }] = useContextStore()
   if (isPreview) {

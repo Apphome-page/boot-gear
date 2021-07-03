@@ -20,7 +20,9 @@ import Screenshot from './Screenshot'
 import Stats from './Stats'
 import Feature from './Feature'
 
-function BodyWrap({ children }) {
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+
+function BodyWrap({ children, links = true }) {
   return (
     <div className={classNames('position-relative', 'main-body')}>
       <Navbar
@@ -32,11 +34,16 @@ function BodyWrap({ children }) {
       >
         <Container>
           <Navbar.Brand className='d-flex align-self-start'>
-            <ImageEditor keyName='appIcon' width='30' height='30' />
+            <ImageEditor
+              keyName='appIcon'
+              width='30'
+              height='30'
+              placeholderImage={`${SITE_URL}/web/purple/logo.png`}
+            />
             <NavName />
           </Navbar.Brand>
           <Nav className='mr-auto' />
-          <Nav>
+          <Nav className={classNames({ 'd-none': !links })}>
             <input
               id='menu-toggle'
               className='d-none'
@@ -63,174 +70,6 @@ function BodyWrap({ children }) {
         </Container>
       </Navbar>
       {children}
-    </div>
-  )
-}
-
-export default function Body({ children }) {
-  if (children) {
-    return <BodyWrap>{children}</BodyWrap>
-  }
-  return (
-    <BodyWrap>
-      <div
-        className={classNames(
-          'position-relative',
-          'py-5',
-          'd-flex',
-          'align-items-center',
-          'intro'
-        )}
-      >
-        <Container>
-          <Row className='align-items-center'>
-            <Col lg={6}>
-              <h1 className='text-white'>
-                <TextEditor
-                  keyName='appTitle'
-                  placeholderText='This is your App Title'
-                />
-              </h1>
-              <div className='mt-3 mb-5 p-3 lead font-weight-normal text-justify text-dark'>
-                <TextEditor
-                  keyName='appDescription'
-                  placeholderText='Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed consequuntur magni dolores ratione voluptatem sequi nesciunt.'
-                />
-              </div>
-              <div id='container-metric'>
-                <div
-                  className={classNames(
-                    'd-inline-block',
-                    'my-1',
-                    'mx-1',
-                    'p-3',
-                    'bg-white',
-                    'shadow',
-                    'rounded'
-                  )}
-                >
-                  <Stats keyName='appMetricDownloads' />
-                </div>
-                <div
-                  className={classNames(
-                    'd-inline-block',
-                    'my-1',
-                    'mx-3',
-                    'p-3',
-                    'bg-white',
-                    'shadow',
-                    'rounded'
-                  )}
-                >
-                  <Stats keyName='appMetricRatings' />
-                </div>
-              </div>
-            </Col>
-            <Col lg={6} id='intro-banner'>
-              <ImageEditor keyName='appBanner' alt='' className='w-100 my-3' />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <Container
-        fluid
-        id='container-feature'
-        className={classNames('position-relative', 'bg-white')}
-      >
-        <Row>
-          <Feature className='featureOne' keyName='appFeature-1'>
-            <IconFeature1 width='32' height='32' />
-          </Feature>
-          <Feature className='featureTwo' keyName='appFeature-2'>
-            <IconFeature2 width='32' height='32' />
-          </Feature>
-          <Feature className='featureThree' keyName='appFeature-3'>
-            <IconFeature3 width='32' height='32' />
-          </Feature>
-        </Row>
-      </Container>
-      <Container
-        id='container-screenshot'
-        className='position-relative bg-white overflow-hidden'
-      >
-        <Screenshot
-          keyName='appScreenshot-1'
-          keyCaptionName='appScreenshot-1-caption'
-        />
-        <Screenshot
-          keyName='appScreenshot-2'
-          keyCaptionName='appScreenshot-2-caption'
-          isAlternate
-        />
-      </Container>
-      <div
-        className={classNames(
-          'position-relative',
-          'py-5',
-          'bg-white',
-          'videoWrap'
-        )}
-      >
-        <Container>
-          <Row className='align-items-center'>
-            <Col lg={6} className='my-3'>
-              <Container id='container-store' className='text-center'>
-                <Row>
-                  <Col>
-                    <div className='mb-3 pb-3 border-bottom border-white display-4 text-white '>
-                      Download Now!
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className='d-flex justify-content-center'>
-                    <Contact
-                      className='align-self-center'
-                      keyName='appLinkAndroid'
-                    >
-                      <img
-                        src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
-                        alt='Android Play Store'
-                        height='80'
-                      />
-                    </Contact>
-                    <Contact
-                      className='align-self-center'
-                      keyName='appLinkApple'
-                    >
-                      <img
-                        src='https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg'
-                        alt='Apple App Store'
-                        height='55'
-                      />
-                    </Contact>
-                  </Col>
-                </Row>
-              </Container>
-            </Col>
-            <Col lg={6} className='my-3'>
-              <Video
-                className={classNames(
-                  'position-relative',
-                  'd-flex',
-                  'align-items-center',
-                  'justify-content-center',
-                  'embed-responsive',
-                  'bg-white',
-                  'text-white',
-                  'videoPlayWrap'
-                )}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <Container
-        fluid
-        className='position-relative py-5 bg-white overflow-hidden'
-      >
-        <Testimonials className='container' />
-      </Container>
       <div className='position-relative bg-white'>
         <hr className={classNames('m-0', 'featureTwo', 'footerBreak')} />
       </div>
@@ -239,14 +78,23 @@ export default function Body({ children }) {
       >
         <div className='container'>
           <div className='row pb-5'>
-            <div className='col-lg-3 my-1 py-1'>
+            <div
+              className={classNames('my-1', 'py-1', {
+                'col-lg-3': links,
+                'col-lg-6': !links,
+              })}
+            >
               <h3 className='font-weight-bold'>About Us</h3>
               <TextEditor
                 keyName='appAbout'
                 placeholderText='Hendrerit placerat! Dapibus rhoncus eveniet, elit quasi. Sagittis diamlorem sed, mauris fuga officiis lacus maece- '
               />
             </div>
-            <div className='col-lg-3 my-1 py-1'>
+            <div
+              className={classNames('col-lg-3', 'my-1', 'py-1', {
+                'd-none': !links,
+              })}
+            >
               <h3 className='font-weight-bold'>Important Links</h3>
               <NavItem keyName='appTnC' href='terms-and-conditions.html'>
                 <TextAreaEditor keyName='appTnC' keyTitle='Terms & Conditions'>
@@ -442,6 +290,181 @@ export default function Body({ children }) {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+export default function Body({ children }) {
+  if (children) {
+    return <BodyWrap links={false}>{children}</BodyWrap>
+  }
+  return (
+    <BodyWrap>
+      <div
+        className={classNames(
+          'position-relative',
+          'py-3',
+          'd-flex',
+          'align-items-center',
+          'intro'
+        )}
+      >
+        <Container>
+          <Row className='align-items-center'>
+            <Col lg={6}>
+              <h1 className='text-white'>
+                <TextEditor
+                  keyName='appTitle'
+                  placeholderText='This is your App Title'
+                />
+              </h1>
+              <div className='mt-3 mb-5 p-3 lead font-weight-normal text-justify text-light'>
+                <TextEditor
+                  keyName='appDescription'
+                  placeholderText='Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed consequuntur magni dolores ratione voluptatem sequi nesciunt.'
+                />
+              </div>
+              <div id='container-metric'>
+                <div
+                  className={classNames(
+                    'd-inline-block',
+                    'my-1',
+                    'mx-1',
+                    'p-3',
+                    'bg-white',
+                    'shadow',
+                    'rounded'
+                  )}
+                >
+                  <Stats keyName='appMetricDownloads' />
+                </div>
+                <div
+                  className={classNames(
+                    'd-inline-block',
+                    'my-1',
+                    'mx-3',
+                    'p-3',
+                    'bg-white',
+                    'shadow',
+                    'rounded'
+                  )}
+                >
+                  <Stats keyName='appMetricRatings' />
+                </div>
+              </div>
+            </Col>
+            <Col lg={6} id='intro-banner'>
+              <ImageEditor
+                keyName='appBanner'
+                alt=''
+                className='w-100 my-3'
+                placeholderImage={`${SITE_URL}/web/purple/banner.png`}
+              />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Container
+        fluid
+        id='container-feature'
+        className={classNames('position-relative', 'bg-white')}
+      >
+        <Row>
+          <Feature className='featureOne' keyName='appFeature-1'>
+            <IconFeature1 width='32' height='32' />
+          </Feature>
+          <Feature className='featureTwo' keyName='appFeature-2'>
+            <IconFeature2 width='32' height='32' />
+          </Feature>
+          <Feature className='featureThree' keyName='appFeature-3'>
+            <IconFeature3 width='32' height='32' />
+          </Feature>
+        </Row>
+      </Container>
+      <Container
+        id='container-screenshot'
+        className='position-relative bg-white overflow-hidden'
+      >
+        <Screenshot
+          keyName='appScreenshot-1'
+          keyCaptionName='appScreenshot-1-caption'
+          placeholderImage={`${SITE_URL}/web/purple/scr_1.png`}
+        />
+        <Screenshot
+          keyName='appScreenshot-2'
+          keyCaptionName='appScreenshot-2-caption'
+          placeholderImage={`${SITE_URL}/web/purple/scr_2.png`}
+          isAlternate
+        />
+      </Container>
+      <div
+        className={classNames(
+          'position-relative',
+          'py-5',
+          'bg-white',
+          'videoWrap'
+        )}
+      >
+        <Container>
+          <Row className='align-items-center'>
+            <Col lg={6} className='my-3'>
+              <Container id='container-store' className='text-center'>
+                <Row>
+                  <Col>
+                    <div className='mb-3 pb-3 border-bottom border-white display-4 text-white '>
+                      Download Now!
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className='d-flex justify-content-center'>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkAndroid'
+                    >
+                      <img
+                        src={`${SITE_URL}/web/purple/store-android.png`}
+                        alt='Android Play Store'
+                        className='my-1 mx-3 border border-white py-2 px-4 bg-white rounded-lg'
+                      />
+                    </Contact>
+                    <Contact
+                      className='align-self-center'
+                      keyName='appLinkApple'
+                    >
+                      <img
+                        src={`${SITE_URL}/web/purple/store-apple.png`}
+                        alt='Apple App Store'
+                        className='my-1 mx-3 border border-white py-2 px-4 bg-white rounded-lg'
+                      />
+                    </Contact>
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
+            <Col lg={6} className='my-3'>
+              <Video
+                className={classNames(
+                  'position-relative',
+                  'd-flex',
+                  'align-items-center',
+                  'justify-content-center',
+                  'embed-responsive',
+                  'bg-white',
+                  'text-white',
+                  'videoPlayWrap'
+                )}
+              />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Container
+        fluid
+        className='position-relative py-5 bg-white overflow-hidden'
+      >
+        <Testimonials className='container' />
+      </Container>
       <VideoScript />
     </BodyWrap>
   )
