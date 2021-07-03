@@ -1,6 +1,6 @@
-export default function addLinkProtocol(value) {
+export default function addLinkProtocol(value, prefix = 'http:/') {
   const href = value || ''
   return new RegExp(/^\w+:/).test(href)
     ? href
-    : `http://${href.replace(/^\//, '')}`
+    : `${prefix}/${href.replace(/^\/+/, '')}`
 }

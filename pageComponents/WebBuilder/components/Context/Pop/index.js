@@ -28,14 +28,15 @@ export const POPUP_TYPES = Object.freeze({
   DEFAULT: 'default',
 })
 
-function PopupTextArea({ keyName }) {
+function PopupTextArea({ keyName, onComplete }) {
   const [appKeyValue, setAppKeyValue] = useWebBuilderContext(keyName)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const saveAction = useCallback(() => {
     const saveValue = draftToHtml(convertToRaw(editorState.getCurrentContent()))
     const rawSaveValue = removeTags(saveValue).replace(/\s/gi, '')
     setAppKeyValue(rawSaveValue ? saveValue : null)
-  }, [editorState, setAppKeyValue])
+    onComplete()
+  }, [editorState, onComplete, setAppKeyValue])
   useEffect(() => {
     if (appKeyValue) {
       const contentBlock = htmlToDraft(appKeyValue)

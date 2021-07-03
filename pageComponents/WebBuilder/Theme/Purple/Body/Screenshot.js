@@ -6,7 +6,12 @@ import { useContextStore } from '../../../../../components/Context'
 import ImageEditor from '../../../components/Editor/Image'
 import TextEditor from '../../../components/Editor/Text'
 
-export default function Screenshot({ keyName, keyCaptionName, isAlternate }) {
+export default function Screenshot({
+  keyName,
+  keyCaptionName,
+  placeholderImage,
+  isAlternate,
+}) {
   const [{ isPreview }] = useContextStore()
   const [appKeyValue] = useWebBuilderContext(keyName)
   const [appKeyCaptionValue] = useWebBuilderContext(keyCaptionName)
@@ -24,6 +29,7 @@ export default function Screenshot({ keyName, keyCaptionName, isAlternate }) {
           keyName={keyName}
           alt=''
           className='w-100 h-100 shadow-lg'
+          placeholderImage={placeholderImage}
         />
       </div>
       <div className='col-lg-6 p-3 screenshot-caption'>

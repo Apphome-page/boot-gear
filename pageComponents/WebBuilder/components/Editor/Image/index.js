@@ -11,7 +11,10 @@ import addLinkProtocol from '../../../helpers/addLinkProtocol'
 
 import styles from './styles.module.scss'
 
-const placeholderImage =
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://boot-gear.netlify.app'
+
+const rawPlaceholderImage =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg=='
 
 function ImageEditor({
@@ -20,6 +23,7 @@ function ImageEditor({
   height,
   width,
   alt = `Image for ${keyName}`,
+  placeholderImage = rawPlaceholderImage,
 }) {
   const inputRef = useRef(null)
 
@@ -34,7 +38,7 @@ function ImageEditor({
       return rawAppKeyValue
     }
     return rawAppKeyValue || placeholderImage
-  }, [isPreview, rawAppKeyValue])
+  }, [isPreview, placeholderImage, rawAppKeyValue])
 
   const onChange = useCallback(
     (event) => {
@@ -56,7 +60,7 @@ function ImageEditor({
     return rawAppKeyValue ? (
       <Image
         id={`container-${keyName}`}
-        src={addLinkProtocol(appKeyValue)}
+        src={addLinkProtocol(appKeyValue, SITE_URL)}
         alt={alt}
         className={classNames(className, styles.fileInputImage)}
         height={height}
