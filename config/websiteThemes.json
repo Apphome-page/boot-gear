@@ -1,6 +1,10 @@
 [
   {
     "key": "purple",
-    "src": "/img/template/purple.jpg"
+    "src": "/web/purple/preview.jpg"
+  },
+  {
+    "key": "saxe",
+    "src": "/web/saxe/preview.jpg"
   }
 ]
