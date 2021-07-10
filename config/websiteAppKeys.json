@@ -8,13 +8,15 @@
 
   "appIcon",
   "appBanner",
-  "appVideo",
 
   "appMetricRatings",
   "appMetricDownloads",
 
   "appAbout",
   "appAddress",
+
+  "appVideo",
+  "appVideo-caption",
 
   "appScreenshot-1",
   "appScreenshot-1-caption",

@@ -1,11 +1,9 @@
-import { NavLink } from 'react-bootstrap'
-
 import { useWebBuilderContext } from '../../../../../components/Context/WebBuilder'
 import { useContextStore } from '../../../../../components/Context'
 
 export function NavName() {
   const [appNameValue] = useWebBuilderContext('appName')
-  return <span className='ml-1 align-top text-dark'>{appNameValue}</span>
+  return <span className='ml-1 align-top'>{appNameValue}</span>
 }
 
 export function NavFeatures() {
@@ -17,9 +15,22 @@ export function NavFeatures() {
     return <></>
   }
   return (
-    <NavLink href='#container-feature' target='_self'>
+    <a className='p-2 d-inline-block' href='#container-feature' target='_self'>
       Features
-    </NavLink>
+    </a>
+  )
+}
+
+export function NavVideo() {
+  const [{ isPreview }] = useContextStore()
+  const [appVideo] = useWebBuilderContext('appVideo')
+  if (!isPreview && !appVideo) {
+    return <></>
+  }
+  return (
+    <a className='p-2 d-inline-block' href='#container-appVideo' target='_self'>
+      Video
+    </a>
   )
 }
 
@@ -41,9 +52,13 @@ export function NavTestimonials() {
   }
 
   return (
-    <NavLink href='#container-testimonials' target='_self'>
+    <a
+      className='p-2 d-inline-block'
+      href='#container-testimonials'
+      target='_self'
+    >
       Testimonials
-    </NavLink>
+    </a>
   )
 }
 
@@ -51,11 +66,11 @@ export function NavItem({ keyName, href, children }) {
   const [{ isPreview }] = useContextStore()
   const [appKeyValue] = useWebBuilderContext(keyName)
   if (isPreview) {
-    return <div className='a-link'>{children}</div>
+    return <div className='d-inline-block a-link'>{children}</div>
   }
   if (!isPreview && appKeyValue) {
     return (
-      <a href={href} rel='noindex, nofollow'>
+      <a className='p-2 d-inline-block' href={href} rel='noindex, nofollow'>
         {children}
       </a>
     )

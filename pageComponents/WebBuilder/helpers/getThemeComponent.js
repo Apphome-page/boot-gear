@@ -2,6 +2,10 @@ import PurpleHead from '../Theme/Purple/Head'
 import PurpleBody from '../Theme/Purple/Body'
 import PurpleAsideConfig from '../Theme/Purple/config/aside.json'
 
+import SaxeHead from '../Theme/Saxe/Head'
+import SaxeBody from '../Theme/Saxe/Body'
+import SaxeAsideConfig from '../Theme/Saxe/config/aside.json'
+
 function EmptyComponent() {
   return <></>
 }
@@ -16,6 +20,11 @@ export default function getThemeComponent(theme) {
       HeadComponent = PurpleHead
       BodyComponent = PurpleBody
       asideRenderProps = PurpleAsideConfig
+      break
+    case 'saxe':
+      HeadComponent = SaxeHead
+      BodyComponent = SaxeBody
+      asideRenderProps = SaxeAsideConfig
       break
     default:
       break
