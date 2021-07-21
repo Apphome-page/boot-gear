@@ -357,7 +357,7 @@ export default function Body({ children }) {
               <ImageEditor
                 keyName='appBanner'
                 alt=''
-                className='w-100 my-3'
+                className='mw-100 my-3'
                 placeholderImage={`${SITE_URL}/web/purple/banner.png`}
               />
             </Col>

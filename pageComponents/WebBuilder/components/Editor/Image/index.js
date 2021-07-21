@@ -78,8 +78,8 @@ function ImageEditor({
         'd-inline-flex',
         'align-items-center',
         'justify-content-center',
-        'w-100',
-        'h-100',
+        'mw-100',
+        'mh-100',
         'overflow-hidden',
         'cursor-pointer',
         styles.fileInputWrap
@@ -122,7 +122,7 @@ function ImageEditor({
           styles.editorIcon
         )}
       >
-        <IconEdit className='w-100 h-100' />
+        <IconEdit className='mw-100 mh-100' />
       </div>
     </div>
   )
