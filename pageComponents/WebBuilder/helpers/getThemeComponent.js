@@ -6,6 +6,10 @@ import SaxeHead from '../Theme/Saxe/Head'
 import SaxeBody from '../Theme/Saxe/Body'
 import SaxeAsideConfig from '../Theme/Saxe/config/aside.json'
 
+import RisqHead from '../Theme/Risq/Head'
+import RisqBody from '../Theme/Risq/Body'
+import RisqAsideConfig from '../Theme/Risq/config/aside.json'
+
 function EmptyComponent() {
   return <></>
 }
@@ -25,6 +29,11 @@ export default function getThemeComponent(theme) {
       HeadComponent = SaxeHead
       BodyComponent = SaxeBody
       asideRenderProps = SaxeAsideConfig
+      break
+    case 'risq':
+      HeadComponent = RisqHead
+      BodyComponent = RisqBody
+      asideRenderProps = RisqAsideConfig
       break
     default:
       break

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import { renderToStaticMarkup } from 'react-dom/server'
-import Compress from 'compress.js'
 import fetch from 'cross-fetch'
+import imageCompression from 'browser-image-compression'
 
 import WebBuilderContext from '../../../components/Context/WebBuilder'
 import StoreContext from '../../../components/Context'
@@ -15,11 +15,6 @@ import getThemeComponent from './getThemeComponent'
 
 const FIRECLOUD_DOMAIN_CONNECT =
   process.env.NEXT_PUBLIC_FIRECLOUD_DOMAIN_CONNECT
-
-const compress = new Compress()
-
-const compressToBase64 = ([{ data, ext }]) =>
-  Compress.convertBase64ToFile(data, ext)
 
 // const toSafeName = (name) => name.replace(/[^a-zA-Z0-9.]/gi, '-').toLowerCase()
 
@@ -119,30 +114,22 @@ export default async function upload(firebase, renderProps = {}) {
   const renderHTMLTnCData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLTnC}</body></html>`
   const renderHTMLPPData = `<!DOCTYPE html><html lang="en"><head>${renderHTMLHead}</head><body>${renderHTMLPP}</body></html>`
 
-  const renderIconData = compress
-    .compress([appIcon], {
-      size: 1,
-      quality: 0.75,
-      maxWidth: 128,
-      maxHeight: 128,
-      resize: true,
-    })
-    .then(compressToBase64)
+  const renderIconData = imageCompression(appIcon, {
+    maxSizeMB: 1,
+    quality: 0.8,
+    maxWidthOrHeight: 128,
+  })
 
   const renderImageData = Promise.all(
     [appBanner, appScreenshot1, appScreenshot2].map((appFile) => {
       if (!appFile) {
         return null
       }
-      return compress
-        .compress([appFile], {
-          size: 2,
-          quality: 0.75,
-          maxHeight: 720,
-          maxWidth: 720,
-          resize: true,
-        })
-        .then(compressToBase64)
+      return imageCompression(appFile, {
+        maxSizeMB: 2,
+        quality: 0.8,
+        maxWidthOrHeight: 720,
+      })
     })
   )
 
