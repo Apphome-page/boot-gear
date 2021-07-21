@@ -24,11 +24,11 @@ export default function Screenshot({
         'flex-row-reverse': isAlternate,
       })}
     >
-      <div className='col-lg-6 p-3 screenshot-image'>
+      <div className='col-lg-6 p-3 text-center screenshot-image'>
         <ImageEditor
           keyName={keyName}
           alt=''
-          className='w-100 h-100 shadow-lg'
+          className='mw-100 mh-100 shadow-lg'
           placeholderImage={placeholderImage}
         />
       </div>
